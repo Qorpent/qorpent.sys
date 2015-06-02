@@ -19,6 +19,7 @@
 
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
@@ -35,12 +36,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 		/// </summary>
 		public string Value { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// </summary>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		protected override bool InternalEval(ILogicTermSource source) {
-			return source.Equal(Literal, Value);
-		}
+	        return AreMatched(source.Value(Literal), Value);
+	    }
 	}
 }

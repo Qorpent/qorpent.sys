@@ -132,7 +132,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <summary>
 		///     Диалект
 		/// </summary>
-		public SqlDialect Dialect { get; set; }
+		public DbDialect Dialect { get; set; }
 
 		/// <summary>
 		///     Файл определением (только тело)
@@ -169,10 +169,10 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				Comment = xml.Attr("name");
 				External = xml.GetSmartValue("external");
 				ExternalBody = xml.GetSmartValue("externalbody");
-				Dialect = SqlDialect.Ansi;
+				Dialect = DbDialect.Ansi;
 				string dialect = xml.GetSmartValue("dialect");
 				if (!string.IsNullOrWhiteSpace(dialect)){
-					Dialect = dialect.To<SqlDialect>();
+					Dialect = dialect.To<DbDialect>();
 				}
 				Body = xml.Value;
 			}
@@ -255,13 +255,13 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 					yield return GetAutoPartition(cls);
 				}
 			}
-			yield return PreventDeleteSysTrigger(cls);
+			if (!cls.NoDefaultRows) yield return PreventDeleteSysTrigger(cls);
 
 		}
 
 		private static SqlTrigger PreventDeleteSysTrigger(PersistentClass cls){
 			var result = new SqlTrigger();
-			result.Dialect = SqlDialect.SqlServer;
+			result.Dialect = DbDialect.SqlServer;
 			result.Table = cls;
 			result.TableName = cls.FullSqlName;
 			result.Name = "PreventDeletionOfSystemDefinedRows";
@@ -276,14 +276,14 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			var sb = new StringBuilder();
 			var a = cls.AllocationInfo;
 			
-			var dtype = a.PartitionField.DataType.ResolveSqlDataType(SqlDialect.SqlServer);
+			var dtype = a.PartitionField.DataType.ResolveSqlDataType(DbDialect.SqlServer);
 			var result = new SqlFunction();
 			result.UseTablePrefixedName = false;
 			result.UseSchemaName = true;
 			result.Schema = cls.Schema;
 			result.Name = cls.Name + "AlignPartitions";
 			result.IsProcedure = true;
-			result.Dialect = SqlDialect.SqlServer;
+			result.Dialect = DbDialect.SqlServer;
 
 			sb.AppendFormat(@"declare @fullparts table ( num int, limit {0})
 while ( 1 = 1 ) begin

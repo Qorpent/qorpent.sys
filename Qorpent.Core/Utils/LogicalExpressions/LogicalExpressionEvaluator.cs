@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Dsl/LogicalExpressionEvaluator.cs
 #endregion
 
+using System.Collections.Generic;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.IoC;
 using Qorpent.LogicalExpressions;
@@ -41,10 +42,15 @@ namespace Qorpent.Utils.LogicalExpressions {
 		/// <param name="expression"> </param>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		public bool Eval(string expression, ILogicTermSource source) {
+		public bool Eval(string expression, object source) {
 			lock (this) {
+			    source = source ?? new Dictionary<string, object>();
+			    if (!(source is ILogicTermSource)) {
+			        source = new DictionaryTermSource<object>(source.ToDict());
+
+			    }
 				var parsedexpression = parser.Parse(expression);
-				return parsedexpression.Eval(source);
+				return parsedexpression.Eval((ILogicTermSource)source);
 			}
 		}
 

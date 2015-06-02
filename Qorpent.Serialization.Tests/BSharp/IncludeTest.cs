@@ -46,6 +46,7 @@ class _t prototype=t abstract
 _t X g='default'
 _t Y g='a'
 _t Z g='z'
+_t E g='all'
 ";
 			var result = Compile(code);
 			var x = result.Get("a").Compiled.ToString().Replace("\"", "'");
@@ -55,6 +56,28 @@ _t Z g='z'
   <X g='default' prototype='t' />
 </class>".Trim().LfOnly().Length, x.Trim().LfOnly().Length);
 		}
+
+        [Test]
+        public void IncludeAllWithWhereAndCrossListSelfSupport()
+        {
+            var @code = @"
+class a
+	include all t
+		where g&+=""default ${self.code}""
+class _t prototype=t abstract
+_t X g='default'
+_t Y g='a'
+_t Z g='z'
+_t E g='all'
+";
+            var result = Compile(code);
+            var x = result.Get("a").Compiled.ToString().Replace("\"", "'");
+            Console.Write(x);
+            Assert.AreEqual(@"<class code='a' fullcode='a'>
+  <Y g='a' prototype='t' />
+  <X g='default' prototype='t' />
+</class>".Trim().LfOnly().Length, x.Trim().LfOnly().Length);
+        }
 
 		[Test]
 		public void NormalInclideAwaredInterpolation(){
@@ -91,6 +114,9 @@ class x
 
 
 		var result = Compile(code);
+	    foreach (var error in result.Errors) {
+	        Console.WriteLine(error.ToLogString());
+	    }
 			var xml = result.Get("x").Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(xml);
 			Assert.AreEqual(@"<class code='x' fullcode='x'>

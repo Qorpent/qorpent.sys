@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// Интерфейс конфигурации BSharp
 	/// </summary>
-	public interface IBSharpConfig:IConfig {
+	public interface IBSharpConfig:IScope {
 		/// <summary>
 		///     Признак использования интерполяции при компиляции
 		/// </summary>
@@ -35,7 +34,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///Глобальные константы
 		/// </summary>
-		IConfig Global { get; set; }
+		IScope Global { get; set; }
 		/// <summary>
 		/// Опция обработки конструкций Requires
 		/// </summary>

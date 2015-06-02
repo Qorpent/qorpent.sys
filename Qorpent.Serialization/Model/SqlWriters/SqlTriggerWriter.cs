@@ -23,7 +23,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetText(){
-			if (Dialect != SqlDialect.SqlServer){
+			if (Dialect != DbDialect.SqlServer){
 				return "-- !ВНИМАНИЕ НА ДАННЫЙ МОМЕНТ РЕАЛИЗАЦИЯ ГЕНЕРАЦИИ ТРИГЕРОВ ЕСТЬ ТОЛЬКО ДЛЯ MS SQL";
 			}
 			var sb = new StringBuilder();

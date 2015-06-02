@@ -23,7 +23,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetText(){
 			if (Mode == ScriptMode.Create){
-				if (Dialect == SqlDialect.SqlServer){
+				if (Dialect == DbDialect.SqlServer){
 					return
 						"exec __ensurefg @n='${Name}', @filecount=${FileCount}, @filesize=${FileSize}, @withidx=${WithIndexAsBit}, @isdefault=${IsDefaultAsBit}";
 				}

@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Qorpent.Utils.Extensions;
 
@@ -45,6 +46,9 @@ namespace Qorpent.IO.Net{
 				if (part[0].ToLowerInvariant() == "expires"){
 					current.Expires = DateTime.Parse(part[1]);
 				}
+                else if (part[0].ToLowerInvariant() == "max-age") {
+                    current.Expires = DateTime.Now.AddSeconds(part[1].ToInt());
+                }
 				else if (part[0].ToLowerInvariant() == "path"){
 					current.Path = part[1];
 				}
@@ -62,7 +66,7 @@ namespace Qorpent.IO.Net{
 				        current.Value = "";
 				    }
 				    else {
-				        current.Value = part[1];
+				        current.Value = string.Join("=", part.Skip(1).ToArray());
 				    }
 				}
 			}

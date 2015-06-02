@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Serialization;
 
 namespace Qorpent.BSharp {
@@ -63,12 +62,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Элемент хранящий данные об индексе параметров
 		/// </summary>
-		IConfig ParamSourceIndex { get; set; }
+		IScope ParamSourceIndex { get; set; }
 
 		/// <summary>
 		///     Сведенный словарь параметров
 		/// </summary>
-		IConfig ParamIndex { get; set; }
+		IScope ParamIndex { get; set; }
 
 		/// <summary>
 		/// Список всех определений мержа
@@ -153,8 +152,12 @@ namespace Qorpent.BSharp {
 		/// Контекст класса
 		/// </summary>
 		IBSharpContext Context { get;}
+        /// <summary>
+        /// Дополнительный связанный с классом контекст интерполяции
+        /// </summary>
+	    IScope InterpolationContext { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

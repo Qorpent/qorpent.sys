@@ -137,50 +137,50 @@ namespace Qorpent.Scaffolding.Model{
 
 
 		private void SetupDefaultScripts(){
-			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.SqlServer) && GenerationOptions.GenerateCreateScript){
+			if (GenerationOptions.IncludeDialect.HasFlag(DbDialect.SqlServer) && GenerationOptions.GenerateCreateScript){
 				if (GenerationOptions.Supports(SqlObjectType.FileGroup)){
 					ExtendedScripts.Add(new SqlScript{
 						Name = "sys:support_for_filegroups_begin",
 						Mode = ScriptMode.Create,
-						SqlDialect = SqlDialect.SqlServer,
+						DbDialect = DbDialect.SqlServer,
 						Position = ScriptPosition.Before,
 						Text = DefaultScripts.SqlServerCreatePeramble
 					});
 					ExtendedScripts.Add(new SqlScript{
 						Name = "sys:support_for_filegroups_end",
 						Mode = ScriptMode.Create,
-						SqlDialect = SqlDialect.SqlServer,
+						DbDialect = DbDialect.SqlServer,
 						Position = ScriptPosition.After,
 						Text = DefaultScripts.SqlServerCreateFinisher
 					});
 				}
 			}
-			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.PostGres)){
+			if (GenerationOptions.IncludeDialect.HasFlag(DbDialect.PostGres)){
 				ExtendedScripts.Add(new SqlScript{
 					Name = "sys:psql_start",
 					Mode = ScriptMode.Create,
-					SqlDialect = SqlDialect.PostGres,
+					DbDialect = DbDialect.PostGres,
 					Position = ScriptPosition.Before,
 					Text = DefaultScripts.PostgresqlPeramble
 				});
 				ExtendedScripts.Add(new SqlScript{
 					Name = "sys:psql_end",
 					Mode = ScriptMode.Create,
-					SqlDialect = SqlDialect.PostGres,
+					DbDialect = DbDialect.PostGres,
 					Position = ScriptPosition.After,
 					Text = DefaultScripts.PostgresqlFinisher
 				});
 				ExtendedScripts.Add(new SqlScript{
 					Name = "sys:psql_start",
 					Mode = ScriptMode.Drop,
-					SqlDialect = SqlDialect.PostGres,
+					DbDialect = DbDialect.PostGres,
 					Position = ScriptPosition.Before,
 					Text = DefaultScripts.PostgresqlPeramble
 				});
 				ExtendedScripts.Add(new SqlScript{
 					Name = "sys:psql_end",
 					Mode = ScriptMode.Drop,
-					SqlDialect = SqlDialect.PostGres,
+					DbDialect = DbDialect.PostGres,
 					Position = ScriptPosition.After,
 					Text = DefaultScripts.PostgresqlFinisher
 				});
@@ -429,7 +429,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="dialect"></param>
 		/// <param name="mode"></param>
 		/// <returns></returns>
-		public string GetScript(SqlDialect dialect, ScriptMode mode){
+		public string GetScript(DbDialect dialect, ScriptMode mode){
 			var sb = new StringBuilder();
 			foreach (SqlCommandWriter sw in GetWriters(dialect, mode)){
 				if (null == sw) continue;
@@ -446,7 +446,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="dialect"></param>
 		/// <param name="mode"></param>
 		/// <returns></returns>
-		public string GetDigest(SqlDialect dialect, ScriptMode mode){
+		public string GetDigest(DbDialect dialect, ScriptMode mode){
 			var sb = new StringBuilder();
 			foreach (SqlCommandWriter sw in GetWriters(dialect, mode)){
 				if (null == sw) continue;
@@ -465,7 +465,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="mode"></param>
 		/// <param name="position"></param>
 		/// <returns></returns>
-		public IEnumerable<SqlScript> GetScripts(SqlDialect dialect, ScriptMode mode, ScriptPosition position){
+		public IEnumerable<SqlScript> GetScripts(DbDialect dialect, ScriptMode mode, ScriptPosition position){
 			if (GenerationOptions.Supports(SqlObjectType.Script)){
 				return ExtendedScripts.SelectMany(_ => _.GetRealScripts(dialect, position, mode));
 			}
@@ -491,7 +491,7 @@ namespace Qorpent.Scaffolding.Model{
 		///     Получить последовательность генерации
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<SqlCommandWriter> GetWriters(SqlDialect dialect, ScriptMode mode){
+		public IEnumerable<SqlCommandWriter> GetWriters(DbDialect dialect, ScriptMode mode){
 			if (mode == ScriptMode.Create && !GenerationOptions.GenerateCreateScript) yield break;
 			if (mode == ScriptMode.Drop && !GenerationOptions.GenerateDropScript) yield break;
 			if (!GenerationOptions.IncludeDialect.HasFlag(dialect)) yield break;
@@ -502,11 +502,11 @@ namespace Qorpent.Scaffolding.Model{
 			}
 		}
 
-		private IEnumerable<object> GetDropWriters(SqlDialect dialect){
+		private IEnumerable<object> GetDropWriters(DbDialect dialect){
 			return GetCreateOrderedWriters(dialect, ScriptMode.Drop).Reverse();
 		}
 
-		private IEnumerable<object> GetCreateOrderedWriters(SqlDialect dialect, ScriptMode mode = ScriptMode.Create){
+		private IEnumerable<object> GetCreateOrderedWriters(DbDialect dialect, ScriptMode mode = ScriptMode.Create){
 			
 			foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.Before)){
 				yield return script;
@@ -540,21 +540,21 @@ namespace Qorpent.Scaffolding.Model{
 			}
 
 			foreach (SqlFunction function in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlFunction>())){
-				if(function.Dialect==SqlDialect.None||function.Dialect==dialect||function.Dialect==SqlDialect.Ansi)
+				if(function.Dialect==DbDialect.None||function.Dialect==dialect||function.Dialect==DbDialect.Ansi)
 				yield return function;
 			}
 			foreach (SqlView view in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlView>())){
-				if (view.Dialect == SqlDialect.None || view.Dialect == dialect || view.Dialect == SqlDialect.Ansi)
+				if (view.Dialect == DbDialect.None || view.Dialect == dialect || view.Dialect == DbDialect.Ansi)
 				yield return view;
 			}
 			foreach (SqlTrigger trigger in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlTrigger>())){
-				if (trigger.Dialect == SqlDialect.None || trigger.Dialect == dialect || trigger.Dialect == SqlDialect.Ansi)
+				if (trigger.Dialect == DbDialect.None || trigger.Dialect == dialect || trigger.Dialect == DbDialect.Ansi)
 				yield return trigger;
 			}
 
             foreach (SqlScript script in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlScript>()))
             {
-                if (script.Dialect == SqlDialect.None || script.Dialect == dialect || script.Dialect == SqlDialect.Ansi)
+                if (script.Dialect == DbDialect.None || script.Dialect == dialect || script.Dialect == DbDialect.Ansi)
                     yield return script;
             }
 
@@ -567,9 +567,9 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <param name="dialect"></param>
 		/// <returns></returns>
-		public bool IsSupportPartitioning(SqlDialect dialect){
+		public bool IsSupportPartitioning(DbDialect dialect){
 			if (!GenerationOptions.GeneratePartitions) return false;
-			return dialect == SqlDialect.SqlServer;
+			return dialect == DbDialect.SqlServer;
 		}
 	}
 }

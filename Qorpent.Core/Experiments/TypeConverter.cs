@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Qorpent.Experiments;
 
@@ -66,6 +67,10 @@ namespace Qorpent.Utils
 				if (string.IsNullOrWhiteSpace(s)) {
 					return defaultValue;
 				}
+                if (s.All(char.IsDigit))
+                {
+                    return int.Parse(s);
+                }
 				dbl = ParseToDouble(s, s.Length, defaultValue, safe);
 			}
 			else {
@@ -186,6 +191,9 @@ namespace Qorpent.Utils
 				if (string.IsNullOrWhiteSpace(s)) {
 					return defaultValue;
 				}
+			    if (s.All(char.IsDigit)) {
+			        return long.Parse(s);
+			    }
 				dbl = ParseToDouble(s, s.Length, defaultValue, safe);
 			}
 			else {
@@ -495,6 +503,7 @@ namespace Qorpent.Utils
 		}
 
 
+
 		/// <summary>
 		/// 	Converts object properties and values to dictionary
 		/// </summary>
@@ -512,6 +521,7 @@ namespace Qorpent.Utils
 				if(nullsafe)return new Dictionary<string, object>();
 				return null;
 			}
+		    
 			var result = existed ?? new Dictionary<string, object>();
 			var str = obj as string;
 		   
@@ -519,10 +529,12 @@ namespace Qorpent.Utils
 				ReadAsDictionary(str,itemdelimiter,valdelimiter,trim,escapechar,urlescape,result);
 				return result;
 			}
+            
 			var convertible = obj as IConvertible;
 			if (null != convertible) {
 				result[DictValueName] = convertible;               
 			}
+           
 			var collection = obj as ICollection;
 			if (null != collection) {
 				if (CheckDictionary<string, object>(obj, result)) return result;

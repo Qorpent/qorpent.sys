@@ -9,7 +9,7 @@ namespace Qorpent.Host.Security{
 		public byte[] Key;
 		public byte[] Vector;
 
-		public Encryptor(){
+	    public Encryptor(){
 		}
 
 		public Encryptor(string keysrc){
@@ -47,14 +47,17 @@ namespace Qorpent.Host.Security{
 			return data;
 		}
 
-		public void Initialize(IHostServer server){
+		public void Initialize(IHostServer server) {
 			InitializeKey(server.Config.EncryptBasis);
 		}
 
 		private void InitializeKey(string keysrc){
-			if (string.IsNullOrWhiteSpace(keysrc)){
-				keysrc = Guid.NewGuid().ToString();
+           
+			if (string.IsNullOrWhiteSpace(keysrc)) {
+			    keysrc = Guid.NewGuid().ToString();
 			}
+            keysrc += Environment.MachineName + DateTime.Today.ToLongDateString();
+            Console.WriteLine("keysrc: "+keysrc);
 			while (keysrc.Length <= 32){
 				keysrc += keysrc;
 			}

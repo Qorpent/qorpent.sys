@@ -1,6 +1,24 @@
-<div class="mapstat">
-    <span title="Количество объектов, в целом отображенных на карте">Всего: </span>
+<div ng-if="myMap.dataset.total > myMap.dataset.current" class="mapstat">
+    <span title="Количество объектов, видимых на экране в данный момент">Показано </span>
+    <span>{{myMap.dataset.current}} объект{{
+        myMap.dataset.current == 1 ? "" : (
+        (myMap.dataset.current == 2 || myMap.dataset.current == 3 || myMap.dataset.current == 4) ? "а" : "ов"
+        )
+    }} </span>
+    <span title="Количество объектов, в целом отображенных на карте"> из </span>
     <span>{{myMap.dataset.total}}</span>
-    <span title="Количество объектов, видимых на экране в данный момент">Текущее: </span>
-    <span>{{myMap.dataset.current}}</span>
+
 </div>
+
+<div ng-if="myMap.dataset.total == 0" class="mapstat">
+
+    Объекты не найдены
+
+</div>
+
+
+<div ng-if="myMap.dataset.total != 0 && myMap.dataset.total == myMap.dataset.current" class="mapstat">
+    Объектов на карте
+    <span> {{myMap.dataset.current}}</span>
+</div>
+

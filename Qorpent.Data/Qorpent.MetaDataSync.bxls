@@ -65,9 +65,9 @@ namespace Qorpent.MetaDataSync
 		
 		
 	Table FileContentBase "Реестр содержимого файлов" abstract target="FileBase"
-		ref MDFile "Целевой файл" to="${target}.Id" index="${.code}_UNQ_FILE_REVISION"
+		ref MDFile "Целевой файл" to="${target}.Id" index="${self.code}_UNQ_FILE_REVISION"
 		datetime RevisionTime "Время создания ревизии"
-		string Revision "Ревизия" index="${.code}_UNQ_FILE_REVISION"
+		string Revision "Ревизия" index="${self.code}_UNQ_FILE_REVISION"
 		string Hash "Хэш контента"
 		longstring Comment "Комментарий"
 		text Content "Контент"
@@ -98,7 +98,7 @@ namespace Qorpent.MetaDataSync
 			return @revid
 		)
 		
-		view "${.code}Full" "Вид полного нормализованного представления ячеек"
+		view "${self.code}Full" "Вид полного нормализованного представления ячеек"
 			selffields
 			reffields
 				by MDFile

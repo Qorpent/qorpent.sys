@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -52,6 +53,27 @@ namespace Qorpent.Utils.Extensions {
 			trace = Regex.Replace(trace, @"[\S]+?:строка\s\d+", " в <strong>$0</strong>");
 			return trace;
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static string UnescapeUrlData(string query) {
+            query = query.Replace("+", " ");
+            return Uri.UnescapeDataString(query);
+        }
+
+        public static IDictionary<string,string> ParseUrlQueryData(string query, bool unescape = true) {
+            var elements = query.SmartSplit(false, false, '&');
+            var result = new Dictionary<string, string>();
+            foreach (var element in elements) {
+                var pair = element.Split('=');
+                var name = unescape?UnescapeUrlData(pair[0]):pair[0];
+                var value = unescape?UnescapeUrlData(pair[1]):pair[1];
+                result[name] = value;
+            }
+            return result;
+        }
 		
 		/// <summary>
 		/// Замещает символы, не совместимые с именем файла
@@ -229,6 +251,68 @@ namespace Qorpent.Utils.Extensions {
 			result = result.Replace("&#xA;&#xA;", "&#xA;");
 			return result;
 		}
+        /// <summary>
+        /// Упрощает строку для задач сравнения
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static string Simplify(this string src, SimplifyOptions options = SimplifyOptions.Default) {
+            if (string.IsNullOrEmpty(src)) return string.Empty;
+            if (SimplifyOptions.None == options) return src;
+            var result = src;
+            if (options.HasFlag(SimplifyOptions.Trim)) {
+                result = result.Trim();
+            }
+            if (options.HasFlag(SimplifyOptions.LowerCase)) {
+                result = result.ToLowerInvariant();
+            }
+            if (options.HasFlag(SimplifyOptions.LfOnly)) {
+                result = result.LfOnly();
+            }
+            var sb = new StringBuilder();
+            foreach(var c in result) {
+                if (char.IsWhiteSpace(c)) {
+                    if (c == '\r' || c == '\n') {
+                        if (!options.HasFlag(SimplifyOptions.NoNewLines)) {
+                            sb.Append(c);
+                        }
+                    }
+                    else {
+                        if (!options.HasFlag(SimplifyOptions.NoInlineWs)) {
+                            sb.Append(c);
+                        }
+
+                    }
+                }
+                else if (c == '_') {
+                    if (!options.HasFlag(SimplifyOptions.NoUndescores)) {
+                        sb.Append(c);
+                    }
+                }
+                else if (c == '-')
+                {
+                    if (!options.HasFlag(SimplifyOptions.NoDashes))
+                    {
+                        sb.Append(c);
+                    }
+                }
+                else if (c == '"' || c == '«' || c == '»') {
+                    if (options.HasFlag(SimplifyOptions.SingleQuotes)) {
+                        sb.Append('\'');
+                    }
+                    else {
+                        sb.Append(c);
+                    }
+                }
+                else {
+                    sb.Append(c);
+                }
+
+            }
+
+            return sb.ToString();
+        }
 
 		/// <summary>
 		/// 	Concatenates any given IEnumerable to joined string, null-ignorance
@@ -446,6 +530,17 @@ namespace Qorpent.Utils.Extensions {
 			return RegexFind(str, pattern,
 						RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 		}
+
+        
+        public static string Interpolate(this string str, object ctx, IDictionary<string,object> ctx2 = null, string controlKey = null, Action<StringInterpolation> setup =null) {
+            var si = new StringInterpolation();
+            if (null != setup) {
+                setup(si);
+            }
+            return si.Interpolate(str, ctx,ctx2,controlKey);
+        }
+
+
 
 		/// <summary>
 		/// Оболочка над Regex.Match с возвратом найденного значения, игнорируется регистр и пробельные символы

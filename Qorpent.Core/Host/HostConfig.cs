@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.IO;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
@@ -24,12 +25,13 @@ namespace Qorpent.Host{
 		private string _dllFolder;
 		private string _logFolder;
 		private string _machineName;
-		private ConfigBase _parameters;
+		private Scope _parameters;
 		private string _rootFolder;
 		private int _threadCount;
 		private string _tmpFolder;
 		private bool _useApplicationName;
 	    private IUserLog _log;
+	    private bool _wasInitialized;
 
 	    /// <summary>
 	    ///     Формирует конфиг из XML
@@ -45,19 +47,34 @@ namespace Qorpent.Host{
 			if (null != xml){
 				LoadXmlConfig(xml,context);
 			}
-            CreateLogger();
+            
+	    }
+
+
+	    public void Initialize() {
+	        if (!_wasInitialized) {
+                CreateLogger();
+	            _wasInitialized = true;
+	        }
+	        
 	    }
 
 	    private void CreateLogger() {
 	        if (LoggerHost != "" && LoggerPort != 0 && LoggerName != "") {
-	            Trace.Listeners.Add(new UdpTraceListener(LoggerHost, LoggerPort, LoggerName));
-	        }
-	        LogDebug("Debug Test");
-	        LogInfo("Info Test");
-	        LogWarning("Warning Test");
-	        LogError("Error Test");
-	        LogFatal("Fatal Test");
+                Console.WriteLine("LOGLEVEL " + LogLevel);
+	            var def = Loggy.Get();
+	            def.Level = LogLevel;
+                def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1,Format = LoggerFormat});
+                def.Debug("debug test тест");
+                def.Trace("trace test тест");
+                def.Info("info test тест");
+                def.Warn("warning test тест");
+                def.Error("error test тест", new Exception("Test exception"));
+                def.Fatal("fatal test тест");
+            }
 	    }
+
+	    public string LoggerFormat { get; set; }
 
 	    /// <summary>
 		///     Формирует конфиг по умолчанию
@@ -234,8 +251,8 @@ namespace Qorpent.Host{
 		///     Дополнительные параметры
 		/// </summary>
 		[Serialize]
-		public ConfigBase Parameters{
-			get { return _parameters ?? (_parameters = new ConfigBase()); }
+		public Scope Parameters{
+			get { return _parameters ?? (_parameters = new Scope()); }
 			set { _parameters = value; }
 		}
 
@@ -456,12 +473,13 @@ namespace Qorpent.Host{
 	        var appid = xml.ResolveValue("appid", "0").ToInt();
 	        if (appid != 0) {
 	            AddQorpentBinding(appid);
-                LogInfo(string.Concat("AppId is [", appid , "]"));
+                Loggy.Info(string.Concat("AppId is [", appid , "]"));
 	        }
 
-            LoggerName = xml.ResolveValue("loggername", "").ToStr();
-            LoggerHost = xml.ResolveValue("loggerhost", "").ToStr();
+            LoggerName = xml.ResolveValue("loggername", "");
+            LoggerHost = xml.ResolveValue("loggerhost", "");
             LoggerPort = xml.ResolveValue("loggerport", "0").ToInt();
+            LoggerFormat = xml.ResolveValue("loggerformat", "").Replace("%{","${");
 
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 

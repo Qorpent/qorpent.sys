@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 using NUnit.Framework;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Utils.Extensions;
 
@@ -67,6 +66,97 @@ namespace .B #partial
             Assert.AreEqual("X.B", resultNoEmptyDefault.Get("c").Namespace);
 
 	    }
+
+        [Test]
+        public void BUG_CannotInheritTwoStatics()
+        {
+
+            var code = @"
+class a static
+a b	static
+	";
+            var result = BSharpCompiler.Compile(code);
+            foreach (var error in result.GetErrors())
+            {
+                Console.WriteLine(error.ToLogString());
+            }
+            Assert.AreEqual(0, result.GetErrors().Count());
+
+        }
+
+	    [Test]
+	    public void SelfKeywordSupport() {
+	        var code = @"
+class a abstract
+    e c=1
+        e2 c=2
+            e3 c='${.c}${self.c}'
+a b c=4 x=${self.c}
+";
+            var result = BSharpCompiler.Compile(code);
+	        var b = result["b"];
+            var x = b.Compiled;
+            Console.WriteLine(x.ToString().Replace("\"","'"));
+            Assert.AreEqual(@"<a code='b' c='4' x='4' fullcode='b'>
+  <e c='1'>
+    <e2 c='2'>
+      <e3 c='24' />
+    </e2>
+  </e>
+</a>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
+	    }
+
+        [Test]
+        public void BaseKeywordSupport()
+        {
+            var code = @"
+class a abstract
+    e c=1
+        e2 c=2
+            e3 c='1:${.c},2:${self.c},3:${self.x},4:${base.x},5:${base.c.x},6:${base.y},7:${self.y}'
+class c abstract x=1
+class d abstract y=2 x=5
+a b c=4 x=3 w=${base.c.x}
+    import c
+    import d
+";
+            var result = BSharpCompiler.Compile(code);
+            var b = result["b"];
+            var x = b.Compiled;
+            Console.WriteLine(x.ToString().Replace("\"", "'"));
+            Assert.AreEqual(@"<a code='b' c='4' x='3' w='1' fullcode='b' y='2'>
+  <e c='1'>
+    <e2 c='2'>
+      <e3 c='1:2,2:4,3:3,4:5,5:1,6:2,7:2' />
+    </e2>
+  </e>
+</a>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
+        }
+
+
+        [Test]
+        public void BUG_InvalidInterpolation()
+        {
+
+            var code = @"
+
+
+
+class cs_basis   
+    col '${_colcode,_DEFCOL}' '${_title,_DEFTITLE}' customcode='${_ccbasis,.code}_FACT_MAIN' forperiods='${_FACT}' condition='${.condition}'
+
+
+
+	";
+            var result = BSharpCompiler.Compile(code);
+            foreach (var error in result.GetErrors())
+            {
+                Console.WriteLine(error.ToLogString());
+            }
+            Assert.AreEqual(0, result.GetErrors().Count());
+            Console.WriteLine(result["cs_basis"].Compiled);
+            Assert.False(result["cs_basis"].Compiled.ToString().Contains("${.condition}"));
+        }
 
 		[Test]
 		public void CanCompileSingleClass() {
@@ -580,10 +670,7 @@ class custom abstract
 			Assert.AreEqual(2, result.Working.Count);
 			var xml = result.Get("A").Compiled;
 			Console.WriteLine(xml);
-			Console.WriteLine("=================================");
-			Console.WriteLine(result.Get("A").ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
-			Console.WriteLine("=====================================");
-			Console.WriteLine(result.Get("A").ParamIndex.ToString(ConfigRenderType.SimpleBxl));
+			
 			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
 			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
 			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));
@@ -615,5 +702,29 @@ custom Z 'zed' _x _y
 			Assert.AreEqual("123", result.Get("Z").Compiled.Attribute("test").Value);
 			Console.WriteLine(result.Working[2].Compiled);
 		}
+
+	    [Test]
+	    public void SequenceSupport() {
+	        var result = Compile(@"
+class enumerated abstract _seq='${initseq(_sname,_sstart,_sstep)}'
+    item 1 idx=${nextseq(_sname)} idx2=${nextseq()} #named and nonamed default sequence used
+    item 2 idx=${nextseq(_sname)} idx2=${nextseq()}
+
+enumerated e1 _sname=e1 _sstart=10 _sstep=10
+enumerated e2 _sname=e2 _sstart=5 _sstep=2
+enumerated e3 _sname=e1 _sstart=5 _sstep=3
+
+");
+	        Func<string, int> getidx = n => result[n].Compiled.Elements("item").Last().Attr("idx").ToInt();
+	        Func<string, int> getidx2 = n => result[n].Compiled.Elements("item").Last().Attr("idx2").ToInt();
+	        Assert.AreEqual(20,getidx("e1"));
+	        Assert.AreEqual(7,getidx("e2"));
+	        Assert.AreEqual(8,getidx("e3"));
+
+            Assert.AreEqual(1, getidx2("e1"));
+            Assert.AreEqual(1, getidx2("e2"));
+            Assert.AreEqual(1, getidx2("e3"));
+            
+	    }
 	}
 }

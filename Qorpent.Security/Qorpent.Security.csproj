@@ -9,7 +9,6 @@
   </PropertyGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
-  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="Qorpent.Security.export" />
@@ -31,7 +30,6 @@
     <Compile Include="FileBasedRoleProvider.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
-    <Compile Include="SysLogon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml" />

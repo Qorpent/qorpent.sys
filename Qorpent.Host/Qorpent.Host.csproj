@@ -48,7 +48,6 @@
     <Compile Include="Security\QorpentHostPrincipal.cs" />
     <Compile Include="Security\UserInfo.cs" />
     <Compile Include="Security\TokenType.cs" />
-    <Compile Include="Security\WinLogon.cs" />
     <Compile Include="SimpleSockets\SimpleSocket.cs" />
     <Compile Include="SimpleSockets\SimpleSocketClient.cs" />
     <Compile Include="SimpleSockets\SimpleSocketRequest.cs" />
@@ -65,13 +64,8 @@
     <Compile Include="HostServer.cs" />
     <Compile Include="HostRequestHandler.cs" />
     <Compile Include="Qweb\HostQwebHandler.cs" />
-    <Compile Include="Utils\HttpListenerContextExtensions.cs" />
-    <Compile Include="Utils\MiltipartReadContext.cs" />
-    <Compile Include="Utils\PostFile.cs" />
     <Compile Include="Handlers\NotFoundHandler.cs" />
     <Compile Include="HostExtensions.cs" />
-    <Compile Include="Utils\RequestDataRetriever.cs" />
-    <Compile Include="Utils\RequestParameterSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\qorpent.sys\Qorpent.Core\Qorpent.Core.csproj">
@@ -219,6 +213,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\extras\textAngular-sanitize.js" />
     <EmbeddedResource Include="Resources\extras\textAngular.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

@@ -66,54 +66,13 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
-    <Compile Include="Charts\ChartAbstractScale.cs" />
-    <Compile Include="Charts\ChartAbstractScaleType.cs" />
-    <Compile Include="Charts\ChartDefaults.cs" />
-    <Compile Include="Charts\ChartException.cs" />
-    <Compile Include="Charts\ChartNormalizerArea.cs" />
-    <Compile Include="Charts\ChartState.cs" />
-    <Compile Include="Charts\GraphOptions.cs" />
-    <Compile Include="Charts\IChart.cs" />
-    <Compile Include="Charts\IChartAttribute.cs" />
-    <Compile Include="Charts\IChartCategories.cs" />
-    <Compile Include="Charts\IChartCategory.cs" />
-    <Compile Include="Charts\IChartColor.cs" />
-    <Compile Include="Charts\IChartConfig.cs" />
-    <Compile Include="Charts\IChartDataItem.cs" />
-    <Compile Include="Charts\IChartDataset.cs" />
-    <Compile Include="Charts\IChartDatasets.cs" />
-    <Compile Include="Charts\IChartElement.cs" />
-    <Compile Include="Charts\IChartElementList.cs" />
-    <Compile Include="Charts\IChartLineset.cs" />
-    <Compile Include="Charts\IChartLineSetItem.cs" />
-    <Compile Include="Charts\IChartNormalized.cs" />
-    <Compile Include="Charts\IChartNormalizer.cs" />
-    <Compile Include="Charts\IChartRender.cs" />
-    <Compile Include="Charts\IChartRenderConfig.cs" />
-    <Compile Include="Charts\IChartRenderResult.cs" />
-    <Compile Include="Charts\IChartSet.cs" />
-    <Compile Include="Charts\IChartSource.cs" />
-    <Compile Include="Charts\IChartTrendLine.cs" />
-    <Compile Include="Charts\IChartTrendLines.cs" />
-    <Compile Include="Charts\IChartVerticalLine.cs" />
-    <Compile Include="Charts\IChartXmlSource.cs" />
-    <Compile Include="Charts\IGraphBuilder.cs" />
-    <Compile Include="Charts\IGraphConvertible.cs" />
-    <Compile Include="Charts\IGraphEdgeBuilder.cs" />
-    <Compile Include="Charts\IGraphElementBuilder.cs" />
-    <Compile Include="Charts\IGraphNodeBuilder.cs" />
-    <Compile Include="Charts\IGraphProvider.cs" />
-    <Compile Include="Charts\IGraphSource.cs" />
-    <Compile Include="Charts\IGraphSubGraphBuilder.cs" />
-    <Compile Include="Config\ConfigBase.cs" />
-    <Compile Include="Config\ConfigRenderType.cs" />
-    <Compile Include="Config\DictionaryCompatibleConfig.cs" />
-    <Compile Include="Config\HierarchyElement.cs" />
-    <Compile Include="Config\IConfig.cs" />
-    <Compile Include="Config\IConfigurableFromDictionary.cs" />
-    <Compile Include="Config\IXmlConfigSource.cs" />
-    <Compile Include="Config\TreeConfigBase.cs" />
-    <Compile Include="Config\TreeConfigBaseElementsList.cs" />
+    <Compile Include="Scope\IScope.cs" />
+    <Compile Include="Scope\IScopeBound.cs" />
+    <Compile Include="Scope\Scope.cs" />
+    <Compile Include="Scope\ScopeAppend.cs" />
+    <Compile Include="Scope\ScopeExtensions.cs" />
+    <Compile Include="Scope\ScopeNull.cs" />
+    <Compile Include="Scope\ScopeOptions.cs" />
     <Compile Include="CoreExtensions.cs" />
     <Compile Include="Data\DbCommandExecutorExtesions.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
@@ -130,8 +89,13 @@
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Data\DbCommandWrapper.cs" />
     <Compile Include="Data\DbParameter.cs" />
-    <Compile Include="Data\SqlDialect.cs" />
+    <Compile Include="Data\DbDialect.cs" />
     <Compile Include="Data\SqlObjectType.cs" />
+    <Compile Include="Dsl\Bxl\BxlGenerator.cs" />
+    <Compile Include="Dsl\Bxl\BxlParser.cs" />
+    <Compile Include="Dsl\Bxl\BxlService.cs" />
+    <Compile Include="Dsl\Bxl\MyBxl.cs" />
+    <Compile Include="Dsl\Bxl\ReadMode.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
     <Compile Include="Experiments\Constants.cs" />
     <Compile Include="Experiments\IJsonSerializable.cs" />
@@ -144,8 +108,6 @@
     <Compile Include="FilterExtensions.cs" />
     <Compile Include="FilterState.cs" />
     <Compile Include="HelpAttribute.cs" />
-    <Compile Include="Host\HostConfigLog.cs" />
-    <Compile Include="Host\UdpTraceListener.cs" />
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
     <Compile Include="Host\HostConfig.cs" />
@@ -156,6 +118,17 @@
     <Compile Include="Host\IEncryptProvider.cs" />
     <Compile Include="Host\IHostConfigProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />
+    <Compile Include="Host\RequestHandlerBase.cs" />
+    <Compile Include="IO\Http\WebContext.cs" />
+    <Compile Include="IO\Http\HttpListenerRequestDescriptor.cs" />
+    <Compile Include="IO\Http\HttpListenerResponseDescriptor.cs" />
+    <Compile Include="IO\Http\HttpRequestDescriptor.cs" />
+    <Compile Include="IO\Http\HttpResponseDescriptor.cs" />
+    <Compile Include="IO\Http\IHttpRequestDescriptor.cs" />
+    <Compile Include="IO\Http\IHttpResponseDescriptor.cs" />
+    <Compile Include="IO\Http\MiltipartReadContext.cs" />
+    <Compile Include="IO\Http\PostFile.cs" />
+    <Compile Include="IO\Http\RequestParameters.cs" />
     <Compile Include="IO\IBinarySerializable.cs" />
     <Compile Include="Host\IHostServer.cs" />
     <Compile Include="Host\IHostServerInitializer.cs" />
@@ -193,6 +166,17 @@
     <Compile Include="IO\IWebFileResolver.cs" />
     <Compile Include="IO\WebFileSerachMode.cs" />
     <Compile Include="Log\CollectionBasedUserLog.cs" />
+    <Compile Include="Log\NewLog\AppenderBase.cs" />
+    <Compile Include="Log\NewLog\ConsoleAppender.cs" />
+    <Compile Include="Log\NewLog\DefaultLoggy.cs" />
+    <Compile Include="Log\NewLog\ILogAppender.cs" />
+    <Compile Include="Log\NewLog\ILoggy.cs" />
+    <Compile Include="Log\NewLog\ILoggyManager.cs" />
+    <Compile Include="Log\NewLog\Loggy.cs" />
+    <Compile Include="Log\NewLog\LoggyExtensions.cs" />
+    <Compile Include="Log\NewLog\LoggyManager.cs" />
+    <Compile Include="Log\NewLog\LoggyMessage.cs" />
+    <Compile Include="Log\NewLog\UdpAppender.cs" />
     <Compile Include="Log\SessionLog.cs" />
     <Compile Include="Log\SessionLogClearQuery.cs" />
     <Compile Include="Log\SessionLogQuery.cs" />
@@ -248,8 +232,12 @@
     <Compile Include="Mvc\ViewNotFoundException.cs" />
     <Compile Include="ScheduledTask.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
+    <Compile Include="Security\DefaultLogonProvider.cs" />
     <Compile Include="Security\ICredentialStorage.cs" />
+    <Compile Include="Security\ILogon.cs" />
+    <Compile Include="Security\ILogonProvider.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
+    <Compile Include="Security\SysLogon.cs" />
     <Compile Include="Security\UserName.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />
@@ -287,6 +275,7 @@
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Tasks\IJob.cs" />
+    <Compile Include="Tasks\ITaskStateProvider.cs" />
     <Compile Include="Tasks\Job.cs" />
     <Compile Include="Tasks\UpdateTaskBase.cs" />
     <Compile Include="TransactionAction.cs" />
@@ -320,7 +309,6 @@
     <Compile Include="Utils\DateRangeResolver.cs" />
     <Compile Include="Utils\Experiments\StringUtils.cs" />
     <Compile Include="Utils\Extensions\ApplicationExtensions.cs" />
-    <Compile Include="Utils\Extensions\ConfigExtensions.cs" />
     <Compile Include="Utils\Extensions\ContainerExtensions.cs" />
     <Compile Include="Utils\Extensions\DatabaseEngineType.cs" />
     <Compile Include="Utils\Extensions\DatabaseExtensions.cs" />
@@ -336,6 +324,7 @@
     <Compile Include="Utils\Extensions\OsExtensions.cs" />
     <Compile Include="Utils\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Utils\Extensions\SecurityExtensions.cs" />
+    <Compile Include="Utils\Extensions\SimplifyOptions.cs" />
     <Compile Include="Utils\Extensions\SlashListHelper.cs" />
     <Compile Include="Utils\Extensions\SqlCommandType.cs" />
     <Compile Include="Utils\Extensions\StreamExtensions.cs" />
@@ -346,7 +335,6 @@
     <Compile Include="Utils\Extensions\UniSqlQuery.cs" />
     <Compile Include="Utils\Extensions\XmlExtensions.cs" />
     <Compile Include="Utils\FileSystemHelper.cs" />
-    <Compile Include="Utils\FuzzyLogic\FuzzySet.cs" />
     <Compile Include="Utils\GeoProjectionHelper.cs" />
     <Compile Include="Utils\Git\FileRecord.cs" />
     <Compile Include="Utils\Git\FileState.cs" />
@@ -365,21 +353,13 @@
     <Compile Include="Utils\LogicalExpressions\DisjunctionNode.cs" />
     <Compile Include="Utils\LogicalExpressions\EqualNode.cs" />
     <Compile Include="Utils\LogicalExpressions\EqualValueNode.cs" />
+    <Compile Include="Utils\LogicalExpressions\LETokenType.cs" />
     <Compile Include="Utils\LogicalExpressions\LiteralNode.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionParser.cs" />
     <Compile Include="Utils\ParamMappingHelper.cs" />
     <Compile Include="Utils\ReflectionExtensionsException.cs" />
     <Compile Include="Utils\ReflectionHelper.cs" />
-    <Compile Include="Utils\Scaling\ScaleApproximated.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalizeCache.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalizeClause.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalized.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalizedVariant.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalizer.cs" />
-    <Compile Include="Utils\Scaling\ScaleNormalizerImproved.cs" />
-    <Compile Include="Utils\Scaling\SlickNumbers.cs" />
-    <Compile Include="Utils\Scaling\Table.cs" />
     <Compile Include="Utils\SimpleExpressionItem.cs" />
     <Compile Include="Utils\SimpleExpressionItemType.cs" />
     <Compile Include="Utils\SimpleExpressionParser.cs" />
@@ -582,7 +562,6 @@
     <DocumentationFile>
     </DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DefineConstants>TRACE;DEBUG;Windows_NT</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>

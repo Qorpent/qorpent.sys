@@ -19,6 +19,31 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 			Assert.IsTrue(field.IsHash);
 		}
 		[Test]
+		public void GetInsertQueryMethodSupports() {
+			const string bxl = @"class a prototype=dbtable
+	string SomeField";
+			var model = PersistentModel.Compile(bxl);
+			var code = new PokoClassWriter(model["a"]) {
+				ProcessFields = false,
+				ProcessFooter = false,
+				ProcessHeader = false,
+				ProcessReferences = false,
+				ProcessHashMethods = false,
+				ProcessInsertConstructor = true
+			}.ToString();
+			Console.WriteLine(code);
+			Assert.AreEqual(@"		/// <summary></summary>
+		public string GetInsertQuery(string target = ""\""dbo\"".\""a\"""", IDictionary<string, string> additional = null) {
+			var s = ""insert into "" + target + "" (\""Id\"",\""SomeField\"""";
+			if (additional != null && additional.Count > 0) s += "","" + string.Join("","", additional.Keys);
+s += "") values (@Id,@SomeField"";
+			if (additional != null && additional.Count > 0) s += "",@"" + string.Join("",@"", additional.Values);
+			s += "");"";
+			return s;
+		}
+", code);
+		}
+		[Test]
 		public void GetHashMethodSupports() {
 			const string bxl = @"class a prototype=dbtable
 	string SomeField hash=1";
@@ -28,7 +53,8 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 				ProcessFooter = false,
 				ProcessHeader = false,
 				ProcessReferences = false,
-				ProcessHashMethods = true
+				ProcessHashMethods = true,
+				ProcessInsertConstructor = false
 			}.ToString();
 			Console.WriteLine(code);
 			Assert.AreEqual(@"		/// <summary>Biz hash code</summary>
@@ -44,7 +70,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 class a prototype=dbtable
 	datetime Date ""DateTime"" csharp-default='Qorpent.QorpentConst.Date.End'
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false,ProcessReferences = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -101,7 +127,7 @@ namespace  {
 			var model = PersistentModel.Compile(@"
 class a prototype=dbtable
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false,ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -153,7 +179,7 @@ class a prototype=dbtable
 	ref b serialize=notnull
 	ref b2 to=b serialize
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -286,7 +312,7 @@ class a prototype=dbtable
 	implements IMyInterface
 	string Code Код
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -347,7 +373,7 @@ class a prototype=dbtable
 	implements IMyInterface
 	string Code Код override=IMyInterface
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -408,7 +434,7 @@ class a prototype=dbtable
 	implements IMyInterface
 	string Code Код hide=IMyInterface
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -457,7 +483,7 @@ class a prototype=dbtable
 	ref b
 class b prototype=dbtable
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -530,7 +556,7 @@ class a prototype=dbtable
 class b prototype=dbtable
 	ref a reverse
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false,ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;
@@ -593,7 +619,7 @@ class a prototype=dbtable
 	string y nosql
 	string z nocode
 ");
-			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false, ProcessInsertConstructor = false}.ToString().Replace("\"", "\"\"");
 			Console.WriteLine(code);
 			Assert.AreEqual(@"
 using System;

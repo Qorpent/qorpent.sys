@@ -12,11 +12,11 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 	[TestFixture]
 	public class WritersTest
 	{
-		[TestCase("test", ScriptMode.Create, SqlDialect.SqlServer, @"if (SCHEMA_ID('test') is null) exec sp_executesql N'CREATE SCHEMA test';")]
-		[TestCase("test", ScriptMode.Create, SqlDialect.PostGres, @"CREATE SCHEMA IF NOT EXISTS test;")]
-		[TestCase("test", ScriptMode.Drop, SqlDialect.SqlServer, @"DROP SCHEMA test;")]
-		[TestCase("test", ScriptMode.Drop, SqlDialect.PostGres, @"DROP SCHEMA test;")]
-		public void SchemaWriter(string schemaname, ScriptMode mode, SqlDialect dialect, string test){
+		[TestCase("test", ScriptMode.Create, DbDialect.SqlServer, @"if (SCHEMA_ID('test') is null) exec sp_executesql N'CREATE SCHEMA test';")]
+		[TestCase("test", ScriptMode.Create, DbDialect.PostGres, @"CREATE SCHEMA IF NOT EXISTS test;")]
+		[TestCase("test", ScriptMode.Drop, DbDialect.SqlServer, @"DROP SCHEMA test;")]
+		[TestCase("test", ScriptMode.Drop, DbDialect.PostGres, @"DROP SCHEMA test;")]
+		public void SchemaWriter(string schemaname, ScriptMode mode, DbDialect dialect, string test){
 			var schema = new Schema{Name = schemaname};
 			var writer = new SchemaWriter(schema){Mode = mode, Dialect = dialect,NoComment=true,NoDelimiter=true};
 			Assert.AreEqual(test,writer.ToString().Trim());
@@ -33,7 +33,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 		public void SchemaWriterWithComments_COVER_PROPOSE()
 		{
 			var schema = new Schema { Name = "x"};
-			var writer = new SchemaWriter(schema) { Mode = ScriptMode.Create, Dialect = SqlDialect.SqlServer, Comment = "Multi line\r\ncomment" };
+			var writer = new SchemaWriter(schema) { Mode = ScriptMode.Create, Dialect = DbDialect.SqlServer, Comment = "Multi line\r\ncomment" };
 			var result = writer.ToString().Trim();
 			var dig = writer.GetDigest().Trim();
 			Console.WriteLine(result);
@@ -53,15 +53,15 @@ GO", result);
 		[TestCase("test", 2, 20, true, false,"exec __ensurefg @n='TEST', @filecount=2, @filesize=20, @withidx=1, @isdefault=0")]
 		public void FileGroupWriter(string name, int count,int size, bool withidx, bool isdefault,string test){
 			var fg = new FileGroup{Name = name, FileCount = count, FileSize = size, WithIndex = withidx, IsDefault = isdefault};
-			var writer = new FileGroupWriter(fg){NoComment = true, NoDelimiter = true,Mode = ScriptMode.Create,Dialect = SqlDialect.SqlServer};
+			var writer = new FileGroupWriter(fg){NoComment = true, NoDelimiter = true,Mode = ScriptMode.Create,Dialect = DbDialect.SqlServer};
 			Assert.AreEqual(test,writer.ToString().Trim());
 		}
 
-		[TestCase("x", 5, 20, SqlDialect.SqlServer, ScriptMode.Create, "CREATE SEQUENCE \"dbo\".\"x_seq\" AS int START WITH 10 INCREMENT BY 10;")]
-		[TestCase("x", 5, 20, SqlDialect.SqlServer, ScriptMode.Drop, "DROP SEQUENCE \"dbo\".\"x_seq\";")]
-		[TestCase("x", 5, 20, SqlDialect.PostGres, ScriptMode.Create, "CREATE SEQUENCE \"dbo\".\"x_seq\" INCREMENT BY 10 START WITH 10;")]
-		[TestCase("x", 5, 20, SqlDialect.PostGres, ScriptMode.Drop, "DROP SEQUENCE \"dbo\".\"x_seq\";")]
-		public void SequenceWriter(string name, int start, int step, SqlDialect dialect,ScriptMode mode, string test){
+		[TestCase("x", 5, 20, DbDialect.SqlServer, ScriptMode.Create, "CREATE SEQUENCE \"dbo\".\"x_seq\" AS int START WITH 10 INCREMENT BY 10;")]
+		[TestCase("x", 5, 20, DbDialect.SqlServer, ScriptMode.Drop, "DROP SEQUENCE \"dbo\".\"x_seq\";")]
+		[TestCase("x", 5, 20, DbDialect.PostGres, ScriptMode.Create, "CREATE SEQUENCE \"dbo\".\"x_seq\" INCREMENT BY 10 START WITH 10;")]
+		[TestCase("x", 5, 20, DbDialect.PostGres, ScriptMode.Drop, "DROP SEQUENCE \"dbo\".\"x_seq\";")]
+		public void SequenceWriter(string name, int start, int step, DbDialect dialect,ScriptMode mode, string test){
 			var pt = new PersistentClass{Name = name, Schema = "dbo"};
 			var sq = new Sequence();
 			sq.Setup(null,pt,null,null);
@@ -108,7 +108,7 @@ class " + name + @" prototype=dbtable
 			var t = model[name];
 			var mwr = new TableWriter(t)
 			{
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -132,7 +132,7 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=-1)  INSERT INTO
 			var master = model["master"];
 			var mwr = new TableWriter(master)
 			{
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -160,7 +160,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Код2', N'SCHEMA', N'dbo', 
 			var model = PersistentModel.Compile(SimpleModel);
 			var master = model["master"];
 			var mwr = new TableWriter(master){
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -178,7 +178,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
 			{
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -208,7 +208,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 			var master = model["master"];
 			var mwr = new TableWriter(master)
 			{
-				Dialect = SqlDialect.PostGres,
+				Dialect = DbDialect.PostGres,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -227,7 +227,7 @@ COMMENT ON COLUMN ""dbo"".""master"".""code"" IS 'Код';
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
 			{
-				Dialect = SqlDialect.PostGres,
+				Dialect = DbDialect.PostGres,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -256,7 +256,7 @@ COMMENT ON COLUMN ""dbo"".""slave"".""master"" IS 'Главный объект';
 			var master = model["master"];
 			var mwr = new TableWriter(master)
 			{
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -277,7 +277,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Младший объект',
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
 			{
-				Dialect = SqlDialect.SqlServer,
+				Dialect = DbDialect.SqlServer,
 				NoDelimiter = true,
 				NoComment = true,
 				Mode = ScriptMode.Create
@@ -297,10 +297,10 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 ".Trim(), scr.Trim());
 		}
 
-		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\");")]
-		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\") DEFERRABLE;")]
-		[TestCase(SqlDialect.SqlServer, ScriptMode.Drop, "ALTER TABLE \"dbo\".\"slave\" DROP CONSTRAINT dbo_slave_master_master_id_fk;")]
-		public void LateFKGenerator(SqlDialect dialect, ScriptMode mode,string test){
+		[TestCase(DbDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\");")]
+		[TestCase(DbDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\") DEFERRABLE;")]
+		[TestCase(DbDialect.SqlServer, ScriptMode.Drop, "ALTER TABLE \"dbo\".\"slave\" DROP CONSTRAINT dbo_slave_master_master_id_fk;")]
+		public void LateFKGenerator(DbDialect dialect, ScriptMode mode,string test){
 			var model = PersistentModel.Compile(CircularModel);
 			var cref = model["slave"]["master"];
 			var crefwr = new LateForeignKeyWriter(cref){NoDelimiter = true, NoComment = true, Dialect = dialect,Mode = mode};
@@ -312,7 +312,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 		[Test]
 		public void TriggerTest(){
 			var trigger = new SqlTrigger{Insert = true, TableName = "dbo.x".SqlQuoteName(), Name = "OnInsert", Body="print 1;"};
-			var writer = new SqlTriggerWriter(trigger){Dialect = SqlDialect.SqlServer,Mode = ScriptMode.Create,NoComment = true};
+			var writer = new SqlTriggerWriter(trigger){Dialect = DbDialect.SqlServer,Mode = ScriptMode.Create,NoComment = true};
 			var res = writer.ToString();
 			Console.WriteLine(res);
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""xOnInsert""') IS NOT NULL DROP TRIGGER ""dbo"".""xOnInsert"";
@@ -325,7 +325,7 @@ GO".Trim(), writer.ToString().Trim());
 			trigger.Update = true;
 			trigger.Delete = true;
 			trigger.Before = true;
-			writer = new SqlTriggerWriter(trigger) { Dialect = SqlDialect.SqlServer, Mode = ScriptMode.Create, NoComment = true };
+			writer = new SqlTriggerWriter(trigger) { Dialect = DbDialect.SqlServer, Mode = ScriptMode.Create, NoComment = true };
 			res = writer.ToString();
 			Console.WriteLine(res);
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""xOnInsert""') IS NOT NULL DROP TRIGGER ""dbo"".""xOnInsert"";
@@ -366,7 +366,7 @@ class a prototype=dbtable
 		return (select @s*id+@v from @this)
 	)");
 			var f = model["a"].SqlObjects.OfType<SqlFunction>().First();
-			var writer = new SqlFunctionWriter(f){Dialect = SqlDialect.SqlServer,NoComment = true};
+			var writer = new SqlFunctionWriter(f){Dialect = DbDialect.SqlServer,NoComment = true};
 			var res = writer.ToString();
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetValue"";
@@ -388,7 +388,7 @@ class a prototype=dbtable
 		return (select @s*id+@v + @this.GetValue(@s,@v) from @this where @this.Id=0)
 	)");
 			var f = model["a"].SqlObjects.OfType<SqlFunction>().First();
-			var writer = new SqlFunctionWriter(f) { Dialect = SqlDialect.SqlServer, NoComment = true };
+			var writer = new SqlFunctionWriter(f) { Dialect = DbDialect.SqlServer, NoComment = true };
 			var res = writer.ToString();
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetValue"";
@@ -412,7 +412,7 @@ class a prototype=dbtable
 		select @s*id+@v from @this
 	)");
 			var f = model["a"].SqlObjects.OfType<SqlFunction>().First();
-			var writer = new SqlFunctionWriter(f) { Dialect = SqlDialect.SqlServer,NoComment = true};
+			var writer = new SqlFunctionWriter(f) { Dialect = DbDialect.SqlServer,NoComment = true};
 			var res = writer.ToString();
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP PROCEDURE ""dbo"".""aGetValue"";
@@ -502,7 +502,7 @@ class a prototype=dbtable schema=test
             var cls = model["a"];
             Assert.AreEqual("test",cls.Schema);
             var f = cls.SqlObjects.OfType<SqlView>().Last();
-            var writer = new SqlViewWriter(f) { Dialect = SqlDialect.SqlServer, NoComment = true };
+            var writer = new SqlViewWriter(f) { Dialect = DbDialect.SqlServer, NoComment = true };
             var res = writer.ToString();
             Console.WriteLine(res.Replace("\"", "\"\""));
             Assert.AreEqual(@"IF OBJECT_ID('""test"".""ax""') IS NOT NULL DROP VIEW ""test"".""ax"";

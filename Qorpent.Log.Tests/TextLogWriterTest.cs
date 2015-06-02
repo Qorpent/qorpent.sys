@@ -40,7 +40,7 @@ namespace Qorpent.Log.Tests {
 			var file2 = Path.GetTempFileName();
 			var file3 = Path.GetTempFileName();
 			var writer = new TextFileWriter {FileName = file, CustomFormat = "${Name}:${Level}", Level = LogLevel.Error};
-			var writer2 = new TextFileWriter {FileName = file2, CustomFormat = "${Name}:${Level}", Level = LogLevel.Warning};
+			var writer2 = new TextFileWriter {FileName = file2, CustomFormat = "${Name}:${Level}", Level = LogLevel.Warn};
 			var writer3 = new TextFileWriter {FileName = file3, CustomFormat = "${Name}:${Level}", Level = LogLevel.Trace};
 			var logger = new BaseLogger
 				{

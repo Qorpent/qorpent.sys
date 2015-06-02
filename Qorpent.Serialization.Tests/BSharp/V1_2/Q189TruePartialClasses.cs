@@ -51,16 +51,19 @@ class A partial y=2 abstract
 		public void ImportsMerged()
 		{
 			var ctx = BSharpCompiler.Compile(@"
-class X a=1
 class Y b=2
+class X a=1
 class A partial x=1
 	import X
 class A partial y=2
 	import Y
+
+
 ");
 			var cls = ctx["A"];
 			Console.WriteLine(cls.Compiled.ToString().Replace("\"","\"\""));
-			Assert.AreEqual(@"<class code=""A"" name=""partial"" y=""2"" x=""1"" fullcode=""A"" a=""1"" b=""2"" />".Trim().LfOnly(), cls.Compiled.ToString().Trim().LfOnly());
+
+            Assert.AreEqual(@"<class code=""A"" name=""partial"" y=""2"" x=""1"" fullcode=""A"" b=""2"" a=""1"" />".Trim().LfOnly(), cls.Compiled.ToString().Trim().LfOnly());
 
 		}
 

@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetText(){
-			if (Dialect != SqlDialect.SqlServer){
+			if (Dialect != DbDialect.SqlServer){
 				return "-- ! ВНИМАНИЕ НА ДАННЫЙ МОМЕНТ РЕАЛИЗАЦИЯ ГЕНЕРАЦИИ ФУНКЦИЙ ЕСТЬ ТОЛЬКО ДЛЯ MS SQL";
 			}
 			var sb = new StringBuilder();
@@ -48,7 +48,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					else{
 						if (Function.ReturnType.IsTable){
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " )\r\nRETURNS @result TABLE " +
-							          GetTableType(Function.ReturnType,SqlDialect.SqlServer));
+							          GetTableType(Function.ReturnType,DbDialect.SqlServer));
 						}else if (Function.ReturnType.IsNative){
 							var type = Function.ReturnType.SqlText; 
 							if (type.Contains(",")){
@@ -72,7 +72,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 						}
 						else{
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
-							          Function.ReturnType.ResolveSqlDataType(SqlDialect.SqlServer));
+							          Function.ReturnType.ResolveSqlDataType(DbDialect.SqlServer));
 						}
 					}
 					sb.Append(" AS BEGIN");
@@ -87,7 +87,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			return sb.ToString();
 		}
 
-		private string GetTableType(DataType returnType,SqlDialect dialect){
+		private string GetTableType(DataType returnType,DbDialect dialect){
 			var result = new StringBuilder();
 			result.Append("(");
 			result.Append(string.Join(", ",
@@ -103,7 +103,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			var sb = new StringBuilder();
 			sb.Append("@" + arg.Name);
 			sb.Append(" ");
-			sb.Append(arg.DataType.ResolveSqlDataType(SqlDialect.SqlServer));
+			sb.Append(arg.DataType.ResolveSqlDataType(DbDialect.SqlServer));
 			if (null != arg.DefaultValue){
 				sb.Append(" = ");
 				string str = arg.DefaultValue.Value.ToString();

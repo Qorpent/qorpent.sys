@@ -29,7 +29,7 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeServiceTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeTestBase.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptorTests.cs" />
-    <Compile Include="ConfigBaseTest.cs" />
+    <Compile Include="ScopeConfigBaseEqualityTest.cs" />
     <Compile Include="Data\DbCommandExecutorTest.cs" />
     <Compile Include="Data\FakeConnectionProvider.cs" />
     <Compile Include="Data\OfflineDbCommandExecutorTest.cs" />
@@ -42,12 +42,18 @@
     <Compile Include="Experiments\ReflectionUtilsHelp.cs" />
     <Compile Include="Experiments\TryUnsafe.cs" />
     <Compile Include="Experiments\TypeConverterTests.cs" />
+    <Compile Include="Http\RequestDataRetrieverTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Log\NewLogs\LoggyManagerTest.cs" />
+    <Compile Include="Log\NewLogs\LoggyTest.cs" />
+    <Compile Include="Log\NewLogs\MainCaseTest.cs" />
+    <Compile Include="Log\NewLogs\TestAppender.cs" />
     <Compile Include="Log\SessionLogTest.cs" />
     <Compile Include="Model\EntityTagTest.cs" />
     <Compile Include="Model\HierarchyExtensionTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />
+    <Compile Include="ScopeImprovementsTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
@@ -78,6 +84,7 @@
     <Compile Include="Utils\HexTests.cs" />
     <Compile Include="Utils\IO\FileDescriptorExTest.cs" />
     <Compile Include="Utils\IO\FileSystemHelperTests.cs" />
+    <Compile Include="Utils\LogicalExpressions\MainTest.cs" />
     <Compile Include="Utils\MathTests.cs" />
     <Compile Include="Utils\ReflectionHelperTest.cs" />
     <Compile Include="Utils\SimpleExpression\SimpleExpressionParserTests.cs" />
@@ -100,6 +107,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Utils\GeometryEmbedTest\" />
     <Folder Include="Utils\Properties\" />
     <Folder Include="Utils\ScaleNormalizeTests\" />
   </ItemGroup>
@@ -109,11 +117,16 @@
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include="Experiments\testperformance.json" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
       <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
       <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Log\Qorpent.Log.csproj">
+      <Project>{77D47855-A3D4-4B92-9FC0-C2EDEE27A8A7}</Project>
+      <Name>Qorpent.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.Mvc\Qorpent.Mvc.csproj">
       <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>

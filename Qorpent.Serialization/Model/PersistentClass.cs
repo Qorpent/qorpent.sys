@@ -63,7 +63,10 @@ namespace Qorpent.Scaffolding.Model{
 		///     Ссылка на исходный класс
 		/// </summary>
 		public IBSharpClass TargetClass { get; set; }
-
+		/// <summary>
+		///		Отключение дефолтных полей
+		/// </summary>
+		public bool NoDefaultRows { get; set; }
 		/// <summary>
 		///     Имя класса/таблицы
 		/// </summary>
@@ -142,7 +145,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public int Rank { get; set; }
-
+		/// <summary>
+		///		Цикличный идентификатор
+		/// </summary>
+		public bool CyclicId { get; set; }
 		/// <summary>
 		///     Признак сущности, подлежащей клонированию
 		/// </summary>
@@ -250,8 +256,9 @@ namespace Qorpent.Scaffolding.Model{
 			Comment = xml.Attr("name");
 			Cloneable = xml.GetSmartValue("cloneable").ToBool();
 			ResolveAble = xml.GetSmartValue("resolve").ToBool();
+			CyclicId = xml.GetSmartValue("cyclicid").ToBool();
+			NoDefaultRows = xml.GetSmartValue("nodefaultrows").ToBool();
 		}
-
 		/// <summary>
 		/// </summary>
 		/// <returns></returns>

@@ -61,7 +61,7 @@ namespace Qorpent.Log {
 				else if (message.Level == LogLevel.Error) {
 					errorlevel = ErrorLevel.Error;
 				}
-				else if (message.Level == LogLevel.Warning) {
+				else if (message.Level == LogLevel.Warn) {
 					errorlevel = ErrorLevel.Warning;
 				}
 				else if (message.Level == LogLevel.Fatal) {

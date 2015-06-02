@@ -17,8 +17,10 @@
 // PROJECT ORIGIN: Qorpent.Dsl/EqualNode.cs
 #endregion
 
+using System;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
@@ -40,16 +42,11 @@ namespace Qorpent.Utils.LogicalExpressions {
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		protected override bool InternalEval(ILogicTermSource source) {
-			if (FirstLiteral.StartsWith("$") && SecondLiteral.StartsWith("$")) {
-				return source.Value(FirstLiteral.Substring(1)) == source.Value(SecondLiteral.Substring(1));
-			}
-			if (FirstLiteral.StartsWith("$") && !SecondLiteral.StartsWith("$")) {
-				return source.Value(FirstLiteral.Substring(1)) == source.Value(SecondLiteral);
-			}
-			if (!FirstLiteral.StartsWith("$") && SecondLiteral.StartsWith("$")) {
-				return source.Value(FirstLiteral) == source.Value(SecondLiteral.Substring(1));
-			}
-			return source.Get(FirstLiteral) == source.Get(SecondLiteral);
+		    var resolvefst = FirstLiteral.StartsWith("$") ?  FirstLiteral.Substring(1) : FirstLiteral;
+		    var resolvesec = SecondLiteral.StartsWith("$") ? SecondLiteral.Substring(1) : SecondLiteral;
+		    var fst = source.Value(resolvefst);
+            var sec = source.Value(resolvesec);
+		    return AreMatched(fst, sec);
 		}
 	}
 }

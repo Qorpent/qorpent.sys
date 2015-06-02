@@ -1,11 +1,10 @@
 ﻿using System;
-using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Имплементация конфига чарта
     /// </summary>
-    public class ChartConfig : ConfigBase, IChartConfig {
+    public class ChartConfig : Scope, IChartConfig {
 		
         /// <summary>
         ///     Тип чарта
@@ -111,7 +110,7 @@ namespace Qorpent.Charts {
 	    /// 
 	    /// </summary>
 	    public ChartState State {
-			get { return Ensure(ChartDefaults.ChartState, new ChartState()); }
+			get { return this.Ensure(ChartDefaults.ChartState, new ChartState()); }
             set { Set(ChartDefaults.ChartState, value); }    
 	    }
 

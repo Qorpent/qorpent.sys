@@ -3,17 +3,18 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Qorpent.Host.SimpleSockets;
+using Qorpent.Security;
 
 namespace Qorpent.Host.Security{
 	/// <summary>
 	/// </summary>
 	public class DefaultAuthHandler : ISimpleSocketHandler<AuthProtocol, AuthProtocol>{
-		private readonly WinLogon _logon;
+		private readonly ILogonProvider _logon;
 
 		/// <summary>
 		/// </summary>
-		public DefaultAuthHandler(){
-			_logon = new WinLogon();
+		public DefaultAuthHandler() {
+		    _logon = new DefaultLogonProvider {Logons = new[] {new SysLogon()}};
 		}
 
 		/// <summary>
@@ -36,7 +37,7 @@ namespace Qorpent.Host.Security{
 		}
 
 		private void Auth(AuthProtocol req, AuthProtocol result){
-			if (_logon.Logon(req.Login, req.PassOrDigest)){
+			if (_logon.IsAuth(req.Login, req.PassOrDigest)){
 				result.Response = AuthProtocolResponseType.True | AuthProtocolResponseType.Token;
 				result.Login = req.Login.ToLowerInvariant();
 				result.Expire = DateTime.Today.AddDays(1);

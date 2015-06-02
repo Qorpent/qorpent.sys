@@ -14,7 +14,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		///     Диалект
 		/// </summary>
-		public SqlDialect Dialect { get; set; }
+		public DbDialect Dialect { get; set; }
 
 		/// <summary>
 		///     Комментарий
@@ -103,8 +103,7 @@ namespace Qorpent.Scaffolding.Model{
 					Output.WriteLine(command);
 				}
 				else{
-					var i = new StringInterpolation();
-					Output.WriteLine(i.Interpolate(command, Parameters));
+                    Output.WriteLine(command.Interpolate(Parameters));
 				}
 				if (Optional){
 					WriteEndOptionalBlock();
@@ -114,19 +113,19 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		private void WriteEndOptionalBlock(){
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				Output.WriteLine("end try begin catch print ERROR_MESSAGE() end catch");
 			}
-			else if (Dialect == SqlDialect.PostGres){
+			else if (Dialect == DbDialect.PostGres){
 				Output.WriteLine("EXCEPTION WHEN OTHERS THEN raise notice '% %', SQLERRM, SQLSTATE; END;");
 			}
 		}
 
 		private void WriteStartOptionalBlock(){
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				Output.WriteLine("begin try");
 			}
-			else if (Dialect == SqlDialect.PostGres){
+			else if (Dialect == DbDialect.PostGres){
 				Output.WriteLine("BEGIN");
 			}
 		}
@@ -149,7 +148,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		protected void WriteDelimiter(){
 			if (NoDelimiter) return;
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				Output.WriteLine("GO");
 			}
 		}

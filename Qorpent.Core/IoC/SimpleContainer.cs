@@ -63,6 +63,12 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		public object Get(Type type, string name = null, params object[] ctorArgs) {
 			lock (this) {
+			    if (!string.IsNullOrWhiteSpace(name) && name.Contains(",")) {
+			        var resolvedType = Type.GetType(name,false,true);
+                    if(null==resolvedType)throw new Exception("cannot find class for "+name);
+                    if(!type.IsAssignableFrom(resolvedType))throw new Exception("type "+resolvedType.FullName+" is not compatible with "+type.FullName);
+                    return Activator.CreateInstance(resolvedType);
+			    }
 				var context = new ContainerContext
 					{Operation = ContainerOperation.BeforeGet, RequestedType = type, RequestedName = name};
 				

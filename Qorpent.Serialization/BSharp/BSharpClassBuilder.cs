@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,6 @@ using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.BSharp.Matcher;
-using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
 using Qorpent.Serialization;
@@ -394,14 +394,18 @@ namespace Qorpent.BSharp{
 
 
 		private void InternalBuild(){
+         //   Console.WriteLine("enter "+_cls.Name);
 			GetInheritedSourceIndex();
+         //   Console.WriteLine("GetInheritedSourceIndex " + _cls.Name);
 			SupplyClassAttributesForEvaluations();
+          //  Console.WriteLine("SupplyClassAttributesForEvaluations " + _cls.Name);
 			InitializeBuildIndexes();
+           // Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
 			DownFallEmbedAttribute();
+          //  Console.WriteLine("DownFallEmbedAttribute " + _cls.Name);
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
-			//CleanupElementsWithConditions();
 			MergeInternals();
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
@@ -959,8 +963,8 @@ namespace Qorpent.BSharp{
 			}
 			//мы должны пропускать интерполяции, так как сверить их все равно нельзя пока
 			if (cond.Contains("${")) return true;
-			IConfig compilerOptions = _compiler.GetConditions();
-			IConfig srcp = _cls.ParamIndex;
+			IScope compilerOptions = _compiler.GetConditions();
+			IScope srcp = _cls.ParamIndex;
 			if (null != compilerOptions){
 				compilerOptions.SetParent(srcp);
 				srcp = compilerOptions;
@@ -1008,7 +1012,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private void InitializeBuildIndexes(){
-			_cls.ParamIndex = new ConfigBase();
+			_cls.ParamIndex = new Scope();
 			_cls.Compiled.SetAttributeValue(BSharpSyntax.ClassFullNameAttribute, _cls.FullName);
 			foreach (var p in _cls.ParamSourceIndex){
 				_cls.ParamIndex.Set(p.Key, p.Value);
@@ -1020,21 +1024,26 @@ namespace Qorpent.BSharp{
 		///     Возвращает XML для резолюции атрибутов
 		/// </summary>
 		/// <returns></returns>
-		private IConfig BuildParametersConfig(){
-			var result = new ConfigBase();
-			ConfigBase current = result;
+		private IScope BuildParametersConfig(){
+			var result = new Scope();
+			Scope current = result;
 			foreach (IBSharpClass i in _cls.AllImports.Union(new[]{_cls})){
-				var selfconfig = new ConfigBase();
+				var selfconfig = new Scope();
 				selfconfig.Set("_class_", _cls.FullName);
 				selfconfig.SetParent(current);
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i){
+                    while (!i.Is(BSharpClassAttributes.Built))
+                    {
+				        Thread.Sleep(5);
+				    }
 					foreach (var p in i.ParamIndex){
 						current.Set(p.Key, p.Value);
 					}
 				}
 				else{
 					foreach (XAttribute a in i.Source.Attributes()){
+                        current.Set("_class_",i.Name);
 						current.Set(a.Name.LocalName, a.Value);
 					}
 				}
@@ -1049,6 +1058,18 @@ namespace Qorpent.BSharp{
 			}
 		}
 
+	    class seq {
+	        public int Current;
+	        public int Start;
+	        public int Step;
+
+	        public int Next() {
+	            var result = Current;
+	            Current = Current + Step;
+	            return result;
+
+	        }
+	    }
 		private void InterpolateElements(char ancor = '\0', bool codeonly = false){
 			if (ancor == '\0'){
 				ancor = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
@@ -1061,25 +1082,79 @@ namespace Qorpent.BSharp{
 					CodeOnly = codeonly,
 					Level = codeonly ? 1 : 0
 				};
-				xi.Interpolate(_cls.Compiled); //,_compiler.Global);
+			    var ctx = GetInterpolationContext();
+                ctx.Set("self",new Scope(_cls.Compiled));
+                var basescope = new Scope((object[])_cls.ParamSourceIndex.GetParents().ToArray());
+                basescope.Stornate();
+			    var p = _cls.ParamSourceIndex.GetParent();
+			    while (null != p) {
+                    basescope[p["_class_"].ToStr()] = p;
+			        p = p.GetParent();
+			    }
+                ctx.Set("base", basescope);
+			    xi.Interpolate(_cls.Compiled,ctx);
 			}
 		}
 
+	    
 
-		private void InterpolateFields(){
+	    private IScope GetInterpolationContext() {
+	        if (_cls.InterpolationContext != null) {
+	            return _cls.InterpolationContext;
+	        }
+	        IDictionary<string, seq> _sequences = new ConcurrentDictionary<string, seq>();
+	        var initseq = (Func<string, int, int, string>) ((n, start, step) => {
+	            if (0 == step) {
+	                step = 1;
+	            }
+	            _sequences[n] = new seq {Current = start, Start = start, Step = step};
+	            return n;
+	        });
+	        var advctx = new {
+	            mycls = _cls,
+	            initseq = initseq,
+	            nextseq = (Func<string, int>) (n => {
+	                if (string.IsNullOrWhiteSpace(n)) {
+	                    n = "default";
+	                }
+	                if (!_sequences.ContainsKey(n)) {
+	                    initseq(n, 0, 1);
+	                }
+	                return _sequences[n].Next();
+	            })
+	        };
+	        var result = new Scope(advctx);
+	        result.SetParent(_compiler.Global);
+
+	        _cls.InterpolationContext = result;
+
+	        return _cls.InterpolationContext;
+	    }
+
+
+	    private void InterpolateFields(){
 			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
-
+            
 			if (GetConfig().UseInterpolation){
 				var si = new StringInterpolation{AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$'};
+			    var global = GetInterpolationContext();
+
 				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
 				while (true){
 					bool changed = false;
-					foreach (var v in _cls.ParamIndex.ToArray()){
+					foreach (var v in _cls.ParamIndex.OrderBy(_ => {
+					    if (_.Value.ToStr().Contains("${") && _.Value.ToStr().Contains("(")) {
+					        return 1000;
+					    }
+					    return 0;
+					}).ToArray()){
 						string key = v.Key;
-						if (requireInterpolateNames){
+						if (requireInterpolateNames) {
+						    var scope = new Scope(_cls.ParamSourceIndex);
+						    scope["self"] = _cls.ParamSourceIndex;
 							string esckey = key.Unescape(EscapingType.XmlName);
 							if (-1 != esckey.IndexOf('{')){
-								string _key = si.Interpolate(esckey, _cls.ParamSourceIndex).Escape(EscapingType.XmlName);
+								string _key = si.Interpolate(esckey, scope).Escape(EscapingType.XmlName);
 								if (_key != key){
 									changed = true;
 									_cls.ParamIndex.Remove(key);
@@ -1091,7 +1166,18 @@ namespace Qorpent.BSharp{
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{') || -1 == s.IndexOf(si.AncorSymbol)) continue;
-						string newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global, key);
+					    var src = s.Contains("(") ? _cls.ParamIndex : _cls.ParamSourceIndex;
+					    src.Set("self",src);
+					    var basescope = new Scope((object[])src.GetParents().ToArray());
+                        basescope.Stornate();
+                        var p = _cls.ParamSourceIndex.GetParent();
+                        while (null != p)
+                        {
+                            basescope[p["_class_"].ToStr()] = p;
+                            p = p.GetParent();
+                        }
+                        src.Set("base",basescope);
+						string newval = si.Interpolate(s,src, global, key);
 						if (newval != s){
 							changed = true;
 							_cls.ParamIndex.Set(key, newval);
@@ -1100,6 +1186,7 @@ namespace Qorpent.BSharp{
 					if (!changed) break;
 				}
 			}
-		}
+           
+	    }
 	}
 }

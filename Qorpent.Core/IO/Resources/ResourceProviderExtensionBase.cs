@@ -47,7 +47,7 @@ namespace Qorpent.IO.Resources {
 			}
 			config = config ?? new ResourceConfig();
 			if (null == config.GetParent()) {
-				config.SetParent(_config);
+				config.AddParent(_config);
 			}
 			return InternalCreateRequest(uri, config);
 		}

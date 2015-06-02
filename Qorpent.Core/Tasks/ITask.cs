@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
-    public interface ITask : IConfig {
+    public interface ITask : IScope {
         string Name { get; set; }
         string[] Requirements { get; set; }
         TaskState State { get; }

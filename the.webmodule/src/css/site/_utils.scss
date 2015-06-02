@@ -1,0 +1,157 @@
+@function map-merge-deep($map1, $map2) {
+  $result : $map1;
+  @each $k, $v in $map2 {
+    $newval : $v;
+    @if type_of($newval) == 'map' and map_has_key($result, $k)  {
+      $newval : map-merge-deep(map_get($result,$k),$newval);
+    }
+    $result : map_merge($result,($k:$newval));
+  }
+  @return $result;
+}
+
+@function map-get-deep($map,$name,$default:false){
+  $current: $map;
+  $n : $name;
+  @if type_of($name)=='list'{
+    @for $ni from 1 through length($name)-1 {
+      $n : nth($name,$ni);
+      @if map_has_key($current,$n){
+        $current: map_get($current,$n);
+        @if type_of($current)!='map' {
+          @return $default;
+        }
+      }@else{
+        @return $default;
+      }
+    }
+    $n  :nth($name,length($name));
+  }
+  @if map-has_key($current,$n){
+    @return map_get($current,$n);
+  }
+  @return $default;
+}
+
+@function skin($name,$default:false){
+  @return map-get-deep($config,$name,$default);
+}
+
+@function color($name,$default:primary){
+  @if type_of($name)=='color'{
+    @return $name;
+  }
+  $result : skin(color $name);
+  @if $result {
+    @if type_of($result)=='color'{
+      @return $result;
+    }
+    @return color($result,$default);
+  }@else{
+    @if type_of($default)!='color' {
+      @return color($default, block);
+    }
+    @return $default;
+  }
+}
+
+@function isyellow($color){
+  @return ((red($color) / (blue($color)+0.01)   ) >= 2)
+  and ((green($color) /(blue($color)+0.01) ) >=2)
+  and (abs(red($color)- green($color))  < 40);
+}
+
+
+@function requiredark($color){
+  $color:color($color);
+  @return isyellow($color) or lightness($color) > skin(vars contrastlimit,70) ;
+}
+
+@function iswhite($color){
+  $color:color($color);
+  @return red($color) >=247 and blue($color) >=247 and green($color) >=247;
+}
+
+@function slighten($color,$percent) {
+  $color:color($color);
+  $result : lighten($color,$percent);
+  @if not iswhite($result) {
+    @return $result;
+  }
+  @each $i in (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025) {
+    $result : lighten($color,$percent * $i);
+    @if  not iswhite($result) {
+      @return $result;
+    }
+  }
+  @return $result;
+}
+
+@function colormode($color,$mode){
+  @if map_has_key(skin(color),#{$color}_#{mode}) {
+    @return color(#{$color}_#{mode});
+  }
+  @if $mode==light {
+    @return slighten(color($color),skin(colormode light,20%));
+  }
+  @if $mode==lightest {
+    @return slighten(color($color),skin(colormode lightest,30%));
+  }
+  @if $mode==text {
+    @return  if(requiredark(color($color)),color(dark),color(light));
+  }
+  @return color($color);
+}
+
+@mixin flex($orient:row,$justify:false){
+  display: -webkit-box;
+  display: flex;
+  flex-direction: $orient;
+  @if $orient==row {
+    -webkit-box-orient: horizontal;
+  }@else{
+    -webkit-box-orient: vertical;
+  }
+  @if $justify {
+    justify-content: $justify;
+    -webkit-box-pack : $justify ;
+  }
+}
+
+@mixin size($control:1px,$delta:0px,$deltacm:0cm){
+  $base : skin(maxwidth);
+  $corrected : $base - $delta;
+  $controlled : $base - $control;
+  min-width: $corrected;
+  max-width: $corrected;
+  $baseps: 19cm  - $deltacm;
+  $basels: 27cm - $deltacm;
+
+  @media print and (orientation: landscape) {
+    & {
+      min-width: $basels;
+      max-width: $basels;
+
+    }
+  }
+
+  @media print and (orientation: portrait) {
+  & {
+    min-width: $baseps;
+    max-width: $baseps;
+  }
+}
+  @each $k, $v in skin(sizes){
+    $base:$v;
+    $corrected:$base - $delta;
+
+    @media screen and (max-width:$controlled) {
+      & {
+        min-width: $corrected;
+        max-width: $corrected;
+      }
+    }
+
+    $controlled : $base - $control;
+  }
+}

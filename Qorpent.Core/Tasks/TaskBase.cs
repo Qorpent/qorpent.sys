@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
     /// <summary>
     ///     Описывает абстракцию обновляемого модуля
     /// </summary>
-    public abstract class TaskBase : ConfigBase, ITask {
+    public abstract class TaskBase : Scope, ITask {
         private IUserLog _log = StubUserLog.Default;
         private TaskState _state;
         private readonly IList<ITask> _requiredModules = new List<ITask>();
@@ -75,6 +74,17 @@ namespace Qorpent.Tasks {
         public bool IsSuccess {
             get { return TaskState.Success == (State & TaskState.Success); }
         }
+
+        public  string ResolvePath(string src) {
+            return EnvironmentInfo.ResolvePath(src, false, ResolvePathOverrides);
+        }
+
+        public IDictionary<string, string> ResolvePathOverrides {
+            get { return Get<IDictionary<string, string>>("resolveoverrides", null); }
+            set {
+                Set("resolveoverrides",value);
+            }
+        } 
 
         public int RunCount { get; set; }
 

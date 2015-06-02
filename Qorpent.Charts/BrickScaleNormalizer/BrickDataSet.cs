@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Qorpent.Config;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	///     Описывает набор данных для обсчета
 	/// </summary>
-	public class BrickDataSet : ConfigBase {
+	public class BrickDataSet : Scope {
         /// <summary>
         ///     Текущий индекс элемента данных, вставленного в датасет
         /// </summary>

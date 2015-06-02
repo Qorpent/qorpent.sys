@@ -42,6 +42,8 @@ namespace Qorpent.Utils.Tests {
 			return result;
 		}
 
+        
+
 		private static readonly object[] XmlSources = new object[]
 			{
 				XElement.Parse("<hello />"),
@@ -63,6 +65,20 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("<hello />", result.ToString());
 		}
 
+	    [Test]
+	    public void UsualAndQorpentIsEmpty() {
+	        Assert.True(XElement.Parse("<a/>").IsEmpty);
+	        Assert.True(XElement.Parse("<a/>").IsRealEmpty());
+
+	        Assert.False(XElement.Parse("<a x='1'/>").IsRealEmpty());
+	        Assert.True(XElement.Parse("<a x='1'/>").IsEmpty);
+
+
+            Assert.True(XElement.Parse("<a>  </a>").IsRealEmpty());
+            Assert.False(XElement.Parse("<a>  </a>").IsEmpty);
+
+
+	    }
 
 		[Test]
 		public void CanGetValidXPath(){

@@ -29,6 +29,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Data;
+using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 
 namespace Qorpent.Utils.Extensions
 {
@@ -83,24 +85,45 @@ namespace Qorpent.Utils.Extensions
 		}
 
 
-		/// <summary>
-		/// Выполняет запрос без результатов
-		/// </summary>
-		/// <param name="connection"></param>
-		/// <param name="command"></param>
-		/// <param name="parameters"></param>
-		/// <param name="timeout"></param>
-		/// <param name="close"></param>
-		/// <exception cref="Exception"></exception>
-		public static int ExecuteNonQuery(this IDbConnection connection, object command,
-										   object parameters = null, int timeout=30, bool close = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject(Name = "database.logger")]
+        public static ILoggy Log {
+            get {
+                if (null == _log) {
+                    _log = Loggy.Get("database.logger");
+                }
+                return _log;
+            }
+            set { _log = value; }
+        }
+
+
+
+	    /// <summary>
+	    /// Выполняет запрос без результатов
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <param name="close"></param>
+	    /// <param name="showCommandTextWithParams">показать в Debug</param>
+	    /// <exception cref="Exception"></exception>
+	    public static int ExecuteNonQuery(this IDbConnection connection, object command,
+										   object parameters = null, int timeout=30, bool close = false, bool showCommandTextWithParams = false)
 		{
 			connection.WellOpen();
 			IDbCommand cmd = connection.CreateCommand(command, parameters,timeout);
 			cmd.CommandTimeout = timeout;
 			int r;
 			try{
+                if (showCommandTextWithParams) {
+                    Log.Debug("Sql command: [\r\n" + cmd.CommandAsSql() + "\r\n]");
+			    }
 				r = cmd.ExecuteNonQuery();
+
 			}
 			catch (Exception ex){
 				throw new Exception("error in query:" + cmd.CommandText, ex);
@@ -114,6 +137,144 @@ namespace Qorpent.Utils.Extensions
 		}
 
 
+        public static String ParameterValueForSQL(this SqlParameter sp) {
+            String retval = "";
+
+            switch (sp.SqlDbType) {
+                case SqlDbType.Char:
+                case SqlDbType.NChar:
+                case SqlDbType.NText:
+                case SqlDbType.NVarChar:
+                case SqlDbType.Text:
+                case SqlDbType.Time:
+                case SqlDbType.VarChar:
+                case SqlDbType.Xml:
+                case SqlDbType.Date:
+                case SqlDbType.DateTime:
+                case SqlDbType.DateTime2:
+                case SqlDbType.DateTimeOffset:
+                    retval = "'" + sp.Value.ToString().Replace("'", "''") + "'";
+                    break;
+
+                case SqlDbType.Bit:
+                    retval = (sp.Value.ToBooleanOrDefault(false)) ? "1" : "0";
+                    break;
+
+                default:
+                    retval = sp.Value.ToString().Replace("'", "''");
+                    break;
+            }
+
+            return retval;
+        }
+
+
+        public static Boolean ToBooleanOrDefault(this String s, Boolean Default) {
+            return ToBooleanOrDefault((Object)s, Default);
+        }
+
+
+        public static Boolean ToBooleanOrDefault(this Object o, Boolean Default) {
+            Boolean ReturnVal = Default;
+            try {
+                if (o != null) {
+                    switch (o.ToString().ToLower()) {
+                        case "yes":
+                        case "true":
+                        case "ok":
+                        case "y":
+                            ReturnVal = true;
+                            break;
+                        case "no":
+                        case "false":
+                        case "n":
+                            ReturnVal = false;
+                            break;
+                        default:
+                            ReturnVal = Boolean.Parse(o.ToString());
+                            break;
+                    }
+                }
+            } catch {
+            }
+            return ReturnVal;
+        }
+
+        public static String CommandAsSql(this IDbCommand sc) {
+            StringBuilder sql = new StringBuilder();
+            Boolean FirstParam = true;
+
+            sql.AppendLine("use " + sc.Connection.Database + ";");
+            switch (sc.CommandType) {
+                case CommandType.StoredProcedure:
+                    sql.AppendLine("declare @return_value int;");
+
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if ((sp.Direction == ParameterDirection.InputOutput) || (sp.Direction == ParameterDirection.Output)) {
+                            sql.Append("declare " + sp.ParameterName + "\t" + sp.SqlDbType.ToString() + "\t= ");
+
+                            sql.AppendLine(((sp.Direction == ParameterDirection.Output) ? "null" : sp.ParameterValueForSQL()) + ";");
+
+                        }
+                    }
+
+                    sql.AppendLine("exec [" + sc.CommandText + "]");
+
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if (sp.Direction != ParameterDirection.ReturnValue) {
+                            sql.Append((FirstParam) ? "\t" : "\t, ");
+
+                            if (FirstParam) FirstParam = false;
+
+                            if (sp.Direction == ParameterDirection.Input)
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterValueForSQL());
+                            else
+
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterName + " output");
+                        }
+                    }
+                    sql.AppendLine(";");
+
+                    sql.AppendLine("select 'Return Value' = convert(varchar, @return_value);");
+
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if ((sp.Direction == ParameterDirection.InputOutput) || (sp.Direction == ParameterDirection.Output)) {
+                            sql.AppendLine("select '" + sp.ParameterName + "' = convert(varchar, " + sp.ParameterName + ");");
+                        }
+                    }
+                    break;
+                case CommandType.Text:
+                    sql.AppendLine(sc.CommandText);
+                    sql.AppendLine("Parameters:");
+                    // show command parameters
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if (sp.Direction != ParameterDirection.ReturnValue) {
+                            sql.Append((FirstParam) ? "\t" : "\t, ");
+
+                            if (FirstParam) FirstParam = false;
+
+                            if (sp.Direction == ParameterDirection.Input)
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterValueForSQL());
+                            else
+
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterName + " output");
+                        }
+                    }
+                    sql.AppendLine(";");
+
+                    sql.AppendLine("select 'Return Value' = convert(varchar, @return_value);");
+
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if ((sp.Direction == ParameterDirection.InputOutput) || (sp.Direction == ParameterDirection.Output)) {
+                            sql.AppendLine("select '" + sp.ParameterName + "' = convert(varchar, " + sp.ParameterName + ");");
+                        }
+                    }
+
+                    break;
+            }
+
+            return sql.ToString();
+        }
 		
 
 
@@ -538,8 +699,11 @@ namespace Qorpent.Utils.Extensions
 			    else {
 				    if (null == pair.Value) {
 					    parameter.Value = DBNull.Value;
-				    }
-				    else {
+				    } else if (pair.Value is DateTime && ((DateTime) pair.Value) < QorpentConst.Date.Begin) {
+					    parameter.Value = QorpentConst.Date.Begin;
+				    } else if (pair.Value is DateTime && ((DateTime) pair.Value) > QorpentConst.Date.End) {
+					    parameter.Value = QorpentConst.Date.End;
+				    } else {
 					    parameter.Value = pair.Value;
 					    if (parameter.Value is XElement) {
 						    parameter.DbType = DbType.Xml;
@@ -820,8 +984,9 @@ namespace Qorpent.Utils.Extensions
 
 		private static Assembly _npgsqlassembly = null;
 		private static Type _npgsqlconnectiontype;
+	    private static ILoggy _log;
 
-		private static Assembly NpgSQLAssembly {
+	    private static Assembly NpgSQLAssembly {
 			get {
 				if(null==_npgsqlassembly) {
 					_npgsqlassembly =

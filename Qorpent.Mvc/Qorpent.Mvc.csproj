@@ -65,7 +65,6 @@
     <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
-    <Compile Include="Renders\DotRender.cs" />
     <Compile Include="Renders\HtmlRender.cs" />
     <Compile Include="Renders\LoginViews\LoginView.cs" />
     <Compile Include="Renders\WikiRender.cs" />
@@ -127,7 +126,6 @@
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
-  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

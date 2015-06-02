@@ -21,8 +21,9 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Xml.Linq;
 using Qorpent.IoC;
+#if !EMBEDQPT
 using Qorpent.Uson;
-
+#endif
 namespace Qorpent.Serialization {
 	/// <summary>
 	/// </summary>
@@ -59,10 +60,13 @@ namespace Qorpent.Serialization {
 	    public override void Serialize(string name, object value, TextWriter output, object options = null) {
 			if (value is XElement) {
 				output.Write(value.ToString());
-			}else if (value is UObj)
+			}
+#if !EMBEDQPT
+            else if (value is UObj)
 			{
 				output.Write(((UObj)value).ToXmlString());
 			}
+#endif
 			else {
 				base.Serialize(name, value, output);
 			}

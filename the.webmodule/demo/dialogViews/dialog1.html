@@ -1,0 +1,14 @@
+<h2>Это первый диалог об объекте</h2>
+<form name="handler.forms.main">
+<table>
+    <tr><th>Свойство</th><th>Значение</th></tr>
+
+    <tr ng-repeat="(k,v) in item">
+        <td ng-bind="k"></td><td><input size="10" ng-required="true" ng-change="handler.validate()" ng-model="item[k]"></td>
+    </tr>
+
+
+
+</table>
+    <p class="danger" ng-bind="i" ng-repeat="(k,i) in handler.errorMessages"></p>
+</form>

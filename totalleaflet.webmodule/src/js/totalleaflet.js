@@ -3,11 +3,13 @@
  */
 define([
     "leaflet-amd",
+    "wellknown",
     "leaflet-awesome-amd",
     "leaflet-draw-amd",
     "leaflet-markercluster-amd",
     "totalleaflet-angular"
-],function($l){
+
+],function($l,$wk){
     //preserving license info
     $l.__licenseInfo = "Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com\
     (c) 2010-2013, Vladimir Agafonkin\
@@ -28,5 +30,7 @@ define([
     https://github.com/Leaflet/Leaflet.markercluster\
     (c) 2012-20\
     13, Dave Leaver, smartrak";
+    L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+    L.$wk = $wk;
     return window.L;
 });

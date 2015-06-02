@@ -79,9 +79,9 @@ namespace Qorpent.Core.Tests.Data
 
         [Test]
         public void DeterminesDialectFromConnection() {
-            Assert.AreEqual(SqlDialect.None,C.Dialect);
+            Assert.AreEqual(DbDialect.None,C.Dialect);
             E.Execute(C).Wait();
-            Assert.AreEqual(SqlDialect.SqlServer, C.Dialect);
+            Assert.AreEqual(DbDialect.SqlServer, C.Dialect);
         }
 
         [Test]

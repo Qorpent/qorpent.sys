@@ -1,0 +1,51 @@
+
+$op : skin(main outerpadding);
+.main:not(.home) {
+  &>article{
+    @include item();
+    margin : $op $op $op $op;
+  }
+  &>h1 + article, &>h2 + article, &>article:first-child {
+    margin-top: $op*2 !important;
+  }
+
+  &>section {
+    padding: $op;
+    &>article {
+      @include item();
+
+    }
+  }
+
+
+  &.docs {
+    .docs {
+      @include flex(column);
+    }
+    .format {
+      font-size: 220%;
+    }
+  }
+
+}
+
+section.advantages {
+
+  & >article:first-child > div, & > h2 + article > div  {
+    padding-top: 20px;
+    flex:1;
+  }
+  .inadvantages {
+    min-width: 100% !important;
+    &.downmap {
+      min-width: 270px !important;
+      max-width: 505px !important;
+    }
+    div {
+      min-height: 100px;
+    }
+  }
+
+
+}
+

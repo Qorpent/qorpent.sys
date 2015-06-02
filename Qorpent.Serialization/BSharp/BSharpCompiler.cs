@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
-using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
@@ -36,7 +35,7 @@ namespace Qorpent.BSharp{
 		protected IBSharpContext CurrentBuildContext;
 
 		private IBSharpConfig _config;
-		private IConfig _global;
+		private IScope _global;
 		private IBSharpSqlAdapter _sqlAdapter;
 
 		/// <summary>
@@ -78,8 +77,8 @@ namespace Qorpent.BSharp{
 		///     Возвращает условия компиляции
 		/// </summary>
 		/// <returns></returns>
-		public IConfig GetConditions(){
-			return new ConfigBase(_config.Conditions);
+		public IScope GetConditions(){
+			return new Scope(_config.Conditions);
 		}
 
 		/// <summary>
@@ -100,7 +99,7 @@ namespace Qorpent.BSharp{
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IBSharpConfig compilerConfig){
 			_config = compilerConfig;
-			_global = _config.Global ?? new ConfigBase{UseInheritance = false};
+			_global = _config.Global ?? new Scope{UseInheritance = false};
 			if (null != compilerConfig.Conditions){
 				foreach (var cond in compilerConfig.Conditions){
 					_global[cond.Key] = cond.Value;
@@ -140,7 +139,7 @@ namespace Qorpent.BSharp{
 
 		/// <summary>
 		/// </summary>
-		public IConfig Global{
+		public IScope Global{
 			get { return _global; }
 		}
 
@@ -507,10 +506,32 @@ namespace Qorpent.BSharp{
 			CompileClasses(batch, context);
 			LinkClasses(batch, context);
 			ExecuteDefinitions(batch, context);
+		    Postprocess(batch, context);
 			return context;
 		}
 
-		private void ExecuteDefinitions(XElement[] batch, IBSharpContext context){
+	    private void Postprocess(XElement[] batch, IBSharpContext context) {
+	        foreach (var cls in context.Get(BSharpContextDataType.Working).ToArray()) {
+	            if (cls.Compiled.Attr("ordered").ToBool()) {
+	                var attr = cls.Compiled.Attr("ordered");
+	                if (attr == "1") attr = "idx";
+	                var elements = cls.Compiled.Elements().ToArray().OrderBy(_ => {
+	                    var val = _.Attr(attr);
+	                    var keybase = _.Name.LocalName+".";
+	                    if (string.IsNullOrWhiteSpace(val)) {
+	                        val = _.Attr("code");
+	                    }
+	                    if (val.ToInt() != 0) val = (100000000 + val.ToInt()).ToString();
+	                    return keybase + val;
+
+	                }).ToArray();
+                    cls.Compiled.Elements().ToArray().Remove();
+                    cls.Compiled.Add(elements);
+	            }
+	        }
+	    }
+
+	    private void ExecuteDefinitions(XElement[] batch, IBSharpContext context){
 			context.Get(BSharpContextDataType.Working).Where(_ => 0 != _.AllEvaluations.Count()).AsParallel().ForAll(_ =>{
 				try{
 					BSharpClassBuilder.Build(BuildPhase.Evaluate, this, _, context);
@@ -565,7 +586,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private void SetupGlobals(){
-			_global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
+			_global = _global ?? _config.Global ?? new Scope { UseInheritance = false };
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){

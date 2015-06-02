@@ -22,16 +22,16 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetText(){
 			if (Mode == ScriptMode.Create){
-				if (Dialect == SqlDialect.SqlServer){
+				if (Dialect == DbDialect.SqlServer){
 					return "CREATE SEQUENCE ${FullName} AS " + Sequence.DataType.ResolveSqlDataType(Dialect) +
-					       " START WITH ${Start} INCREMENT BY ${Step};";
+					       " START WITH ${Start} INCREMENT BY ${Step}${Cycle};";
 				}
-				if (Dialect == SqlDialect.PostGres){
+				if (Dialect == DbDialect.PostGres){
 					return "CREATE SEQUENCE ${FullName} INCREMENT BY ${Step} START WITH ${Start};";
 				}
 			}
 			else{
-				if (Dialect == SqlDialect.SqlServer || Dialect == SqlDialect.PostGres){
+				if (Dialect == DbDialect.SqlServer || Dialect == DbDialect.PostGres){
 					return "DROP SEQUENCE ${FullName};";
 				}
 			}
@@ -42,7 +42,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetDigestFinisher(){
-			if (Dialect == SqlDialect.SqlServer || Dialect == SqlDialect.PostGres){
+			if (Dialect == DbDialect.SqlServer || Dialect == DbDialect.PostGres){
 				return "Sequence " + Sequence.FullName;
 			}
 			return "";

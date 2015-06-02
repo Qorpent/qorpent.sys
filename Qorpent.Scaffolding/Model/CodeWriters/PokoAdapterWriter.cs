@@ -15,20 +15,26 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		/// </summary>
 		/// <param name="cls"></param>
 		/// <param name="output"></param>
-		public PokoAdapterWriter(PersistentClass cls, TextWriter output = null) : base(cls, output){
+		public PokoAdapterWriter(PersistentClass cls, TextWriter output = null) : base(cls, output) {
+			ProcessGetFields = true;
 		}
-      
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessGetFields { get; set; }
 	    /// <summary>
 		/// </summary>
 		protected override void InternalRun(){
 			WriteStartClass();
-	            WriteGetTableQuery();
-	            WriteGetSelectQuery();
-	            WriteSingleRecordProcessor();
-	            WriteEnumerableReaderProcessor();
-	            WriteWriteAccessors();
-	       
+	        WriteGetTableQuery();
+	        WriteGetSelectQuery();
+			if (ProcessGetFields) {
+				WriteGetFields();
+				WriteGetInsertFieldList();
+			}
+	        WriteSingleRecordProcessor();
+	        WriteEnumerableReaderProcessor();
+	        WriteWriteAccessors();
 	        WriteEndClass();
 		}
 
@@ -194,7 +200,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (ormField.IsReference && ormField.ReferenceClass.TargetClass == null){
 					cond = "if(!reader.IsDBNull("+i+"))";
 				}
-			    if (type == "Int64" && name.ToLowerInvariant() == "id") {
+			    if (type == "Int64") {
 
                     o.WriteLine("\t\t\t\t" + cond + "result." + name + " = Convert.To" + type + "(reader.GetValue("+i+"));");
 			    }
@@ -249,7 +255,36 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t}");
 			o.WriteLine("#endif");
 		}
-
+		private void WriteGetInsertFieldList() {
+			var f = Cls.Fields.Values.Where(_ => !_.NoCode && !_.NoSql).OrderBy(_ => _.Idx).ToArray();
+			o.WriteLine("\t\t/// <summary></summary>");
+			o.WriteLine("\t\tpublic IEnumerable<string> GetInsertFieldList(IEnumerable<string> additional = null) {");
+			o.Write("\t\t\treturn System.Linq.Enumerable.Concat(new[] {");
+			for (var i = 0; i < f.Length; i++) {
+				o.Write("\"" + f[i].Name + "\"");
+				if (i != f.Length - 1) o.Write(",");
+			}
+			o.WriteLine("}, additional ?? new string[] {});");
+			o.WriteLine("\t\t}");
+		}
+		private void WriteGetFields() {
+			var f = Cls.Fields.Values.Where(_ => !_.NoCode && !_.NoSql).OrderBy(_ => _.Idx).ToArray();
+			o.WriteLine("\t\t/// <summary></summary>");
+			o.WriteLine("\t\tpublic string GetInsertFields(IEnumerable<string> additional = null) {");
+			o.WriteLine("\t\t\tvar s = string.Empty;");
+			o.Write("\t\t\ts += \"");
+			for (var i = 0; i < f.Length; i++) {
+				o.Write("\\\"" + f[i].Name + "\\\"");
+				if (i != f.Length - 1) o.Write(",");
+			}
+			o.WriteLine("\";");
+			o.WriteLine("\t\t\tif (additional != null) {");
+			o.WriteLine("\t\t\t\tvar d = string.Join(\",\", additional);");
+			o.WriteLine("\t\t\t\ts = string.IsNullOrWhiteSpace(d) ? s : s + \",\" + d;");
+			o.WriteLine("\t\t\t}");
+			o.WriteLine("\t\t\treturn s;");
+			o.WriteLine("\t\t}");
+		}
 		private void WriteGetSelectQuery(){
 			o.WriteLine("\t\t///<summary>Implementation of PrepareSelectQuery</summary>");
 			o.WriteLine("#if NOQORPENT");
@@ -276,7 +311,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				rn = rn.SqlQuoteName().Replace("\"", "\\\"");
 				n = n.Replace("\"", "\\\"");
 				//геометрический тип трансформируем в nvarchar(max)
-				if (of.DataType.ResolveSqlDataType(SqlDialect.SqlServer).Name.StartsWith("geo"))
+				if (of.DataType.ResolveSqlDataType(DbDialect.SqlServer).Name.StartsWith("geo"))
 				{
 					n = "CAST(" + n + " as nvarchar(max))";
 				}

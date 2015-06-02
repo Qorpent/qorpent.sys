@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Uson;
 
@@ -127,5 +128,97 @@ namespace Qorpent.Utils.Tests
 			Console.WriteLine(realresult);
 			Assert.AreEqual(result, realresult);
 		}
+
+	    [Test]
+	    public void LimitedSupportForFunctionCall() {
+	        var code = "${getx()}${gety(2)}${getz(3)}${getz(3,2)}${getz(gety(4),5)}";
+	        var src = new {
+	            getx = (Func<int>) (() => 1),
+	            gety = (Func<int, int>) (s => s*2),
+	            getz = (Func<int, int, int>) ((s, w) => s*2 + w*3)
+	        };var result = _si.Interpolate(code,src);
+            Console.WriteLine(result);
+            Assert.AreEqual("1461231", result);
+	    }
+
+       
+        [Test]
+        public void CoreLibFunctionCall()
+        {
+            var code = "'${upper(x)}', '${lower(x)}', '${trim(x)}', '${match(x,'b.')}', '${match(x,'b(.)','1')}', '${match(x,'(?<a>b).','a')}', '${replace(x,'b','z')}'";
+            
+            var result = _si.Interpolate(code, new{x=" Abc "});
+            Console.WriteLine(result);
+            Assert.AreEqual("' ABC ', ' abc ', 'Abc', 'bc', 'c', 'b', ' Azc '", result);
+        }
+
+
+        [Test]
+        public void TypeResolutionInFunctionCall()
+        {
+            var code = "'${stringer(i)}', '${inter(s)}', '${inter(d)}', '${decer(s)}', '${decer(i)}'";
+
+            var result = _si.Interpolate(code, 
+                new {
+                    s = "Abc",
+                    i = 2,
+                    d = 4.5m,
+                    stringer = (Func<string,string>)(s=>s+"!"),
+                    inter = (Func<int,int>)(s=>s+3),
+                    decer = (Func<decimal,decimal>)(s=>s+2.1m),
+                });
+            Console.WriteLine(result);
+            Assert.AreEqual("'2!', '3', '7', '2.1', '4.1'", result);
+        }
+
+	    [Test]
+	    public void StructureResolutionSupport() {
+	        var code = "${x.a} ${x.b.c} ${x.b.c.gotta()}";
+	        var ctx = new {x = new {a= "2", b = new {c = new {gotta = (Func<string>) (() => "h")}}}};
+	        var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2 { gotta = System.Func`1[System.String] } h", result);
+	    }
+
+        [Test]
+        public void StructureResolutionSupportScope()
+        {
+            var code = "${x.a.b}";
+            var ctx = new { x = new { a = new Scope(new{b=2})}};
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2", result);
+        }
+        [Test]
+        public void StructureResolutionSupportDictionary()
+        {
+            var code = "${x.a.b}";
+            var ctx = new { x = new { a = new Scope(new Dictionary<string,object> { {"b" ,2} }) } };
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2", result);
+        }
+        [Test]
+        public void StructureResolutionSupportXElement()
+        {
+            var code = "${x.a.b.c}${x.a.b}";
+            var ctx = new { x = new { a = XElement.Parse("<a><b c='2'>z</b></a>") } };
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2z", result);
+        }
+
+
+        [Test]
+        public void CanWorkWithPrefix()
+        {
+            var code = "${x.y}${x.z}";
+            var src = new Dictionary<string, object>();
+            src["x.y"] = 1;
+            src["x.z"] = 4;
+            var result = _si.Interpolate(code, src);
+            Console.WriteLine(result);
+            Assert.AreEqual("14", result);
+        }
 	}
 }

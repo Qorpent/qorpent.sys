@@ -22,7 +22,7 @@ namespace Qorpent.Data.Installer {
         /// <param name="filename"></param>
         public AssemblyDbUpdateTask(string filename, string prefix = null) {
             if (!string.IsNullOrWhiteSpace(filename)) {
-                Source = new FileDescriptorEx {FullName = filename};
+                Source = new FileDescriptorEx {FullName = filename,Overrides = ResolvePathOverrides};
                 Source.Name = Path.GetFileNameWithoutExtension(filename);
                 if (!string.IsNullOrWhiteSpace(prefix)) {
                     Source.Name = prefix + "." + Source.Name;
@@ -34,7 +34,7 @@ namespace Qorpent.Data.Installer {
         /// </summary>
         public string Schema {
             get {
-                if (options.ContainsKey("schema")) {
+                if (ContainsKey("schema")) {
                     return Get("schema", "qorpent");
                 }
                 if (null != Source && null != Source.Header) {

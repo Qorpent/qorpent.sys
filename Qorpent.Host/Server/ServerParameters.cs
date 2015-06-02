@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Qorpent.Log;
 using Qorpent.Utils;
 
 namespace Qorpent.Host.Server
@@ -25,7 +26,7 @@ namespace Qorpent.Host.Server
         /// </summary>
         public string WebFarmRoot {
             get {
-                var result = ResolveBest("farmroot", "~fr");
+                var result = this.ResolveBestString("farmroot", "~fr");
                 if (string.IsNullOrWhiteSpace(result)) {
                     return EnvironmentInfo.ResolvePath("@repos@/.www");
                 }
@@ -47,7 +48,7 @@ namespace Qorpent.Host.Server
         /// </summary>
         /// <returns></returns>
         public HostConfig BuildServerConfig() {
-	        return new HostConfig(Definition, BSharpContext, log: Log);
+	        return new HostConfig(Definition, BSharpContext, log: Log){LogLevel = this.LogLevel};
         }
 
         /// <summary>

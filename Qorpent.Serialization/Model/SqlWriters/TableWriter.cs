@@ -38,8 +38,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WriteAllocation(sb);
 				sb.Append(";");
 				sb.AppendLine();
-				GenerateDefaultRows(sb, 0, "/", "NULL/ROOT");
-				GenerateDefaultRows(sb, -1, "ERR", "ERROR/LOST", -1);
+				if (!Table.NoDefaultRows) {
+					GenerateDefaultRows(sb, 0, "/", "NULL/ROOT");
+					GenerateDefaultRows(sb, -1, "ERR", "ERROR/LOST", -1);
+				}
 				SetSqlComment(sb, Table, null);
 				foreach (Field f in fields){
 					SetSqlComment(sb, f.Table, f);
@@ -103,14 +105,14 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			string comment = table.Comment;
 			if (null != fld) comment = fld.Comment;
 			if (string.IsNullOrWhiteSpace(comment)) return;
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				sb.AppendFormat("EXECUTE sp_addextendedproperty N'MS_Description', '{0}', N'SCHEMA', N'{1}', N'TABLE', N'{2}'",
 				                comment.ToSqlString(), table.Schema, table.Name.ToLowerInvariant());
 				if (null != fld){
 					sb.AppendFormat(", N'COLUMN', '{0}'", fld.Name.ToLowerInvariant());
 				}
 			}
-			else if (Dialect == SqlDialect.PostGres){
+			else if (Dialect == DbDialect.PostGres){
 				if (null == fld){
 					sb.AppendFormat("COMMENT ON TABLE {0} IS '{1}'", table.FullSqlName, comment.ToSqlString());
 				}
@@ -124,19 +126,19 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		}
 
 		private void WriteAllocation(StringBuilder sb){
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				string name = Table.AllocationInfo.FileGroup.Name;
-				if (Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(SqlDialect.SqlServer)){
+				if (Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(DbDialect.SqlServer)){
 					name = Table.FullSqlName.Replace(".", "_").Replace("\"","") + "_PARTITION ( " + Table.AllocationInfo.PartitionField.Name + ")";
 				}
 				sb.Append(" ON " + name);
 			}
-			else if (Dialect == SqlDialect.PostGres){
+			else if (Dialect == DbDialect.PostGres){
 				sb.Append(" TABLESPACE " + Table.AllocationInfo.FileGroup.Name);
 			}
 		}
 
-		private void WriteField(SqlDialect dialect,Field field, StringBuilder sb, bool last){
+		private void WriteField(DbDialect dialect,Field field, StringBuilder sb, bool last){
 			if (!string.IsNullOrWhiteSpace(field.Comment) && !NoComment){
 				sb.AppendLine("\t-- " + field.Comment);
 			}
@@ -170,7 +172,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 		}
 
-		private void WriteComputeAs(SqlDialect dialect, Field field, StringBuilder sb){
+		private void WriteComputeAs(DbDialect dialect, Field field, StringBuilder sb){
 			sb.Append(" AS ");
 			sb.Append("(");
 			sb.Append(field.ComputeAs);
@@ -181,10 +183,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (field.IsPrimaryKey) return;
 			if (!field.IsReference) return;
 			if (field.GetIsCircular()) return;
-			var fk = Dialect == SqlDialect.PostGres ? " " : " FOREIGN KEY ";
+			var fk = Dialect == DbDialect.PostGres ? " " : " FOREIGN KEY ";
 			sb.Append(" CONSTRAINT " + field.GetConstraintName("FK") + fk + "REFERENCES " +
 			          field.ReferenceClass.FullSqlName + " (" + field.ReferenceField.SqlQuoteName() + ")");
-			if (Dialect == SqlDialect.PostGres){
+			if (Dialect == DbDialect.PostGres){
 				sb.Append(" DEFERRABLE");
 			}
 		}
@@ -206,7 +208,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 		}
 
-		private void WriteDefaultValue(SqlDialect dialect, Field field, StringBuilder sb)
+		private void WriteDefaultValue(DbDialect dialect, Field field, StringBuilder sb)
 		{
 			sb.Append(" DEFAULT ");
 			if (field.IsAutoIncrement){
@@ -217,7 +219,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 		}
 
-		private void WriteUsualDefault(SqlDialect dialect,Field field, StringBuilder sb){
+		private void WriteUsualDefault(DbDialect dialect,Field field, StringBuilder sb){
 			DefaultValue def = field.DefaultSqlValue;
 			switch (def.DefaultValueType){
 
@@ -228,7 +230,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					if (def.Value == null || "".Equals(def.Value)){
 						sb.Append("''");
 					}else if (def.Value is bool){
-						if (dialect == SqlDialect.PostGres){
+						if (dialect == DbDialect.PostGres){
 							sb.Append(def.Value.ToString().ToLower());
 						}
 						else{
@@ -249,10 +251,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			Sequence seq = field.Table.SqlObjects.OfType<Sequence>().FirstOrDefault();
 			if (seq != null){
 				string seqname = seq.FullName;
-				if (Dialect == SqlDialect.SqlServer){
+				if (Dialect == DbDialect.SqlServer){
 					sb.Append("(NEXT VALUE FOR " + seqname + ")");
 				}
-				else if (Dialect == SqlDialect.PostGres){
+				else if (Dialect == DbDialect.PostGres){
 					sb.Append("(nextval('" + seqname + "'))");
 				}
 				else{

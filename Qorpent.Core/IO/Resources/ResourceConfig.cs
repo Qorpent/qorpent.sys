@@ -1,12 +1,11 @@
 ﻿using System.Net;
 using System.Text;
-using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
 	/// Базовая реализация конфгурации запроса и самого ресурса
 	/// </summary>
-	public class ResourceConfig : ConfigBase, IResourceConfig {
+	public class ResourceConfig : Scope, IResourceConfig {
 		private static IResourceConfig _default = new ResourceConfig();
 		/// <summary>
 		/// Конфигурация ресурсов и их загрузки по умолчанию

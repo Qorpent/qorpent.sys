@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Qorpent.Config;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -35,6 +34,6 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		bool Match(IConfig config);
+		bool Match(IScope config);
 	}
 }

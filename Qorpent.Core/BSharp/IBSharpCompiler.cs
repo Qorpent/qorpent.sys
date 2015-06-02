@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.IoC;
 
 namespace Qorpent.BSharp {
@@ -31,7 +30,7 @@ namespace Qorpent.BSharp {
 		/// Возвращает условия компиляции
 		/// </summary>
 		/// <returns></returns>
-		IConfig GetConditions();
+		IScope GetConditions();
 
 	    /// <summary>
 	    /// Выполняет расширения для указанного
@@ -59,7 +58,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// 
 		/// </summary>
-		IConfig Global { get; }
+		IScope Global { get; }
 		
 	}
 }

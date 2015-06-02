@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Qorpent.Config;
 using Qorpent.IoC;
 
 namespace Qorpent.IO.Resources {
@@ -114,6 +113,6 @@ namespace Qorpent.IO.Resources {
 		/// <summary>
 		/// Акцессор до конфигурации
 		/// </summary>
-		public IConfig Config { get { return _config; } }
+		public IScope Config { get { return _config; } }
 	}
 }

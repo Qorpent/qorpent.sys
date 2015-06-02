@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host{
     /// <summary>
@@ -13,7 +14,7 @@ namespace Qorpent.Host{
 		/// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-		void Authenticate(HttpListenerContext context);
+        void Authenticate(WebContext context);
 
 		/// <summary>
 		/// </summary>
@@ -21,25 +22,25 @@ namespace Qorpent.Host{
 		/// <param name="username"></param>
 		/// <param name="password"></param>
 		/// <returns></returns>
-		void Authenticate(HttpListenerContext context, string username, string password);
+        void Authenticate(WebContext context, string username, string password);
 
 		/// <summary>
 		///     Выполняет вход с разбором переданных параметров
 		/// </summary>
 		/// <param name="context"></param>
-		void Logon(HttpListenerContext context);
+		void Logon(WebContext context);
 
 		/// <summary>
 		///     Выполняет выход из контекста
 		/// </summary>
 		/// <param name="context"></param>
-		void Logout(HttpListenerContext context);
+        void Logout(WebContext context);
 
 		/// <summary>
 		/// Проверка аутентифицированного контекста
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		bool IsAuth(HttpListenerContext context);
+        bool IsAuth(WebContext context);
 	}
 }

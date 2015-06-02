@@ -1,5 +1,4 @@
-﻿using Qorpent.Config;
-using Qorpent.Model;
+﻿using Qorpent.Model;
 
 namespace Qorpent{
 	/// <summary>
@@ -13,13 +12,13 @@ namespace Qorpent{
 		/// <param name="target"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		bool IsMatch(T target, IConfig context = null);
+		bool IsMatch(T target, IScope context = null);
 		/// <summary>
 		/// Применяет фильтр к целевому объекту в заданном контексте
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		FilterState Apply(T target, IConfig context = null);
+		FilterState Apply(T target, IScope context = null);
 	}
 }

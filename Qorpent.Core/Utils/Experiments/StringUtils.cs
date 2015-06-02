@@ -13,6 +13,12 @@ namespace Qorpent.Utils {
         private static readonly string[] EmptyStrings = {};
         private static readonly char[] DefaultSplitters = {',', ';', '/'};
 
+
+        public static string Norm(string s) {
+            if (string.IsNullOrWhiteSpace(s)) return "";
+            return s.Trim().ToLowerInvariant();
+        }
+
         /// <summary>
         /// Parses string as array of strings
         /// </summary>

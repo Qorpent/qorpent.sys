@@ -1,0 +1,119 @@
+@import "_utils";
+.ng-hide {
+  display: none !important;
+}
+*{
+  box-sizing: border-box;
+}
+html {
+
+}
+
+body {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: slighten(color(default),30%);
+  > div,  > section, > nav {
+    background-color: color(light);
+    box-shadow:         -10px 10px 11px 0px color(default);
+    border-right: solid 1px color(default);
+    border-left: solid 1px color(default);
+  }
+  color: color(dark);
+  @include flex(column);
+  flex-grow: 1;
+  min-height: 100%;
+  @include size(50px,0px);
+  @include flex(column);
+  font-family: skin(font);
+  font-size: skin(fontsize);
+  line-height: 1.3;
+  > div, > section, > nav {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    &.main {
+      flex-grow: 1;
+      @include flex(column);
+      h1 {
+        flex-order: 1;
+      }
+      border-bottom: solid 1px color(default);
+      padding-bottom: 50px;
+    }
+  }
+  @media print {
+    display: block;
+    font-size: 10pt;
+    margin: 0px !important;
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: none !important;
+    min-height: 0px;
+    * {
+      box-shadow: none !important;
+    }
+  }
+}
+
+@media print {
+  @page  {
+    margin: 1cm;
+  }
+
+}
+
+.row {
+  @include flex(row);
+  @media screen and (max-width:799px) {
+    >div {
+      min-width: 350px;
+    }
+    flex-wrap: wrap !important;
+  }
+  @media screen and (max-width:499px) {
+    >div {
+      min-width: 200px;
+    }
+
+  }
+
+
+}
+.col {
+  @include flex(column);
+}
+
+.warn {
+  border: solid 1px darken(color(warn),10%);
+  background-color: slighten(color(warn),10%);
+  color : darken(color(warn),20%);
+  border-radius: 10px;
+  padding: 5px;
+  font-size:80%;
+  @include flex(row);
+  align-items: center;
+  justify-content: center;
+}
+
+.notranslate{
+  display: inline-block;
+}
+
+p > a {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+
+section, article  {
+  @include flex(row);
+}
+article {
+  @include flex(column);
+}
+
+.hidden {
+  display: none !important;
+}

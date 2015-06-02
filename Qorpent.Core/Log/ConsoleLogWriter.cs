@@ -29,6 +29,7 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		protected override void InternalWrite(LogMessage message) {
 			var text = GetText(message);
+		    
 			try {
 				switch (message.Level) {
 					case LogLevel.Debug:
@@ -40,7 +41,7 @@ namespace Qorpent.Log {
 					case LogLevel.Info:
 						Console.ForegroundColor = ConsoleColor.White;
 						break;
-					case LogLevel.Warning:
+					case LogLevel.Warn:
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						break;
 					case LogLevel.Error:

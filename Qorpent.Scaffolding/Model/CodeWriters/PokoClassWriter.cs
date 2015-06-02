@@ -19,6 +19,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			ProcessHashMethods = true;
 			ProcessHeader = true;
 			ProcessReferences = true;
+			ProcessInsertConstructor = true;
 		}
 
 		/// <summary>
@@ -28,7 +29,30 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			if (ProcessFields) GenerateOwnFields();
 			if (ProcessReferences) GenerateIncomeReferences();
 			if (ProcessHashMethods) GenerateHashMethods();
+			if (ProcessInsertConstructor) GenerateInsertConstructor();
 			if (ProcessFooter) WriteEndClass();
+		}
+		private void GenerateInsertConstructor() {
+			var f = Cls.Fields.Values.Where(_ => !_.NoCode && !_.NoSql).OrderBy(_ => _.Idx).ToArray();
+			o.WriteLine("\t\t/// <summary></summary>");
+			o.WriteLine("\t\tpublic string GetInsertQuery(string target = \"" + Cls.FullSqlName.Replace("\"", "\\\"") + "\", IDictionary<string, string> additional = null) {");
+			o.Write("\t\t\tvar s = \"insert into \" + target + \" (");
+			for (var i = 0; i < f.Length; i++) {
+				o.Write("\\\"" + f[i].Name + "\\\"");
+				if (i != f.Length - 1) o.Write(",");
+			}
+			o.WriteLine("\";");
+			o.WriteLine("\t\t\tif (additional != null && additional.Count > 0) s += \",\" + string.Join(\",\", additional.Keys);");
+			o.Write("s += \") values (");
+			for (var i = 0; i < f.Length; i++) {
+				o.Write("@" + f[i].Name);
+				if (i != f.Length - 1) o.Write(",");
+			}
+			o.WriteLine("\";");
+			o.WriteLine("\t\t\tif (additional != null && additional.Count > 0) s += \",@\" + string.Join(\",@\", additional.Values);");
+			o.WriteLine("\t\t\ts += \");\";");
+			o.WriteLine("\t\t\treturn s;");
+			o.WriteLine("\t\t}");
 		}
 		/// <summary>
 		/// 
@@ -46,7 +70,10 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t\treturn src.GetMd5();");
 			o.WriteLine("\t\t}");
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessInsertConstructor { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

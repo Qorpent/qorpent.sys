@@ -66,7 +66,7 @@ END;
                 Console.WriteLine(C.Error.ToString());
             }
             Assert.True(C.Ok);
-            Assert.AreEqual(SqlDialect.SqlServer,C.Dialect);
+            Assert.AreEqual(DbDialect.SqlServer,C.Dialect);
             Assert.AreEqual(SqlObjectType.Procedure,C.ObjectType);
             Assert.AreEqual(3, C.Parameters.Length);
         }

@@ -79,17 +79,17 @@ html.theA4 .report-toolbar {
   width: 100%;
   height: 60px;
   z-index: 10000;
-  background: -moz-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  background: -moz-linear-gradient(top, #4C81AF 0%, #92b3cf 100%);
   /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #72baea), color-stop(100%, #c7d8e5));
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4C81AF), color-stop(100%, #92b3cf));
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  background: -webkit-linear-gradient(top, #4C81AF 0%, #92b3cf 100%);
   /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  background: -o-linear-gradient(top, #4C81AF 0%, #92b3cf 100%);
   /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  background: -ms-linear-gradient(top, #4C81AF 0%, #92b3cf 100%);
   /* IE10+ */
-  background: linear-gradient(to bottom, #72baea 0%, #c7d8e5 100%);
+  background: linear-gradient(to bottom, #4C81AF 0%, #92b3cf 100%);
   /* W3C */
   box-shadow: darkgray;
 }
@@ -105,7 +105,7 @@ html.theA4 .report-toolbar {
     margin: 0;
     padding: 0;
     padding-top: 2cm;
-    background-color: #C7D8E5;
+    background-color: #92b3cf;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -251,11 +251,11 @@ html.theA4 body {
 }
 /* line 29, the/tools/_stackedbutton.scss */
 .stackedbutton .back .front.fa-question-circle {
-  color: #10bbf2 !important;
+  color: #6e9ac0 !important;
 }
 /* line 31, the/tools/_stackedbutton.scss */
 .stackedbutton .back .front.fa-question-circle:hover {
-  color: #0B97C4 !important;
+  color: #4C81AF !important;
 }
 /* line 36, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover {
@@ -276,8 +276,8 @@ html.theA4 body {
 /* line 50, the/tools/_stackedbutton.scss */
 .stackedbutton .back .inner {
   font-size: 10pt !important;
-  left: 2px;
-  top: -1px;
+  left: 3px;
+  top: 3px;
   color: green;
   width: 18px;
   height: 18px;
@@ -287,10 +287,10 @@ html.theA4 body {
 }
 /* line 62, the/tools/_stackedbutton.scss */
 .stackedbutton .back .help {
-  font-size: 6pt !important;
-  left: 28px;
-  top: 30px;
-  color: #0B97C4;
+  font-size: 12px !important;
+  left: 27px;
+  bottom: 7px;
+  color: #4C81AF;
   width: 18px;
   height: 18px;
 }

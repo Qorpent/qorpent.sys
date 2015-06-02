@@ -15,7 +15,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		public SqlScript(){
 			SubScripts = new List<SqlScript>();
 			Position = ScriptPosition.After;
-			SqlDialect = SqlDialect.Ansi;
+			DbDialect = DbDialect.Ansi;
 		}
 
 
@@ -44,7 +44,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <summary>
 		///     Диалект, для которого применяется
 		/// </summary>
-		public SqlDialect SqlDialect { get; set; }
+		public DbDialect DbDialect { get; set; }
 
 		/// <summary>
 		///     Родительский скрипт
@@ -68,9 +68,9 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="position"></param>
 		/// <param name="mode"></param>
 		/// <returns></returns>
-		public IEnumerable<SqlScript> GetRealScripts(SqlDialect dialect, ScriptPosition position, ScriptMode mode){
+		public IEnumerable<SqlScript> GetRealScripts(DbDialect dialect, ScriptPosition position, ScriptMode mode){
 			if (0 == SubScripts.Count){
-				if (SqlDialect == SqlDialect.Ansi || dialect == SqlDialect){
+				if (DbDialect == DbDialect.Ansi || dialect == DbDialect){
 					if (Mode == mode){
 						if (Position == position){
 							yield return this;
@@ -102,7 +102,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			External = definition.Attr("external");
 			Position = definition.Attr("position", "After").To<ScriptPosition>();
 			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
-			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
+			DbDialect = definition.Attr("dialect", "Ansi").To<DbDialect>();
 			if (string.IsNullOrWhiteSpace(definition.Value) && string.IsNullOrWhiteSpace(External)){
 				External = Name;
 			}

@@ -20,10 +20,12 @@ namespace Qorpent.Host.Exe
 	        var config = arg.BuildServerConfig();
 	        EnsureRequiredApplications(arg,config);
 	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
+            Console.WriteLine("LOGLEVEL " + config.LogLevel);
 	        var hostServer = new HostServer(config);
 
             LogHostInfo(arg, config);
 	        hostServer.Start();
+            Console.WriteLine("LOGLEVEL " + config.LogLevel);
 	        try {
 		    while(true){
 		      try{

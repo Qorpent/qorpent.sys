@@ -23,10 +23,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetText(){
 			if (Mode == ScriptMode.Create){
-				if (Dialect == SqlDialect.SqlServer){
+				if (Dialect == DbDialect.SqlServer){
 					return "if (SCHEMA_ID('${Name}') is null) exec sp_executesql N'CREATE SCHEMA ${Name}';";
 				}
-				if (Dialect == SqlDialect.PostGres){
+				if (Dialect == DbDialect.PostGres){
 					return "CREATE SCHEMA IF NOT EXISTS ${Name};";
 				}
 

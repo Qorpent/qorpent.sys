@@ -24,7 +24,7 @@ class b prototype=dbtable
 			to Code
 			to Code2
 ");
-			var script = model.GetScript(SqlDialect.SqlServer, ScriptMode.Create);
+			var script = model.GetScript(DbDialect.SqlServer, ScriptMode.Create);
 			Console.WriteLine(script.Replace("\"","\"\""));
 			Assert.AreEqual(@"
 -- begin command ScriptWriter

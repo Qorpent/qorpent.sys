@@ -94,7 +94,7 @@ namespace Qorpent.Data.Installer {
             cmd.ParametersSoruce = new {code = name};
             var result = (IDictionary<string, object>) DbExecutor.GetResultSync(cmd);
             var meta = null == result
-                ? new FileDescriptorEx {Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue}
+                ? new FileDescriptorEx {Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue,Overrides = ResolvePathOverrides}
                 : new FileDescriptorEx {
                     Name = Source.Name,
                     Hash = result["hash"].ToStr(),
@@ -136,7 +136,7 @@ namespace Qorpent.Data.Installer {
             var version = new DateTime(2000, 1, 1);
             var offset = versionstring.Replace(".", "").ToInt();
             version = version.AddSeconds(offset);
-            var src = new FileDescriptorEx {Name = name, Hash = hash, Version = version};
+            var src = new FileDescriptorEx {Name = name, Hash = hash, Version = version,Overrides = ResolvePathOverrides};
             return src;
         }
 
@@ -153,8 +153,7 @@ namespace Qorpent.Data.Installer {
                 Notation = notation
             };
             if (!string.IsNullOrWhiteSpace(query)) {
-                var si = new StringInterpolation();
-                query = si.Interpolate(query, CmdParameters);
+                query = query.Interpolate(CmdParameters);
                 if (query.Contains(" ")) {
                     result.Query = query;
                 }

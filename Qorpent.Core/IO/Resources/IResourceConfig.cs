@@ -1,12 +1,11 @@
 ﻿using System.Net;
 using System.Text;
-using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
 	/// Интерфейс метаданных ресурса
 	/// </summary>
-	public interface IResourceConfig:IConfig {
+	public interface IResourceConfig:IScope {
 		/// <summary>
 		/// Данные для отсылки конечной точке(для вебоподобных ресурсов)
 		/// </summary>

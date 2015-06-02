@@ -1,11 +1,10 @@
 ﻿using System.Net;
-using Qorpent.Config;
 
 namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// Конфигурация BinaryServer
 	/// </summary>
-	public class SimpleSocketConfig:ConfigBase{
+	public class SimpleSocketConfig:Scope{
 		/// <summary>
 		/// 
 		/// </summary>

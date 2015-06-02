@@ -109,7 +109,7 @@ namespace Qorpent.Db
 		trigger UpgradeSequence "Триггер обновления SEQUENCE" update insert : (
 			if ( UPDATE (Id) ) begin
 				declare @maxid int set @maxid  = (select max(Id) from @this )
-				declare @currentseq int set @currentseq = (SELECT cast(current_value as int) FROM sys.sequences WHERE name = '${.code}_SEQ'  and schema_id = SCHEMA_ID('${.schema}'))
+				declare @currentseq int set @currentseq = (SELECT cast(current_value as int) FROM sys.sequences WHERE name = '${self.code}_SEQ'  and schema_id = SCHEMA_ID('${self.schema}'))
 				if @currentseq <  @maxid begin
 					set @currentseq = ( (@maxid  + 10) / 10 ) * 10
 					declare @q nvarchar(max) set @q = N'ALTER SEQUENCE ${fullname}_SEQ RESTART WITH ' + cast(@currentseq as nvarchar(255))
@@ -132,7 +132,7 @@ namespace Qorpent.Db
 		dictso LocalProperties resolve=5 nosql clone qorpent-hide=Entity
 
 	class IWithHierarchy "Интерфейс иерархической сущности" abstract
-		implements "IWithSimpleHierarchy<${.code}>"
+		implements "IWithSimpleHierarchy<${self.code}>"
 		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233 reverse=Children auto resolve=100
 		string Path "Сформированный полный путь сущности" idx=234
 		string GetPath "Расчет полного пути к элементу" @id=int   : (

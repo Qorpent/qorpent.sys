@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using Qorpent.IO;
 using Qorpent.IO.FileCache;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host.Static {
     /// <summary>
@@ -80,8 +81,8 @@ namespace Qorpent.Host.Static {
         /// <returns></returns>
         public IWebFileRecord Get(string name, object context = null, bool withextended = false) {
             IWebFileRecord result;
-            var ctx = context as HttpListenerContext;
-            bool forced = null != ctx && ctx.Request.Url.ToString().Contains("__forced");
+            var ctx = context as WebContext;
+            bool forced = null != ctx && ctx.Uri.ToString().Contains("__forced");
             if (!forced  && _cache.TryGetValue(name, out result)) {
                 return result;
             }
