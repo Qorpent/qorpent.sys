@@ -4,8 +4,10 @@ using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
 using qorpent.v2.security.user.storage;
 using Qorpent;
+using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
@@ -25,6 +27,9 @@ namespace qorpent.v2.security.authentication {
 
         public IIdentity GetUserIdentity(IHttpRequestDescriptor request) {
             var currentToken = TokenService.Extract(request);
+            if (Logg.IsForDebug()) {
+                Logg.Debug(new {request = request.Uri.ToString(), action = "extract", token = currentToken}.stringify());
+            }
             if (currentToken != null && TokenService.IsValid(request, currentToken)) {
                 return AuthenticateWithValidToken(request, currentToken);
             }
@@ -32,7 +37,14 @@ namespace qorpent.v2.security.authentication {
         }
 
         private IIdentity AuthenticateWithValidToken(IHttpRequestDescriptor request, Token currentToken) {
+            var currentExpire = currentToken.Expire.ToUniversalTime();
             var token = TokenService.Prolongate(currentToken);
+            var resultExpire = token.Expire.ToUniversalTime();
+            if (Logg.IsForDebug()) {
+                Logg.Debug(
+                    new {request = request.Uri.ToString(), token = "upgrade", from = currentExpire, to = resultExpire}
+                        .stringify());
+            }
             var result = BuildIdentity(token);
             return result;
         }

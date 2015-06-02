@@ -536,13 +536,7 @@ namespace Qorpent.Host {
                 OnBeforeInitializeServices(Container);
             }
            
-            if (null == Container.FindComponent(typeof (IHostConfigProvider), null)) {
-                Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
-            }
-            if (null == Container.FindComponent(typeof(IConfigProvider), null))
-            {
-                Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
-            }
+           
             if (null == Container.FindComponent(typeof (IRequestHandlerFactory), null)) {
                 Container.Register(
                     Container.NewComponent<IRequestHandlerFactory, DefaultRequestHandlerFactory>(Lifestyle.Transient));
@@ -584,6 +578,14 @@ namespace Qorpent.Host {
                     }
                 }
                 loader.LoadManifest(xml, true);
+            }
+            if (null == Container.FindComponent(typeof(IHostConfigProvider), null))
+            {
+                Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
+            }
+            if (null == Container.FindComponent(typeof(IConfigProvider), null))
+            {
+                Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
             }
 	        var connections = Container.Get<IDatabaseConnectionProvider>();
 			if (null == connections) {

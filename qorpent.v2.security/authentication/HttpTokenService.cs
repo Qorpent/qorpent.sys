@@ -5,6 +5,7 @@ using qorpent.v2.security.user;
 using Qorpent;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
@@ -13,7 +14,7 @@ namespace qorpent.v2.security.authentication {
         public HttpTokenService() {
             CookieName = "QHAUTH";
             LeaseTime = 30;
-            SlideTime = 10;
+            SlideTime = 30;
             Sliding = true;
         }
 
@@ -94,8 +95,9 @@ namespace qorpent.v2.security.authentication {
 
         public Token Prolongate(Token existedToken) {
             if (Sliding) {
-                existedToken.Expire = DateTime.Now.AddMinutes(SlideTime);
+                existedToken.Expire = DateTime.Now.AddMinutes(SlideTime).ToUniversalTime();
             }
+            
             return existedToken;
         }
 

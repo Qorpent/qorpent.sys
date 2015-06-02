@@ -36,6 +36,18 @@ namespace qorpent.v2.security.authorization {
             if (path.EndsWith(".js")) {
                 return true;
             }
+            if (path.EndsWith(".png"))
+            {
+                return true;
+            }
+            if (path.EndsWith(".jpg"))
+            {
+                return true;
+            }
+            if (path.EndsWith(".jpeg"))
+            {
+                return true;
+            }
             if (path.EndsWith(".css")) {
                 return true;
             }
@@ -58,6 +70,9 @@ namespace qorpent.v2.security.authorization {
                 return true;
             }
             if (path == "/logon") {
+                return true;
+            }
+            if (uri.AbsolutePath == "/info/app") {
                 return true;
             }
             if (uri.AbsolutePath == "/logout") {
