@@ -44,13 +44,6 @@
     <Compile Include="FileSystemWebFileProvider.cs" />
     <Compile Include="FileSystemWebFileRecord.cs" />
     <Compile Include="FixedWebFileRecord.cs" />
-    <Compile Include="Net\HttpClient.cs" />
-    <Compile Include="Net\HttpRequest.cs" />
-    <Compile Include="Net\HttpRequestWriter.cs" />
-    <Compile Include="Net\HttpResponse.cs" />
-    <Compile Include="Net\HttpResponseReaderExecutor.cs" />
-    <Compile Include="Net\HttpResponseReader.cs" />
-    <Compile Include="Net\HttpUtils.cs" />
     <Compile Include="ResourceWebFileProvider.cs" />
     <Compile Include="ResourceWebFileRecord.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />

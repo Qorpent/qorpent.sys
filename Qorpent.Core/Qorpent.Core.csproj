@@ -78,6 +78,13 @@
     <Compile Include="ICacheService.cs" />
     <Compile Include="IExtensibleService.cs" />
     <Compile Include="InitializeAbleService.cs" />
+    <Compile Include="IO\Net\HttpClient.cs" />
+    <Compile Include="IO\Net\HttpRequest.cs" />
+    <Compile Include="IO\Net\HttpRequestWriter.cs" />
+    <Compile Include="IO\Net\HttpResponse.cs" />
+    <Compile Include="IO\Net\HttpResponseReader.cs" />
+    <Compile Include="IO\Net\HttpResponseReaderExecutor.cs" />
+    <Compile Include="IO\Net\HttpUtils.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />
     <Compile Include="Scope\Scope.cs" />
