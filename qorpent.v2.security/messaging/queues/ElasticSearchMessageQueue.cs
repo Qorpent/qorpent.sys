@@ -137,6 +137,7 @@ namespace qorpent.v2.security.messaging.queues {
             Index = e.Attr("index", Index);
             Type = e.Attr("type", Type);
             Enabled = e.Attr("active", "true").ToBool();
+            EsClient.Urls = e.Attr("urls", "http://127.0.0.1:9200").SmartSplit(false, true, ',', ';');
         }
 
         private static PostMessage CreateFromJson(object j) {
