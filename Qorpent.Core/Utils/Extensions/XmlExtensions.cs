@@ -55,6 +55,11 @@ namespace Qorpent.Utils.Extensions {
             throw new Exception("multiple instance");
         }
 
+
+	    public static XElement toRoot(this XElement e) {
+	        return e.AncestorsAndSelf().Last();
+	    }
+
 	    public static bool IsRealEmpty(this XElement e) {
 	        if (e.HasAttributes) return false;
 	        if (e.HasElements) return false;

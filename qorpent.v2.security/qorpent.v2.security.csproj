@@ -75,7 +75,6 @@
     <Compile Include="logon\services\SecureLogonService.cs" />
     <Compile Include="logon\providers\WinLogon.cs" />
     <Compile Include="user\UserSerializer.cs" />
-    <Compile Include="utils\ElasticSearchClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="messaging\resources\message_template_wellcome.xml" />
@@ -100,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="messaging\resources\message_template_pwdreset.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="utils\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

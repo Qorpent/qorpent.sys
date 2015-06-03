@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using System.Xml.Linq;
 using Qorpent.Experiments;
 using Qorpent.IoC;
@@ -110,6 +109,10 @@ namespace Qorpent.Log.NewLog {
             }
             else if (type == "udp") {
                 ap = BuildUdpAppender(name, a);
+            }
+            else if (type == "elastic")
+            {
+                ap = new ElasticSearchAppender(a);
             }
             else {
                 selflog.Add(new LoggyMessage (LogLevel.Error,  "unknown appender type " + type ));
