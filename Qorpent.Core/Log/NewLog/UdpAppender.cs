@@ -50,7 +50,13 @@ namespace Qorpent.Log.NewLog {
             lock (sync) {
                 foreach (var xmlMessage in _messageBuffer) {
                     var payload = Encoding.UTF8.GetBytes(xmlMessage);
-                    _udpClient.SendAsync(payload, payload.Length);
+                    try {
+                        _udpClient.SendAsync(payload, payload.Length);
+
+                    }
+                    catch {
+                        
+                    }
                 }
 
                 _messageBuffer.Clear();

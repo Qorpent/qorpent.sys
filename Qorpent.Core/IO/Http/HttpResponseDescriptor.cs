@@ -163,21 +163,24 @@ namespace Qorpent.IO.Http {
             source.Seek(range.Start, SeekOrigin.Current);
             var totalLength = range.Finish - range.Start + 1;
             var currentLength = 0;
-            var buffer = new byte[4096];
+            var buffer = new byte[524288];
+            
             while (true) {
                 if (currentLength >= totalLength) {
                     break;
                 }
                 ;
-                var readsize = Math.Min(4096, totalLength - currentLength);
+                var readsize = Math.Min(524288, totalLength - currentLength);
                 var currentChunk = source.Read(buffer, 0, (int)readsize);
                 if (currentChunk <= 0) {
                     break;
                 }
                 currentLength += currentChunk;
                 target.Write(buffer, 0, currentChunk);
-                target.Flush();
+
             }
+
+    
         }
 
         private bool IsRequiredGZip(object sendobject) {
