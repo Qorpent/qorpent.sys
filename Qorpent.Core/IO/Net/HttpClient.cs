@@ -142,7 +142,7 @@ namespace Qorpent.IO.Net{
 				var secure = request.Uri.Scheme.StartsWith("https");
 				request.Cookies = request.Cookies ?? this.Cookies ?? new CookieCollection();
 				var endpoint = GetEndpoint(request.Uri);
-				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)) {
+				using (var socket = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp)) {
 				    if (ConnectionTimeout <= 0) {
 				        socket.Connect(endpoint);
 				    }
