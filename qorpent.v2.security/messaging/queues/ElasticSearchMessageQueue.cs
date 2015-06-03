@@ -6,6 +6,7 @@ using qorpent.v2.security.utils;
 using Qorpent;
 using Qorpent.Experiments;
 using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.messaging.queues {
@@ -137,7 +138,9 @@ namespace qorpent.v2.security.messaging.queues {
             Index = e.Attr("index", Index);
             Type = e.Attr("type", Type);
             Enabled = e.Attr("active", "true").ToBool();
-            EsClient.Urls = e.Attr("urls", "http://127.0.0.1:9200").SmartSplit(false, true, ',', ';');
+            if (!string.IsNullOrWhiteSpace(e.Attr("urls"))) {
+                EsClient.Urls = e.Attr("urls", "http://127.0.0.1:9200").SmartSplit(false, true, ',', ';');
+            }
         }
 
         private static PostMessage CreateFromJson(object j) {
@@ -160,7 +163,11 @@ namespace qorpent.v2.security.messaging.queues {
         private void Store(PostMessage message) {
             var result = EsClient.ExecuteCommand(BaseUrl() + "/" + message.Id + "?refresh=true", message.stringify());
             if (null == result) {
-                throw EsClient.LastError;
+                Logg.Error(new {
+                    error_in_es = EsClient.LastError.Message,
+                    urls = EsClient.Urls.ToArray()
+                }.stringify());
+                throw  EsClient.LastError;
             }
         }
 

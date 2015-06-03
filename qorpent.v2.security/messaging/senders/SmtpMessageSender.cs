@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 using System.Security;
 using System.Text;
@@ -32,7 +33,13 @@ namespace qorpent.v2.security.messaging.senders {
                     conf = Registry[message.From];
                 }
                 var mail = BuildMessage(message, conf);
+                var prev = ServicePointManager.ServerCertificateValidationCallback;
+                ServicePointManager
+    .ServerCertificateValidationCallback =
+    (sender, cert, chain, sslPolicyErrors) => true;
                 conf.SmtpClient.Send(mail);
+                ServicePointManager
+                    .ServerCertificateValidationCallback = prev;
             }
         }
 

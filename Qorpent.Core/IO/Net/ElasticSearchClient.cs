@@ -6,7 +6,7 @@ using Qorpent.IO.Net;
 namespace qorpent.v2.security.utils {
     public class ElasticSearchClient {
         public ElasticSearchClient() {
-            ConnectionTimeout = 2000;
+            ConnectionTimeout = 200;
             Urls = new List<string> {"http://127.0.0.1:9200"};
         }
 

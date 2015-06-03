@@ -25,7 +25,7 @@ namespace qorpent.v2.security.user.storage.providers {
   
 }";
         private readonly IDictionary<string, IUser> _cache = new Dictionary<string, IUser>();
-        private readonly bool _initialized = false;
+        private  bool _initialized = false;
 
         public ElasticUserSource() {
             EsClient = new ElasticSearchClient();
@@ -164,6 +164,7 @@ namespace qorpent.v2.security.user.storage.providers {
         private void CheckCache(bool forced = false) {
             if (!_initialized) {
                 Initialize();
+                _initialized = true;
             }
             if (!forced && EsClient.InvalidConnection) {
                 if (EsClient.LastPing.AddMilliseconds(PingRate) > DateTime.Now) {
