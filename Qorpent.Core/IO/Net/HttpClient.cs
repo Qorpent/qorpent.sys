@@ -153,6 +153,7 @@ namespace Qorpent.IO.Net{
 				            throw new IOException("timeouted");
 				        }
 				    }
+                    if(!socket.Connected)throw new Exception("socket was not connected");
 					using (var ns = new NetworkStream(socket)){
 						using (var rs = secure ? (Stream) new SslStream(ns, false, UserCertificateValidationCallback) : ns){
 							if (secure){
