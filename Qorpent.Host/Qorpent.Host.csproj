@@ -217,5 +217,18 @@
   <ItemGroup>
     <Folder Include="Utils\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\extras\angular-mocks.js" />
+    <EmbeddedResource Include="Resources\extras\angular-sanitize.min.js" />
+    <EmbeddedResource Include="Resources\extras\bindonce.js" />
+    <EmbeddedResource Include="Resources\extras\chai.js" />
+    <EmbeddedResource Include="Resources\extras\jquery.datetimepicker.css" />
+    <EmbeddedResource Include="Resources\extras\jquery.datetimepicker.js" />
+    <EmbeddedResource Include="Resources\extras\mocha.css" />
+    <EmbeddedResource Include="Resources\extras\mocha.js" />
+    <EmbeddedResource Include="Resources\extras\react.js" />
+    <EmbeddedResource Include="Resources\extras\scalyr.js" />
+    <EmbeddedResource Include="Resources\extras\teamcity.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
