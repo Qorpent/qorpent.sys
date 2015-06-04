@@ -229,11 +229,15 @@ define(["totalleaflet-utils"],function(utils){
 
             url = url.replace(/\{hostname\}/, document.location.hostname);
 
-            map.tiles = L.tileLayer(url, {
-                reuseTiles: true,
-                updateWhenIdle: false
-            }).addTo(map);
-
+            if(iAttrs["yandex"]){
+                map.tiles = new L.Yandex();
+                map.addLayer(map.tiles);
+            }else {
+                map.tiles = L.tileLayer(url, {
+                    reuseTiles: true,
+                    updateWhenIdle: false
+                }).addTo(map);
+            }
 
             if(!!iAttrs["onload"]) {
 				if (iAttrs["onload"] in $scope) {
