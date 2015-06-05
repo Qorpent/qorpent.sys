@@ -45,7 +45,7 @@ define(["the-angular"], function ($the) {
                             format:'d.m.Y',
                             timepicker:false,
                             closeOnDateSelect : true,
-                            /* cool firefox hack avoid of it's lag in events */
+                            scrollInput : false,
                             onChangeDateTime : function(c,i){
 
                                 if(!!ngchange) {
