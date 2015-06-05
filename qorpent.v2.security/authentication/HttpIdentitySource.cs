@@ -11,7 +11,7 @@ using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
-    [ContainerComponent(Lifestyle.Singleton, "http.identitysource", ServiceType = typeof (IHttpIdentitySource))]
+    [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.identitysource", ServiceType = typeof (IHttpIdentitySource))]
     public class HttpIdentitySource : ServiceBase, IHttpIdentitySource {
         [Inject]
         public IHttpTokenService TokenService { get; set; }

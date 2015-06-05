@@ -9,7 +9,7 @@ using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
-    [ContainerComponent(Lifestyle.Singleton, "httptoken.service", ServiceType = typeof (IHttpTokenService))]
+    [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.tokenservice", ServiceType = typeof (IHttpTokenService))]
     public class HttpTokenService : InitializeAbleService, IHttpTokenService {
         public HttpTokenService() {
             CookieName = "QHAUTH";

@@ -5,7 +5,7 @@ using Qorpent.IoC;
 using Qorpent.IO.Http;
 
 namespace qorpent.v2.security.authentication {
-    [ContainerComponent(Lifestyle.Singleton, "http.authenticator", ServiceType = typeof (IHttpAuthenticator))]
+    [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.authenticator", ServiceType = typeof (IHttpAuthenticator))]
     public class HttpAuthenticator : ServiceBase, IHttpAuthenticator {
         [Inject]
         public IHttpTokenService TokenService { get; set; }

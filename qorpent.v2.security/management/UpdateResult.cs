@@ -6,5 +6,6 @@ namespace qorpent.v2.security.management {
         public bool IsError { get; set; }
         public string ErrorMessage { get; set; }
         public IUser ResultUser { get; set; }
+        public string Message { get; set; }
     }
 }

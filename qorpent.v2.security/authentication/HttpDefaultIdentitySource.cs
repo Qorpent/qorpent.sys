@@ -10,7 +10,7 @@ using Qorpent.IO.Http;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
-    [ContainerComponent(Lifestyle.Singleton, "http.defaultidentitysource",
+    [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.defaultidentitysource",
         ServiceType = typeof (IHttpDefaultIdentitySource))]
     public class HttpDefaultIdentitySource : InitializeAbleService, IHttpDefaultIdentitySource {
         private static readonly IPAddress LocalIp4 = IPAddress.Parse("127.0.0.1");

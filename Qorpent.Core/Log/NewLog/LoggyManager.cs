@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Experiments;
 using Qorpent.IoC;
@@ -143,11 +144,23 @@ namespace Qorpent.Log.NewLog {
             if (string.IsNullOrWhiteSpace(name)) {
                 name = "default";
             }
+            
             var result = loggers.GetOrAdd(name, n => {
                 var l = new DefaultLoggy {Name = n};
                 if (n != "default") {
-                    l.SubLoggers.Add(Get());
-                    l.Level = Get().Level;
+                    ILoggy parent = null;
+                    if (n.Contains(".")) {
+                        var parts = n.Split('.');
+                        var path = string.Join(".", parts.Take(parts.Length - 1));
+                        parent = Get(path);
+                    }
+                    else {
+                        parent = Get();
+                    }
+
+
+                    l.SubLoggers.Add(parent);
+                    l.Level = parent.Level;
                 }
                 else {
                     l.Isolated = true;

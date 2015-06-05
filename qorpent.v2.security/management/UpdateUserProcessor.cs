@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Principal;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.messaging;
@@ -37,8 +39,14 @@ namespace qorpent.v2.security.management {
 
 
 
-        public UpdateResult DefineUser(IIdentity actor, UserUpdateInfo updateinfo, IUser target = null,
+        public UpdateResult[] DefineUser(IIdentity actor, UserUpdateInfo[] updateinfos, IUser target = null,
             bool store = true) {
+            return  updateinfos.Select(_=>UpdateResult(actor, target, store, _)).ToArray();
+        }
+
+        private UpdateResult UpdateResult(IIdentity actor, IUser target, bool store, UserUpdateInfo updateinfo
+          ) {
+            UpdateResult res = null;
             Logg.Info(new {updateusr = "start", usr = actor.Name, info = updateinfo}.stringify());
             if (string.IsNullOrWhiteSpace(updateinfo.Login)) {
                 updateinfo.Login = actor.Name;
@@ -46,15 +54,15 @@ namespace qorpent.v2.security.management {
             target = target ?? Users.GetUser(updateinfo.Login);
             var newuser = target == null;
             if (!updateinfo.HasDelta(target)) {
-                return new UpdateResult();
+                return new UpdateResult {Ok = true, Message="notchanged", ResultUser = target};
             }
 
-            var canupdate = Checker.ValidateUpdate(actor, updateinfo, target);
-            if (!canupdate.Ok) {
+            res = Checker.ValidateUpdate(actor, updateinfo, target);
+            if (!res.Ok) {
                 Logg.Warn(
-                    new {updateusr = "invalid", validation = canupdate, usr = actor.Name, info = updateinfo}.stringify());
+                    new {updateusr = "invalid", validation = res, usr = actor.Name, info = updateinfo}.stringify());
 
-                return canupdate;
+                return res;
             }
             if (null == target) {
                 target = new User {Login = updateinfo.Login};
@@ -78,8 +86,8 @@ namespace qorpent.v2.security.management {
             Logg.Info(new {updateusr = "finish", result = target, usr = actor.Name, info = updateinfo}.stringify());
             Users.Clear();
             Roles.Clear();
-            return new UpdateResult {Ok = true, ResultUser = target};
+            res = new UpdateResult {Ok = true, ResultUser = target};
+            return res;
         }
-
     }
 }

@@ -13,12 +13,7 @@ namespace qorpent.v2.security.handlers.management {
 
         public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             var result = UserProcessor.DefineUser(context);
-            if (!result.IsError) {
-                context.Finish(result.ResultUser.stringify());
-            }
-            else {
-                context.Finish(result.stringify(), status: 500);
-            }
+            context.Finish(result.stringify());
         }
     }
 }

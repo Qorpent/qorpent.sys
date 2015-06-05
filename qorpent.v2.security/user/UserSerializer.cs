@@ -45,6 +45,7 @@ namespace qorpent.v2.security.user {
             user.Name = j.str("name");
             user.Email = j.str("email");
             user.IsAdmin = j.bul("admin");
+            user.IsGroup = j.bul("isgroup");
 
             user.Active = j.bul("active");
             user.Expire = j.date("expire");
@@ -82,6 +83,7 @@ namespace qorpent.v2.security.user {
             user.Groups = element.Elements("group").Select(_ => _.Attr("code")).ToArray();
             user.Logable = element.Attr("logable").ToBool();
             user.Active = element.Attr("active").ToBool();
+            user.IsGroup = element.Attr("isgroup").ToBool();
             user.CreateTime = element.Attr("createtime").ToDate();
             user.UpdateTime = element.Attr("updatetime").ToDate();
             var custom = element.Element("custom");
@@ -145,6 +147,7 @@ namespace qorpent.v2.security.user {
             jw.WriteProperty("name", user.Name, notnullonly);
             jw.WriteProperty("email", user.Email, notnullonly);
             jw.WriteProperty("admin", user.IsAdmin, notnullonly);
+            jw.WriteProperty("isgroup", user.IsGroup, notnullonly);
 
 
             if (usermode == "store" || usermode == "admin") {
