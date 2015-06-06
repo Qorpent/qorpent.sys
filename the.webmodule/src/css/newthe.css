@@ -220,7 +220,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   min-width: 300px;
   min-height: 100px;
   max-width: 1024px;
-  max-height: 700px;
+  max-height: 800px;
 }
 /* line 76, newthe/toolwindow.scss */
 .toolwindow.dialog .content {

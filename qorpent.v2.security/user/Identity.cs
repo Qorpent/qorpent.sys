@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Security.Principal;
 using qorpent.v2.security.authentication;
+using qorpent.v2.security.user.services;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 
@@ -15,6 +16,23 @@ namespace qorpent.v2.security.user {
             this.Native = identity;
             this.IsAuthenticated = identity.IsAuthenticated;
             this.User = new User {Login = Name};
+        }
+
+        public Identity(IUser usr) {
+            this.AuthenticationType = "embed";
+            this.User = usr;
+            if (null != usr) {
+                
+                this.Name = usr.Login;
+                this.IsAuthenticated = usr.Logable &&
+                                       new UserStateChecker().GetActivityState(usr) == UserActivityState.Ok;
+                
+                this.IsAdmin = usr.IsAdmin;
+            }
+            else {
+                this.IsError = true;
+                this.Error = new Exception("null user");
+            }
         }
 
         public Identity() {
