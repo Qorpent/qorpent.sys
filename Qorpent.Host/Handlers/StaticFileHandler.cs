@@ -69,7 +69,7 @@ namespace Qorpent.Host.Handlers
 				if (!string.IsNullOrWhiteSpace(staticdescriptor.Role)) {
 					var roles = server.Container.Get<IRoleResolverService>();
 					if (!roles.IsInRole(context.User, staticdescriptor.Role)) {
-						throw new SecurityException("access denied");
+						throw new SecurityException("access denied "+context.User.Identity.Name+" "+staticdescriptor.Role);
 					}
 				}
 			 //   context.Response.AddHeader("Accept-Ranges","bytes");

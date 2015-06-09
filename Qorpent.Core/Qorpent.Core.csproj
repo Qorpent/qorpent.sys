@@ -402,7 +402,8 @@
     <Compile Include="v2\security\authorization\IRoleResolverCache.cs" />
     <Compile Include="v2\security\authorization\IRoleResolverCacheLease.cs" />
     <Compile Include="v2\security\authorization\IRoleResolverService.cs" />
-    <Compile Include="v2\security\authorization\NotAuthReaction.cs" />
+    <Compile Include="v2\security\authorization\IUriAuthorizer.cs" />
+    <Compile Include="v2\security\authorization\AuthorizationReaction.cs" />
     <Compile Include="v2\security\logon\ILogon.cs" />
     <Compile Include="v2\security\logon\ILogonProvider.cs" />
     <Compile Include="v2\security\logon\ILogonService.cs" />

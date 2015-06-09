@@ -8,24 +8,24 @@ using Qorpent.IO.Http;
 namespace qorpent.v2.security.authorization {
     [ContainerComponent(Lifestyle.Singleton, "notauth.provider", ServiceType = typeof (INotAuthProcessProvider))]
     public class NotAuthProcessProvider : ServiceBase, INotAuthProcessProvider {
-        public NotAuthReaction GetReaction(IIdentity notauthidentity, IHttpRequestDescriptor request) {
+        public AuthorizationReaction GetReaction(IIdentity notauthidentity, IHttpRequestDescriptor request) {
             if (notauthidentity.IsAuthenticated) {
-                return new NotAuthReaction {Process = true};
+                return new AuthorizationReaction {Process = true};
             }
             var uri = request.Uri;
             if (IsProcessAble(uri)) {
-                return new NotAuthReaction {Process = true};
+                return new AuthorizationReaction {Process = true};
             }
             var redir = RedirectHtml(uri);
             if (null != redir) {
                 return redir;
             }
-            return new NotAuthReaction {Error = new SecurityException("not authenticated")};
+            return new AuthorizationReaction {Error = new SecurityException("not authenticated")};
         }
 
-        private static NotAuthReaction RedirectHtml(Uri uri) {
+        private static AuthorizationReaction RedirectHtml(Uri uri) {
             if (uri.AbsolutePath.EndsWith(".html")) {
-                return new NotAuthReaction {Redirect = "/login.html?referer=" + uri.PathAndQuery};
+                return new AuthorizationReaction {Redirect = "/login.html?referer=" + uri.PathAndQuery};
             }
             return null;
         }

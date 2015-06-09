@@ -24,6 +24,7 @@
     <Compile Include="authorization\RoleResolverExtensions.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />
     <Compile Include="authorization\RoleResolver.cs" />
+    <Compile Include="authorization\UriAuthorizer.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />
     <Compile Include="handlers\management\IDefineUserHandler.cs" />
     <Compile Include="handlers\logon\IIsAuthHandler.cs" />
