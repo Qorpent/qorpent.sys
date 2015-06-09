@@ -260,9 +260,8 @@ namespace Qorpent.Host.Qweb
 						null != context
 							? context.User
 							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] {"DEFAULT"});
-					if (null == _logonuser)
-					{
-						_logonuser = Application.Principal.CurrentUser;
+					if (null == _logonuser) {
+					    _logonuser = Thread.CurrentPrincipal; //Application.Principal.CurrentUser;
 					}
 					//SETUP USER FROM APACHE BASIC AUTHORIZATION HEADER
 					if ((string.IsNullOrEmpty(_logonuser.Identity.Name) || _logonuser.Identity.Name == "local\\guest") &&

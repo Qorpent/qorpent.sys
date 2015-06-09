@@ -10,7 +10,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Tests
 {
-    [Action("test.best")]
+    [Action("test.best",Role = "GUEST")]
     class TestAction : ActionBase {
         private static int i = 0;
         public static int creates = 0;

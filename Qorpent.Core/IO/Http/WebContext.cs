@@ -187,6 +187,8 @@ namespace Qorpent.IO.Http {
         }
 
         public bool HasHeader(string name) {
+            if (null == Request) return false;
+            if (null == Request.Headers) return false;
             return Request.Headers.ContainsKey(name);
         }
 
