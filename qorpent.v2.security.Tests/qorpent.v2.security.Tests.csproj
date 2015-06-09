@@ -22,6 +22,7 @@
     <Compile Include="authentication\TrustedOriginTest.cs" />
     <Compile Include="authorization\AuthorizerTests.cs" />
     <Compile Include="authorization\DefaultRoleResolverTest.cs" />
+    <Compile Include="authorization\EvaluatesRolesWithExpressions.cs" />
     <Compile Include="encryption\EncryptorMainTest.cs" />
     <Compile Include="EnvironmentCheck.cs" />
     <Compile Include="logon\hash\HashSecureLogonTest.cs" />

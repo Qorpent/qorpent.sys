@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Policy;
 using System.Security.Principal;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
@@ -12,6 +13,7 @@ namespace qorpent.v2.security.authorization {
     [ContainerComponent(Lifestyle.Singleton, "roleresolver.service", ServiceType = typeof (IRoleResolverService))]
     public class RoleResolverService : ExtensibleServiceBase<IRoleResolver>, IRoleResolverService {
         private IRoleResolverCache _cache;
+        private IRoleExpressionEvaluator _evaluator;
 
         /// <summary>
         /// </summary>
@@ -24,7 +26,20 @@ namespace qorpent.v2.security.authorization {
         [Inject]
         public IUserService Users { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public IRoleExpressionEvaluator Evaluator {
+            get { return _evaluator??(_evaluator = new RoleExpressionEvaluator()); }
+            set { _evaluator = value; }
+        }
+
         public bool IsInRole(IIdentity identity, string role, bool exact = false) {
+            role = role.ToUpperInvariant().Trim();
+            if (-1 != role.LastIndexOfAny(new[] {' ', '!','+', ',','-','&','|','(',')'})) {
+                return Evaluator.Evaluate(this, identity,role);
+            }
             if (!identity.IsAuthenticated) {
                 return false;
             }
@@ -35,7 +50,7 @@ namespace qorpent.v2.security.authorization {
             if (null == id) {
                id = new Identity(identity);
             }
-            role = role.ToUpperInvariant().Trim();
+            
             //first rule - GUEST role is allowed for all authenticated users - allow
             if (role == "GUEST") {
                 return true;

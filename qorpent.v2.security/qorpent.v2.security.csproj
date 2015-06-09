@@ -21,6 +21,7 @@
     <Compile Include="authentication\TrustedOrigin.cs" />
     <Compile Include="authorization\AuthorizationRule.cs" />
     <Compile Include="authorization\NotAuthProcessProvider.cs" />
+    <Compile Include="authorization\RoleExpressionEvaluator.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
     <Compile Include="authorization\RoleResolverExtensions.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />

@@ -398,6 +398,7 @@
     <Compile Include="v2\security\authentication\ITokenEncryptor.cs" />
     <Compile Include="v2\security\authentication\Token.cs" />
     <Compile Include="v2\security\authorization\INotAuthProcessProvider.cs" />
+    <Compile Include="v2\security\authorization\IRoleExpressionEvaluator.cs" />
     <Compile Include="v2\security\authorization\IRoleResolver.cs" />
     <Compile Include="v2\security\authorization\IRoleResolverCache.cs" />
     <Compile Include="v2\security\authorization\IRoleResolverCacheLease.cs" />
