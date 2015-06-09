@@ -64,6 +64,8 @@ namespace qorpent.v2.security.handlers.logon {
             PasswordManager.MakeRequest(user, 10, email);
             Users.Store(user);
             var message = UserMessagingService.SendPasswordReset(user);
+            bool sent = false;
+            string senderror = "";
             //try force
             try {
                 if (null != Sender) {
@@ -72,11 +74,13 @@ namespace qorpent.v2.security.handlers.logon {
                         Sender.Send(savedmessage);
                         Queue.MarkSent(savedmessage.Id);
                     }
+                    sent = true;
                 }
             }
             catch (Exception e) {
+                senderror = e.Message;
             }
-            context.Finish(new {messageid = message.Id, minutes = 10}.stringify());
+            context.Finish(new {messageid = message.Id, minutes = 10, sent, senderror}.stringify());
         }
 
         private static void Error(WebContext context, string message) {

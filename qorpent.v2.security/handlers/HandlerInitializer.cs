@@ -16,6 +16,7 @@ namespace qorpent.v2.security.handlers {
         private IRequireResetPasswordHandler _requireResetPasswordHandler;
         private IResetPasswordHandler _resetPasswordHandler;
         private ISendMailHandler _sendMailHandler;
+        private IImpersonateHandler _impersonateHandler;
 
         [Inject]
         public ILogonHandler LogonHandler {
@@ -33,6 +34,13 @@ namespace qorpent.v2.security.handlers {
         public IIsAuthHandler IsAuthHandler {
             get { return _isAuthHandler ?? (_isAuthHandler = new IsAuthHandler()); }
             set { _isAuthHandler = value; }
+        }
+
+
+        [Inject]
+        public IImpersonateHandler ImpersonateHandler {
+            get { return _impersonateHandler ?? (_impersonateHandler = new ImpersonateHandler()); }
+            set { _impersonateHandler = value; }
         }
 
         [Inject]
@@ -83,6 +91,7 @@ namespace qorpent.v2.security.handlers {
             server.Factory.Register("/resetpwd", ResetPasswordHandler);
             server.Factory.Register("/resetpwdreq", RequireResetPasswordHandler);
             server.Factory.Register("/sendmail", SendMailHandler);
+            server.Factory.Register("/impersonate", ImpersonateHandler);
         }
     }
 }

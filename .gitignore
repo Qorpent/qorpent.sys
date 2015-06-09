@@ -94,3 +94,8 @@ UpgradeLog*
 /totalleaflet.webmodule/dist/js/textAngular.js
 /totalleaflet.webmodule/dist/js/ui-bootstrap.js
 /totalleaflet.webmodule/dist/js/video.js
+/styles.webmodule/dist/css/bootstrap.css
+/styles.webmodule/dist/css/jquery.datetimepicker.css
+/styles.webmodule/dist/css/mocha.css
+/styles.webmodule/dist/js/angular-sanitize.min.js
+/styles.webmodule/dist/js/jquery.datetimepicker.js

@@ -64,6 +64,9 @@ namespace Qorpent.Host{
 			_server.RequestCount++;
 			IRequestHandler handler = _server.Factory.GetHandler(_server, _context, callbackEndPoint);
 			handler.Run(_server, _context, callbackEndPoint, _cancel);
+		    if (!_context.Response.WasClosed) {
+		        _context.Response.Finish("");
+		    }
 		}
 	}
 }

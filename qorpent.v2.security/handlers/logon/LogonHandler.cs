@@ -8,7 +8,7 @@ using Qorpent.IoC;
 using Qorpent.IO.Http;
 
 namespace qorpent.v2.security.handlers.logon {
-    [ContainerComponent(Lifestyle.Singleton, "logon.handler", ServiceType = typeof (ILogonHandler))]
+    [ContainerComponent(Lifestyle.Singleton, "handler.logon", ServiceType = typeof (ILogonHandler))]
     public class LogonHandler : ILogonHandler {
         [Inject]
         public ILogonService LogonService { get; set; }
