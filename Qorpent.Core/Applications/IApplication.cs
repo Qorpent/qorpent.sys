@@ -100,21 +100,6 @@ namespace Qorpent.Applications {
 		/// </remarks>
 		string BinDirectory { get; set; }
 
-		/// <summary>
-		/// 	Indicates that Application is web Application
-		/// </summary>
-		/// <value> <c>true</c> if this instance is web; otherwise, <c>false</c> . </value>
-		/// <remarks>
-		/// </remarks>
-		bool IsWeb { get; set; }
-
-		/// <summary>
-		/// 	Indicates that Application is web Application
-		/// </summary>
-		/// <value> <c>true</c> if this instance is web utility; otherwise, <c>false</c> . </value>
-		/// <remarks>
-		/// </remarks>
-		bool IsWebUtility { get; set; }
 
 		/// <summary>
 		/// 	Web Application root name

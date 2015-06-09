@@ -47,26 +47,27 @@ namespace Qorpent.Security {
 			get {
 				lock (Sync) {
 					if (null == Current) {
-						if (IsWeb()) {
-							if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser) {
-								Current = MvcContextBase.Current.LogonUser;
-							}
-							else if (null!=Application.HttpWrapper.GetCurrentUser()) {
-								Current = Application.HttpWrapper.GetCurrentUser();
-							}
-							else {
-								Current = new GenericPrincipal(new GenericIdentity("local\\guest"), null);
-							}
-						}
-						else {
-							if (null != Thread.CurrentPrincipal && Thread.CurrentPrincipal.Identity.IsAuthenticated) {
-								Current = Thread.CurrentPrincipal;
-							}
-							else {
-								Current = new GenericPrincipal(new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName),
-								                               null);
-							}
-						}
+					    if (null != MvcContextBase.Current) {
+					        if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser) {
+					            Current = MvcContextBase.Current.LogonUser;
+					        }
+					        else if (null != Application.HttpWrapper.GetCurrentUser()) {
+					            Current = Application.HttpWrapper.GetCurrentUser();
+					        }
+					        else {
+					            Current = new GenericPrincipal(new GenericIdentity("local\\guest"), null);
+					        }
+					    }
+					    else {
+					        if (null != Thread.CurrentPrincipal && Thread.CurrentPrincipal.Identity.IsAuthenticated) {
+					            Current = Thread.CurrentPrincipal;
+					        }
+					        else {
+					            Current =
+					                new GenericPrincipal(new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName),
+					                    null);
+					        }
+					    }
 					}
 
 #if PARANOID
@@ -86,7 +87,7 @@ namespace Qorpent.Security {
 		/// </summary>
 		public IPrincipal BasePrincipal {
 			get {
-				if (IsWeb())
+				if (null!=MvcContextBase.Current)
 				{
 					if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser)
 					{
@@ -138,18 +139,6 @@ namespace Qorpent.Security {
 			}
 		}
 
-
-		private bool IsWeb() {
-			if (null == _isweb) {
-				lock (Sync) {
-					_isweb = EnvironmentInfo.IsWeb;
-					if (null != Application) {
-						_isweb = Application.IsWeb;
-					}
-				}
-			}
-			return _isweb.Value;
-		}
 
 		private bool? _isweb;
 	}

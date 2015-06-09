@@ -117,7 +117,6 @@ namespace Qorpent.Mvc.Tests {
 		public void context_logon_user_and_user() {
 			var test = new GenericPrincipal(new GenericIdentity("test"), null);
 			var ctx = new MvcContext {LogonUser = test};
-			Application.Current.IsWeb = true;
 			MvcContextBase.Current = ctx;
 			Assert.AreEqual("test", ctx.LogonUser.Identity.Name);
 			Assert.AreEqual("test", ctx.User.Identity.Name);

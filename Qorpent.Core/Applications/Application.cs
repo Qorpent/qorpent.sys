@@ -372,28 +372,7 @@ namespace Qorpent.Applications {
 			set { _codeDirectory = value; }
 		}
 
-		/// <summary>
-		/// 	Indicates that Application is web Application
-		/// </summary>
-		/// <value> <c>true</c> if this instance is web; otherwise, <c>false</c> . </value>
-		/// <remarks>
-		/// </remarks>
-		public bool IsWeb {
-			get { return _isweb.HasValue ? _isweb.Value : EnvironmentInfo.IsWeb; }
-			set { _isweb = value; }
-		}
-
-
-		/// <summary>
-		/// 	Indicates that Application is web Application
-		/// </summary>
-		/// <value> <c>true</c> if this instance is web utility; otherwise, <c>false</c> . </value>
-		/// <remarks>
-		/// </remarks>
-		public bool IsWebUtility {
-			get { return _iswebUtility.HasValue ? _iswebUtility.Value : EnvironmentInfo.IsWebUtility; }
-			set { _iswebUtility = value; }
-		}
+	
 
 		/// <summary>
 		/// 	Web Application root name
@@ -405,15 +384,7 @@ namespace Qorpent.Applications {
 			get {
 				lock (this) {
 					if (null == _applicationName) {
-						if (IsWeb) {
-							if(HttpWrapper.HasCurrent()) {
-								var apppath = HttpWrapper.GetCurrentApplicationPath();
-								if(null!=apppath) {
-									_applicationName = apppath.Replace("/", "");
-								}
-								
-							}
-						}
+						
 					}
 				}
 				return _applicationName;

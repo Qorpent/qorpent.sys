@@ -23,13 +23,7 @@ namespace Qorpent {
 	/// 	Enable app domain testing
 	/// </summary>
 	internal class EnvironmentInfoTestObject : MarshalByRefObject {
-		public bool IsWeb {
-			get { return EnvironmentInfo.IsWeb; }
-		}
-
-		public bool IsWebUtility {
-			get { return EnvironmentInfo.IsWebUtility; }
-		}
+		
 
 		public string RootDirectory {
 			get { return EnvironmentInfo.RootDirectory; }
