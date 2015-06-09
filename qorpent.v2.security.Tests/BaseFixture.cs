@@ -172,7 +172,7 @@ class app
                 Convert.ToBase64String(
                     typeof (UserSerializationTest).Assembly.ReadManifestResourceBytes("public.cer"));
             user.Custom = new {a = "1_" + idx, b = "2_" + idx}.jsonify() as IDictionary<string, object>;
-            user.Expire = new DateTime(2016, 1, 1).AddMonths(idx);
+            user.Expire = new DateTime(2016, 1, 1).AddMonths(idx).ToUniversalTime();
             return user;
         }
 
