@@ -108,6 +108,10 @@ class app
 		domain='https://super.puper.com'
         home='home.html'
         name ='Супер-Пупер'
+    authrule /public.html notauth=allow
+    authrule /roled.html role=special
+    authrule /spredir.html notauth=/public.html
+    authrule /admin-* role=ADMIN
 	messaging
 		smtp support ivannovozhilov81@gmail.com default
 			host=smtp.gmail.com

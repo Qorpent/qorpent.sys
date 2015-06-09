@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using qorpent.v2.security.authentication;
+using qorpent.v2.security.authorization;
 using qorpent.v2.security.logon;
 using qorpent.v2.security.logon.services;
 using qorpent.v2.security.messaging;
@@ -16,6 +17,7 @@ using qorpent.v2.security.user.storage;
 using qorpent.v2.security.user.storage.providers;
 using Qorpent;
 using Qorpent.Utils;
+using Qorpent.v2.security.authorization;
 
 namespace qorpent.v2.security.Tests
 {
@@ -127,6 +129,13 @@ namespace qorpent.v2.security.Tests
             Assert.NotNull(emq);
             Assert.True(emq.Enabled);
             Assert.AreEqual("v2securetest", emq.Index);
+        }
+
+        [Test]
+        public void HasAuthorizer() {
+            var authz = (HttpAuthorizer)_container.Get<IHttpAuthorizer>();
+            Assert.NotNull(authz);
+            Assert.AreEqual(4,authz.Rules.Count);
         }
 
         [Test]

@@ -19,12 +19,13 @@
     <Compile Include="authentication\HttpTokenService.cs" />
     <Compile Include="authentication\TokenEncryptor.cs" />
     <Compile Include="authentication\TrustedOrigin.cs" />
+    <Compile Include="authorization\AuthorizationRule.cs" />
     <Compile Include="authorization\NotAuthProcessProvider.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
     <Compile Include="authorization\RoleResolverExtensions.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />
     <Compile Include="authorization\RoleResolver.cs" />
-    <Compile Include="authorization\UriAuthorizer.cs" />
+    <Compile Include="authorization\HttpAuthorizer.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />
     <Compile Include="handlers\management\IDefineUserHandler.cs" />
     <Compile Include="handlers\logon\IIsAuthHandler.cs" />

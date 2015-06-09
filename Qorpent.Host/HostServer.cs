@@ -24,6 +24,7 @@ using Qorpent.IO.Http;
 using Qorpent.Log;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
+using Qorpent.v2.security.authorization;
 
 namespace Qorpent.Host {
     /// <summary>
@@ -37,6 +38,7 @@ namespace Qorpent.Host {
         private IHostServerStaticResolver _static;
         private IHttpAuthenticator _auth;
         private INotAuthProcessProvider _notAuth;
+        private IHttpAuthorizer _httpAuthorizer;
 
         /// <summary>
         ///     Создает новый экземпляр сервера
@@ -114,18 +116,16 @@ namespace Qorpent.Host {
         /// <summary>
         /// 
         /// </summary>
-        public IHttpAuthenticator Auth {
+        public IHttpAuthenticator Authenticator {
             get { return _auth ??(_auth=Container.Get<IHttpAuthenticator>()); }
             set { _auth = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public INotAuthProcessProvider NotAuth {
-            get { return _notAuth ?? (_notAuth = Container.Get<INotAuthProcessProvider>()); }
-            set { _notAuth = value; }
+        public IHttpAuthorizer Authorizer {
+            get { return _httpAuthorizer ?? (_httpAuthorizer = Container.Get<IHttpAuthorizer>()); }
+            set { _httpAuthorizer = value; }
         }
+
 
         /// <summary>
         ///     Конфигурация
@@ -249,9 +249,10 @@ namespace Qorpent.Host {
                     throw    new Exception("Exceed max request size");
                 }
                 CopyCookies(wc);
-                Auth.Authenticate(wc.Request,wc.Response);
-                
-                if (BeforeHandlerProcessed(wc)) {
+                Authenticator.Authenticate(wc.Request,wc.Response);
+                var authorization = Authorizer.Authorize(wc.Request);
+               
+                if (BeforeHandlerProcessed(wc,authorization)) {
                     if (!wc.Response.WasClosed) {
                         wc.Response.Close();
                     }
@@ -280,12 +281,11 @@ namespace Qorpent.Host {
         }
 
 
-        private bool BeforeHandlerProcessed(WebContext wc) {
-            if (wc.User.Identity.IsAuthenticated) return false;
-            var suggest = NotAuth.GetReaction(wc.User.Identity,wc.Request);
-            if (suggest.Process) return false;
-            if (!string.IsNullOrWhiteSpace(suggest.Redirect)) {
-                wc.Redirect(suggest.Redirect);
+        private bool BeforeHandlerProcessed(WebContext wc,AuthorizationReaction authorization) {
+
+            if (authorization.Process) return false;
+            if (!string.IsNullOrWhiteSpace(authorization.Redirect)) {
+                wc.Redirect(authorization.Redirect);
                 return true;
             }
             wc.Finish(new{error="not auth"}.stringify(),status:500);

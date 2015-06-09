@@ -8,8 +8,8 @@ using Qorpent.IO.Http;
 namespace qorpent.v2.security.authorization {
     [ContainerComponent(Lifestyle.Singleton, "notauth.provider", ServiceType = typeof (INotAuthProcessProvider))]
     public class NotAuthProcessProvider : ServiceBase, INotAuthProcessProvider {
-        public AuthorizationReaction GetReaction(IIdentity notauthidentity, IHttpRequestDescriptor request) {
-            if (notauthidentity.IsAuthenticated) {
+        public AuthorizationReaction GetReaction(IHttpRequestDescriptor request) {
+            if (request.User.Identity.IsAuthenticated) {
                 return new AuthorizationReaction {Process = true};
             }
             var uri = request.Uri;

@@ -5,12 +5,13 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using qorpent.v2.security.authorization;
+using Qorpent.IO.Http;
 
 namespace Qorpent.v2.security.authorization
 {
 
-    public interface IUriAuthorizer {
-        AuthorizationReaction AuthorizeUri(IIdentity identity, Uri uri);
+    public interface IHttpAuthorizer {
+        AuthorizationReaction Authorize(IHttpRequestDescriptor  request);
     }
 
 }
