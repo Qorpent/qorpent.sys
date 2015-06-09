@@ -43,7 +43,6 @@ namespace qorpent.v2.security.authorization
       
 
         public AuthorizationReaction Authorize(IHttpRequestDescriptor request) {
-            if (0 == Rules.Count) return null;
             var uri = request.Uri;
             var identity = request.User.Identity;
             var rule = Rules.Where(_ => _.IsMatch(uri)).OrderByDescending(_ => _.Idx).FirstOrDefault();           

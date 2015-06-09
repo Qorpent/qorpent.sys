@@ -283,6 +283,7 @@ namespace Qorpent.Host {
 
         private bool BeforeHandlerProcessed(WebContext wc,AuthorizationReaction authorization) {
 
+           
             if (authorization.Process) return false;
             if (!string.IsNullOrWhiteSpace(authorization.Redirect)) {
                 wc.Redirect(authorization.Redirect);
@@ -587,17 +588,19 @@ namespace Qorpent.Host {
             {
                 Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
             }
-	        var connections = Container.Get<IDatabaseConnectionProvider>();
-			if (null == connections) {
-				throw new Exception("No connection provider");
-			}
-            foreach (var cs in Config.ConnectionStrings) {
-                var dsc = new ConnectionDescriptor {
-                    ConnectionString = cs.Value,
-                    Name = cs.Key,
-                    PresereveCleanup = true
-                };
-                connections.Register(dsc, false);
+            if (0 != Config.ConnectionStrings.Count) {
+                var connections = Container.Get<IDatabaseConnectionProvider>();
+                if (null == connections) {
+                    throw new Exception("No connection provider");
+                }
+                foreach (var cs in Config.ConnectionStrings) {
+                    var dsc = new ConnectionDescriptor {
+                        ConnectionString = cs.Value,
+                        Name = cs.Key,
+                        PresereveCleanup = true
+                    };
+                    connections.Register(dsc, false);
+                }
             }
             loader.LoadAssembly(typeof (HostServer).Assembly);
             loader.LoadAssembly(typeof (HttpAuthenticator).Assembly);

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using NUnit.Framework;
+using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Lib.Tests
@@ -25,8 +26,9 @@ namespace Qorpent.Host.Lib.Tests
 		{
 			
 			srv.On("/test", "CanStartServer");
-			var wcl = new WebClient();
-			var str = wcl.DownloadString("http://127.0.0.1:8094/test");
+			var wcl = new HttpClient();
+			var str = wcl.GetString("http://127.0.0.1:8094/test");
+            Console.WriteLine(str);
 			Assert.AreEqual("CanStartServer", str);
 		}
 		[Test]
