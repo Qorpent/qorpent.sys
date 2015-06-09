@@ -31,7 +31,7 @@ namespace qorpent.v2.security.Tests
         protected static string mainpwd;
 
         protected string esindex = "v2securetest";
-        protected bool ignoreelastic = false;
+        protected static bool ignoreelastic = false;
         protected static XElement config = null;
 
         class configprovider : IConfigProvider {
@@ -172,7 +172,7 @@ class app
                 Convert.ToBase64String(
                     typeof (UserSerializationTest).Assembly.ReadManifestResourceBytes("public.cer"));
             user.Custom = new {a = "1_" + idx, b = "2_" + idx}.jsonify() as IDictionary<string, object>;
-            user.Expire = new DateTime(2016, 1, 1).AddMonths(idx).ToUniversalTime();
+            user.Expire = new DateTime(2015, 12, 31,19,0,0,DateTimeKind.Utc).AddMonths(idx).ToUniversalTime();
             return user;
         }
 
