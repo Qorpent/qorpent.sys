@@ -581,7 +581,7 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>$(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+    <PostBuildEvent>REM $(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
