@@ -110,6 +110,7 @@ namespace qorpent.v2.security.Tests
         }
         [Test]
         public void CanLogonToEsuser()
+
         {
             if (ignoreelastic)
             {

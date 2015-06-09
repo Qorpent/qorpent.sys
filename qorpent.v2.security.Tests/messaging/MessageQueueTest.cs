@@ -15,6 +15,7 @@ namespace qorpent.v2.security.Tests.messaging
     {
         [Test]
         public void CanStoreAndGet() {
+            if(this.ignoreelastic)Assert.Ignore("no elastic search");
             var mq = _container.Get<IMessageQueue>();
             var message = new PostMessage {
                 Addresses = new[] {"fagim.sadykov@gmail.com"},
@@ -34,6 +35,7 @@ namespace qorpent.v2.security.Tests.messaging
 
         [Test]
         public void CanMarkSent() {
+            if (this.ignoreelastic) Assert.Ignore("no elastic search");
             var mq = _container.Get<IMessageQueue>();
             var message = new PostMessage
             {
@@ -50,6 +52,7 @@ namespace qorpent.v2.security.Tests.messaging
 
         [Test]
         public void CanSearch() {
+            if (this.ignoreelastic) Assert.Ignore("no elastic search");
             var mq = _container.Get<IMessageQueue>();
             for (var i = 0; i < 10; i++)
             {
@@ -81,6 +84,7 @@ namespace qorpent.v2.security.Tests.messaging
 
         [Test]
         public void CanDetectNotSent() {
+            if (this.ignoreelastic) Assert.Ignore("no elastic search");
             var mq = _container.Get<IMessageQueue>();
             for (var i = 0; i < 10; i++) {
                 var message = new PostMessage

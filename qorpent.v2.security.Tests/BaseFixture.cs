@@ -86,6 +86,7 @@ namespace qorpent.v2.security.Tests
             ExecuteCommand("http://127.0.0.1:9200/" + esindex, method: "DELETE");
             var storeesresult = ExecuteCommand("http://127.0.0.1:9200/" + esindex + "/pwd/esuser",
                 esuser.ToString("store"));
+            Console.WriteLine("ESSTORERESULT: "+storeesresult);
             if (null == storeesresult) {
                 ignoreelastic = true;
             }
@@ -157,9 +158,9 @@ class app
             var user = new T {
                 Login = "login" + idx,
                 Name = "myname" + idx,
-                IsAdmin = idx%5 == 0,
-                Logable = idx%3 == 0,
-                IsGroup = idx%4 == 0,
+                IsAdmin = idx % 5 == 0,
+                Logable = idx % 3 == 0 && 0 != idx,
+                IsGroup = idx%4 == 0 && 0!=idx,
                 Domain = "master" + idx,
                 Roles = new[] {"role1_" + idx, "role2_" + idx},
                 Groups = new[] {"grp1_" + idx, "grp2_" + idx},
