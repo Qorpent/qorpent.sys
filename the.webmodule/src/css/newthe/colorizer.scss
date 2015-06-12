@@ -32,28 +32,19 @@
                 }
                 &.progress{
                         position: relative;
-                }
-                &.progress::after  {
-                                position: absolute;
-                        top:0px;
-                        left: 0px;
-                        width:100%;
-                        height: 100%;
-                        content:" ";
-                                display: block;
                         background-image: url('progress.png');
-                                background-repeat: repeat;
-                                animation-name: progress_#{$backcolorname};
-                                -webkit-animation-name: progress_#{$backcolorname};
-                                opacity: 0.4;
-                                animation-duration: 15s;
-                                -webkit-animation-duration: 15s;
-                                animation-timing-function: linear;
-                                -webkit-animation-timing-function: linear;
-                                animation-iteration-count: infinite;
-                                -webkit-animation-iteration-count: infinite;
-
+                        background-repeat: repeat;
+                        animation-name: progress_#{$backcolorname};
+                        -webkit-animation-name: progress_#{$backcolorname};
+                        opacity: 0.6;
+                        animation-duration: 15s;
+                        -webkit-animation-duration: 15s;
+                        animation-timing-function: linear;
+                        -webkit-animation-timing-function: linear;
+                        animation-iteration-count: infinite;
+                        -webkit-animation-iteration-count: infinite;
                 }
+
         }
 
         color :$color;
