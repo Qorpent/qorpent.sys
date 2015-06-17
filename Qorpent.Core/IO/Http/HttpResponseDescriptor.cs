@@ -130,8 +130,11 @@ namespace Qorpent.IO.Http {
             if (allowZip && SupportGZip && IsRequiredGZip(sendobject)) {
                 SetHeader("Content-Encoding", "gzip");
                 var ms = EnsureStream(sendobject);
-                
-                using (var g = new GZipStream(Stream, CompressionLevel.Optimal)) {
+                var str = Stream;
+                if (ms.Length < 1024000 && null==range) {
+                    str = new MemoryStream();
+                }
+                using (var g = new GZipStream(str, CompressionLevel.Optimal,leaveOpen:str!=Stream)) {
                     if (null == range) {
                         ms.CopyTo(g, 4096);
                     }
@@ -139,6 +142,13 @@ namespace Qorpent.IO.Http {
                         CopyRanged(range, ms, g);
                     }
                 }
+
+                if (str != Stream) {
+                    SetHeader("Content-Length", str.Length.ToStr());
+                    str.Position = 0;
+                    str.CopyTo(Stream);
+                }
+
             }
             else {
                 var bytes = sendobject as byte[];
