@@ -9,10 +9,12 @@ namespace Qorpent {
 			return scope.Get(name, def);
 		}
         public static object ResolveBest(this IScope scope,params string[] names) {
+            if (null == scope) return null;
             return names.Select(name => scope.Get(name)).FirstOrDefault(subresult => null != subresult);
         }
         public static string ResolveBestString(this IScope scope, params string[] names)
         {
+            if (null == scope) return null;
             return names.Select(name => scope.Get(name).ToStr()).FirstOrDefault(subresult => !string.IsNullOrWhiteSpace(subresult));
         }
 

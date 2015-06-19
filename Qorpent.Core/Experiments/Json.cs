@@ -613,8 +613,8 @@ namespace Qorpent.Experiments {
             return sw.ToString();
         }
 
-        public static string stringify(this object data) {
-            return Stringify(data);
+        public static string stringify(this object data, string jsonmode="") {
+            return Stringify(data,jsonmode);
         }
 
         public static object jsonify(this object data) {
