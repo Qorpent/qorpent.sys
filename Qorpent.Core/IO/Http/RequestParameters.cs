@@ -151,15 +151,23 @@ namespace Qorpent.IO.Http
                 }
                 else {
                     var str = context.ReadRequestString();
-                    str = Unescape(str, true);
-                    result.PostData = str;
-                    if (IsJson(str))
-                    {
+					result.PostData = Unescape(str, true);
+                    if (IsJson(str)) {
                         result.FormJson = Experiments.Json.Parse(result.PostData);
-                    }
-                    else if (IsDictionary(str))
-                    {
-                        PrepareDictionaryData(result.Form, str, context.InContentType != null && context.InContentType.Contains("application/x-www-form-urlencoded"));
+                    } else if (IsDictionary(str)) {
+						foreach (var variable in str.Split('&')) {
+							var parts = variable.Split('=');
+							if (parts.Length != 2) {
+			                    continue;
+		                    }
+							var name = Unescape(parts[0], true);
+							var value = Unescape(parts[1], true);
+							if (result.Form.ContainsKey(name)) {
+								result.Form[name] += "," + value;
+							} else {
+								result.Form[name] = value;
+							}
+						}
                     }
 
                 }
