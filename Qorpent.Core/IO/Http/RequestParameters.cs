@@ -219,7 +219,7 @@ namespace Qorpent.IO.Http
 	        {
 	            var parts = queryItem.Split('=');
 	            var name = parts[0];
-	            var value = parts[1];
+				var value = string.Join("=", parts.Skip(1).ToArray());
                
 				
 	            if (target.ContainsKey(name))
