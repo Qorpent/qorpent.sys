@@ -17,10 +17,8 @@ namespace Qorpent.IO.Http {
             Stream = request.InputStream;
             Method = request.HttpMethod;
             Cookies = request.Cookies;
-            if (null != request.Headers["X-Real-IP"]) {
-                Console.WriteLine(request.Headers["X-Real-IP"]);                
+            if (null != request.Headers["X-Real-IP"]) {           
                 var addr = request.RemoteEndPoint.Address.ToString();
-                Console.Write(addr);
                 if (addr.StartsWith("127.0.") || addr.StartsWith("192.168.")) {
                     RemoteEndPoint = new IPEndPoint(IPAddress.Parse(request.Headers["X-Real-IP"]),0);
                 }
