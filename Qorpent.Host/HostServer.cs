@@ -318,7 +318,9 @@ namespace Qorpent.Host {
             if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)) {
                 if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
                     var origin = task.Result.Request.Headers["Origin"];
-                    task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+                    if (!string.IsNullOrWhiteSpace(origin)) {
+                        task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+                    }
                 }
                 else {
                     task.Result.Response.AddHeader("Access-Control-Allow-Origin", Config.AccessAllowOrigin);
