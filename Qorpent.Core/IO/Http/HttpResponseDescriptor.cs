@@ -104,6 +104,8 @@ namespace Qorpent.IO.Http {
                 var cooks = cookies.OfType<Cookie>().Reverse().ToArray();
                 foreach (var cookie in cooks)
                 {
+                    if(string.IsNullOrWhiteSpace(cookie.Domain))continue;
+                    
                     if (_visited.Contains(cookie.Name)) continue;
                     _visited.Add(cookie.Name);
                     AddHeader("Set-Cookie", GetCookieString(cookie));
