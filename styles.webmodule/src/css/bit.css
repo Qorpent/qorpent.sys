@@ -443,12 +443,50 @@ input {
   font-size: 100% !important;
 }
 
-/* line 20, core/_global.scss */
+@-moz-keyframes progress_light {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+@-webkit-keyframes progress_light {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+@keyframes progress_light {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+/* line 44, core/_global.scss */
+.progress {
+  height: 30px;
+  background: #4C81AF url("progress.png") repeat;
+  animation-name: progress_light;
+  -webkit-animation-name: progress_light;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+
+/* line 56, core/_global.scss */
 html {
   background-color: #D7D7D7;
 }
 
-/* line 25, core/_global.scss */
+/* line 61, core/_global.scss */
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -487,7 +525,7 @@ body {
     font-size: 10px;
   }
 }
-/* line 38, core/_global.scss */
+/* line 74, core/_global.scss */
 body input[type=text] {
   width: 100%;
   margin: 0;
@@ -528,7 +566,7 @@ body input[type=text] {
     font-size: 10px;
   }
 }
-/* line 48, core/_global.scss */
+/* line 84, core/_global.scss */
 body button {
   background: #4C81AF;
   border: none;
@@ -567,55 +605,55 @@ body button {
     font-size: 10px;
   }
 }
-/* line 57, core/_global.scss */
+/* line 93, core/_global.scss */
 body table {
   width: 100%;
 }
-/* line 59, core/_global.scss */
+/* line 95, core/_global.scss */
 body table thead, body table tbody {
   line-height: 180%;
 }
-/* line 62, core/_global.scss */
+/* line 98, core/_global.scss */
 body table thead {
   border-bottom: 1px solid #4C81AF;
 }
-/* line 67, core/_global.scss */
+/* line 103, core/_global.scss */
 body table tbody {
   color: #333333;
 }
-/* line 69, core/_global.scss */
+/* line 105, core/_global.scss */
 body table tbody tr.hidden {
   display: none;
 }
-/* line 72, core/_global.scss */
+/* line 108, core/_global.scss */
 body table tbody tr:nth-child(2n) {
   background: #ededed;
 }
-/* line 76, core/_global.scss */
+/* line 112, core/_global.scss */
 body table td, body table th {
   vertical-align: top;
   padding: 2px 3px 2px 3px;
 }
-/* line 79, core/_global.scss */
+/* line 115, core/_global.scss */
 body table td .not-important, body table th .not-important {
   opacity: 0.5;
 }
-/* line 84, core/_global.scss */
+/* line 120, core/_global.scss */
 body a, body a:visited {
   color: #4C81AF;
   text-decoration: underline;
 }
-/* line 87, core/_global.scss */
+/* line 123, core/_global.scss */
 body a:hover, body a:visited:hover {
   color: #6e9ac0;
 }
-/* line 91, core/_global.scss */
+/* line 127, core/_global.scss */
 body > header {
   color: #fafafa;
   background-color: #4C81AF;
   padding-top: 5px;
 }
-/* line 100, core/_global.scss */
+/* line 136, core/_global.scss */
 body > header.with-logo {
   background-image: url("/img/logo-toolbar.png");
   background-position: left center;
@@ -623,7 +661,7 @@ body > header.with-logo {
   background-size: 80px 60px;
   padding-left: 100px !important;
 }
-/* line 107, core/_global.scss */
+/* line 143, core/_global.scss */
 body > header > .tab {
   color: #fafafa;
   text-decoration: none;
@@ -638,40 +676,40 @@ body > header > .tab {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 122, core/_global.scss */
+/* line 158, core/_global.scss */
 body > header > .tab:first-child {
   margin-left: 10px;
 }
-/* line 125, core/_global.scss */
+/* line 161, core/_global.scss */
 body > header > .tab.active {
   background: #fafafa;
   color: #4C81AF;
 }
-/* line 129, core/_global.scss */
+/* line 165, core/_global.scss */
 body > header > .tab:not(.active):hover {
   background: #6e9ac0;
   color: #fafafa !important;
 }
-/* line 138, core/_global.scss */
+/* line 174, core/_global.scss */
 body > footer {
   font-size: 90%;
 }
-/* line 143, core/_global.scss */
+/* line 179, core/_global.scss */
 body > nav {
   padding: 10px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: #D7D7D7;
 }
-/* line 150, core/_global.scss */
+/* line 186, core/_global.scss */
 body > nav a {
   font-family: Verdana;
 }
-/* line 154, core/_global.scss */
+/* line 190, core/_global.scss */
 body > nav a:not(:last-child) {
   margin-right: 10px;
 }
-/* line 156, core/_global.scss */
+/* line 192, core/_global.scss */
 body > nav a:not(:last-child):after {
   display: inline-block;
   content: "";
@@ -679,7 +717,7 @@ body > nav a:not(:last-child):after {
   text-decoration: none !important;
   color: #333333;
 }
-/* line 164, core/_global.scss */
+/* line 200, core/_global.scss */
 body > nav a.active {
   text-decoration: none;
   background: #4C81AF;
@@ -692,50 +730,50 @@ body > nav a.active {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-/* line 175, core/_global.scss */
+/* line 211, core/_global.scss */
 body > nav a.active:last-child {
   padding-right: 10px;
 }
-/* line 182, core/_global.scss */
+/* line 218, core/_global.scss */
 body > main p {
   text-indent: 25px;
 }
-/* line 185, core/_global.scss */
+/* line 221, core/_global.scss */
 body > main p, body > main li {
   margin-top: 5px;
 }
-/* line 188, core/_global.scss */
+/* line 224, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-/* line 192, core/_global.scss */
+/* line 228, core/_global.scss */
 body > main ul {
   padding-left: 25px;
 }
-/* line 195, core/_global.scss */
+/* line 231, core/_global.scss */
 body > main ul > li:before {
   content: '-';
   margin-right: 10px;
 }
-/* line 200, core/_global.scss */
+/* line 236, core/_global.scss */
 body > main ul > ul, body > main ul > li > ul {
   padding-left: 25px;
 }
-/* line 202, core/_global.scss */
+/* line 238, core/_global.scss */
 body > main ul > ul > ul, body > main ul > ul > li > ul, body > main ul > li > ul > ul, body > main ul > li > ul > li > ul {
   padding-left: 25px;
 }
-/* line 212, core/_global.scss */
+/* line 248, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   font-size: 105%;
   color: #4C81AF;
 }
-/* line 212, core/_global.scss */
+/* line 248, core/_global.scss */
 body > main h1 {
   font-size: 120%;
 }
-/* line 212, core/_global.scss */
+/* line 248, core/_global.scss */
 body > main h2 {
   font-size: 110%;
 }
