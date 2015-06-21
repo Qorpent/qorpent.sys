@@ -161,6 +161,21 @@
             color: color(dark);
           }
         }
+        &.active {
+          text-decoration: none;
+          background: color(primary);
+          color: color(white);
+          margin-top: -10px;
+          margin-bottom: -5px;
+          padding-top: 10px;
+          padding-left: 10px;
+          padding-bottom: 5px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          &:last-child {
+            padding-right: 10px;
+          }
+        }
       }
     }
     > main {
