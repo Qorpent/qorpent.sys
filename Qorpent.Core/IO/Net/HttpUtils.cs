@@ -75,6 +75,19 @@ namespace Qorpent.IO.Net{
 			}
 			yield return current;
 		}
+
+	    public static string AdaptCookieDomain(string domain) {
+            var parts = domain.Split('.');
+            if (parts.Length > 1)
+            {
+                if (!(parts.Length == 4 && domain.Replace(".", "").All(char.IsDigit)))
+                {
+                    domain = "." + parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+                }
+
+            }
+	        return domain;
+	    }
 		/// <summary>
 		/// Проверяет соответствие куки адресу
 		/// </summary>
