@@ -89,6 +89,13 @@
       padding: 7px 10px;
       color: color(white);
       cursor: pointer;
+      &:hover {
+        background: lighten(color(primary), 5%);
+      }
+      &:disabled {
+        background: color(disabled)!important;
+        cursor: default!important;
+      }
     }
     table {
       width: 100%;
