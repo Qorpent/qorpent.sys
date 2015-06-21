@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
+using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Http {
@@ -16,7 +18,8 @@ namespace Qorpent.IO.Http {
         public const string LastModifiedHeader = "Last-Modified";
         public static implicit operator HttpResponseDescriptor(HttpListenerContext context) {
             return new HttpListenerResponseDescriptor(context.Response) {
-                SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip")
+                SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip"),
+            
             };
         }
 
@@ -86,25 +89,32 @@ namespace Qorpent.IO.Http {
                 SetHeader("Content-Length",length.ToString());
             }
             
-            ConvertCookies();
+            WriteCookies();
             
             Write(data, true, range);
             Close();
         }
 
-        private void ConvertCookies()
+        public void WriteCookies()
         {
+            
             if (Cookies.Count > 0)
             {
+   
+                
                 var cookies = Cookies;
                 Cookies = null;
                 IList<string> _visited = new List<string>();
                 var cooks = cookies.OfType<Cookie>().Reverse().ToArray();
                 foreach (var cookie in cooks)
                 {
+                    if(string.IsNullOrWhiteSpace(cookie.Domain))continue;
+                    
                     if (_visited.Contains(cookie.Name)) continue;
                     _visited.Add(cookie.Name);
-                    AddHeader("Set-Cookie", GetCookieString(cookie));
+                    var c = GetCookieString(cookie);
+       
+                    AddHeader("Set-Cookie",c);
                 }
             }
         }
@@ -114,7 +124,9 @@ namespace Qorpent.IO.Http {
             if (cookie.Expires.ToUniversalTime() > DateTime.Now.ToUniversalTime()) {
                 maxage = (cookie.Expires.ToUniversalTime() - DateTime.Now.ToUniversalTime()).TotalSeconds.ToInt();
             }
-            var result= string.Format("{0}={1}; Path={2}; Max-Age={3}; Domain={4};", cookie.Name, cookie.Value, cookie.Path,maxage,cookie.Domain);
+            var domain = HttpUtils.AdaptCookieDomain( cookie.Domain);
+            
+            var result= string.Format("{0}={1}; Path={2}; Max-Age={3}; Domain={4};", cookie.Name, cookie.Value, cookie.Path,maxage,domain);
             if (cookie.HttpOnly) {
                 result += "HttpOnly;";
             }
@@ -259,6 +271,7 @@ namespace Qorpent.IO.Http {
         protected IDictionary<string, string> Headers { get; set; }
         public virtual CookieCollection Cookies { get; set; }
         public bool NoCloseStream { get; set; }
+        public HttpRequestDescriptor CorrespondRequest { get; set; }
 
         public virtual string GetHeader(string name) {
             Headers = Headers ?? new ConcurrentDictionary<string, string>();

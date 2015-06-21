@@ -196,6 +196,7 @@ namespace Qorpent.Host{
             var ms = new MemoryStream();
             var rs = new HttpResponseDescriptor { Stream = ms, NoCloseStream = true };
             var rq = new HttpRequestDescriptor { Uri = new Uri("http://localhost" + command) };
+
 	        var ctx = new WebContext{Request = rq,Response=rs};
             h.Run(host, ctx, null, new CancellationToken());
             var len = ms.Position;

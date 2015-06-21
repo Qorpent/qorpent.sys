@@ -125,6 +125,7 @@ namespace Qorpent.Host.Qweb
 
 		private void RenderResult(IMvcContext context)
 		{
+             ((HostMvcContext)context).WebContext.Response.WriteCookies();
 			context.Render();
 			context.Output.Flush();
             ((HostMvcContext)context).WebContext.Response.Close();

@@ -168,7 +168,6 @@
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
-  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 
@@ -16,7 +17,18 @@ namespace Qorpent.IO.Http {
             Stream = request.InputStream;
             Method = request.HttpMethod;
             Cookies = request.Cookies;
-            RemoteEndPoint = request.RemoteEndPoint;
+            if (null != request.Headers["X-Real-IP"]) {           
+                var addr = request.RemoteEndPoint.Address.ToString();
+                if (addr.StartsWith("127.0.") || addr.StartsWith("192.168.")) {
+                    RemoteEndPoint = new IPEndPoint(IPAddress.Parse(request.Headers["X-Real-IP"]),0);
+                }
+                else {
+                    throw new Exception("Invalid X-Real-IP origin");
+                }
+            }
+            else {
+                RemoteEndPoint = request.RemoteEndPoint;
+            }
             LocalEndPoint = request.LocalEndPoint;
 
         }
