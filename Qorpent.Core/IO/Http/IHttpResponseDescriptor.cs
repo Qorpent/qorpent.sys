@@ -26,5 +26,6 @@ namespace Qorpent.IO.Http {
         void Redirect(string localurl);
         void Write(object data, bool allowZip, RangeDescriptor range = null);
         void AddHeader(string name, string value);
+        void WriteCookies();
     }
 }

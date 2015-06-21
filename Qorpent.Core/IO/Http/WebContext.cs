@@ -19,6 +19,7 @@ namespace Qorpent.IO.Http {
         public static implicit operator WebContext(HttpListenerContext context) {
             var request = (HttpRequestDescriptor) context;
             var response = (HttpResponseDescriptor) context;
+            response.CorrespondRequest = request;
             response.Range = request.GetHeader("Range");
             var result = new WebContext { Request = request, Response = response };
             result.Cookies = result.Cookies ?? context.Request.Cookies;

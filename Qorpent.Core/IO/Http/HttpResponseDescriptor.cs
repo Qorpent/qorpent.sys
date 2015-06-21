@@ -18,7 +18,8 @@ namespace Qorpent.IO.Http {
         public const string LastModifiedHeader = "Last-Modified";
         public static implicit operator HttpResponseDescriptor(HttpListenerContext context) {
             return new HttpListenerResponseDescriptor(context.Response) {
-                SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip")
+                SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip"),
+            
             };
         }
 
@@ -88,16 +89,22 @@ namespace Qorpent.IO.Http {
                 SetHeader("Content-Length",length.ToString());
             }
             
-            ConvertCookies();
+            WriteCookies();
             
             Write(data, true, range);
             Close();
         }
 
-        private void ConvertCookies()
+        public void WriteCookies()
         {
+            
             if (Cookies.Count > 0)
             {
+                Console.WriteLine("--");
+                if (null != CorrespondRequest) {
+                    Console.WriteLine(CorrespondRequest.Uri);
+                }
+                
                 var cookies = Cookies;
                 Cookies = null;
                 IList<string> _visited = new List<string>();
@@ -108,7 +115,9 @@ namespace Qorpent.IO.Http {
                     
                     if (_visited.Contains(cookie.Name)) continue;
                     _visited.Add(cookie.Name);
-                    AddHeader("Set-Cookie", GetCookieString(cookie));
+                    var c = GetCookieString(cookie);
+                    Console.WriteLine(c);
+                    AddHeader("Set-Cookie",c);
                 }
             }
         }
@@ -265,6 +274,7 @@ namespace Qorpent.IO.Http {
         protected IDictionary<string, string> Headers { get; set; }
         public virtual CookieCollection Cookies { get; set; }
         public bool NoCloseStream { get; set; }
+        public HttpRequestDescriptor CorrespondRequest { get; set; }
 
         public virtual string GetHeader(string name) {
             Headers = Headers ?? new ConcurrentDictionary<string, string>();
