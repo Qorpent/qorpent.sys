@@ -100,10 +100,7 @@ namespace Qorpent.IO.Http {
             
             if (Cookies.Count > 0)
             {
-                Console.WriteLine("--");
-                if (null != CorrespondRequest) {
-                    Console.WriteLine(CorrespondRequest.Uri);
-                }
+   
                 
                 var cookies = Cookies;
                 Cookies = null;
@@ -116,7 +113,7 @@ namespace Qorpent.IO.Http {
                     if (_visited.Contains(cookie.Name)) continue;
                     _visited.Add(cookie.Name);
                     var c = GetCookieString(cookie);
-                    Console.WriteLine(c);
+       
                     AddHeader("Set-Cookie",c);
                 }
             }
