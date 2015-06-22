@@ -76,6 +76,9 @@ namespace qorpent.v2.security.handlers.logon {
                     }
                     sent = true;
                 }
+                else {
+                    throw new Exception("no sender found");
+                }
             }
             catch (Exception e) {
                 senderror = e.Message;
