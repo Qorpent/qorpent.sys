@@ -650,63 +650,71 @@ body button {
   }
 }
 /* line 92, core/_global.scss */
+body button.danger {
+  background: #E7582E;
+}
+/* line 94, core/_global.scss */
+body button.danger:hover {
+  background: #ea6a45;
+}
+/* line 98, core/_global.scss */
 body button:hover {
   background: #5c8eb8;
 }
-/* line 95, core/_global.scss */
+/* line 101, core/_global.scss */
 body button:disabled {
   background: #ccc !important;
   cursor: default !important;
 }
-/* line 100, core/_global.scss */
+/* line 106, core/_global.scss */
 body table {
   width: 100%;
 }
-/* line 102, core/_global.scss */
+/* line 108, core/_global.scss */
 body table thead, body table tbody {
   line-height: 180%;
 }
-/* line 105, core/_global.scss */
+/* line 111, core/_global.scss */
 body table thead {
   border-bottom: 1px solid #4C81AF;
 }
-/* line 110, core/_global.scss */
+/* line 116, core/_global.scss */
 body table tbody {
   color: #333333;
 }
-/* line 112, core/_global.scss */
+/* line 118, core/_global.scss */
 body table tbody tr.hidden {
   display: none;
 }
-/* line 115, core/_global.scss */
+/* line 121, core/_global.scss */
 body table tbody tr:nth-child(2n) {
   background: #ededed;
 }
-/* line 119, core/_global.scss */
+/* line 125, core/_global.scss */
 body table td, body table th {
   vertical-align: top;
   padding: 2px 3px 2px 3px;
 }
-/* line 122, core/_global.scss */
+/* line 128, core/_global.scss */
 body table td .not-important, body table th .not-important {
   opacity: 0.5;
 }
-/* line 127, core/_global.scss */
+/* line 133, core/_global.scss */
 body a, body a:visited {
   color: #4C81AF;
   text-decoration: underline;
 }
-/* line 130, core/_global.scss */
+/* line 136, core/_global.scss */
 body a:hover, body a:visited:hover {
   color: #6e9ac0;
 }
-/* line 134, core/_global.scss */
+/* line 140, core/_global.scss */
 body > header {
   color: #fafafa;
   background-color: #4C81AF;
   padding-top: 5px;
 }
-/* line 143, core/_global.scss */
+/* line 149, core/_global.scss */
 body > header.with-logo {
   background-image: url("/img/logo-toolbar.png");
   background-position: left center;
@@ -714,7 +722,7 @@ body > header.with-logo {
   background-size: 80px 60px;
   padding-left: 100px !important;
 }
-/* line 150, core/_global.scss */
+/* line 156, core/_global.scss */
 body > header > .tab {
   color: #fafafa;
   text-decoration: none;
@@ -729,32 +737,32 @@ body > header > .tab {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 165, core/_global.scss */
+/* line 171, core/_global.scss */
 body > header > .tab:first-child {
   margin-left: 10px;
 }
-/* line 168, core/_global.scss */
+/* line 174, core/_global.scss */
 body > header > .tab.active {
   background: #fafafa;
   color: #4C81AF;
 }
-/* line 172, core/_global.scss */
+/* line 178, core/_global.scss */
 body > header > .tab:not(.active):hover {
   background: #6e9ac0;
   color: #fafafa !important;
 }
-/* line 181, core/_global.scss */
+/* line 187, core/_global.scss */
 body > footer {
   font-size: 90%;
 }
-/* line 186, core/_global.scss */
+/* line 192, core/_global.scss */
 body > nav {
   padding: 10px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: #D7D7D7;
 }
-/* line 193, core/_global.scss */
+/* line 199, core/_global.scss */
 body > nav a {
   padding-top: 5px;
   padding-left: 10px;
@@ -762,11 +770,11 @@ body > nav a {
   border-radius: 3px;
   font-family: Verdana;
 }
-/* line 201, core/_global.scss */
+/* line 207, core/_global.scss */
 body > nav a:not(:last-child) {
   margin-right: 10px;
 }
-/* line 203, core/_global.scss */
+/* line 209, core/_global.scss */
 body > nav a:not(:last-child):after {
   display: inline-block;
   content: "";
@@ -774,56 +782,56 @@ body > nav a:not(:last-child):after {
   text-decoration: none !important;
   color: #333333;
 }
-/* line 211, core/_global.scss */
+/* line 217, core/_global.scss */
 body > nav a.active {
   text-decoration: none;
   background: #4C81AF;
   color: white;
 }
-/* line 215, core/_global.scss */
+/* line 221, core/_global.scss */
 body > nav a.active:last-child {
   padding-right: 10px;
 }
-/* line 222, core/_global.scss */
+/* line 228, core/_global.scss */
 body > main p {
   text-indent: 25px;
 }
-/* line 225, core/_global.scss */
+/* line 231, core/_global.scss */
 body > main p, body > main li {
   margin-top: 5px;
 }
-/* line 228, core/_global.scss */
+/* line 234, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-/* line 232, core/_global.scss */
+/* line 238, core/_global.scss */
 body > main ul {
   padding-left: 25px;
 }
-/* line 235, core/_global.scss */
+/* line 241, core/_global.scss */
 body > main ul > li:before {
   content: '-';
   margin-right: 10px;
 }
-/* line 240, core/_global.scss */
+/* line 246, core/_global.scss */
 body > main ul > ul, body > main ul > li > ul {
   padding-left: 25px;
 }
-/* line 242, core/_global.scss */
+/* line 248, core/_global.scss */
 body > main ul > ul > ul, body > main ul > ul > li > ul, body > main ul > li > ul > ul, body > main ul > li > ul > li > ul {
   padding-left: 25px;
 }
-/* line 252, core/_global.scss */
+/* line 258, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   font-size: 105%;
   color: #4C81AF;
 }
-/* line 252, core/_global.scss */
+/* line 258, core/_global.scss */
 body > main h1 {
   font-size: 120%;
 }
-/* line 252, core/_global.scss */
+/* line 258, core/_global.scss */
 body > main h2 {
   font-size: 110%;
 }

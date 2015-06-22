@@ -89,6 +89,12 @@
       padding: 7px 10px;
       color: color(white);
       cursor: pointer;
+      &.danger {
+        background: color(danger);
+        &:hover {
+          background: lighten(color(danger), 5%);
+        }
+      }
       &:hover {
         background: lighten(color(primary), 5%);
       }
