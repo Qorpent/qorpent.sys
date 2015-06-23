@@ -48,10 +48,29 @@ namespace qorpent.v2.security.authorization {
             {
                 return true;
             }
+            if (path.EndsWith(".woff"))
+            {
+                return true;
+            }
+            if (path.EndsWith(".ttf"))
+            {
+                return true;
+            }
+            if (path.EndsWith(".woff2"))
+            {
+                return true;
+            }
             if (path.EndsWith(".css")) {
                 return true;
             }
             if (path.EndsWith("login.html")) {
+                return true;
+            }
+            if (path.EndsWith("home.html"))
+            {
+                return true;
+            }
+            if (path == "/") {
                 return true;
             }
             if (path.EndsWith("resetpwd.html")) {
