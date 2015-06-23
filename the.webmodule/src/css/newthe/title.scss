@@ -25,7 +25,8 @@
 
         &:before,&:after,*:before,*:after{
                 font-family: FontAwesome;
-                font-size: 90%;
+                font-size: 90% ;
+
         }
         &.xlg {
                min-height: ceil($height * $xlgfactor)+$hdelta;
@@ -33,6 +34,11 @@
                 padding-right: ceil($hpadding * $xlgfactor);
                 font-size: ceil($height * $xlgfactor)+$hdelta - (ceil($vpadding * $xlgfactor)*2) - 1px;
                 line-height: ceil($height * $xlgfactor)+$hdelta;
+          &:before,&:after,*:before,*:after{
+
+            font-size: 130% ;
+
+          }
         }
         &.lg {
           min-height: ceil($height * $lgfactor)+$hdelta;
@@ -40,6 +46,11 @@
                 padding-right: ceil($hpadding * $lgfactor);
                 font-size: ceil($height * $lgfactor)+$hdelta - (ceil($vpadding * $lgfactor)*2) - 1px;
                 line-height: ceil($height * $lgfactor)+$hdelta;
+          &:before,&:after,*:before,*:after{
+
+            font-size: 120% ;
+
+          }
         }
         &.sm {
           min-height: ceil($height * $smfactor)+$hdelta;
