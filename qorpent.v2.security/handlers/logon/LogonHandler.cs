@@ -7,11 +7,12 @@ using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
-using Qorpent.Log.NewLog;
+using Qorpent.Log;
 
 namespace qorpent.v2.security.handlers.logon {
     [ContainerComponent(Lifestyle.Singleton, "handler.logon", ServiceType = typeof (ILogonHandler))]
-    public class LogonHandler : ILogonHandler {
+    [UserOp("logon",Secure =true,SuccessLevel = LogLevel.Info,ErrorLevel = LogLevel.Warn,TreatFalseAsError = true)]
+    public class LogonHandler : UserOperation,ILogonHandler {
         
        
         [Inject]
@@ -20,47 +21,47 @@ namespace qorpent.v2.security.handlers.logon {
         [Inject]
         public IHttpTokenService TokenService { get; set; }
 
-        [Inject]
-        public ILoggyManager LoggyManager { get; set; }
-        private ILoggy _userOpLog;
-        private const string UserOpName = "user.op.secure.logon";
-        private ILoggy UserOpLog {
-            get { return _userOpLog ?? (_userOpLog = (this.LoggyManager ?? Loggy.Manager).Get(UserOpName)); }
-            set { _userOpLog = value; }
-        }
 
-        public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="context"></param>
+        /// <param name="callbackEndPoint"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        protected override HandlerResult GetResult(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             var ctx = RequestParameters.Create(context);
             var login = ctx.Get("login");
             var password = ctx.Get("pass");
-            var identity = (Identity) LogonService.Logon(login, password);
+            var identity = (Identity)LogonService.Logon(login, password);
             context.User = new GenericPrincipal(identity, null);
-            if (identity.IsAuthenticated && !identity.IsGuest) {
+            if (identity.IsAuthenticated && !identity.IsGuest)
+            {
                 var token = TokenService.Create(context.Request);
                 TokenService.Store(context.Response, context.Request.Uri, token);
-                if (UserOpLog.IsForInfo()) {
-                    UserOpLog.Info(new {
-                        auth=true,
-                        name=identity.Name,
-                        type=identity.AuthenticationType,
-                        isadmin=identity.IsAdmin
-                    }.stringify());
-                }
-                context.Finish("true");
+                return new HandlerResult {Result = true, Data = identity};
             }
-            else {
-                TokenService.Store(context.Response, context.Request.Uri, null);
-                if (UserOpLog.IsForWarn())
-                {
-                    UserOpLog.Warn(new
-                    {
-                        auth = false,
-                        login,
-                        error = identity.Error
-                    }.stringify());
-                }
-                context.Finish("false");
-            }
+            TokenService.Store(context.Response, context.Request.Uri, null);
+            return new HandlerResult {Result = false, Data = identity};
         }
+
+        public override string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result) {
+            var identity = result.Data as Identity;
+            if (iserror) {
+                return new {
+                    auth = false,
+                    login = identity.Name,
+                    error = identity.Error
+                }.stringify();
+            }
+            return new {
+                auth = true,
+                name = identity.Name,
+                type = identity.AuthenticationType,
+                isadmin = identity.IsAdmin
+            }.stringify();
+        }
+
     }
 }
