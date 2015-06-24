@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Net;
+using System.Security.Principal;
 using System.Threading;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.logon;
@@ -36,30 +37,51 @@ namespace qorpent.v2.security.handlers.logon {
             var password = ctx.Get("pass");
             var identity = (Identity)LogonService.Logon(login, password);
             context.User = new GenericPrincipal(identity, null);
+            var logondata = new LogonInfo {
+                Identity = identity,
+                RemoteEndPoint = context.Request.RemoteEndPoint,
+                LocalEndPoint = context.Request.LocalEndPoint,
+                UserAgent = context.Request.UserAgent
+            };
             if (identity.IsAuthenticated && !identity.IsGuest)
             {
                 var token = TokenService.Create(context.Request);
                 TokenService.Store(context.Response, context.Request.Uri, token);
-                return new HandlerResult {Result = true, Data = identity};
+                return new HandlerResult {Result = true, Data = logondata};
             }
             TokenService.Store(context.Response, context.Request.Uri, null);
-            return new HandlerResult {Result = false, Data = identity};
+            return new HandlerResult {Result = false, Data = logondata};
         }
 
-        public override string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result) {
-            var identity = result.Data as Identity;
+        class LogonInfo {
+            public Identity Identity { get; set; }
+            public IPEndPoint RemoteEndPoint { get; set; }
+            public IPEndPoint LocalEndPoint { get; set; }
+            public string UserAgent { get; set; }
+        }
+
+        public override string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result,WebContext context) {
+            var info = result.Data as LogonInfo;
             if (iserror) {
                 return new {
                     auth = false,
-                    login = identity.Name,
-                    error = identity.Error
+                    login = info.Identity.Name,
+                    error = info.Identity.Error,
+                    addr = info.RemoteEndPoint.Address.ToString(),
+                    local = info.LocalEndPoint.Address.ToString(),
+                    port = info.LocalEndPoint.Port
                 }.stringify();
             }
             return new {
                 auth = true,
-                name = identity.Name,
-                type = identity.AuthenticationType,
-                isadmin = identity.IsAdmin
+                type = info.Identity.AuthenticationType,
+                isadmin = info.Identity.IsAdmin,
+                login = info.Identity.Name,
+                error = info.Identity.Error,
+                addr = info.RemoteEndPoint.Address.ToString(),
+                local = info.LocalEndPoint.Address.ToString(),
+                port = info.LocalEndPoint.Port,
+                agent = info.UserAgent
             }.stringify();
         }
 

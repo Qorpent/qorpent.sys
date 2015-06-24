@@ -37,6 +37,11 @@ namespace qorpent.v2.security.handlers {
         public LogLevel SuccessLevel = LogLevel.Trace;
         public bool TreatFalseAsError = false;
 
+        protected virtual bool IsError(HandlerResult result) {
+            var iserror = result.State != 200 || (false.Equals(result.Result) && TreatFalseAsError);
+            return iserror;
+        }
+
         public UserOperation() : base() {
             var opattr =
                 this.GetType()
@@ -73,11 +78,11 @@ namespace qorpent.v2.security.handlers {
                 var result = DefaultProcess(server, context, callbackEndPoint, cancel);
                 
                 if (IsUserOperation) {
-                    var iserror = result.State != 200 || (false.Equals(result.Result) && TreatFalseAsError);
-                    if (iserror) {
+                    
+                    if (IsError(result)) {
                         if (ErrorLevel != LogLevel.None) {
                             if (UserOpLog.IsFor(ErrorLevel)) {
-                                var message = GetUserOperationLog(true, ErrorLevel, result);
+                                var message = GetUserOperationLog(true, ErrorLevel, result,context);
                                 UserOpLog.Write(ErrorLevel, message);
                             }
                         }
@@ -85,7 +90,7 @@ namespace qorpent.v2.security.handlers {
                     else {
                         if (SuccessLevel != LogLevel.None) {
                             if (UserOpLog.IsFor(SuccessLevel)) {
-                                var message = GetUserOperationLog(false, SuccessLevel, result);
+                                var message = GetUserOperationLog(false, SuccessLevel, result,context);
                                 UserOpLog.Write(SuccessLevel, message);
                             }
                         }
@@ -105,8 +110,8 @@ namespace qorpent.v2.security.handlers {
             }
         }
 
-        public virtual string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result) {
-            return result.Result.stringify();
+        public virtual string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result,WebContext context) {
+            return (result.Data??result.Result).stringify();
         }
 
 
