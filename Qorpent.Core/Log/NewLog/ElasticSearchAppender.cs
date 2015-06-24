@@ -55,11 +55,16 @@ namespace Qorpent.Log.NewLog {
             }
             
             var id = GetId(message);
+            object mes = message.Message;
+            if (message.Message.StartsWith("{") && message.Message.EndsWith("}")) {
+                mes = message.Message.jsonify();
+            }
             var m = new {
                 level = message.Level,
                 timestamp = message.Timestamp.ToUniversalTime(),
                 logger = message.LoggerName,
-                message = message.Message,
+                loggerpath = "/"+message.LoggerName.Replace(".","/"),
+                message = mes,
                 error,
                 user = message.UserName,
                 host = Environment.MachineName,
@@ -70,7 +75,7 @@ namespace Qorpent.Log.NewLog {
         }
 
         private object GetId(LoggyMessage message) {
-            return message.Timestamp.ToUniversalTime().ToString("yyyyMMMMddHHmmss_") +
+            return message.Timestamp.ToUniversalTime().ToString("yyyyMMddHHmmss_") +
                    Guid.NewGuid().ToString().GetMd5().Substring(0, 6);
         }
     }
