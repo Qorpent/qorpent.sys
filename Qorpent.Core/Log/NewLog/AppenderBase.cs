@@ -1,8 +1,14 @@
+using System;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Log.NewLog {
     public abstract class AppenderBase : ILogAppender {
         public string Format { get; set; }
+
+        public string Id = System.Guid.NewGuid().ToString();
+
+        public ILoggyManager Manager { get; set; }
 
         public virtual void Dispose() {
             Flush();
@@ -16,7 +22,20 @@ namespace Qorpent.Log.NewLog {
             return result;
         }
 
-        public abstract void Write(LoggyMessage message);
+        public  void Write(LoggyMessage message) {
+            try {
+                if (message.Visited.Contains(this.Id)) {
+                    return;
+                }
+                InternalWrite(message);
+                message.Visited.Add(this.Id);
+            }
+            catch (Exception ex) {
+                (Manager ?? Loggy.Manager).Get("_failsafe").Error(new{appendertype=GetType().Name,error=ex.ToString()}.stringify());
+            }
+        }
+
+        protected abstract void InternalWrite(LoggyMessage message);
 
         public virtual void Flush() {
             

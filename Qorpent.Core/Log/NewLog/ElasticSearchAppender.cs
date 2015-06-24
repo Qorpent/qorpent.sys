@@ -43,7 +43,7 @@ namespace Qorpent.Log.NewLog {
         public string Type { get; set; }
 
         public ElasticSearchClient Client { get; set; }
-        public override void Write(LoggyMessage message) {
+        protected override void InternalWrite(LoggyMessage message) {
             if(message.Level<Level)return;
             object error = null;
             if (null != message.Exception) {

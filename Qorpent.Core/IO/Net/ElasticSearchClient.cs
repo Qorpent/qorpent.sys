@@ -24,6 +24,9 @@ namespace qorpent.v2.security.utils {
                 string json;
                 for (var i = 0; i < Urls.Count; i++) {
                     var url = Urls[i] + cmd;
+                    if (!url.StartsWith("http")) {
+                        url = "http://" + url;
+                    }
                     try {
                         var cli = new HttpClient {ConnectionTimeout = ConnectionTimeout};
                         json = cli.GetString(url, post, _ => {
