@@ -210,7 +210,7 @@ require.config({
                                     document.location.href = redirect;
                                 }
                             } else {
-                                $scope.lasterror = result.error;
+                                $scope.lasterror = result.error || "Логин и/или пароль указаны неверно";
                                 $scope.lastwaslogin = false;
 
                             }
