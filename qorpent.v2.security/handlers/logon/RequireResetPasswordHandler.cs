@@ -8,11 +8,12 @@ using qorpent.v2.security.user.storage;
 using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.handlers.logon {
     [ContainerComponent(Lifestyle.Singleton, "resetpwdreq.handler", ServiceType = typeof (IRequireResetPasswordHandler))]
-    [UserOp("resetpwdreq",Secure = true)]
+    [UserOp("resetpwdreq",Secure = true,SuccessLevel = LogLevel.Info)]
     public class RequireResetPasswordHandler : UserOperation,IRequireResetPasswordHandler {
         [Inject]
         public IUserService Users { get; set; }

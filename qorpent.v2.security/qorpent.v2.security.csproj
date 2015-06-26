@@ -29,6 +29,7 @@
     <Compile Include="authorization\HttpAuthorizer.cs" />
     <Compile Include="handlers\HandlerBase.cs" />
     <Compile Include="handlers\HandlerResult.cs" />
+    <Compile Include="handlers\UserOpAttribute.cs" />
     <Compile Include="handlers\UserOperation.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />
     <Compile Include="handlers\management\IDefineUserHandler.cs" />
