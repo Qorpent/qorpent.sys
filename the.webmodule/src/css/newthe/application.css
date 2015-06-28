@@ -76,5 +76,9 @@
     transform: rotate(359deg);
   }
 }
+/* line 141, tools.scss */
+.clickable {
+  cursor: pointer;
+}
 
 /*# sourceMappingURL=application.css.map */

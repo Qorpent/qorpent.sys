@@ -141,6 +141,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     transform: rotate(359deg);
   }
 }
+/* line 141, newthe/tools.scss */
+.clickable {
+  cursor: pointer;
+}
+
 /* line 1, newthe/toolwindow.scss */
 .toolwindow {
   display: flex;
@@ -203,17 +208,51 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 /* line 60, newthe/toolwindow.scss */
 .toolwindow.dialog {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  min-height: 150px;
   display: none;
 }
-/* line 61, newthe/toolwindow.scss */
+/* line 65, newthe/toolwindow.scss */
 .toolwindow.dialog > form {
   padding: 0px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-/* line 65, newthe/toolwindow.scss */
+/* line 71, newthe/toolwindow.scss */
+.toolwindow.dialog .content {
+  flex-grow: 1;
+}
+/* line 75, newthe/toolwindow.scss */
 .toolwindow.dialog.active {
   display: flex;
 }
-/* line 68, newthe/toolwindow.scss */
+/* line 78, newthe/toolwindow.scss */
+.toolwindow.dialog label.title, .toolwindow.dialog nav {
+  padding-right: 16px;
+}
+/* line 81, newthe/toolwindow.scss */
+.toolwindow.dialog.expanded {
+  top: 0px !important;
+  left: 5px !important;
+  min-width: 97% !important;
+  min-height: 99% !important;
+  max-width: 97% !important;
+  max-height: 99% !important;
+  overflow: hidden;
+}
+/* line 89, newthe/toolwindow.scss */
+.toolwindow.dialog.expanded > form {
+  overflow: hidden;
+}
+/* line 91, newthe/toolwindow.scss */
+.toolwindow.dialog.expanded > form .content {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+/* line 98, newthe/toolwindow.scss */
 .toolwindow.dialog.fixed {
   position: fixed;
   z-index: 10000;
@@ -222,17 +261,17 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   max-width: 1024px;
   max-height: 800px;
 }
-/* line 76, newthe/toolwindow.scss */
+/* line 106, newthe/toolwindow.scss */
 .toolwindow.dialog .content {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
 }
-/* line 81, newthe/toolwindow.scss */
+/* line 111, newthe/toolwindow.scss */
 .toolwindow.dialog > label, .toolwindow.dialog > form > label {
   flex-shrink: 0;
 }
-/* line 84, newthe/toolwindow.scss */
+/* line 114, newthe/toolwindow.scss */
 .toolwindow.dialog > nav, .toolwindow.dialog > form > nav {
   flex-shrink: 0;
   margin-bottom: 5px;
@@ -241,14 +280,19 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   justify-content: flex-end;
   align-items: center;
 }
-/* line 91, newthe/toolwindow.scss */
+/* line 121, newthe/toolwindow.scss */
 .toolwindow.dialog > nav i, .toolwindow.dialog > form > nav i {
   margin-left: 3px;
   margin-right: 3px;
   min-width: 80px;
 }
+/* line 125, newthe/toolwindow.scss */
+.toolwindow.dialog > nav i.icon, .toolwindow.dialog > form > nav i.icon {
+  min-width: 30px;
+  font-size: 150%;
+}
 
-/* line 101, newthe/toolwindow.scss */
+/* line 135, newthe/toolwindow.scss */
 .modalback {
   display: none;
   position: fixed;
@@ -261,32 +305,32 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   opacity: 0.4;
 }
 
-/* line 113, newthe/toolwindow.scss */
+/* line 147, newthe/toolwindow.scss */
 table.props {
   border-collapse: collapse;
   font-size: 80%;
 }
-/* line 116, newthe/toolwindow.scss */
+/* line 150, newthe/toolwindow.scss */
 table.props td, table.props th {
   border: solid 1px #eaeaea;
   padding: 5px;
 }
-/* line 120, newthe/toolwindow.scss */
+/* line 154, newthe/toolwindow.scss */
 table.props td:first-child {
   font-size: 90%;
 }
-/* line 123, newthe/toolwindow.scss */
+/* line 157, newthe/toolwindow.scss */
 table.props th {
   background-color: #eaeaea;
   font-weight: bold;
 }
 
-/* line 129, newthe/toolwindow.scss */
+/* line 163, newthe/toolwindow.scss */
 .ng-invalid {
   border: solid 1px #E7582E;
 }
 
-/* line 132, newthe/toolwindow.scss */
+/* line 166, newthe/toolwindow.scss */
 form.ng-invalid {
   border: inherit;
 }
@@ -303,7 +347,6 @@ form.ng-invalid {
   overflow: hidden;
   background: none;
   padding-left: 2px;
-  pointer-events: none !important;
 }
 /* line 12, newthe/_layers.scss */
 .the .layer *, .the .box * {
@@ -343,7 +386,12 @@ form.ng-invalid {
   position: absolute;
 }
 
-/* line 52, newthe/_layers.scss */
+/* line 46, newthe/_layers.scss */
+.the.app .box {
+  pointer-events: none !important;
+}
+
+/* line 57, newthe/_layers.scss */
 .the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
   top: 0;
   left: 0;
@@ -492,7 +540,7 @@ html.the .workplace > .left > label.title:before, html.the .workplace > .left > 
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 30, newthe/title.scss */
+/* line 31, newthe/title.scss */
 html.the .workplace > .left > label.title.xlg {
   min-height: 39px;
   padding-left: 8px;
@@ -501,6 +549,10 @@ html.the .workplace > .left > label.title.xlg {
   line-height: 39px;
 }
 /* line 37, newthe/title.scss */
+html.the .workplace > .left > label.title.xlg:before, html.the .workplace > .left > label.title.xlg:after, html.the .workplace > .left > label.title.xlg *:before, html.the .workplace > .left > label.title.xlg *:after {
+  font-size: 130%;
+}
+/* line 43, newthe/title.scss */
 html.the .workplace > .left > label.title.lg {
   min-height: 32px;
   padding-left: 7px;
@@ -508,21 +560,25 @@ html.the .workplace > .left > label.title.lg {
   font-size: 25px;
   line-height: 32px;
 }
-/* line 44, newthe/title.scss */
-html.the .workplace > .left > label.title.sm {
-  min-height: 17px;
-  padding-left: 4px;
-  padding-right: 4px;
-  font-size: 12px;
-  line-height: 17px;
+/* line 49, newthe/title.scss */
+html.the .workplace > .left > label.title.lg:before, html.the .workplace > .left > label.title.lg:after, html.the .workplace > .left > label.title.lg *:before, html.the .workplace > .left > label.title.lg *:after {
+  font-size: 120%;
 }
-/* line 51, newthe/title.scss */
+/* line 55, newthe/title.scss */
+html.the .workplace > .left > label.title.sm {
+  min-height: 22px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 17px;
+  line-height: 22px;
+}
+/* line 62, newthe/title.scss */
 html.the .workplace > .left > label.title.xsm {
-  min-height: 10px;
-  padding-left: 2px;
-  padding-right: 2px;
-  font-size: 7px;
-  line-height: 10px;
+  min-height: 15px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 10px;
+  line-height: 15px;
 }
 @media screen and (min-width: 1400px) {
   /* line 57, newthe/application.scss */
@@ -533,7 +589,7 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 22px;
     line-height: 29px;
   }
-  /* line 64, newthe/title.scss */
+  /* line 75, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
     min-height: 47px;
     padding-left: 10px;
@@ -541,7 +597,7 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 38px;
     line-height: 47px;
   }
-  /* line 71, newthe/title.scss */
+  /* line 82, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
     min-height: 38px;
     padding-left: 8px;
@@ -549,21 +605,21 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 29px;
     line-height: 38px;
   }
-  /* line 78, newthe/title.scss */
+  /* line 89, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
-    min-height: 21px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 16px;
-    line-height: 21px;
+    min-height: 26px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 19px;
+    line-height: 26px;
   }
-  /* line 85, newthe/title.scss */
+  /* line 96, newthe/title.scss */
   html.the .workplace > .left > label.title.xsm {
-    min-height: 12px;
-    padding-left: 3px;
-    padding-right: 3px;
-    font-size: 9px;
-    line-height: 12px;
+    min-height: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 13px;
+    line-height: 18px;
   }
 }
 @media screen and (max-width: 1100px) {
@@ -575,7 +631,7 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 15px;
     line-height: 20px;
   }
-  /* line 99, newthe/title.scss */
+  /* line 110, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
     min-height: 31px;
     padding-left: 7px;
@@ -583,7 +639,7 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 24px;
     line-height: 31px;
   }
-  /* line 106, newthe/title.scss */
+  /* line 117, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
     min-height: 25px;
     padding-left: 6px;
@@ -591,21 +647,21 @@ html.the .workplace > .left > label.title.xsm {
     font-size: 18px;
     line-height: 25px;
   }
-  /* line 113, newthe/title.scss */
+  /* line 124, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
-    min-height: 14px;
+    min-height: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+  /* line 131, newthe/title.scss */
+  html.the .workplace > .left > label.title.xsm {
+    min-height: 12px;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 9px;
-    line-height: 14px;
-  }
-  /* line 120, newthe/title.scss */
-  html.the .workplace > .left > label.title.xsm {
-    min-height: 8px;
-    padding-left: 2px;
-    padding-right: 2px;
-    font-size: 5px;
-    line-height: 8px;
+    line-height: 12px;
   }
 }
 /* line 8, newthe/tools.scss */
@@ -683,7 +739,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 143, newthe/tools.scss */
+/* line 145, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -780,7 +836,7 @@ html.the button.active:hover[disabled='disabled'], html.the button.active:hover.
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 146, newthe/tools.scss */
+/* line 148, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 24px;
@@ -796,7 +852,7 @@ html.the .tooltitle:before, html.the .tooltitle:after, html.the .tooltitle *:bef
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 30, newthe/title.scss */
+/* line 31, newthe/title.scss */
 html.the .tooltitle.xlg {
   min-height: 39px;
   padding-left: 8px;
@@ -805,6 +861,10 @@ html.the .tooltitle.xlg {
   line-height: 39px;
 }
 /* line 37, newthe/title.scss */
+html.the .tooltitle.xlg:before, html.the .tooltitle.xlg:after, html.the .tooltitle.xlg *:before, html.the .tooltitle.xlg *:after {
+  font-size: 130%;
+}
+/* line 43, newthe/title.scss */
 html.the .tooltitle.lg {
   min-height: 32px;
   padding-left: 7px;
@@ -812,24 +872,28 @@ html.the .tooltitle.lg {
   font-size: 25px;
   line-height: 32px;
 }
-/* line 44, newthe/title.scss */
-html.the .tooltitle.sm {
-  min-height: 17px;
-  padding-left: 4px;
-  padding-right: 4px;
-  font-size: 12px;
-  line-height: 17px;
+/* line 49, newthe/title.scss */
+html.the .tooltitle.lg:before, html.the .tooltitle.lg:after, html.the .tooltitle.lg *:before, html.the .tooltitle.lg *:after {
+  font-size: 120%;
 }
-/* line 51, newthe/title.scss */
+/* line 55, newthe/title.scss */
+html.the .tooltitle.sm {
+  min-height: 22px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 17px;
+  line-height: 22px;
+}
+/* line 62, newthe/title.scss */
 html.the .tooltitle.xsm {
-  min-height: 10px;
-  padding-left: 2px;
-  padding-right: 2px;
-  font-size: 7px;
-  line-height: 10px;
+  min-height: 15px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 10px;
+  line-height: 15px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 146, newthe/tools.scss */
+  /* line 148, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 29px;
     padding-left: 6px;
@@ -837,7 +901,7 @@ html.the .tooltitle.xsm {
     font-size: 22px;
     line-height: 29px;
   }
-  /* line 64, newthe/title.scss */
+  /* line 75, newthe/title.scss */
   html.the .tooltitle.xlg {
     min-height: 47px;
     padding-left: 10px;
@@ -845,7 +909,7 @@ html.the .tooltitle.xsm {
     font-size: 38px;
     line-height: 47px;
   }
-  /* line 71, newthe/title.scss */
+  /* line 82, newthe/title.scss */
   html.the .tooltitle.lg {
     min-height: 38px;
     padding-left: 8px;
@@ -853,15 +917,57 @@ html.the .tooltitle.xsm {
     font-size: 29px;
     line-height: 38px;
   }
-  /* line 78, newthe/title.scss */
+  /* line 89, newthe/title.scss */
   html.the .tooltitle.sm {
-    min-height: 21px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 16px;
-    line-height: 21px;
+    min-height: 26px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 19px;
+    line-height: 26px;
   }
-  /* line 85, newthe/title.scss */
+  /* line 96, newthe/title.scss */
+  html.the .tooltitle.xsm {
+    min-height: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  /* line 148, newthe/tools.scss */
+  html.the .tooltitle {
+    min-height: 20px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 15px;
+    line-height: 20px;
+  }
+  /* line 110, newthe/title.scss */
+  html.the .tooltitle.xlg {
+    min-height: 31px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 24px;
+    line-height: 31px;
+  }
+  /* line 117, newthe/title.scss */
+  html.the .tooltitle.lg {
+    min-height: 25px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 18px;
+    line-height: 25px;
+  }
+  /* line 124, newthe/title.scss */
+  html.the .tooltitle.sm {
+    min-height: 18px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+  /* line 131, newthe/title.scss */
   html.the .tooltitle.xsm {
     min-height: 12px;
     padding-left: 3px;
@@ -870,55 +976,13 @@ html.the .tooltitle.xsm {
     line-height: 12px;
   }
 }
-@media screen and (max-width: 1100px) {
-  /* line 146, newthe/tools.scss */
-  html.the .tooltitle {
-    min-height: 20px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 15px;
-    line-height: 20px;
-  }
-  /* line 99, newthe/title.scss */
-  html.the .tooltitle.xlg {
-    min-height: 31px;
-    padding-left: 7px;
-    padding-right: 7px;
-    font-size: 24px;
-    line-height: 31px;
-  }
-  /* line 106, newthe/title.scss */
-  html.the .tooltitle.lg {
-    min-height: 25px;
-    padding-left: 6px;
-    padding-right: 6px;
-    font-size: 18px;
-    line-height: 25px;
-  }
-  /* line 113, newthe/title.scss */
-  html.the .tooltitle.sm {
-    min-height: 14px;
-    padding-left: 3px;
-    padding-right: 3px;
-    font-size: 9px;
-    line-height: 14px;
-  }
-  /* line 120, newthe/title.scss */
-  html.the .tooltitle.xsm {
-    min-height: 8px;
-    padding-left: 2px;
-    padding-right: 2px;
-    font-size: 5px;
-    line-height: 8px;
-  }
-}
 /* line 8, newthe/tools.scss */
 html.the .tooltitle .tbt {
   float: right;
   display: flex;
   align-items: center;
 }
-/* line 149, newthe/tools.scss */
+/* line 151, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 28px;
   padding-left: 12px;
@@ -931,7 +995,7 @@ html.the .button:before, html.the .button:after, html.the .button *:before, html
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 30, newthe/title.scss */
+/* line 31, newthe/title.scss */
 html.the .button.xlg, html.the .title.xlg {
   min-height: 45px;
   padding-left: 20px;
@@ -940,6 +1004,10 @@ html.the .button.xlg, html.the .title.xlg {
   line-height: 45px;
 }
 /* line 37, newthe/title.scss */
+html.the .button.xlg:before, html.the .button.xlg:after, html.the .button.xlg *:before, html.the .button.xlg *:after, html.the .title.xlg:before, html.the .title.xlg:after, html.the .title.xlg *:before, html.the .title.xlg *:after {
+  font-size: 130%;
+}
+/* line 43, newthe/title.scss */
 html.the .button.lg, html.the .title.lg {
   min-height: 37px;
   padding-left: 16px;
@@ -947,24 +1015,28 @@ html.the .button.lg, html.the .title.lg {
   font-size: 22px;
   line-height: 37px;
 }
-/* line 44, newthe/title.scss */
-html.the .button.sm, html.the .title.sm {
-  min-height: 20px;
-  padding-left: 9px;
-  padding-right: 9px;
-  font-size: 11px;
-  line-height: 20px;
+/* line 49, newthe/title.scss */
+html.the .button.lg:before, html.the .button.lg:after, html.the .button.lg *:before, html.the .button.lg *:after, html.the .title.lg:before, html.the .title.lg:after, html.the .title.lg *:before, html.the .title.lg *:after {
+  font-size: 120%;
 }
-/* line 51, newthe/title.scss */
+/* line 55, newthe/title.scss */
+html.the .button.sm, html.the .title.sm {
+  min-height: 26px;
+  padding-left: 11px;
+  padding-right: 11px;
+  font-size: 15px;
+  line-height: 26px;
+}
+/* line 62, newthe/title.scss */
 html.the .button.xsm, html.the .title.xsm {
-  min-height: 12px;
-  padding-left: 5px;
-  padding-right: 5px;
-  font-size: 7px;
-  line-height: 12px;
+  min-height: 17px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 10px;
+  line-height: 17px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 149, newthe/tools.scss */
+  /* line 151, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 34px;
     padding-left: 15px;
@@ -972,7 +1044,7 @@ html.the .button.xsm, html.the .title.xsm {
     font-size: 21px;
     line-height: 34px;
   }
-  /* line 64, newthe/title.scss */
+  /* line 75, newthe/title.scss */
   html.the .button.xlg, html.the .title.xlg {
     min-height: 54px;
     padding-left: 24px;
@@ -980,7 +1052,7 @@ html.the .button.xsm, html.the .title.xsm {
     font-size: 33px;
     line-height: 54px;
   }
-  /* line 71, newthe/title.scss */
+  /* line 82, newthe/title.scss */
   html.the .button.lg, html.the .title.lg {
     min-height: 44px;
     padding-left: 19px;
@@ -988,15 +1060,57 @@ html.the .button.xsm, html.the .title.xsm {
     font-size: 27px;
     line-height: 44px;
   }
-  /* line 78, newthe/title.scss */
+  /* line 89, newthe/title.scss */
   html.the .button.sm, html.the .title.sm {
-    min-height: 24px;
-    padding-left: 11px;
-    padding-right: 11px;
-    font-size: 13px;
-    line-height: 24px;
+    min-height: 31px;
+    padding-left: 13px;
+    padding-right: 13px;
+    font-size: 18px;
+    line-height: 31px;
   }
-  /* line 85, newthe/title.scss */
+  /* line 96, newthe/title.scss */
+  html.the .button.xsm, html.the .title.xsm {
+    min-height: 21px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 12px;
+    line-height: 21px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  /* line 151, newthe/tools.scss */
+  html.the .button, html.the .title {
+    min-height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+    line-height: 23px;
+  }
+  /* line 110, newthe/title.scss */
+  html.the .button.xlg, html.the .title.xlg {
+    min-height: 36px;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: 21px;
+    line-height: 36px;
+  }
+  /* line 117, newthe/title.scss */
+  html.the .button.lg, html.the .title.lg {
+    min-height: 30px;
+    padding-left: 13px;
+    padding-right: 13px;
+    font-size: 17px;
+    line-height: 30px;
+  }
+  /* line 124, newthe/title.scss */
+  html.the .button.sm, html.the .title.sm {
+    min-height: 21px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 12px;
+    line-height: 21px;
+  }
+  /* line 131, newthe/title.scss */
   html.the .button.xsm, html.the .title.xsm {
     min-height: 14px;
     padding-left: 6px;
@@ -1005,49 +1119,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 14px;
   }
 }
-@media screen and (max-width: 1100px) {
-  /* line 149, newthe/tools.scss */
-  html.the .button, html.the .title {
-    min-height: 23px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 14px;
-    line-height: 23px;
-  }
-  /* line 99, newthe/title.scss */
-  html.the .button.xlg, html.the .title.xlg {
-    min-height: 36px;
-    padding-left: 16px;
-    padding-right: 16px;
-    font-size: 21px;
-    line-height: 36px;
-  }
-  /* line 106, newthe/title.scss */
-  html.the .button.lg, html.the .title.lg {
-    min-height: 30px;
-    padding-left: 13px;
-    padding-right: 13px;
-    font-size: 17px;
-    line-height: 30px;
-  }
-  /* line 113, newthe/title.scss */
-  html.the .button.sm, html.the .title.sm {
-    min-height: 16px;
-    padding-left: 7px;
-    padding-right: 7px;
-    font-size: 9px;
-    line-height: 16px;
-  }
-  /* line 120, newthe/title.scss */
-  html.the .button.xsm, html.the .title.xsm {
-    min-height: 9px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 4px;
-    line-height: 9px;
-  }
-}
-/* line 153, newthe/tools.scss */
+/* line 155, newthe/tools.scss */
 html.the .input {
   min-height: 20px;
   padding-left: 3px;
@@ -1060,7 +1132,7 @@ html.the .input:before, html.the .input:after, html.the .input *:before, html.th
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 30, newthe/title.scss */
+/* line 31, newthe/title.scss */
 html.the .input.xlg {
   min-height: 32px;
   padding-left: 5px;
@@ -1069,6 +1141,10 @@ html.the .input.xlg {
   line-height: 32px;
 }
 /* line 37, newthe/title.scss */
+html.the .input.xlg:before, html.the .input.xlg:after, html.the .input.xlg *:before, html.the .input.xlg *:after {
+  font-size: 130%;
+}
+/* line 43, newthe/title.scss */
 html.the .input.lg {
   min-height: 26px;
   padding-left: 4px;
@@ -1076,24 +1152,28 @@ html.the .input.lg {
   font-size: 19px;
   line-height: 26px;
 }
-/* line 44, newthe/title.scss */
+/* line 49, newthe/title.scss */
+html.the .input.lg:before, html.the .input.lg:after, html.the .input.lg *:before, html.the .input.lg *:after {
+  font-size: 120%;
+}
+/* line 55, newthe/title.scss */
 html.the .input.sm {
-  min-height: 14px;
+  min-height: 18px;
   padding-left: 3px;
   padding-right: 3px;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: 13px;
+  line-height: 18px;
 }
-/* line 51, newthe/title.scss */
+/* line 62, newthe/title.scss */
 html.the .input.xsm {
-  min-height: 8px;
+  min-height: 12px;
   padding-left: 2px;
   padding-right: 2px;
-  font-size: 5px;
-  line-height: 8px;
+  font-size: 7px;
+  line-height: 12px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 153, newthe/tools.scss */
+  /* line 155, newthe/tools.scss */
   html.the .input {
     min-height: 24px;
     padding-left: 4px;
@@ -1101,7 +1181,7 @@ html.the .input.xsm {
     font-size: 17px;
     line-height: 24px;
   }
-  /* line 64, newthe/title.scss */
+  /* line 75, newthe/title.scss */
   html.the .input.xlg {
     min-height: 39px;
     padding-left: 6px;
@@ -1109,7 +1189,7 @@ html.the .input.xsm {
     font-size: 30px;
     line-height: 39px;
   }
-  /* line 71, newthe/title.scss */
+  /* line 82, newthe/title.scss */
   html.the .input.lg {
     min-height: 32px;
     padding-left: 5px;
@@ -1117,15 +1197,57 @@ html.the .input.xsm {
     font-size: 23px;
     line-height: 32px;
   }
-  /* line 78, newthe/title.scss */
+  /* line 89, newthe/title.scss */
   html.the .input.sm {
-    min-height: 17px;
+    min-height: 22px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  /* line 96, newthe/title.scss */
+  html.the .input.xsm {
+    min-height: 15px;
     padding-left: 3px;
     padding-right: 3px;
-    font-size: 12px;
-    line-height: 17px;
+    font-size: 10px;
+    line-height: 15px;
   }
-  /* line 85, newthe/title.scss */
+}
+@media screen and (max-width: 1100px) {
+  /* line 155, newthe/tools.scss */
+  html.the .input {
+    min-height: 16px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  /* line 110, newthe/title.scss */
+  html.the .input.xlg {
+    min-height: 26px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 19px;
+    line-height: 26px;
+  }
+  /* line 117, newthe/title.scss */
+  html.the .input.lg {
+    min-height: 21px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+  /* line 124, newthe/title.scss */
+  html.the .input.sm {
+    min-height: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 10px;
+    line-height: 15px;
+  }
+  /* line 131, newthe/title.scss */
   html.the .input.xsm {
     min-height: 10px;
     padding-left: 2px;
@@ -1134,53 +1256,11 @@ html.the .input.xsm {
     line-height: 10px;
   }
 }
-@media screen and (max-width: 1100px) {
-  /* line 153, newthe/tools.scss */
-  html.the .input {
-    min-height: 16px;
-    padding-left: 3px;
-    padding-right: 3px;
-    font-size: 11px;
-    line-height: 16px;
-  }
-  /* line 99, newthe/title.scss */
-  html.the .input.xlg {
-    min-height: 26px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 19px;
-    line-height: 26px;
-  }
-  /* line 106, newthe/title.scss */
-  html.the .input.lg {
-    min-height: 21px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 14px;
-    line-height: 21px;
-  }
-  /* line 113, newthe/title.scss */
-  html.the .input.sm {
-    min-height: 12px;
-    padding-left: 2px;
-    padding-right: 2px;
-    font-size: 7px;
-    line-height: 12px;
-  }
-  /* line 120, newthe/title.scss */
-  html.the .input.xsm {
-    min-height: 7px;
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 4px;
-    line-height: 7px;
-  }
-}
-/* line 157, newthe/tools.scss */
+/* line 159, newthe/tools.scss */
 html.the input.block {
   box-sizing: border-box;
 }
-/* line 162, newthe/tools.scss */
+/* line 164, newthe/tools.scss */
 html.the .subtitle {
   color: #4C81AF;
   background: transparent;
@@ -1188,7 +1268,7 @@ html.the .subtitle {
   margin-top: 10px;
   padding-bottom: 2px;
 }
-/* line 169, newthe/tools.scss */
+/* line 171, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -1213,7 +1293,7 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 172, newthe/tools.scss */
+/* line 174, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
@@ -1248,7 +1328,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 175, newthe/tools.scss */
+/* line 177, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 3px;
@@ -1370,7 +1450,7 @@ html.the .dropdown .menuitem:before, html.the .dropdown .menuitem:after, html.th
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 30, newthe/title.scss */
+/* line 31, newthe/title.scss */
 html.the .dropdown .menuitem.xlg {
   min-height: 39px;
   padding-left: 20px;
@@ -1379,6 +1459,10 @@ html.the .dropdown .menuitem.xlg {
   line-height: 39px;
 }
 /* line 37, newthe/title.scss */
+html.the .dropdown .menuitem.xlg:before, html.the .dropdown .menuitem.xlg:after, html.the .dropdown .menuitem.xlg *:before, html.the .dropdown .menuitem.xlg *:after {
+  font-size: 130%;
+}
+/* line 43, newthe/title.scss */
 html.the .dropdown .menuitem.lg {
   min-height: 32px;
   padding-left: 16px;
@@ -1386,21 +1470,25 @@ html.the .dropdown .menuitem.lg {
   font-size: 17px;
   line-height: 32px;
 }
-/* line 44, newthe/title.scss */
-html.the .dropdown .menuitem.sm {
-  min-height: 17px;
-  padding-left: 9px;
-  padding-right: 9px;
-  font-size: 8px;
-  line-height: 17px;
+/* line 49, newthe/title.scss */
+html.the .dropdown .menuitem.lg:before, html.the .dropdown .menuitem.lg:after, html.the .dropdown .menuitem.lg *:before, html.the .dropdown .menuitem.lg *:after {
+  font-size: 120%;
 }
-/* line 51, newthe/title.scss */
+/* line 55, newthe/title.scss */
+html.the .dropdown .menuitem.sm {
+  min-height: 22px;
+  padding-left: 11px;
+  padding-right: 11px;
+  font-size: 11px;
+  line-height: 22px;
+}
+/* line 62, newthe/title.scss */
 html.the .dropdown .menuitem.xsm {
-  min-height: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  font-size: 5px;
-  line-height: 10px;
+  min-height: 15px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 8px;
+  line-height: 15px;
 }
 @media screen and (min-width: 1400px) {
   /* line 26, newthe/dropdown.scss */
@@ -1411,7 +1499,7 @@ html.the .dropdown .menuitem.xsm {
     font-size: 16px;
     line-height: 29px;
   }
-  /* line 64, newthe/title.scss */
+  /* line 75, newthe/title.scss */
   html.the .dropdown .menuitem.xlg {
     min-height: 47px;
     padding-left: 24px;
@@ -1419,7 +1507,7 @@ html.the .dropdown .menuitem.xsm {
     font-size: 26px;
     line-height: 47px;
   }
-  /* line 71, newthe/title.scss */
+  /* line 82, newthe/title.scss */
   html.the .dropdown .menuitem.lg {
     min-height: 38px;
     padding-left: 19px;
@@ -1427,21 +1515,21 @@ html.the .dropdown .menuitem.xsm {
     font-size: 21px;
     line-height: 38px;
   }
-  /* line 78, newthe/title.scss */
+  /* line 89, newthe/title.scss */
   html.the .dropdown .menuitem.sm {
-    min-height: 21px;
-    padding-left: 11px;
-    padding-right: 11px;
-    font-size: 10px;
-    line-height: 21px;
+    min-height: 26px;
+    padding-left: 13px;
+    padding-right: 13px;
+    font-size: 13px;
+    line-height: 26px;
   }
-  /* line 85, newthe/title.scss */
+  /* line 96, newthe/title.scss */
   html.the .dropdown .menuitem.xsm {
-    min-height: 12px;
-    padding-left: 6px;
-    padding-right: 6px;
-    font-size: 5px;
-    line-height: 12px;
+    min-height: 18px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 9px;
+    line-height: 18px;
   }
 }
 @media screen and (max-width: 1100px) {
@@ -1453,7 +1541,7 @@ html.the .dropdown .menuitem.xsm {
     font-size: 11px;
     line-height: 20px;
   }
-  /* line 99, newthe/title.scss */
+  /* line 110, newthe/title.scss */
   html.the .dropdown .menuitem.xlg {
     min-height: 31px;
     padding-left: 16px;
@@ -1461,7 +1549,7 @@ html.the .dropdown .menuitem.xsm {
     font-size: 16px;
     line-height: 31px;
   }
-  /* line 106, newthe/title.scss */
+  /* line 117, newthe/title.scss */
   html.the .dropdown .menuitem.lg {
     min-height: 25px;
     padding-left: 13px;
@@ -1469,21 +1557,21 @@ html.the .dropdown .menuitem.xsm {
     font-size: 12px;
     line-height: 25px;
   }
-  /* line 113, newthe/title.scss */
+  /* line 124, newthe/title.scss */
   html.the .dropdown .menuitem.sm {
-    min-height: 14px;
-    padding-left: 7px;
-    padding-right: 7px;
-    font-size: 7px;
-    line-height: 14px;
+    min-height: 18px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 9px;
+    line-height: 18px;
   }
-  /* line 120, newthe/title.scss */
+  /* line 131, newthe/title.scss */
   html.the .dropdown .menuitem.xsm {
-    min-height: 8px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 3px;
-    line-height: 8px;
+    min-height: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 5px;
+    line-height: 12px;
   }
 }
 /* line 29, newthe/dropdown.scss */
@@ -4347,24 +4435,25 @@ html.site body {
   min-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  min-height: 99%;
 }
-/* line 122, newthe/page.scss */
+/* line 123, newthe/page.scss */
 html.site body.lg {
   max-width: 1024px;
   min-width: 1024px;
 }
 
-/* line 129, newthe/page.scss */
+/* line 130, newthe/page.scss */
 a {
   text-decoration: none;
   color: #4C81AF;
 }
-/* line 132, newthe/page.scss */
+/* line 133, newthe/page.scss */
 a :hover {
   text-decoration: underline;
 }
 
-/* line 137, newthe/page.scss */
+/* line 138, newthe/page.scss */
 i {
   box-sizing: border-box;
 }
