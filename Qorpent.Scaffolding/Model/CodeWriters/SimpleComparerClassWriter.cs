@@ -97,7 +97,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             o.WriteLine("\t\tprivate IList<CompareMessage> _messages;");
             o.WriteLine("\t\t");
             var sb = new System.Text.StringBuilder(1168);
-            o.WriteLine(@"  private bool StringEqual(string o, string n, string message) {");
+            o.WriteLine(@"  private bool StringEqual(string o, string n, string message, string field) {");
             o.WriteLine(@"            o = StringUtils.Norm(o);");
             o.WriteLine(@"            n = StringUtils.Norm(n);");
             o.WriteLine(@"            ");
