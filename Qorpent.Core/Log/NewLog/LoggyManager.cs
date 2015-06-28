@@ -140,6 +140,7 @@ namespace Qorpent.Log.NewLog {
             return appender;
         }
 
+        private ILoggy _fail = null;
         public ILoggy Get(string name = null, Action<ILoggy> setup= null) {
             if (string.IsNullOrWhiteSpace(name)) {
                 name = "default";
@@ -147,6 +148,13 @@ namespace Qorpent.Log.NewLog {
             
             var result = loggers.GetOrAdd(name, n => {
                 var l = new DefaultLoggy {Name = n};
+                if (n == "_failsafe") {
+                    l.Isolated = true;
+                    l.Level = LogLevel.All;
+                    l.Appenders.Add(new ConsoleAppender{Format = "%{Level} - %{UserName} - %{Message}"});
+                    l.Appenders.Add(new UdpAppender("127.0.0.2", 7071) { Format = "%{UserName} - %{Message}" });
+                    return l;
+                }
                 if (n != "default") {
                     ILoggy parent = null;
                     if (n.Contains(".")) {

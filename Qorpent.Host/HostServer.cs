@@ -21,6 +21,7 @@ using Qorpent.Host.Static;
 using Qorpent.IoC;
 using Qorpent.IO;
 using Qorpent.IO.Http;
+using Qorpent.IO.Net;
 using Qorpent.Log;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
@@ -275,6 +276,7 @@ namespace Qorpent.Host {
                 cookie.Path = "/";
                 cookie.HttpOnly = true;
                 cookie.Secure = true;
+                cookie.Domain = HttpUtils.AdaptCookieDomain(cookie.Domain);
                 _context.Response.Cookies.Add(cookie);
             }
             _context.Response.Cookies = _context.Request.Cookies;
@@ -318,7 +320,9 @@ namespace Qorpent.Host {
             if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)) {
                 if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
                     var origin = task.Result.Request.Headers["Origin"];
-                    task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+                    if (!string.IsNullOrWhiteSpace(origin)) {
+                        task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+                    }
                 }
                 else {
                     task.Result.Response.AddHeader("Access-Control-Allow-Origin", Config.AccessAllowOrigin);

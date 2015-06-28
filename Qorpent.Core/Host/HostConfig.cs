@@ -396,7 +396,20 @@ namespace Qorpent.Host{
 	        DefaultPage = xml.ResolveValue(HostUtils.DefaultPage, "default.html");
 	        MaxRequestSize = xml.ResolveValue("maxrequestsize", "10000000").ToInt();
 	        RequireLogin = xml.ResolveValue("requirelogin").ToBool();
-	        foreach (XElement bind in xml.Elements(HostUtils.BindingXmlName)){
+	        foreach (XElement bind in xml.Elements(HostUtils.BindingXmlName)) {
+	            var excludehost = bind.Attr("excludehost").SmartSplit();
+	            bool process = true;
+	            if (0 != excludehost.Count) {
+	                var machine = Environment.MachineName.ToUpperInvariant();
+	                foreach (var h in excludehost) {
+	                    if (machine == h.ToUpperInvariant().Trim()) {
+	                        process = false;
+                            break;
+	                        
+	                    }
+	                }
+	            }
+                if(!process)continue;
 				var hostbind = new HostBinding();
 				hostbind.Port = bind.Attr(HostUtils.PortXmlName).ToInt();
 				hostbind.Interface = bind.Attr(HostUtils.InterfaceXmlName);

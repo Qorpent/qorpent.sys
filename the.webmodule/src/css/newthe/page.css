@@ -226,35 +226,93 @@ form.ng-invalid {
   border: inherit;
 }
 
-/* line 112, page.scss */
+/* line 2, _layers.scss */
+.the .layer {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 6, _layers.scss */
+.the .layer, .the .box {
+  display: flex;
+  overflow: hidden;
+  background: none;
+  padding-left: 2px;
+  pointer-events: none !important;
+}
+/* line 12, _layers.scss */
+.the .layer *, .the .box * {
+  pointer-events: all;
+}
+/* line 15, _layers.scss */
+.the .row.layer, .the .row.box {
+  flex-direction: row;
+  margin: 0 !important;
+}
+/* line 19, _layers.scss */
+.the .col.layer, .the .col.box {
+  flex-direction: column;
+  margin: 0 !important;
+}
+/* line 24, _layers.scss */
+.the .rest.layer, .the .rest.box {
+  flex-grow: 10;
+}
+/* line 27, _layers.scss */
+.the .layer .scroll, .the .box .scroll {
+  overflow-y: auto;
+}
+/* line 30, _layers.scss */
+.the .layer .content, .the .box .content {
+  background-color: #ffffff;
+}
+/* line 33, _layers.scss */
+.the .layer .statusbar, .the .box .statusbar {
+  min-height: 40px;
+  max-height: 40px;
+}
+
+/* line 38, _layers.scss */
+.the .layer {
+  margin: 0;
+  position: absolute;
+}
+
+/* line 52, _layers.scss */
+.the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
+  top: 0;
+  left: 0;
+}
+
+/* line 113, page.scss */
 .tlicon {
   color: color(primary);
 }
 
-/* line 116, page.scss */
+/* line 117, page.scss */
 html.site body {
   max-width: 800px;
   min-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
-/* line 121, page.scss */
+/* line 122, page.scss */
 html.site body.lg {
   max-width: 1024px;
   min-width: 1024px;
 }
 
-/* line 128, page.scss */
+/* line 129, page.scss */
 a {
   text-decoration: none;
   color: color(primary);
 }
-/* line 131, page.scss */
+/* line 132, page.scss */
 a :hover {
   text-decoration: underline;
 }
 
-/* line 136, page.scss */
+/* line 137, page.scss */
 i {
   box-sizing: border-box;
 }

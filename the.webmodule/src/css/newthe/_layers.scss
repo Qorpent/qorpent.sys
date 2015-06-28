@@ -1,0 +1,65 @@
+// Describes layered layout
+%the-fill {
+  width : 100%;
+  height: 100%;
+}
+%the-box {
+  display: flex;
+  overflow: hidden;
+  background: none;
+  padding-left:2px;
+
+  * {
+    pointer-events: all;
+  }
+  &.row{
+    flex-direction: row;
+    margin: 0 !important;
+  }
+  &.col{
+    flex-direction: column;
+    margin: 0 !important;
+
+  }
+  &.rest {
+    flex-grow: 10;
+  }
+  .scroll {
+    overflow-y: auto;
+  }
+  .content {
+    background-color:#ffffff;
+  }
+  .statusbar{
+    min-height: 40px;
+    max-height: 40px;
+  }
+}
+%the-layer{
+  @extend %the-box;
+  @extend %the-fill;
+  margin: 0;
+  position:absolute;
+
+}
+.the.app {
+  .box {
+    pointer-events: none !important;
+  }
+}
+
+.the {
+  .layer {
+    @extend %the-layer;
+
+  }
+  body, html {
+    &.layer, &>.layer {
+      top: 0;
+      left: 0;
+    }
+  }
+  .box {
+    @extend %the-box;
+  }
+}

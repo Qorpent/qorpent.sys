@@ -17,12 +17,14 @@ define(["the-angular"], function ($the) {
                             /* cool firefox hack avoid of it's lag in events */
                             onChangeDateTime : function(c,i){
 
-                                if(!!ngchange) {
+                                if(!!ngmodel) {
                                     setTimeout(function(){
                                         if(!!ngmodel){
                                             scope.$eval(ngmodel+"='"+ $(i).val()+"'");
                                         }
-                                        scope.$eval(ngchange);
+                                        if(!!ngchange) {
+                                            scope.$eval(ngchange);
+                                        }
                                     },4);
 
                                 }
@@ -48,12 +50,14 @@ define(["the-angular"], function ($the) {
                             scrollInput : false,
                             onChangeDateTime : function(c,i){
 
-                                if(!!ngchange) {
+                                if(!!ngmodel) {
                                    setTimeout(function(){
                                        if(!!ngmodel){
                                            scope.$eval(ngmodel+"='"+ $(i).val()+"'");
                                        }
-                                        scope.$eval(ngchange);
+                                       if(!!ngchange) {
+                                           scope.$eval(ngchange);
+                                       }
                                     },4);
 
                                 }

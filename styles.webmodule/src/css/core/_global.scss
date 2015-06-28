@@ -14,6 +14,45 @@
       flex-direction: row;
     }
   }
+  input {
+    font-size: 100%!important;
+  }
+  @-moz-keyframes progress_light {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  @-webkit-keyframes progress_light {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  @keyframes progress_light {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  .progress {
+    height: 30px;
+    background: color(primary) url("progress.png") repeat;
+    animation-name: progress_light;
+    -webkit-animation-name: progress_light;
+    animation-duration: 15s;
+    -webkit-animation-duration: 15s;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+  }
   html {
     background: {
       color: skin(default-background, color(default));
@@ -36,10 +75,32 @@
       width: 100%;
       margin: 0;
       border: 1px solid color(primary);
-      padding: 3px;
+      padding: 5px 10px;
       @include in-size(font-size);
       @if skin(input-rounded-corners) {
         @include rounded-corners();
+      }
+    }
+    button {
+      @include in-size(font-size);
+      background: color(primary);
+      border: none;
+      border-radius: 3px;
+      padding: 7px 10px;
+      color: color(white);
+      cursor: pointer;
+      &.danger {
+        background: color(danger);
+        &:hover {
+          background: lighten(color(danger), 5%);
+        }
+      }
+      &:hover {
+        background: lighten(color(primary), 5%);
+      }
+      &:disabled {
+        background: color(disabled)!important;
+        cursor: default!important;
       }
     }
     table {
@@ -136,6 +197,10 @@
         color: skin(nav border-bottom-color);
       }
       a {
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-bottom: 5px;
+        border-radius: 3px;
         font: {
           family: skin(nav font-family);
         }
@@ -147,6 +212,14 @@
             margin-left: 10px;
             text-decoration: none!important;
             color: color(dark);
+          }
+        }
+        &.active {
+          text-decoration: none;
+          background: color(primary);
+          color: color(white);
+          &:last-child {
+            padding-right: 10px;
           }
         }
       }

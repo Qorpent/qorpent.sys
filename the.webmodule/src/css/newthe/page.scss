@@ -3,6 +3,7 @@
 @import "dropdown";
 @import "scroller";
 @import "toolwindow";
+@import "_layers";
 
 @mixin page() {
   body {
@@ -118,6 +119,7 @@ html.site body {
   min-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  min-height: 99%;
   &.lg{
     max-width: 1024px;
     min-width: 1024px;

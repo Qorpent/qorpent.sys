@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Qorpent.Log.NewLog {
@@ -9,6 +10,8 @@ namespace Qorpent.Log.NewLog {
         private DateTime _timestamp;
         private string _userName;
         public string LoggerName { get; set; }
+
+        public IList<string> Visited = new List<string>();  
 
         public LoggyMessage(LogLevel level, params object[] args) {
             Level = level;

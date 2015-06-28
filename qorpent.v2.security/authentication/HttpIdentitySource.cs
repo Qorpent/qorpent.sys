@@ -38,7 +38,13 @@ namespace qorpent.v2.security.authentication {
 
         private IIdentity AuthenticateWithValidToken(IHttpRequestDescriptor request, Token currentToken) {
             var currentExpire = currentToken.Expire.ToUniversalTime();
-            var token = TokenService.Prolongate(currentToken);
+            Token token;
+            if (IsProlongable(request)) {
+                token = TokenService.Prolongate(currentToken);
+            }
+            else {
+                token = currentToken;
+            }
             var resultExpire = token.Expire.ToUniversalTime();
             if (Logg.IsForDebug()) {
                 Logg.Debug(
@@ -47,6 +53,14 @@ namespace qorpent.v2.security.authentication {
             }
             var result = BuildIdentity(token);
             return result;
+        }
+
+        private bool IsProlongable(IHttpRequestDescriptor request) {
+            var path = request.Uri.AbsolutePath;
+            if (path == "/isauth") return false;
+            if (path == "/logout") return false;
+            if (path == "/myinfo") return false;
+            return true;
         }
 
         private Identity BuildIdentity(Token token) {

@@ -30,7 +30,7 @@ namespace Qorpent.Log.NewLog {
 		///     ¬нутренн€€ операци€ записи в лог
 		/// </summary>
 		/// <param name="message"> </param>
-		public override void Write(LoggyMessage message) {
+		protected override void InternalWrite(LoggyMessage message) {
 		    
 		    
 			try {

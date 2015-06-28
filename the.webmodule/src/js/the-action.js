@@ -104,7 +104,10 @@
                         }
                     }
                     url = url || "";
-                    url = ("/" + baseUrl + "/" + url);
+                    url = url.replace(/HOSTNAME/,document.location.hostname);
+                    if(!url.match(/^http/)) {
+                        url = ("/" + baseUrl + "/" + url);
+                    }
                     var appPath = callinfo.appPath || this.appPath || "";
                     if(!!appPath){
                         if(!!document) {

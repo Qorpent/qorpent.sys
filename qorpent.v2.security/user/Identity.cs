@@ -63,6 +63,9 @@ namespace qorpent.v2.security.user {
         public string AuthenticationType { get; set; }
         public bool IsAuthenticated { get; set; }
         public void Write(TextWriter output, string mode, ISerializationAnnotator annotator) {
+            if (string.IsNullOrWhiteSpace(mode)) {
+                mode = "admin";
+            }
             var jw = new JsonWriter(output);
             jw.OpenObject();
             jw.WriteProperty("name",Name);
@@ -71,14 +74,15 @@ namespace qorpent.v2.security.user {
             jw.WriteProperty("isadmin",IsAdmin,true);
             jw.WriteProperty("isguest",IsGuest,true);
             jw.WriteProperty("iserror",IsError,true);
-            if (null != Token) {
-                jw.OpenProperty("token");
-                jw.WriteNative(Token.stringify());
-                jw.CloseProperty();
-            }
+    
+                if (null != Token) {
+                    jw.OpenProperty("token");
+                    jw.WriteNative(Token.stringify(mode));
+                    jw.CloseProperty();
+                }
             if (null != User) {
                 jw.OpenProperty("user");
-                jw.WriteNative(User.stringify());
+                jw.WriteNative(User.stringify(mode));
                 jw.CloseProperty();
             }
             jw.CloseObject();

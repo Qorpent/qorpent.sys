@@ -8,10 +8,13 @@ using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Log.NewLog;
 
 namespace qorpent.v2.security.handlers.management {
     [ContainerComponent(Lifestyle.Singleton, "sendmail.handler", ServiceType = typeof (ISendMailHandler))]
     public class SendMailHandler : ISendMailHandler {
+        private ILoggy loggy;
+
         [Inject]
         public IMessageQueue Queue { get; set; }
 
@@ -21,7 +24,11 @@ namespace qorpent.v2.security.handlers.management {
         [Inject]
         public IRoleResolverService Roles { get; set; }
 
+        [Inject]
+        public ILoggyManager LoggyManager { get; set; }
+
         public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
+            this.loggy = this.loggy ?? LoggyManager.Get("handler.sendmail");
             if (!Roles.IsInRole(context.User, "ADMIN")) {
                 context.Finish(new {error = "notauth"}.stringify(), status: 500);
                 return;
@@ -38,14 +45,25 @@ namespace qorpent.v2.security.handlers.management {
                     sent++;
                 }
                 catch (Exception e) {
-                    errors.Add(new {message, error = e.Message});
+                    var inner = null == e.InnerException ? "" : e.InnerException.ToString();
+                    var erinfo = new {message, error = e.ToString(), inner};
+                    errors.Add(erinfo);
+                    if (loggy.IsForError()) {
+                        loggy.Error(erinfo.stringify());
+                    }
                 }
+            }
+            if (errors.Count == 0) {
+                if (loggy.IsForTrace()) {
+                    loggy.Trace(new{sent=messages.Length, ids=string.Join(", ",messages.Select(_=>_.Id))});
+                }
+               
             }
             context.Finish(new {
                 src = messages.Length,
                 sent,
                 errors
-            }.stringify(), status: 500);
+            }.stringify(), status: errors.Count==0?200:500);
         }
     }
 }

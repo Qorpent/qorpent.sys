@@ -153,6 +153,7 @@ namespace Qorpent.Host.Handlers
 				}
 				catch (Exception e) {
 					Console.WriteLine(e.GetType().Name);
+                    context.Finish(e.ToString(),status:500);
 				}
 				finally {
 					context.Response.Close();
