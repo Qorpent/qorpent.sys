@@ -60,6 +60,8 @@
   &.dialog {
     display: flex;
     flex-direction: column;
+    min-width:200px;
+    min-height:150px;
     > form {
       padding: 0px;
       flex:1;
@@ -83,8 +85,15 @@
       min-height: 99% !important;
       max-width:97% !important;
       max-height: 99% !important;
-      overflow-y: auto;
-      overflow-x: auto;
+      overflow: hidden;
+      > form {
+        overflow:hidden;
+        .content {
+          overflow-y: auto;
+          overflow-x: auto;
+        }
+      }
+
     }
     &.fixed {
       position: fixed;

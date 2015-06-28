@@ -250,7 +250,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                    })
 
 
-               },100);
+               },300);
             }
             dialog.matchBackPosition = function(){
                 if(dialog.modalCount==0){
