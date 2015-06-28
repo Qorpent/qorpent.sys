@@ -138,7 +138,9 @@
     }
   }
 }
-
+.clickable {
+  cursor: pointer;
+}
 @mixin tools(){
   button, .button, .menuitem {
     @include colorschema((schema:light), false, false);
