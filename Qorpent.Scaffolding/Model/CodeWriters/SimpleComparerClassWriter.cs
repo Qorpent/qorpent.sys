@@ -113,7 +113,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             o.WriteLine(@"            } else if (o == """" && n == """") {");
             o.WriteLine(@"                return true;");
             o.WriteLine(@"            }");
-            o.WriteLine(@"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", message, ""]""), OldValue = o, NewValue = n };");
+
+            o.WriteLine(
+                @"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", field, ""]""), OldValue = o, NewValue = n , Field = field};
+            ");
+
             o.WriteLine(@"            _messages.Add(cm);");
             o.WriteLine(@"");
             o.WriteLine(@"            return false;");
