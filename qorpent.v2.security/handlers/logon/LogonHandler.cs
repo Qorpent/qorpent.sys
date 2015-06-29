@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Security.Principal;
 using System.Threading;
+using Qorpent.Log.NewLog;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.logon;
 using qorpent.v2.security.user;
@@ -46,7 +47,13 @@ namespace qorpent.v2.security.handlers.logon {
             if (identity.IsAuthenticated && !identity.IsGuest)
             {
                 var token = TokenService.Create(context.Request);
+	            var strRemoteIp = logondata.RemoteEndPoint.Address.ToString();
+	            var resolvedUsername = identity.User.Login;
+				if (!string.IsNullOrWhiteSpace(identity.User.Domain)) {
+					resolvedUsername = resolvedUsername + "@" + identity.User.Domain;
+				}
                 TokenService.Store(context.Response, context.Request.Uri, token);
+				Loggy.Info("Login: " + resolvedUsername + ", " + logondata.UserAgent + " from " + strRemoteIp);
                 return new HandlerResult {Result = true, Data = logondata};
             }
             TokenService.Store(context.Response, context.Request.Uri, null);
