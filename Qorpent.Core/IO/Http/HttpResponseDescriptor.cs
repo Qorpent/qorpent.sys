@@ -95,9 +95,8 @@ namespace Qorpent.IO.Http {
             Close();
         }
 
-        public void WriteCookies()
-        {
-            
+        public void WriteCookies() {
+            if (null == Cookies) return;   
             if (Cookies.Count > 0)
             {
    

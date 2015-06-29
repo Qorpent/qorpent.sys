@@ -49,11 +49,13 @@ namespace Qorpent.Host.Lib.Tests
 		    srv.Config.AccessAllowOrigin = "";
 			var req = WebRequest.Create("http://127.0.0.1:8094/test");
 			req.Headers["Access-Control-Request-Headers"] = "x-other";
+			req.Headers["Origin"] = "http://127.0.0.1:8094";
 			var resp = req.GetResponse();
 			Assert.False(resp.Headers.AllKeys.Any(_ => _.StartsWith("Access-Control")));
 			srv.Config.AccessAllowOrigin = "*";
 			req = WebRequest.Create("http://127.0.0.1:8094/test");
 			req.Headers["Access-Control-Request-Headers"] = "x-other";
+            req.Headers["Origin"] = "http://127.0.0.1:8094";
 			resp = req.GetResponse();
 			Assert.AreEqual(4, resp.Headers.AllKeys.Count(_ => _.StartsWith("Access-Control")));
 		}
@@ -65,11 +67,14 @@ namespace Qorpent.Host.Lib.Tests
 			srv.Config.AccessAllowOrigin = "*";
 			var req = WebRequest.Create("http://127.0.0.1:8094/test");
 			req.Headers["Access-Control-Request-Headers"] = "x-other";
+		    req.Headers["Origin"] = "http://127.0.0.1:8094";
 			req.Method = "OPTIONS";
 			var resp = (HttpWebResponse)req.GetResponse();
 			Assert.AreEqual(0,resp.ContentLength);
 			Assert.AreEqual(HttpStatusCode.OK,resp.StatusCode);
-			Assert.AreEqual(4, resp.Headers.AllKeys.Count(_ => _.StartsWith("Access-Control")));
+		    var headers = resp.Headers.AllKeys.Where(_ => _.StartsWith("Access-Control")).ToArray();
+		   
+			Assert.AreEqual(4, headers.Count());
 			Assert.True(!string.IsNullOrWhiteSpace(resp.Headers["Allow"]));
 		}
 
