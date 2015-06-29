@@ -1,9 +1,9 @@
 require.config({
     paths: {
-        jquery: "./../lib/jquery",
-        angular: "./../lib/angular",
-        text: "./../lib/text",
-        the: "./../dist/js/the"
+        jquery: "jquery",
+        angular: "angular",
+        text: "text",
+        the: "the"
     },
     shim: {
         the: {
@@ -135,7 +135,11 @@ require.config({
                                 $scope.user.info = null;
                             });
                         } else {
-
+                            var urlref =  document.location.href.match(/referer=([\s\S]+)$/);
+                            if(urlref)urlref = urlref[1];
+                            if(urlref){
+                                document.location.href = urlref;
+                            }
                             the.login.myinfo(function (data) {
                                 $scope.$apply(function () {
                                     $scope.user.auth = true;
@@ -183,7 +187,7 @@ require.config({
                                 $scope.lasterror = errorobject.error;
 
                             }else{
-                                document.location.href= "login.html";
+                                document.location.href= "/";
                             }
 
                             $scope.update();
@@ -206,7 +210,7 @@ require.config({
                                     document.location.href = redirect;
                                 }
                             } else {
-                                $scope.lasterror = result.error;
+                                $scope.lasterror = result.error || "Логин и/или пароль указаны неверно";
                                 $scope.lastwaslogin = false;
 
                             }

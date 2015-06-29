@@ -16,6 +16,7 @@ define([
     'the-angular-unsafe',
     'the-angular-autocomplete',
     'the-angular-autoselect',
+    'the-angular-ellipse',
     'the-angular-datetimepicker',
     'the-uploader',
     'the-angular-dialog',

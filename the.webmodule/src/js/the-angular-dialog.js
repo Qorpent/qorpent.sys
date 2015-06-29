@@ -26,6 +26,8 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
 
                 if (0 == e.children('nav').length) {
                     $("<nav>" +
+                    "<i ng-if='handler.getShowExpand() && !handler.expanded' ng-click='handler.expand()' style='cursor:pointer' class='icon iprimary fa fa-arrows-alt'></i>" +
+                    "<i ng-if='handler.getShowExpand() && handler.expanded' ng-click='handler.collapse()' class='icon iprimary fa fa-compress'></i>" +
                     "<i ng-if='handler.getShowSuccess()' ng-click='!handler.isValid || handler.success()' class='button success' ng-disabled='!handler.isValid' ng-bind='handler.getSuccessText()'></i>" +
                     "<i ng-if='handler.getShowCancel()' ng-click='handler.close()' class='button default'>Отмена</i>" +
                     "</nav>").appendTo(e);
@@ -82,12 +84,17 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 }
                 var element = $('<div><div the-dialog class="fixed"></div></div>');
                 element = $(compile(element.contents())(scope)[0]);
+
+
+
                 element.appendTo(document.body);
                 if(!scope.$$phase) {
                     scope.$apply();
                 }
 
                 scope = angular.element(element[0]).scope();
+
+
                 return scope.handler;
             }
 
@@ -215,7 +222,35 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     }
                     je.css('top', top + "px");
                     je.css('left', left + "px");
-                },100);
+
+                   var content = je.find('.content');
+                   content.on("mousewheel",function(ev){
+                       e = ev.currentTarget;
+                        ev = ev.originalEvent;
+
+                       var preventScroll = false;
+                       var isScrollingDown = ev.wheelDelta < 0;
+
+                       if (isScrollingDown) {
+                           var isAtBottom = e.scrollTop + e.clientHeight >= e.scrollHeight-2;
+
+                           if (isAtBottom) {
+                               preventScroll = true;
+                           }
+                       } else {
+                           var isAtTop = e.scrollTop == 0;
+                           if (isAtTop) {
+                               preventScroll = true;
+                           }
+                       }
+
+                       if (preventScroll) {
+                           ev.preventDefault();
+                       }
+                   })
+
+
+               },300);
             }
             dialog.matchBackPosition = function(){
                 if(dialog.modalCount==0){
@@ -226,6 +261,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     dialog.modalBack.show();
                 }
             }
+
             dialog.hide = function (element) {
                 dialog.init();
                 var je = $(element);
@@ -328,15 +364,39 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                             if ('showCancel' in attr)return !!attr.showCancel;
                             return true;
                         },
+                        getShowExpand: function () {
+                            if ('showExpand' in this)return !!handler.showExpand;
+                            if ('showExpand' in attr)return !!attr.showExpand;
+                            return true;
+                        },
                         getSuccessText: function () {
                             if ('successText' in handler)return handler.successText;
                             if ('successText' in attr)return attr.successText;
                             return 'ОК';
+                        },
+                        expand : function(){
+                            this.expanded =true;
+                            this.element.addClass("expanded");
+                        },
+                        collapse : function(){
+                            this.expanded =false;
+                            this.element.removeClass("expanded");
+                            this.element.find('.content').css('overflow-y','hidden');
+                            var self = this;
+                            setTimeout(function(){
+                                self.element.find('.content').css('overflow-y','auto');
+                            },100);
+                        },
+                        toggleExpand : function(){
+                            if(this.expanded){
+                                this.collapse();
+                            }else{
+                                this.expand();
+                            }
                         }
                     });
                 $the.$angular.directiveCall(scope, attr, "onInit", "initDialog", {handler: handler});
                 if(handler.template || handler.getTemplate) {
-                    console.log('here');
                     var template  = (handler.getTemplate? handler.getTemplate():null)||handler.template;
                     if (!!template) {
                         var compile = angular.element(document.body).injector().get('$compile');

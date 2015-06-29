@@ -26,6 +26,7 @@ namespace Qorpent.Log.NewLog {
                 }
                 foreach (var appender in Appenders) {
                     if (appender.Level <= message.Level) {
+                       
                         appender.Write(message);
                     }
                 }

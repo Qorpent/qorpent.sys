@@ -35,7 +35,7 @@ namespace Qorpent.Log.NewLog {
             _udpClient.Connect(host, port);
         }
 
-        public override void Write(LoggyMessage message) {
+        protected override void InternalWrite(LoggyMessage message) {
             var xml = GetEventXml(message);
             lock (sync) {
                 _messageBuffer.Push(xml);

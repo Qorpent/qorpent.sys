@@ -142,27 +142,29 @@ namespace Qorpent.IO.Http
 	        if (null != context.PreparedParameters) return context.PreparedParameters;
 	        lock (context.RequestParametersSync) {
                 if (null != context.PreparedParameters) return context.PreparedParameters;
-	            var result = new RequestParameters {QueryData = Unescape(context.Uri.Query, true)};
-	            if (IsJson(result.QueryData)) {
-	                result.QueryJson = Experiments.Json.Parse(result.QueryData);
+
+	            var result = new RequestParameters {QueryData = context.Uri.Query.StartsWith("?")? context.Uri.Query.Substring(1):context.Uri.Query};
+	            var unescaped = Unescape(result.QueryData, true);
+	            if (IsJson(unescaped)) {
+	                result.QueryJson = Experiments.Json.Parse(unescaped);
 	            }
-	            if (IsDictionary(result.QueryData)) {
-	                PrepareDictionaryData(result.Query, result.QueryData, false);
+	            else if (IsDictionary(result.QueryData)) {
+	                PrepareDictionaryData(result.Query, result.QueryData, true);
 	            }
 	            if (context.IsPost) {
 	                if (context.IsMultipartForm) {
 	                    ReadMultipartForm(result, context);
 	                }
 	                else {
-	                    var str = context.ReadRequestString();
-	                    str = Unescape(str, !str.Contains(" ") && str.Contains("+"));
+	                    var str = context.ReadRequestString();	                  
 	                    result.PostData = str;
 	                    if (IsJson(str)) {
-	                        result.FormJson = Experiments.Json.Parse(result.PostData);
+                            unescaped = Unescape(str, false);
+	                        result.FormJson = Experiments.Json.Parse(unescaped);
 	                    }
 	                    else if (IsDictionary(str)) {
 	                        PrepareDictionaryData(result.Form, str,
-	                            context.InContentType != null &&
+	                            string.IsNullOrWhiteSpace(context.InContentType) ||
 	                            context.InContentType.Contains("application/x-www-form-urlencoded"));
 	                    }
 
@@ -208,10 +210,12 @@ namespace Qorpent.IO.Http
             mrcontext.Read();
 	    }
 
-	    private static void PrepareDictionaryData(IDictionary<string, string> target, string query, bool isqueryString)
+	    private static void PrepareDictionaryData(IDictionary<string, string> target, string query, bool unescape)
 	    {
 	        if(String.IsNullOrWhiteSpace(query))return;
-
+	        if (query.StartsWith("?")) {
+	            query = query.Substring(1);
+	        }
 
 
 	        var querydata = query.Split('&');
@@ -220,7 +224,9 @@ namespace Qorpent.IO.Http
 	            var parts = queryItem.Split('=');
 	            var name = parts[0];
 				var value = string.Join("=", parts.Skip(1).ToArray());
-               
+	            if (unescape) {
+	                value = Unescape(value, true);
+	            }
 				
 	            if (target.ContainsKey(name))
 	            {

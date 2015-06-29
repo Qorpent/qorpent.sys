@@ -675,6 +675,20 @@ namespace Qorpent.Experiments {
             return (Get(data, path) as object[]);
         }
 
+        public static object arr0(this object data, string path)
+        {
+            var _arr = (Get(data, path) as object[]);
+            if (null == _arr || 0 == _arr.Length) return null;
+            return _arr[0];
+        }
+
+        public static string arr0s(this object data, string path)
+        {
+            var _arr = (Get(data, path) as object[]);
+            if (null == _arr || 0 == _arr.Length) return null;
+            return _arr[0].ToStr();
+        }
+
         public static Map map(this object data, string path)
         {
             return Get(data, path) as Map;

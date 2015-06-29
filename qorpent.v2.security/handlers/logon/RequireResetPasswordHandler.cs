@@ -5,16 +5,16 @@ using qorpent.v2.security.messaging;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
 using qorpent.v2.security.user.storage;
-using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.handlers.logon {
-    [ContainerComponent(Lifestyle.Singleton, "resetpwdreq.handler", ServiceType = typeof (IRequireResetPasswordHandler))
-    ]
-    public class RequireResetPasswordHandler : IRequireResetPasswordHandler {
+    [ContainerComponent(Lifestyle.Singleton, "resetpwdreq.handler", ServiceType = typeof (IRequireResetPasswordHandler))]
+    [UserOp("resetpwdreq",Secure = true,SuccessLevel = LogLevel.Info)]
+    public class RequireResetPasswordHandler : UserOperation,IRequireResetPasswordHandler {
         [Inject]
         public IUserService Users { get; set; }
 
@@ -33,33 +33,41 @@ namespace qorpent.v2.security.handlers.logon {
         [Inject]
         public IPasswordManager PasswordManager { get; set; }
 
-        public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
+        HandlerResult GetError(string error, string login, string email) {
+            return new HandlerResult { Result = new {error}, State = 500 , Data = new{error,login,email}};
+        }
+
+        protected override HandlerResult GetResult(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             var p = RequestParameters.Create(context);
             var login = p.Get("login");
-            if (EmptyLogin(context, login)) {
-                return;
-            }
+            
             var email = p.Get("email");
-            if (EmptyEmail(context, email)) {
-                return;
+           
+            if (string.IsNullOrWhiteSpace(login))
+            {
+                return GetError("no login", login, email);
+            }
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return GetError("no email", login, email);
             }
             var user = Users.GetUser(login);
-            if (null == user) {
-                Error(context, "not existed user");
-                return;
+            if (null == user)
+            {
+                return GetError("not existed user", login, email);
             }
-            if (!CheckState.IsLogable(user)) {
-                Error(context, "not for logon user");
-                return;
+            if (!CheckState.IsLogable(user))
+            {
+                return GetError("not for logon user", login, email);
             }
             var state = CheckState.GetActivityState(user);
-            if (state != UserActivityState.Ok) {
-                Error(context, "invalid state " + state.ToStr());
-                return;
+            if (state != UserActivityState.Ok)
+            {
+                return GetError("invalid state " + state.ToStr(), login, email);
             }
-            if (user.Email != email) {
-                Error(context, "invalid email");
-                return;
+            if (user.Email != email)
+            {
+                return GetError("invalid email", login, email);
             }
             PasswordManager.MakeRequest(user, 10, email);
             Users.Store(user);
@@ -67,47 +75,35 @@ namespace qorpent.v2.security.handlers.logon {
             bool sent = false;
             string senderror = "";
             //try force
-            try {
-                if (null != Sender) {
+            try
+            {
+                if (null != Sender)
+                {
                     var savedmessage = Queue.GetMessage(message.Id);
-                    if (!savedmessage.WasSent) {
+                    if (!savedmessage.WasSent)
+                    {
                         Sender.Send(savedmessage);
                         Queue.MarkSent(savedmessage.Id);
                     }
                     sent = true;
                 }
-                else {
+                else
+                {
                     throw new Exception("no sender found");
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 senderror = e.Message;
             }
-            context.Finish(new {messageid = message.Id, minutes = 10, sent, senderror}.stringify());
+            var result = new {messageid = message.Id, minutes = 10, sent, senderror};
+            return new HandlerResult {Result = result, Data = new{resetpwdreq=true,login,email,data=result}};
         }
 
-        private static void Error(WebContext context, string message) {
-            context.Finish(GetError(message), status: 500);
-        }
 
-        private static string GetError(string m) {
-            return "{\"error\":\"" + m + "\"}";
-        }
+        
 
-        private static bool EmptyLogin(WebContext context, string login) {
-            if (string.IsNullOrWhiteSpace(login)) {
-                Error(context, "no login");
-                return true;
-            }
-            return false;
-        }
+ 
 
-        private static bool EmptyEmail(WebContext context, string email) {
-            if (string.IsNullOrWhiteSpace(email)) {
-                Error(context, "no email");
-                return true;
-            }
-            return false;
-        }
     }
 }

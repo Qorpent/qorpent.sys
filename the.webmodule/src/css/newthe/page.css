@@ -76,6 +76,11 @@
     transform: rotate(359deg);
   }
 }
+/* line 141, tools.scss */
+.clickable {
+  cursor: pointer;
+}
+
 /* line 1, toolwindow.scss */
 .toolwindow {
   display: flex;
@@ -138,17 +143,51 @@
 }
 /* line 60, toolwindow.scss */
 .toolwindow.dialog {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  min-height: 150px;
   display: none;
 }
-/* line 61, toolwindow.scss */
+/* line 65, toolwindow.scss */
 .toolwindow.dialog > form {
   padding: 0px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-/* line 65, toolwindow.scss */
+/* line 71, toolwindow.scss */
+.toolwindow.dialog .content {
+  flex-grow: 1;
+}
+/* line 75, toolwindow.scss */
 .toolwindow.dialog.active {
   display: flex;
 }
-/* line 68, toolwindow.scss */
+/* line 78, toolwindow.scss */
+.toolwindow.dialog label.title, .toolwindow.dialog nav {
+  padding-right: 16px;
+}
+/* line 81, toolwindow.scss */
+.toolwindow.dialog.expanded {
+  top: 0px !important;
+  left: 5px !important;
+  min-width: 97% !important;
+  min-height: 99% !important;
+  max-width: 97% !important;
+  max-height: 99% !important;
+  overflow: hidden;
+}
+/* line 89, toolwindow.scss */
+.toolwindow.dialog.expanded > form {
+  overflow: hidden;
+}
+/* line 91, toolwindow.scss */
+.toolwindow.dialog.expanded > form .content {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+/* line 98, toolwindow.scss */
 .toolwindow.dialog.fixed {
   position: fixed;
   z-index: 10000;
@@ -157,17 +196,17 @@
   max-width: 1024px;
   max-height: 800px;
 }
-/* line 76, toolwindow.scss */
+/* line 106, toolwindow.scss */
 .toolwindow.dialog .content {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
 }
-/* line 81, toolwindow.scss */
+/* line 111, toolwindow.scss */
 .toolwindow.dialog > label, .toolwindow.dialog > form > label {
   flex-shrink: 0;
 }
-/* line 84, toolwindow.scss */
+/* line 114, toolwindow.scss */
 .toolwindow.dialog > nav, .toolwindow.dialog > form > nav {
   flex-shrink: 0;
   margin-bottom: 5px;
@@ -176,14 +215,19 @@
   justify-content: flex-end;
   align-items: center;
 }
-/* line 91, toolwindow.scss */
+/* line 121, toolwindow.scss */
 .toolwindow.dialog > nav i, .toolwindow.dialog > form > nav i {
   margin-left: 3px;
   margin-right: 3px;
   min-width: 80px;
 }
+/* line 125, toolwindow.scss */
+.toolwindow.dialog > nav i.icon, .toolwindow.dialog > form > nav i.icon {
+  min-width: 30px;
+  font-size: 150%;
+}
 
-/* line 101, toolwindow.scss */
+/* line 135, toolwindow.scss */
 .modalback {
   display: none;
   position: fixed;
@@ -196,32 +240,32 @@
   opacity: 0.4;
 }
 
-/* line 113, toolwindow.scss */
+/* line 147, toolwindow.scss */
 table.props {
   border-collapse: collapse;
   font-size: 80%;
 }
-/* line 116, toolwindow.scss */
+/* line 150, toolwindow.scss */
 table.props td, table.props th {
   border: solid 1px color(defaultlight);
   padding: 5px;
 }
-/* line 120, toolwindow.scss */
+/* line 154, toolwindow.scss */
 table.props td:first-child {
   font-size: 90%;
 }
-/* line 123, toolwindow.scss */
+/* line 157, toolwindow.scss */
 table.props th {
   background-color: color(defaultlight);
   font-weight: bold;
 }
 
-/* line 129, toolwindow.scss */
+/* line 163, toolwindow.scss */
 .ng-invalid {
   border: solid 1px color(danger);
 }
 
-/* line 132, toolwindow.scss */
+/* line 166, toolwindow.scss */
 form.ng-invalid {
   border: inherit;
 }
@@ -238,7 +282,6 @@ form.ng-invalid {
   overflow: hidden;
   background: none;
   padding-left: 2px;
-  pointer-events: none !important;
 }
 /* line 12, _layers.scss */
 .the .layer *, .the .box * {
@@ -278,7 +321,12 @@ form.ng-invalid {
   position: absolute;
 }
 
-/* line 52, _layers.scss */
+/* line 46, _layers.scss */
+.the.app .box {
+  pointer-events: none !important;
+}
+
+/* line 57, _layers.scss */
 .the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
   top: 0;
   left: 0;
@@ -295,24 +343,25 @@ html.site body {
   min-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  min-height: 99%;
 }
-/* line 122, page.scss */
+/* line 123, page.scss */
 html.site body.lg {
   max-width: 1024px;
   min-width: 1024px;
 }
 
-/* line 129, page.scss */
+/* line 130, page.scss */
 a {
   text-decoration: none;
   color: color(primary);
 }
-/* line 132, page.scss */
+/* line 133, page.scss */
 a :hover {
   text-decoration: underline;
 }
 
-/* line 137, page.scss */
+/* line 138, page.scss */
 i {
   box-sizing: border-box;
 }
