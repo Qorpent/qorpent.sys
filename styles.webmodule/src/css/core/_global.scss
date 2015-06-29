@@ -14,7 +14,7 @@
       flex-direction: row;
     }
   }
-  input {
+  input, textarea {
     font-size: 100%!important;
   }
   @-moz-keyframes progress_light {
@@ -71,7 +71,7 @@
     }
     color: color(dark);
     @include in-size(font-size);
-    input[type=text] {
+    input[type=text], textarea {
       width: 100%;
       margin: 0;
       border: 1px solid color(primary);

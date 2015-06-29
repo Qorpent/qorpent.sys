@@ -483,7 +483,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 
 /* line 17, core/_global.scss */
-input {
+input, textarea {
   font-size: 100% !important;
 }
 
@@ -570,7 +570,7 @@ body {
   }
 }
 /* line 74, core/_global.scss */
-body input[type=text] {
+body input[type=text], body textarea {
   width: 100%;
   margin: 0;
   border: 1px solid #4C81AF;
@@ -582,31 +582,31 @@ body input[type=text] {
 }
 @media screen and (max-width: 1531px) {
   /* line 116, core/_utils.scss */
-  body input[type=text] {
+  body input[type=text], body textarea {
     font-size: 12px;
   }
 }
 @media screen and (max-width: 1023px) {
   /* line 116, core/_utils.scss */
-  body input[type=text] {
+  body input[type=text], body textarea {
     font-size: 12px;
   }
 }
 @media screen and (max-width: 799px) {
   /* line 116, core/_utils.scss */
-  body input[type=text] {
+  body input[type=text], body textarea {
     font-size: 11px;
   }
 }
 @media screen and (max-width: 499px) {
   /* line 116, core/_utils.scss */
-  body input[type=text] {
+  body input[type=text], body textarea {
     font-size: 10px;
   }
 }
 @media screen and (max-width: 299px) {
   /* line 116, core/_utils.scss */
-  body input[type=text] {
+  body input[type=text], body textarea {
     font-size: 10px;
   }
 }
