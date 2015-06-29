@@ -207,7 +207,11 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 }
                 je.css('z-index', zindex);
                 je.addClass("active");
-               setTimeout(function(){
+                dialog.resetonce =false;
+
+                var content = je.find('.content');
+
+                dialog.reset = function(){
                     var rect = je[0].getBoundingClientRect();
                     var width = window.innerWidth;
                     var height = window.innerHeight;
@@ -222,35 +226,37 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     }
                     je.css('top', top + "px");
                     je.css('left', left + "px");
+                    content = je.find('.content.ng-scope');
+                    if(!dialog.resetonce) {
+                        content.on("mousewheel", function (ev) {
+                            e = ev.currentTarget;
+                            ev = ev.originalEvent;
 
-                   var content = je.find('.content');
-                   content.on("mousewheel",function(ev){
-                       e = ev.currentTarget;
-                        ev = ev.originalEvent;
+                            var preventScroll = false;
+                            var isScrollingDown = ev.wheelDelta < 0;
 
-                       var preventScroll = false;
-                       var isScrollingDown = ev.wheelDelta < 0;
+                            if (isScrollingDown) {
+                                var isAtBottom = e.scrollTop + e.clientHeight >= e.scrollHeight - 2;
 
-                       if (isScrollingDown) {
-                           var isAtBottom = e.scrollTop + e.clientHeight >= e.scrollHeight-2;
+                                if (isAtBottom) {
+                                    preventScroll = true;
+                                }
+                            } else {
+                                var isAtTop = e.scrollTop == 0;
+                                if (isAtTop) {
+                                    preventScroll = true;
+                                }
+                            }
 
-                           if (isAtBottom) {
-                               preventScroll = true;
-                           }
-                       } else {
-                           var isAtTop = e.scrollTop == 0;
-                           if (isAtTop) {
-                               preventScroll = true;
-                           }
-                       }
+                            if (preventScroll) {
+                                ev.preventDefault();
+                            }
+                        });
+                        dialog.resetonce = true;
+                    }
+                }
+               setTimeout(dialog.reset,300);
 
-                       if (preventScroll) {
-                           ev.preventDefault();
-                       }
-                   })
-
-
-               },300);
             }
             dialog.matchBackPosition = function(){
                 if(dialog.modalCount==0){
@@ -315,6 +321,9 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                                 }
                             }
                             dialog.hide(element[0]);
+                        },
+                        reset : function(){
+                            dialog.reset();
                         },
                         success: function () {
                             if (!this.validate())return;
