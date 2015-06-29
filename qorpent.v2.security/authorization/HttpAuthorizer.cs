@@ -16,11 +16,23 @@ namespace qorpent.v2.security.authorization
     [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.authorizer", ServiceType = typeof(IHttpAuthorizer))]
     public class HttpAuthorizer:InitializeAbleService, IHttpAuthorizer
     {
+        private IRoleResolverService _roles;
+        private INotAuthProcessProvider _notAuth;
+
+        /// <summary>
+        /// 
+        /// </summary>
         [Inject]
-        public IRoleResolverService Roles { get; set; }
+        public IRoleResolverService Roles {
+            get { return _roles ?? (_roles = new RoleResolverService()); }
+            set { _roles = value; }
+        }
 
         [Inject]
-        public INotAuthProcessProvider NotAuth { get; set; }
+        public INotAuthProcessProvider NotAuth {
+            get { return _notAuth ?? (_notAuth = new NotAuthProcessProvider()); }
+            set { _notAuth = value; }
+        }
 
         public HttpAuthorizer() {
             Rules =new List<AuthorizationRule>();

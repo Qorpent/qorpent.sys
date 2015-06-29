@@ -11,6 +11,8 @@ using Qorpent.Utils.Extensions;
 namespace qorpent.v2.security.authentication {
     [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.tokenservice", ServiceType = typeof (IHttpTokenService))]
     public class HttpTokenService : InitializeAbleService, IHttpTokenService {
+        private ITokenEncryptor _tokenEncryptor;
+
         public HttpTokenService() {
             CookieName = "QHAUTH";
             LeaseTime = 30;
@@ -19,7 +21,10 @@ namespace qorpent.v2.security.authentication {
         }
 
         [Inject]
-        public ITokenEncryptor TokenEncryptor { get; set; }
+        public ITokenEncryptor TokenEncryptor {
+            get { return _tokenEncryptor ?? (_tokenEncryptor = new TokenEncryptor()); }
+            set { _tokenEncryptor = value; }
+        }
 
         public int LeaseTime { get; set; }
         public int SlideTime { get; set; }

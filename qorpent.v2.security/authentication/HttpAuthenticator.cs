@@ -7,11 +7,26 @@ using Qorpent.IO.Http;
 namespace qorpent.v2.security.authentication {
     [ContainerComponent(Lifestyle.Singleton, "sys.sec.http.authenticator", ServiceType = typeof (IHttpAuthenticator))]
     public class HttpAuthenticator : ServiceBase, IHttpAuthenticator {
-        [Inject]
-        public IHttpTokenService TokenService { get; set; }
+        private IHttpTokenService _tokenService;
+        private IHttpIdentitySource _identitySource;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Inject]
-        public IHttpIdentitySource IdentitySource { get; set; }
+        public IHttpTokenService TokenService {
+            get { return _tokenService ?? (_tokenService  =new HttpTokenService()); }
+            set { _tokenService = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public IHttpIdentitySource IdentitySource {
+            get { return _identitySource ?? (_identitySource = new HttpDefaultIdentitySource()); }
+            set { _identitySource = value; }
+        }
 
         public void Authenticate(IHttpRequestDescriptor request, IHttpResponseDescriptor response) {
             var identity = (Identity) IdentitySource.GetUserIdentity(request);

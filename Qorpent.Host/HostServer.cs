@@ -118,12 +118,12 @@ namespace Qorpent.Host {
         /// 
         /// </summary>
         public IHttpAuthenticator Authenticator {
-            get { return _auth ??(_auth=Container.Get<IHttpAuthenticator>()); }
+            get { return _auth ??(_auth=Container.Get<IHttpAuthenticator>() ?? new HttpAuthenticator()); }
             set { _auth = value; }
         }
 
         public IHttpAuthorizer Authorizer {
-            get { return _httpAuthorizer ?? (_httpAuthorizer = Container.Get<IHttpAuthorizer>()); }
+            get { return _httpAuthorizer ?? (_httpAuthorizer = Container.Get<IHttpAuthorizer>() ?? new HttpAuthorizer()); }
             set { _httpAuthorizer = value; }
         }
 
