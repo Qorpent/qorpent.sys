@@ -16,6 +16,7 @@ namespace Qorpent.Host.Lib.Tests
 		[TestCase("http://x/?a=2&y=3","a=2;y=3")]
 		[TestCase("http://x/?a=2&y=3&y=4","a=2;y=3,4")]
 		[TestCase("http://x/?a=2+%2B+3","a=2 + 3")]
+		[TestCase("http://x/?a=1=2=%26","a=1=2=&")]
 		public void UrlGetTest(string url, string test)
 		{
 			var result = RequestParameters.Create(url);
@@ -43,6 +44,42 @@ namespace Qorpent.Host.Lib.Tests
             Assert.NotNull(result.FormJson);
         }
 
+	    [Test]
+	    public void CanGetJsonFromFormUrlEncoded() {
+            var str = new MemoryStream();
+            var strw = new StreamWriter(str);
+            strw.Write(@"{""my"":""test+%23%20%23+best=1&2""}");
+            strw.Flush();
+            str.Position = 0;
+            var req = new HttpRequestDescriptor { Uri = new Uri(@"http://localhost/test"), Method = "POST", Stream = str, ContentLength = str.Length };
+            var result = RequestParameters.Create(req);
+            Assert.AreEqual("test+# #+best=1&2", result.Get("my"));
+            Assert.NotNull(result.FormJson);
+	    }
+
+        [Test]
+        public void CanGetJsonFromQueryUrlEncoded()
+        {
+            var req = new HttpRequestDescriptor { Uri = new Uri(@"http://localhost/test?{""my"":""test+%23%20%23%2Bbest=1&2""}") };
+            var result = RequestParameters.Create(req);
+            Assert.NotNull(result.QueryJson);
+            Assert.AreEqual("test # #+best=1&2", result.Get("my"));
+            
+        }
+       
+	    [Test]
+	    public void CanReadHardFormDataFromPost() {
+            var str = new MemoryStream();
+            var strw = new StreamWriter(str);
+            strw.Write(@"x=1&y=2=3+4&z=5=%26");
+            strw.Flush();
+            str.Position = 0;
+            var req = new HttpRequestDescriptor { Uri = new Uri(@"http://localhost/test"), Method = "POST", Stream = str, ContentLength = str.Length };
+            var result = RequestParameters.Create(req);
+            Assert.AreEqual("1", result.Get("x"));
+            Assert.AreEqual("2=3 4", result.Get("y"));
+            Assert.AreEqual("5=&", result.Get("z"));
+	    }
 
 		[Test]
 		public void MultipartFormTest()

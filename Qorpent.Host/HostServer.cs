@@ -251,6 +251,10 @@ namespace Qorpent.Host {
                 }
                 CopyCookies(wc);
                 Authenticator.Authenticate(wc.Request,wc.Response);
+                if (Applications.Application.HasCurrent)
+                {
+                    Applications.Application.Current.Principal.SetCurrentUser(wc.User);
+                }
                 var authorization = Authorizer.Authorize(wc.Request);
                
                 if (BeforeHandlerProcessed(wc,authorization)) {
