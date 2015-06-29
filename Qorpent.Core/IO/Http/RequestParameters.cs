@@ -156,7 +156,7 @@ namespace Qorpent.IO.Http
 	                    ReadMultipartForm(result, context);
 	                }
 	                else {
-	                    var str = context.ReadRequestString();	                  
+	                    var str = context.ReadRequestString().Trim();	                  
 	                    result.PostData = str;
 	                    if (IsJson(str)) {
                             unescaped = Unescape(str, false);

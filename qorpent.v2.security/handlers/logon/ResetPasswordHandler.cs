@@ -60,7 +60,7 @@ namespace qorpent.v2.security.handlers.logon {
             {
                 return GetError("invalid state " + state, login, pass, key);
             }
-
+            
             PasswordManager.ResetPassword(user, pass, key);
 
             

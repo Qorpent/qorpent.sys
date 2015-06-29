@@ -1,5 +1,5 @@
 ﻿<div>
-  <h1>Уважаемый ${user.Name}!</h1>
+  <h1>Уважаемый(ая) ${user.Name}!</h1>
   <p>
     Данным письмом мы уведомляем Вас о том, что вы зарегистрированы на
     ресурсе "<a href="${resource.domain}/login.html?referer=/${resource.home}">${resource.name}</a>"
