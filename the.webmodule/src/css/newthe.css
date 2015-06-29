@@ -348,50 +348,54 @@ form.ng-invalid {
   background: none;
   padding-left: 2px;
 }
-/* line 12, newthe/_layers.scss */
+/* line 11, newthe/_layers.scss */
 .the .layer *, .the .box * {
   pointer-events: all;
 }
-/* line 15, newthe/_layers.scss */
+/* line 14, newthe/_layers.scss */
 .the .row.layer, .the .row.box {
   flex-direction: row;
   margin: 0 !important;
 }
-/* line 19, newthe/_layers.scss */
+/* line 18, newthe/_layers.scss */
 .the .col.layer, .the .col.box {
   flex-direction: column;
   margin: 0 !important;
 }
-/* line 24, newthe/_layers.scss */
+/* line 23, newthe/_layers.scss */
 .the .rest.layer, .the .rest.box {
   flex-grow: 10;
 }
-/* line 27, newthe/_layers.scss */
+/* line 26, newthe/_layers.scss */
 .the .layer .scroll, .the .box .scroll {
   overflow-y: auto;
 }
-/* line 30, newthe/_layers.scss */
+/* line 29, newthe/_layers.scss */
 .the .layer .content, .the .box .content {
   background-color: #ffffff;
 }
-/* line 33, newthe/_layers.scss */
+/* line 32, newthe/_layers.scss */
 .the .layer .statusbar, .the .box .statusbar {
   min-height: 40px;
   max-height: 40px;
 }
 
-/* line 38, newthe/_layers.scss */
+/* line 37, newthe/_layers.scss */
 .the .layer {
   margin: 0;
   position: absolute;
 }
 
-/* line 46, newthe/_layers.scss */
-.the.app .box {
+/* line 45, newthe/_layers.scss */
+html.the.app .box {
+  pointer-events: none !important;
+}
+/* line 48, newthe/_layers.scss */
+html.the.app .layer {
   pointer-events: none !important;
 }
 
-/* line 57, newthe/_layers.scss */
+/* line 59, newthe/_layers.scss */
 .the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
   top: 0;
   left: 0;

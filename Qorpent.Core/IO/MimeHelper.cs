@@ -66,6 +66,10 @@ namespace Qorpent.IO {
                     return "image/bmp";
 				case "jpeg":
 					return "image/jpeg";
+                case "tif":
+                    return "image/tiff";
+                case "tiff":
+                    return "image/tiff";
 				case "gif":
 					return "image/gif";
 				case "pdf":

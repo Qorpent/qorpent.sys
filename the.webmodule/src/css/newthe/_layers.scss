@@ -8,7 +8,6 @@
   overflow: hidden;
   background: none;
   padding-left:2px;
-
   * {
     pointer-events: all;
   }
@@ -42,8 +41,11 @@
   position:absolute;
 
 }
-.the.app {
+html.the.app {
   .box {
+    pointer-events: none !important;
+  }
+  .layer {
     pointer-events: none !important;
   }
 }

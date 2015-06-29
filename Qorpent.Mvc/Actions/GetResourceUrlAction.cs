@@ -48,7 +48,7 @@ namespace Qorpent.Mvc.Actions {
 				return GetProbes(name, new[] {"css"}, true);
 			}
 			if (type == "img") {
-				return GetProbes(name, new[] {"png", "gif", "jpg", "jpeg"}, true);
+				return GetProbes(name, new[] {"png", "gif", "jpg", "jpeg","tif","tiff"}, true);
 			}
 			throw new Exception("unknouwn resource type " + type);
 		}
