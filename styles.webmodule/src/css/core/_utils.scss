@@ -10,6 +10,14 @@
   @return $result;
 }
 
+@function  map-get-default($map,$name,$default:false){
+
+  @if map-has_key($map,$name){
+    @return map_get($map,$name);
+  }
+  @return $default;
+}
+
 @function map-get-deep($map,$name,$default:false){
   $current: $map;
   $n : $name;
@@ -27,17 +35,24 @@
     }
     $n  :nth($name,length($name));
   }
-  @if map-has_key($current,$n){
-    @return map_get($current,$n);
-  }
-  @return $default;
+
+  @return map-get-default($current,$n,$default);
 }
+
+
 
 @function skin($name,$default:false){
   @return map-get-deep($config,$name,$default);
 }
 
 @function color($name,$default:primary){
+  $sname : inspect($name);
+  @each $m in (light dark) {
+    $mname : inspect($m);
+    @if str-length($sname)> str-length($mname) and str-slice($sname,str-length($sname) - str-length($mname) + 1)==$m {
+      @return colormode(str-slice($sname,1,str-length($sname) - str-length($mname)),$m);
+    }
+  }
   @if type_of($name)=='color'{
     @return $name;
   }
@@ -103,24 +118,7 @@
   @return color($color);
 }
 
-@mixin in-size($name) {
-  $base : skin(sizes default max-width);
-  $corrected : $base;
-  $controlled : $base - 1px;
-  @each $k, $v in skin(sizes){
-    $base:map_get($v, max-width);
-    $controlled : $base - 1px;
-    $corrected:$base;
-    $value: map_get($v, $name);
-    @media screen and (max-width:$controlled) {
-      & {
-        #{$name}: $value
-      }
-    }
 
-    $controlled : $base - 1px;
-  }
-}
 
 @mixin flex($orient:row,$justify:false){
   display: -webkit-box;
@@ -137,40 +135,17 @@
   }
 }
 
-@mixin size($control:1px,$delta:0px,$deltacm:0cm){
-  $base : skin(sizes default max-width);
-  $corrected : $base - $delta;
-  $controlled : $base - $control;
-  min-width: $corrected;
-  max-width: $corrected;
-  $baseps: 19cm  - $deltacm;
-  $basels: 27cm - $deltacm;
 
-  @media print and (orientation: landscape) {
-    & {
-      min-width: $basels;
-      max-width: $basels;
-
-    }
-  }
-
-  @media print and (orientation: portrait) {
-    & {
-      min-width: $baseps;
-      max-width: $baseps;
-    }
-  }
-  @each $k, $v in skin(sizes){
-    $base:map_get($v, max-width);
-    $corrected:$base - $delta;
-
-    @media screen and (max-width:$controlled) {
-      & {
-        min-width: $corrected;
-        max-width: $corrected;
+@mixin skin-styles($name){
+  $styles: skin(join($name, styles));
+  @if $styles {
+    @each $k, $v in $styles {
+      $val : $v;
+      @if  str-slice(inspect($val),1,6) == color_ {
+        $val : color(str-slice(inspect($val),7));
       }
+      #{$k} : $val;
     }
-
-    $controlled : $base - $control;
   }
 }
+

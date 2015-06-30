@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html class="site">
+<head lang="en">
+    <script data-main="demo-init.js" src="../lib/require.js"></script>
+    <link rel="stylesheet" href="../dist/css/bit.css" type="text/css" />
+    <meta charset="UTF-8">
+    <title>Верстка для BIT-Сайтов</title>
+</head>
+<body class="form-factor-{{sizefactor}}" ng-controller="body-layout-example">
+    <header></header>
+    <nav></nav>
+    <main>
+        <section>
+            <h1>Управление</h1>
+            <article>
+                <label>form-factor
+                <select ng-model="sizefactor">
+                    <option value="dynamic">dynamic</option>
+                    <option value="wide">wide</option>
+                    <option value="lg">lg</option>
+                    <option value="md">md</option>
+                    <option value="sm">sm</option>
+                    <option value="xsm">xsm</option>
+                    <option value="printps">print-portrait</option>
+                    <option value="printls">print-landscape</option>
+                </select>
+                </label>
+            </article>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+</html>

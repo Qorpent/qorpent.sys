@@ -1,4 +1,4 @@
-/* line 5, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,45 +20,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../bin/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -536,40 +536,10 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: #fafafa;
   font-family: Lucida Grande, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   color: #333333;
 }
-@media screen and (max-width: 1531px) {
-  /* line 116, core/_utils.scss */
-  body {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  /* line 116, core/_utils.scss */
-  body {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 799px) {
-  /* line 116, core/_utils.scss */
-  body {
-    font-size: 11px;
-  }
-}
-@media screen and (max-width: 499px) {
-  /* line 116, core/_utils.scss */
-  body {
-    font-size: 10px;
-  }
-}
-@media screen and (max-width: 299px) {
-  /* line 116, core/_utils.scss */
-  body {
-    font-size: 10px;
-  }
-}
-/* line 74, core/_global.scss */
+/* line 73, core/_global.scss */
 body input[type=text], body textarea {
   width: 100%;
   margin: 0;
@@ -580,37 +550,7 @@ body input[type=text], body textarea {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-@media screen and (max-width: 1531px) {
-  /* line 116, core/_utils.scss */
-  body input[type=text], body textarea {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  /* line 116, core/_utils.scss */
-  body input[type=text], body textarea {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 799px) {
-  /* line 116, core/_utils.scss */
-  body input[type=text], body textarea {
-    font-size: 11px;
-  }
-}
-@media screen and (max-width: 499px) {
-  /* line 116, core/_utils.scss */
-  body input[type=text], body textarea {
-    font-size: 10px;
-  }
-}
-@media screen and (max-width: 299px) {
-  /* line 116, core/_utils.scss */
-  body input[type=text], body textarea {
-    font-size: 10px;
-  }
-}
-/* line 84, core/_global.scss */
+/* line 82, core/_global.scss */
 body button {
   background: #4C81AF;
   border: none;
@@ -619,111 +559,218 @@ body button {
   color: white;
   cursor: pointer;
 }
-@media screen and (max-width: 1531px) {
-  /* line 116, core/_utils.scss */
-  body button {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  /* line 116, core/_utils.scss */
-  body button {
-    font-size: 12px;
-  }
-}
-@media screen and (max-width: 799px) {
-  /* line 116, core/_utils.scss */
-  body button {
-    font-size: 11px;
-  }
-}
-@media screen and (max-width: 499px) {
-  /* line 116, core/_utils.scss */
-  body button {
-    font-size: 10px;
-  }
-}
-@media screen and (max-width: 299px) {
-  /* line 116, core/_utils.scss */
-  body button {
-    font-size: 10px;
-  }
-}
-/* line 92, core/_global.scss */
+/* line 89, core/_global.scss */
 body button.danger {
   background: #E7582E;
 }
-/* line 94, core/_global.scss */
+/* line 91, core/_global.scss */
 body button.danger:hover {
   background: #ea6a45;
 }
-/* line 98, core/_global.scss */
+/* line 95, core/_global.scss */
 body button:hover {
   background: #5c8eb8;
 }
-/* line 101, core/_global.scss */
+/* line 98, core/_global.scss */
 body button:disabled {
   background: #ccc !important;
   cursor: default !important;
 }
-/* line 106, core/_global.scss */
+/* line 103, core/_global.scss */
 body table {
   width: 100%;
 }
-/* line 108, core/_global.scss */
+/* line 105, core/_global.scss */
 body table thead, body table tbody {
   line-height: 180%;
 }
-/* line 111, core/_global.scss */
+/* line 108, core/_global.scss */
 body table thead {
   border-bottom: 1px solid #4C81AF;
 }
-/* line 116, core/_global.scss */
+/* line 113, core/_global.scss */
 body table tbody {
   color: #333333;
 }
-/* line 118, core/_global.scss */
+/* line 115, core/_global.scss */
 body table tbody tr.hidden {
   display: none;
 }
-/* line 121, core/_global.scss */
+/* line 118, core/_global.scss */
 body table tbody tr:nth-child(2n) {
   background: #ededed;
 }
-/* line 125, core/_global.scss */
+/* line 122, core/_global.scss */
 body table td, body table th {
   vertical-align: top;
   padding: 2px 3px 2px 3px;
 }
-/* line 128, core/_global.scss */
+/* line 125, core/_global.scss */
 body table td .not-important, body table th .not-important {
   opacity: 0.5;
 }
-/* line 133, core/_global.scss */
+/* line 130, core/_global.scss */
 body a, body a:visited {
   color: #4C81AF;
   text-decoration: underline;
 }
-/* line 136, core/_global.scss */
+/* line 133, core/_global.scss */
 body a:hover, body a:visited:hover {
   color: #6e9ac0;
 }
-/* line 140, core/_global.scss */
-body > header {
+
+/* line 4, core/_site.scss */
+html.site {
+  display: -webkit-box;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  min-height: 100%;
+}
+/* line 7, core/site/_body.scss */
+html.site body {
+  min-width: 1280px;
+  max-width: 1280px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  flex-grow: 1;
+  box-shadow: 0 0 15px #cacaca;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+/* line 85, core/site/_size.scss */
+html.site body.form-factor-printps, html.site body.form-factor-print {
+  min-width: 19cm;
+  max-width: 19cm;
+  min-height: 27cm;
+  max-height: 27cm;
+  font-size: 10pt;
+  padding: 2cm;
+}
+/* line 93, core/site/_size.scss */
+html.site body.form-factor-printls {
+  min-width: 27cm;
+  max-width: 27cm;
+  min-height: 19cm;
+  max-height: 19cm;
+  font-size: 10pt;
+  padding: 2cm;
+}
+@media print and (orientation: landscape) {
+  /* line 103, core/site/_size.scss */
+  html.site body {
+    min-width: 27cm;
+    max-width: 27cm;
+    font-size: 10pt;
+  }
+}
+@media print {
+  @page {
+    /* line 7, core/site/_body.scss */
+    html.site body {
+      margin: 2cm;
+    }
+  }
+}
+@media print and (orientation: portrait) {
+  /* line 118, core/site/_size.scss */
+  html.site body {
+    min-width: 19cm;
+    max-width: 19cm;
+    font-size: 10pt;
+  }
+}
+/* line 126, core/site/_size.scss */
+html.site body .form-factor-dynamic {
+  min-width: 1280px;
+  max-width: 1280px;
+  font-size: 12px;
+}
+@media screen and (max-width: -1px) {
+  /* line 136, core/site/_size.scss */
+  html.site body.form-factor-dynamic {
+    min-width: 1280px;
+    max-width: 1280px;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 1279px) {
+  /* line 136, core/site/_size.scss */
+  html.site body.form-factor-dynamic {
+    min-width: 1024px;
+    max-width: 1024px;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 1023px) {
+  /* line 136, core/site/_size.scss */
+  html.site body.form-factor-dynamic {
+    min-width: 800px;
+    max-width: 800px;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 799px) {
+  /* line 136, core/site/_size.scss */
+  html.site body.form-factor-dynamic {
+    min-width: 320px;
+    max-width: 320px;
+    font-size: 12px;
+  }
+}
+/* line 149, core/site/_size.scss */
+html.site body.form-factor-wide {
+  min-width: 100%;
+  max-width: 100%;
+}
+/* line 159, core/site/_size.scss */
+html.site body.form-factor-lg {
+  min-width: 1280px;
+  max-width: 1280px;
+  font-size: 12px;
+}
+/* line 159, core/site/_size.scss */
+html.site body.form-factor-md {
+  min-width: 1024px;
+  max-width: 1024px;
+  font-size: 12px;
+}
+/* line 159, core/site/_size.scss */
+html.site body.form-factor-sm {
+  min-width: 800px;
+  max-width: 800px;
+  font-size: 12px;
+}
+/* line 159, core/site/_size.scss */
+html.site body.form-factor-xsm {
+  min-width: 320px;
+  max-width: 320px;
+  font-size: 12px;
+}
+/* line 3, core/site/_header.scss */
+html.site body > header {
+  flex-shrink: 0;
+  padding-top: 5px;
+  min-height: 30px;
+  max-height: 30px;
   color: #fafafa;
   background-color: #4C81AF;
-  padding-top: 5px;
 }
-/* line 149, core/_global.scss */
-body > header.with-logo {
+/* line 18, core/site/_header.scss */
+html.site body > header.with-logo {
   background-image: url("/img/logo-toolbar.png");
   background-position: left center;
   background-repeat: no-repeat;
   background-size: 80px 60px;
   padding-left: 100px !important;
 }
-/* line 156, core/_global.scss */
-body > header > .tab {
+/* line 25, core/site/_header.scss */
+html.site body > header > .tab {
   color: #fafafa;
   text-decoration: none;
   display: inline-block;
@@ -737,190 +784,113 @@ body > header > .tab {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 171, core/_global.scss */
-body > header > .tab:first-child {
+/* line 40, core/site/_header.scss */
+html.site body > header > .tab:first-child {
   margin-left: 10px;
 }
-/* line 174, core/_global.scss */
-body > header > .tab.active {
+/* line 43, core/site/_header.scss */
+html.site body > header > .tab.active {
   background: #fafafa;
   color: #4C81AF;
 }
-/* line 178, core/_global.scss */
-body > header > .tab:not(.active):hover {
+/* line 47, core/site/_header.scss */
+html.site body > header > .tab:not(.active):hover {
   background: #6e9ac0;
   color: #fafafa !important;
 }
-/* line 187, core/_global.scss */
-body > footer {
-  font-size: 90%;
+/* line 3, core/site/_main.scss */
+html.site body > main {
+  flex-grow: 1;
+  padding: 10px 5px 10px 5px;
 }
-/* line 192, core/_global.scss */
-body > nav {
-  padding: 10px;
+/* line 6, core/site/_main.scss */
+html.site body > main p {
+  text-indent: 25px;
+}
+/* line 9, core/site/_main.scss */
+html.site body > main p, html.site body > main li {
+  margin-top: 5px;
+}
+/* line 12, core/site/_main.scss */
+html.site body > main h1, html.site body > main h2, html.site body > main h3, html.site body > main h4, html.site body > main h5, html.site body > main h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+/* line 16, core/site/_main.scss */
+html.site body > main ul {
+  padding-left: 25px;
+}
+/* line 19, core/site/_main.scss */
+html.site body > main ul > li:before {
+  content: '-';
+  margin-right: 10px;
+}
+/* line 24, core/site/_main.scss */
+html.site body > main ul > ul, html.site body > main ul > li > ul {
+  padding-left: 25px;
+}
+/* line 26, core/site/_main.scss */
+html.site body > main ul > ul > ul, html.site body > main ul > ul > li > ul, html.site body > main ul > li > ul > ul, html.site body > main ul > li > ul > li > ul {
+  padding-left: 25px;
+}
+/* line 36, core/site/_main.scss */
+html.site body > main h1, html.site body > main h2, html.site body > main h3, html.site body > main h4, html.site body > main h5, html.site body > main h6 {
+  font-size: 105%;
+  color: #4C81AF;
+}
+/* line 36, core/site/_main.scss */
+html.site body > main h1 {
+  font-size: 120%;
+}
+/* line 36, core/site/_main.scss */
+html.site body > main h2 {
+  font-size: 110%;
+}
+/* line 3, core/site/_nav.scss */
+html.site body > nav {
+  flex-shrink: 0;
+  border-bottom-color: #D7D7D7;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #D7D7D7;
 }
-/* line 199, core/_global.scss */
-body > nav a {
+/* line 6, core/site/_nav.scss */
+html.site body > nav a {
   padding-top: 5px;
   padding-left: 10px;
   padding-bottom: 5px;
   border-radius: 3px;
-  font-family: Verdana;
+  font-family: false;
 }
-/* line 207, core/_global.scss */
-body > nav a:not(:last-child) {
+/* line 14, core/site/_nav.scss */
+html.site body > nav a:not(:last-child) {
   margin-right: 10px;
 }
-/* line 209, core/_global.scss */
-body > nav a:not(:last-child):after {
+/* line 16, core/site/_nav.scss */
+html.site body > nav a:not(:last-child):after {
   display: inline-block;
   content: "";
   margin-left: 10px;
   text-decoration: none !important;
   color: #333333;
 }
-/* line 217, core/_global.scss */
-body > nav a.active {
+/* line 24, core/site/_nav.scss */
+html.site body > nav a.active {
   text-decoration: none;
   background: #4C81AF;
   color: white;
 }
-/* line 221, core/_global.scss */
-body > nav a.active:last-child {
+/* line 28, core/site/_nav.scss */
+html.site body > nav a.active:last-child {
   padding-right: 10px;
 }
-/* line 228, core/_global.scss */
-body > main p {
-  text-indent: 25px;
-}
-/* line 231, core/_global.scss */
-body > main p, body > main li {
-  margin-top: 5px;
-}
-/* line 234, core/_global.scss */
-body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-/* line 238, core/_global.scss */
-body > main ul {
-  padding-left: 25px;
-}
-/* line 241, core/_global.scss */
-body > main ul > li:before {
-  content: '-';
-  margin-right: 10px;
-}
-/* line 246, core/_global.scss */
-body > main ul > ul, body > main ul > li > ul {
-  padding-left: 25px;
-}
-/* line 248, core/_global.scss */
-body > main ul > ul > ul, body > main ul > ul > li > ul, body > main ul > li > ul > ul, body > main ul > li > ul > li > ul {
-  padding-left: 25px;
-}
-/* line 258, core/_global.scss */
-body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
-  font-size: 105%;
-  color: #4C81AF;
-}
-/* line 258, core/_global.scss */
-body > main h1 {
-  font-size: 120%;
-}
-/* line 258, core/_global.scss */
-body > main h2 {
-  font-size: 110%;
-}
-
-/* line 4, core/_site.scss */
-html.site {
-  display: -webkit-box;
-  display: flex;
-  flex-direction: column;
-  -webkit-box-orient: vertical;
-  min-height: 100%;
-}
-/* line 2, core/site/_body.scss */
-html.site body {
-  min-width: 1532px;
-  max-width: 1532px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 10px;
-  display: -webkit-box;
-  display: flex;
-  flex-direction: column;
-  -webkit-box-orient: vertical;
-  flex-grow: 1;
-  box-shadow: 0 0 15px #cacaca;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-@media print and (orientation: landscape) {
-  /* line 150, core/_utils.scss */
-  html.site body {
-    min-width: 27cm;
-    max-width: 27cm;
-  }
-}
-@media print and (orientation: portrait) {
-  /* line 158, core/_utils.scss */
-  html.site body {
-    min-width: 19cm;
-    max-width: 19cm;
-  }
-}
-@media screen and (max-width: 1531px) {
-  /* line 168, core/_utils.scss */
-  html.site body {
-    min-width: 1532px;
-    max-width: 1532px;
-  }
-}
-@media screen and (max-width: 1531px) {
-  /* line 168, core/_utils.scss */
-  html.site body {
-    min-width: 1024px;
-    max-width: 1024px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  /* line 168, core/_utils.scss */
-  html.site body {
-    min-width: 800px;
-    max-width: 800px;
-  }
-}
-@media screen and (max-width: 799px) {
-  /* line 168, core/_utils.scss */
-  html.site body {
-    min-width: 500px;
-    max-width: 500px;
-  }
-}
-@media screen and (max-width: 499px) {
-  /* line 168, core/_utils.scss */
-  html.site body {
-    min-width: 300px;
-    max-width: 300px;
-  }
-}
-/* line 15, core/site/_body.scss */
-html.site body > header, html.site body > footer {
-  flex-shrink: 0;
-}
-/* line 18, core/site/_body.scss */
+/* line 3, core/site/_footer.scss */
 html.site body > footer {
+  flex-shrink: 0;
+  background-color: #92b3cf;
+  color: #fafafa;
+  min-height: 30px;
+  max-height: 30px;
   padding: 7px 5px 7px 5px;
-}
-/* line 21, core/site/_body.scss */
-html.site body > main {
-  flex-grow: 1;
-  padding: 10px 5px 10px 5px;
 }
 
 /* line 4, core/_app.scss */

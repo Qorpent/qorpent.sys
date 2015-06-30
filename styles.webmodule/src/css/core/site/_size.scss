@@ -1,0 +1,170 @@
+@import "../utils";
+
+@mixin in-size($size,$data) {
+  $base : skin(sizes default width);
+  $corrected : $base;
+  $controlled : $base - 1px;
+  $form-factor-dynamic: skin(form-factor-dynamic);
+  $form-factor-direct: skin(form-factor-direct);
+
+  @if $form-factor-dynamic {
+    @each $k, $v in skin(sizes) {
+      $base: map_get_default($v, width,0px);
+      $controlled: $base - 1px;
+      $corrected: $base;
+
+      @if map_get_default($v,active,true) and $k==$size {
+
+        @media screen and (max-width: $controlled) {
+          body.form-factor-dynamic & {
+            @if type_of( $data ) == 'string' {
+              $value: map_get($v, $data);
+              @if type_of($value)=='map'{
+                @each $k,$v in $value {
+                  #{$k} : $v
+                }
+              }@else {
+                #{$data}: $value
+              }
+            }@else {
+              @each $k,$v in $data {
+                #{$k} : $v
+              }
+            }
+          }
+        }
+      }
+
+      $controlled: $base - 1px;
+    }
+  }
+
+
+  @if $form-factor-direct {
+    @each $k, $v in skin(sizes) {
+
+      @if map_get_default($v,active,true) and $k==$size {
+
+          body.form-factor-#{$k} & {
+            @if type_of( $data ) == 'string' {
+              $value: map_get($v, $data);
+              @if type_of($value)=='map'{
+                @each $k,$v in $value {
+                  #{$k} : $v
+                }
+              }@else {
+                #{$data}: $value
+              }
+            }@else {
+              @each $k,$v in $data {
+                #{$k} : $v
+              }
+            }
+          }
+
+      }
+    }
+  }
+}
+
+
+@mixin size($control:1px,$delta:0px,$deltacm:0cm) {
+  $base: skin(sizes default width);
+  $corrected: $base - $delta;
+  $controlled: $base - $control;
+  min-width: $corrected;
+  max-width: $corrected;
+  $baseps: 19cm  - $deltacm;
+  $basels: 27cm - $deltacm;
+
+  $form-factor-print: skin(form-factor-print);
+  $form-factor-dynamic: skin(form-factor-dynamic);
+  $form-factor-direct: skin(form-factor-direct);
+
+  @if $form-factor-print {
+    &.form-factor-printps, &.form-factor-print {
+      min-width: $baseps;
+      max-width: $baseps;
+      min-height: $basels;
+      max-height: $basels;
+      font-size: 10pt;
+      padding:2cm;
+    }
+    &.form-factor-printls {
+      min-width: $basels;
+      max-width: $basels;
+      min-height: $baseps;
+      max-height: $baseps;
+      font-size: 10pt;
+      padding:2cm;
+    }
+
+    @media print and (orientation: landscape) {
+      & {
+        min-width: $basels;
+        max-width: $basels;
+        font-size: 10pt;
+
+      }
+    }
+
+    @media print {
+      @page {
+        margin:2cm;
+      }
+    }
+
+    @media print and (orientation: portrait) {
+      & {
+        min-width: $baseps;
+        max-width: $baseps;
+        font-size: 10pt;
+      }
+    }
+  }
+  @if $form-factor-dynamic {
+    .form-factor-dynamic {
+      min-width: skin(width);
+      max-width: skin(width);
+      font-size: skin(font-size);
+    }
+      @each $k, $v in skin(sizes) {
+        $base: map_get_default($v, width,0px);
+        $corrected: $base - $delta;
+        @if map_get_default($v, active, true) {
+          @media screen and (max-width: $controlled) {
+            &.form-factor-dynamic {
+              min-width: $corrected;
+              max-width: $corrected;
+              font-size: map_get($v, font-size);
+            }
+          }
+        }
+        $controlled: $base - $control;
+      }
+
+  }
+
+  @if $form-factor-direct {
+    &.form-factor-wide {
+      min-width: 100%;
+      max-width: 100%;
+    }
+    @each $k, $v in skin(sizes) {
+      $base: map_get_default($v, width,0px);
+      $corrected: $base - $delta;
+
+      @if map_get_default($v, active, true) {
+
+        &.form-factor-#{$k} {
+          min-width: $corrected;
+          max-width: $corrected;
+          font-size: map_get($v, font-size);
+        }
+      }
+      $controlled: $base - $control;
+
+    }
+
+  }
+}

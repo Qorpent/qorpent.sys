@@ -1,0 +1,56 @@
+@import "../utils";
+@mixin site-header(){
+  >header {
+    flex-shrink: 0;
+    @include skin-styles(header);
+
+    $h : skin(header height);
+    @if $h {
+      min-height: $h;
+      max-height: $h;
+    }
+
+    $header-background-color: color(primary);
+    color: color(light);
+    background: {
+      color: $header-background-color;
+    }
+    &.with-logo {
+      background-image: url("/img/logo-toolbar.png");
+      background-position: left center;
+      background-repeat: no-repeat;
+      background-size: 80px 60px;
+      padding-left: 100px!important;
+    }
+    > .tab {
+      color: color(light);
+      text-decoration: skin(header tabs text-decoration);
+      display: inline-block;
+      font: {
+        size: skin(header tabs font-size);
+        weight: skin(header tabs font-weight);
+        family: skin(header tabs font-family);
+      }
+      padding: {
+        top: skin(header tabs padding-top);
+        right: skin(header tabs padding-right);
+        bottom: skin(header tabs padding-bottom);
+        left: skin(header tabs padding-left);
+      }
+      &:first-child {
+        margin-left: skin(header tabs first-tab-left-margin);
+      }
+      &.active {
+        background: color(light);
+        color: $header-background-color;
+      }
+      &:not(.active):hover {
+        background: slighten($header-background-color, 10%);
+        color: color(light)!important;
+      }
+      @if skin(rounded-tabs-corners) {
+        @include rounded-top-corners();
+      }
+    }
+  }
+}

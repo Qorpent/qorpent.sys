@@ -1,0 +1,15 @@
+@import "../utils";
+@mixin site-footer(){
+  >footer {
+    flex-shrink: 0;
+    background-color: color(primarylight);
+    color:color(light);
+    $h : skin(footer height);
+    @if $h {
+      min-height: $h;
+      max-height: $h;
+    }
+    @include skin-styles(footer);
+
+  }
+}

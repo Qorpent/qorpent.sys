@@ -1,0 +1,34 @@
+@import "../utils";
+@mixin site-nav(){
+  >nav {
+    flex-shrink: 0;
+    @include skin-styles(nav);
+    a {
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-bottom: 5px;
+      border-radius: 3px;
+      font: {
+        family: skin(nav font-family);
+      }
+      &:not(:last-child) {
+        margin-right: 10px;
+        &:after {
+          display: inline-block;
+          content: skin(nav link after content);
+          margin-left: 10px;
+          text-decoration: none!important;
+          color: color(dark);
+        }
+      }
+      &.active {
+        text-decoration: none;
+        background: color(primary);
+        color: color(white);
+        &:last-child {
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+}

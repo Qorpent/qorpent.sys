@@ -9,6 +9,7 @@ define(['angular'], function () {
             debug: false
         };
         $scope.showLargeText = true;
+        $scope.sizefactor = "dynamic";
         $scope.changeHtmlClass = function () {
             var el = document.getElementsByTagName('html')[0];
             var cls = '';

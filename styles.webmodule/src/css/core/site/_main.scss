@@ -1,0 +1,46 @@
+@import "../utils";
+@mixin site-main(){
+  >main {
+    flex-grow: 1;
+    @include skin-styles(main);
+    p {
+      text-indent: 25px;
+    }
+    p, li {
+      margin-top: 5px;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    ul {
+      padding-left: 25px;
+      > li {
+        &:before {
+          content: '-';
+          margin-right: 10px;
+        }
+      }
+      > ul, > li > ul {
+        padding-left: 25px;
+        > ul, > li > ul {
+          padding-left: 25px;
+        }
+      }
+    }
+    @each $k, $v in skin(heading) {
+      $selector: $k;
+      @if $selector == 'default' {
+        $selector: h1, h2, h3, h4, h5, h6;
+      }
+      #{$selector} {
+        @each $z, $i in $v {
+          @if $z == 'color' {
+            $i: color($i);
+          }
+          #{$z}: $i;
+        }
+      }
+    }
+  }
+}

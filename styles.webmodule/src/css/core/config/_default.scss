@@ -1,56 +1,69 @@
+@import "../_utils";
 $config: (
-  nav: (
-    border-bottom-color: #D7D7D7,
-    border-bottom-width: 1px,
-    border-bottom-style: solid,
-    font-family: Verdana,
-    link: (
-      after: (
-        content: ''
-      )
-    )
-  ),
+        nav: (
+                styles :(
+                        border-bottom-color: color_default,
+                        border-bottom-width: 1px,
+                        border-bottom-style: solid
+                ),
+                link: (
+                        after: (
+                                content: ''
+                        )
+                )
+        ),
         color : (
                 dark : #333333,
                 light : #fafafa,
                 disabled: #ccc,
                 primary : #4C81AF,
-                default : #D7D7D7,//#B5B5B5,
-                success : #5E994B,//#67B34E,
-                info : #F9D264,//#FFF68E,
+                default : #D7D7D7, //#B5B5B5,
+                success : #5E994B, //#67B34E,
+                info : #F9D264, //#FFF68E,
                 danger :#E7582E,
-                warn :  #FA9357//#FFAC51
+                warn : #FA9357 //#FFAC51
         ),
-        maxwidth : 1532px,
-        minwidth : 1532px,
+        width : 1280px,
+
         body-shadow: true,
         rounded-body-corners: true,
         rounded-tabs-corners: true,
         input-rounded-corners: true,
+        form-factor-print: true,
+        form-factor-dynamic: true,
+        form-factor-direct: true,
+
+
+
         sizes : (
                 default : (
-                  max-width: 1532px,
-                  font-size: 12px
+                        width: 1280px,
+                        font-size: 12px,
+                        active:false
+                ),
+                wide : (
+                        font-size:16px,
+                        active:false
                 ),
                 lg : (
-                   max-width: 1024px,
-                   font-size: 12px
+                        width: 1280px,
+                        font-size: 12px
                 ),
                 md : (
-                  max-width: 800px,
-                  font-size: 11px
+                        width: 1024px,
+                        font-size: 12px
                 ),
                 sm : (
-                  max-width: 500px,
-                  font-size: 10px
+                        width: 800px,
+                        font-size: 12px
                 ),
                 xsm : (
-                  max-width: 300px,
-                  font-size: 10px
+                        width: 320px,
+                        font-size: 12px
                 )
         ),
         font: (Lucida Grande, Arial, sans-serif),
-        font-size : 16px,
+        font-size : 12px,
         toolbar : (
                 height : 66px,
                 align: flex-end,
@@ -66,42 +79,50 @@ $config: (
                 )
         ),
         footer : (
-          padding: 7px 5px 7px 5px
+                height:30px,
+                styles : (
+                        padding: 7px 5px 7px 5px
+                )
         ),
         main : (
-          padding: 10px 5px 10px 5px
-        ),
 
-        heading: (
-          default: (
-            font-size: 105%,
-            color: primary
-          ),
-          h1: (
-            font-size: 120%
-          ),
-          h2: (
-            font-size: 110%
-          )
+                styles : (
+                padding: 10px 5px 10px 5px
+                )
         ),
-  header : (
-    padding-top: 5px,
-    tabs: (
-      font-size: 18px,
-      font-family: Arial,
-      font-weight: bold,
-      text-decoration: none,
-      padding-top: 10px,
-      padding-right: 10px,
-      padding-left: 10px,
-      padding-bottom: 5px,
-      first-tab-left-margin: 10px
-    )
-  ),
+        heading: (
+                default: (
+                        font-size: 105%,
+                        color: primary
+                ),
+                h1: (
+                        font-size: 120%
+                ),
+                h2: (
+                        font-size: 110%
+                )
+        ),
+        header : (
+                height: 30px,
+                styles : (
+                        padding-top: 5px
+                ),
+                tabs: (
+                        font-size: 18px,
+                        font-family: Arial,
+                        font-weight: bold,
+                        text-decoration: none,
+                        padding-top: 10px,
+                        padding-right: 10px,
+                        padding-left: 10px,
+                        padding-bottom: 5px,
+                        first-tab-left-margin: 10px
+                )
+        ),
         item : (
                 padding : 5px,
                 space : 5px,
-                shadow  :true,
+                shadow :true,
                 shadowsize : 2px,
                 bordercolor : default,
                 borderradius : 5px,
@@ -117,7 +138,7 @@ $config: (
                 )
         ),
         contact : (
-                localtimecolor :  warn,
+                localtimecolor : warn,
                 fontsize : 95%,
                 name : (
                         fontsize : 120%,
@@ -125,9 +146,21 @@ $config: (
                 )
         )
 ) !global;
-@if variable_exists(skin) {
-  $config: map-merge-deep($config, $skin);
+@function map-merge-deep2($map1, $map2) {
+        $result : $map1;
+        @each $k, $v in $map2 {
+                $newval : $v;
+                @if type_of($newval) == 'map' and map_has_key($result, $k)  {
+                        $newval : map-merge-deep(map_get($result,$k),$newval);
+                }
+                $result : map_merge($result,($k:$newval));
+        }
+        @return $result;
 }
+@if variable_exists(skin) {
+        $config : map-merge-deep( $config , $skin );
+}
+
 
 @if function_exists(skinsetup) {
   $config: skinsetup($config);

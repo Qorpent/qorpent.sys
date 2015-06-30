@@ -1,3 +1,8 @@
+@import "size";
+@import "header";
+@import "nav";
+@import "main";
+@import "footer";
 @mixin site-body() {
   body {
     @include size();
@@ -12,15 +17,20 @@
     @if skin(rounded-body-corners) {
       @include rounded-bottom-corners();
     }
-    > header, > footer {
-      flex-shrink: 0;
+
+
+    @if skin(header active, true){
+      @include site-header();
     }
-    > footer {
-      padding: skin(footer padding);
+    @if skin(main active, true) {
+      @include site-main();
     }
-    > main {
-      flex-grow: 1;
-      padding: skin(main padding)
+    @if skin(nav active, true){
+      @include site-nav();
     }
+    @if skin(footer active, true){
+      @include site-footer();
+    }
+
   }
 }

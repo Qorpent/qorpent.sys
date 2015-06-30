@@ -70,19 +70,16 @@
       size: skin(font-size);
     }
     color: color(dark);
-    @include in-size(font-size);
     input[type=text], textarea {
       width: 100%;
       margin: 0;
       border: 1px solid color(primary);
       padding: 5px 10px;
-      @include in-size(font-size);
       @if skin(input-rounded-corners) {
         @include rounded-corners();
       }
     }
     button {
-      @include in-size(font-size);
       background: color(primary);
       border: none;
       border-radius: 3px;
@@ -135,134 +132,6 @@
       text-decoration: underline;
       &:hover {
         color: slighten(color(primary), 10%);
-      }
-    }
-    > header {
-      $header-background-color: color(primary);
-      color: color(light);
-      background: {
-        color: $header-background-color;
-      }
-      padding: {
-        top: skin(header padding-top)
-      }
-      &.with-logo {
-        background-image: url("/img/logo-toolbar.png");
-        background-position: left center;
-        background-repeat: no-repeat;
-        background-size: 80px 60px;
-        padding-left: 100px!important;
-      }
-      > .tab {
-        color: color(light);
-        text-decoration: skin(header tabs text-decoration);
-        display: inline-block;
-        font: {
-          size: skin(header tabs font-size);
-          weight: skin(header tabs font-weight);
-          family: skin(header tabs font-family);
-        }
-        padding: {
-          top: skin(header tabs padding-top);
-          right: skin(header tabs padding-right);
-          bottom: skin(header tabs padding-bottom);
-          left: skin(header tabs padding-left);
-        }
-        &:first-child {
-          margin-left: skin(header tabs first-tab-left-margin);
-        }
-        &.active {
-          background: $body-background-color;
-          color: $header-background-color;
-        }
-        &:not(.active):hover {
-          background: slighten($header-background-color, 10%);
-          color: color(light)!important;
-        }
-        @if skin(rounded-tabs-corners) {
-          @include rounded-top-corners();
-        }
-      }
-    }
-    > footer {
-      font: {
-        size: 90%;
-      }
-    }
-    > nav {
-      padding: 10px;
-      border-bottom: {
-        width: skin(nav border-bottom-width);
-        style: skin(nav border-bottom-style);
-        color: skin(nav border-bottom-color);
-      }
-      a {
-        padding-top: 5px;
-        padding-left: 10px;
-        padding-bottom: 5px;
-        border-radius: 3px;
-        font: {
-          family: skin(nav font-family);
-        }
-        &:not(:last-child) {
-          margin-right: 10px;
-          &:after {
-            display: inline-block;
-            content: skin(nav link after content);
-            margin-left: 10px;
-            text-decoration: none!important;
-            color: color(dark);
-          }
-        }
-        &.active {
-          text-decoration: none;
-          background: color(primary);
-          color: color(white);
-          &:last-child {
-            padding-right: 10px;
-          }
-        }
-      }
-    }
-    > main {
-      p {
-        text-indent: 25px;
-      }
-      p, li {
-        margin-top: 5px;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-      ul {
-        padding-left: 25px;
-        > li {
-          &:before {
-            content: '-';
-            margin-right: 10px;
-          }
-        }
-        > ul, > li > ul {
-          padding-left: 25px;
-          > ul, > li > ul {
-            padding-left: 25px;
-          }
-        }
-      }
-      @each $k, $v in skin(heading) {
-        $selector: $k;
-        @if $selector == 'default' {
-          $selector: h1, h2, h3, h4, h5, h6;
-        }
-        #{$selector} {
-          @each $z, $i in $v {
-            @if $z == 'color' {
-              $i: color($i);
-            }
-            #{$z}: $i;
-          }
-        }
       }
     }
   }
