@@ -22,7 +22,7 @@ namespace qorpent.v2.security.Tests.messaging
             var message = um.CompoundMessage(u, "ref:wellcome", "support","test",null);
             Console.WriteLine(message.Message.Simplify(SimplifyOptions.SingleQuotes));
             Assert.AreEqual(@"<div>
-  <h1>Уважаемый Иванов!</h1>
+  <h1>Уважаемый(ая) Иванов!</h1>
   <p>
     Данным письмом мы уведомляем Вас о том, что вы зарегистрированы на
     ресурсе '<a href='https://super.puper.com/login.html?referer=/home.html'>Супер-Пупер</a>'
