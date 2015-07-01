@@ -3,30 +3,45 @@
   >nav {
     flex-shrink: 0;
     @include skin-styles(nav);
-    a {
-      padding-top: 5px;
-      padding-left: 10px;
-      padding-bottom: 5px;
-      border-radius: 3px;
-      font: {
-        family: skin(nav font-family);
-      }
-      &:not(:last-child) {
-        margin-right: 10px;
-        &:after {
-          display: inline-block;
-          content: skin(nav link after content);
-          margin-left: 10px;
-          text-decoration: none!important;
-          color: color(dark);
-        }
+    flex-wrap: wrap;
+    display: flex;
+    align-items: flex-end;
+    background-color: color(light);
+
+
+
+    >.tab, > a {
+      padding-top:15px;
+      padding-bottom:15px;
+      margin-top:10px;
+      min-width:100px;
+      flex:1;
+      text-align: center;
+      text-decoration: none;
+      border-top : solid 1px color(defaultlight);
+      border-bottom :solid 2px color(primary);
+
+      font-size:16px;
+      @include in-size((sm xsm),(font-size:14px));
+      @include in-size(wide,(font-size:20px));
+
+      &:hover {
+        background-color: color(primarylight);
+        color:color(light);
       }
       &.active {
-        text-decoration: none;
-        background: color(primary);
-        color: color(white);
+
+        border :solid 2px color(primary);
+        border-bottom:none;
+        border-radius: 5px 5px 0px 0px;
+        &:first-child {
+          border-left: none;
+          border-radius: 0px 5px 0px 0px;
+        }
+
         &:last-child {
-          padding-right: 10px;
+          border-right: none;
+          border-radius: 5px 0px 0px 0px;
         }
       }
     }

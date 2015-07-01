@@ -1,72 +1,93 @@
 @import "../utils";
 
 @mixin in-size($size,$data) {
-  $base : skin(sizes default width);
-  $corrected : $base;
-  $controlled : $base - 1px;
-  $form-factor-dynamic: skin(form-factor-dynamic);
-  $form-factor-direct: skin(form-factor-direct);
+  @if type_of($size)=='list' {
+    @each $s in $size {
+      @include in-size($s, $data);
+    }
+  } @else {
+    $base: skin(sizes default width);
+    $corrected: $base;
+    $controlled: $base - 1px;
+    $form-factor-dynamic: skin(form-factor-dynamic);
+    $form-factor-direct: skin(form-factor-direct);
 
-  @if $form-factor-dynamic {
-    @each $k, $v in skin(sizes) {
-      $base: map_get_default($v, width,0px);
+    @if $form-factor-dynamic {
+      $base: skin(sizes default width);
+      $corrected: $base - 0px;
       $controlled: $base - 1px;
-      $corrected: $base;
+      @each $k, $v in skin(sizes) {
+        $base: map_get_default($v, width, skin(sizes default width));
+        $corrected: $base - 0px;
+        @if map_get_default($v,active,true) and $k==$size {
+          @each $s in & {
+            $newsel: ();
+            $idx: str-index(inspect($s), 'body');
+            @if not $idx {
+              $newsel: append($newsel, str-insert(inspect($s), 'body.form-factor-dynamic ', 1));
+            }@else{
+              $newsel: append($newsel, str-insert(inspect($s), '.form-factor-dynamic', $idx+4));
+            }
 
-      @if map_get_default($v,active,true) and $k==$size {
+            $newsel: selector-parse($newsel);
+            @media screen and (max-width: $controlled) {
+              @at-root #{$newsel} {
+                @if type_of( $data ) == 'string' {
+                  $value: map_get($v, $data);
+                  @if type_of($value)=='map' {
+                    @each $k, $v in $value {
+                      #{$k} : $v
+                    }
+                  } @else {
+                    #{$data}: $value
+                  }
+                } @else {
+                  @each $k, $v in $data {
+                    #{$k} : $v
+                  }
+                }
+              }
+            }
+          }
+        }
+        $controlled: $base - 1px;
+      }
+    }
 
-        @media screen and (max-width: $controlled) {
-          body.form-factor-dynamic & {
-            @if type_of( $data ) == 'string' {
-              $value: map_get($v, $data);
-              @if type_of($value)=='map'{
-                @each $k,$v in $value {
+    @if $form-factor-direct {
+      @each $k, $v in skin(sizes) {
+        @if $k==$size {
+          @each $s in & {
+            $newsel: ();
+            $idx: str-index(inspect($s), 'body');
+            @if not $idx {
+              $newsel: append($newsel, str-insert(inspect($s), 'body.form-factor-#{$k} ', 1));
+            }@else {
+              $newsel: append($newsel, str-insert(inspect($s), '.form-factor-#{$k}', $idx+4));
+            }
+            $newsel: selector-parse($newsel);
+            @at-root #{$newsel} {
+              @if type_of( $data ) == 'string' {
+                $value: map_get($v, $data);
+                @if type_of($value)=='map' {
+                  @each $k, $v in $value {
+                    #{$k} : $v
+                  }
+                } @else {
+                  #{$data}: $value
+                }
+              } @else {
+                @each $k, $v in $data {
                   #{$k} : $v
                 }
-              }@else {
-                #{$data}: $value
-              }
-            }@else {
-              @each $k,$v in $data {
-                #{$k} : $v
               }
             }
           }
         }
       }
-
-      $controlled: $base - 1px;
-    }
-  }
-
-
-  @if $form-factor-direct {
-    @each $k, $v in skin(sizes) {
-
-      @if map_get_default($v,active,true) and $k==$size {
-
-          body.form-factor-#{$k} & {
-            @if type_of( $data ) == 'string' {
-              $value: map_get($v, $data);
-              @if type_of($value)=='map'{
-                @each $k,$v in $value {
-                  #{$k} : $v
-                }
-              }@else {
-                #{$data}: $value
-              }
-            }@else {
-              @each $k,$v in $data {
-                #{$k} : $v
-              }
-            }
-          }
-
-      }
     }
   }
 }
-
 
 @mixin size($control:1px,$delta:0px,$deltacm:0cm) {
   $base: skin(sizes default width);
@@ -88,7 +109,7 @@
       min-height: $basels;
       max-height: $basels;
       font-size: 10pt;
-      padding:2cm;
+      padding: 2cm;
     }
     &.form-factor-printls {
       min-width: $basels;
@@ -96,7 +117,7 @@
       min-height: $baseps;
       max-height: $baseps;
       font-size: 10pt;
-      padding:2cm;
+      padding: 2cm;
     }
 
     @media print and (orientation: landscape) {
@@ -105,12 +126,6 @@
         max-width: $basels;
         font-size: 10pt;
 
-      }
-    }
-
-    @media print {
-      @page {
-        margin:2cm;
       }
     }
 
@@ -123,25 +138,27 @@
     }
   }
   @if $form-factor-dynamic {
-    .form-factor-dynamic {
-      min-width: skin(width);
-      max-width: skin(width);
-      font-size: skin(font-size);
+    &.form-factor-dynamic {
+      min-width: skin(sizes default width);
+      max-width: skin(sizes default width);
+      font-size: skin(sizes default font-size);
+      @include skin-styles(sizes default);
     }
-      @each $k, $v in skin(sizes) {
-        $base: map_get_default($v, width,0px);
-        $corrected: $base - $delta;
-        @if map_get_default($v, active, true) {
-          @media screen and (max-width: $controlled) {
-            &.form-factor-dynamic {
-              min-width: $corrected;
-              max-width: $corrected;
-              font-size: map_get($v, font-size);
-            }
+    @each $k, $v in skin(sizes) {
+      $base: map_get_default($v, width, skin(sizes default width));
+      $corrected: $base - $delta;
+      @if map_get_default($v, active, true) {
+        @media screen and (max-width: $controlled) {
+          &.form-factor-dynamic {
+            min-width: $corrected;
+            max-width: $corrected;
+            font-size: map_get_default($v, font-size, skin(sizes default font-size));
+            @include skin-styles(sizes $k);
           }
         }
-        $controlled: $base - $control;
       }
+      $controlled: $base - $control;
+    }
 
   }
 
@@ -149,9 +166,11 @@
     &.form-factor-wide {
       min-width: 100%;
       max-width: 100%;
+      font-size: skin(sizes wide font-size);
+      @include skin-styles(sizes wide);
     }
     @each $k, $v in skin(sizes) {
-      $base: map_get_default($v, width,0px);
+      $base: map_get_default($v, width, skin(sizes default width));
       $corrected: $base - $delta;
 
       @if map_get_default($v, active, true) {
@@ -159,7 +178,8 @@
         &.form-factor-#{$k} {
           min-width: $corrected;
           max-width: $corrected;
-          font-size: map_get($v, font-size);
+          font-size: map_get_default($v, font-size, skin(sizes default font-size));
+          @include skin-styles(sizes $k);
         }
       }
       $controlled: $base - $control;

@@ -1,11 +1,6 @@
 @import "../_utils";
 $config: (
         nav: (
-                styles :(
-                        border-bottom-color: color_default,
-                        border-bottom-width: 1px,
-                        border-bottom-style: solid
-                ),
                 link: (
                         after: (
                                 content: ''
@@ -23,7 +18,6 @@ $config: (
                 danger :#E7582E,
                 warn : #FA9357 //#FFAC51
         ),
-        width : 1280px,
 
         body-shadow: true,
         rounded-body-corners: true,
@@ -32,38 +26,33 @@ $config: (
         form-factor-print: true,
         form-factor-dynamic: true,
         form-factor-direct: true,
-
-
+        icons : true,
+        toolwindow: true,
 
         sizes : (
+                wide : (
+                        font-size:18px,
+                        active:false
+                ),
                 default : (
                         width: 1280px,
-                        font-size: 12px,
+                        font-size: 14px,
                         active:false
                 ),
-                wide : (
-                        font-size:16px,
-                        active:false
-                ),
+
                 lg : (
-                        width: 1280px,
-                        font-size: 12px
                 ),
                 md : (
                         width: 1024px,
-                        font-size: 12px
                 ),
                 sm : (
                         width: 800px,
-                        font-size: 12px
                 ),
                 xsm : (
                         width: 320px,
-                        font-size: 12px
                 )
         ),
-        font: (Lucida Grande, Arial, sans-serif),
-        font-size : 12px,
+        font: ( Arial, sans-serif),
         toolbar : (
                 height : 66px,
                 align: flex-end,
@@ -85,9 +74,8 @@ $config: (
                 )
         ),
         main : (
-
                 styles : (
-                padding: 10px 5px 10px 5px
+                padding: 10px
                 )
         ),
         heading: (
@@ -103,9 +91,10 @@ $config: (
                 )
         ),
         header : (
-                height: 30px,
+                height: 60px,
                 styles : (
-                        padding-top: 5px
+                        padding:5px,
+
                 ),
                 tabs: (
                         font-size: 18px,
@@ -165,4 +154,6 @@ $config: (
 @if function_exists(skinsetup) {
   $config: skinsetup($config);
 }
+
+
 

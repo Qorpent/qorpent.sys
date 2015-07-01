@@ -35,6 +35,9 @@
     .inverse-#{$k} {
       @include inverse-colored-background($v);
     }
+    .i#{$k} {
+      @include inverse-colored-background($v);
+    }
     .inverse-#{$k}-light {
       @include inverse-colored-background(slighten($v, 20%));
     }

@@ -109,6 +109,9 @@
   @if $mode==light {
     @return slighten(color($color),skin(colormode light,20%));
   }
+  @if $mode==dark {
+    @return darken(color($color),skin(colormode dark,20%));
+  }
   @if $mode==lightest {
     @return slighten(color($color),skin(colormode lightest,30%));
   }
@@ -120,7 +123,7 @@
 
 
 
-@mixin flex($orient:row,$justify:false){
+@mixin flex($orient:row,$justify:false,$align:false){
   display: -webkit-box;
   display: flex;
   flex-direction: $orient;
@@ -133,6 +136,14 @@
     justify-content: $justify;
     -webkit-box-pack : $justify ;
   }
+  @if $align {
+    align-items: $align;
+    -webkit-align-items: $align;
+  }
+}
+@mixin grow($grow:0,$shrink:0,$basis:auto){
+  flex : $grow $shrink $basis;
+  -webkit-flex: $grow $shrink $basis;
 }
 
 

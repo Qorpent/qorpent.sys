@@ -10,7 +10,7 @@
     margin-left: auto;
     margin-bottom: 10px;
     @include flex(column);
-    flex-grow: 1;
+    @include grow(1,1,auto);
     @if skin(body-shadow) {
       @include body-shadow();
     }
@@ -30,6 +30,14 @@
     }
     @if skin(footer active, true){
       @include site-footer();
+    }
+
+    @if skin(icons){
+      @include icons();
+    }
+
+    @if skin(toolwindow){
+      @include toolwindow();
     }
 
   }

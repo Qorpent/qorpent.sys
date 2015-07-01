@@ -2,12 +2,30 @@
 @mixin site-header(){
   >header {
     flex-shrink: 0;
+    @include flex(row,false,center);
     @include skin-styles(header);
 
     $h : skin(header height);
     @if $h {
       min-height: $h;
-      max-height: $h;
+    }
+
+    @include in-size((sm xsm),(flex-wrap:wrap));
+
+
+
+    a , i, label {
+      margin-right:10px;
+      font-size:skin(header label font-size,24px);
+      @include in-size((sm xsm),(font-size:16px));
+    }
+
+    > img:first-child, >img.logo {
+      min-height: $h - 10px;
+      max-height: $h - 10px;
+      margin-right:30px;
+      flex-shrink: 0;
+      @include skin-styles(header logo);
     }
 
     $header-background-color: color(primary);

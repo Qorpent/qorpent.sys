@@ -7,7 +7,6 @@
     $h : skin(footer height);
     @if $h {
       min-height: $h;
-      max-height: $h;
     }
     @include skin-styles(footer);
 

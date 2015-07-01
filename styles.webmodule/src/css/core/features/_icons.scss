@@ -1,0 +1,44 @@
+@mixin icons(){
+  $margin:  skin(icon margin,5px);
+  $padding: skin(icon padding,2px);
+  $lg : skin(icon lg,100px);
+  $sm : skin(icon sm,$lg / 2);
+  $retina : skin(icon retina,30px);
+  figure {
+    position: relative;
+    padding: $padding;
+    margin: $margin;
+    border:solid 1px color(primary);
+    border-radius:$padding + 1px;
+    height:$lg + ($padding + 1) * 2;
+    width:$lg + ($padding+1) * 2;
+    img {
+      position: absolute;
+      height: $lg;
+      width: $lg;
+    }
+    aside {
+      position: absolute;
+      width:$retina;
+      height: $retina;
+      top : $lg / 2 - $retina / 2;
+      left : $lg / 2 - $retina / 2;
+      &.video {
+        background-image:url(../img/video.png);
+      }
+    }
+  }
+  figure.sm, .smallicons .icon {
+    height:$sm + ($padding+1) * 2;
+    width:$sm + ($padding+1) * 2;;
+    img {
+      height: $sm;
+      width: $sm;
+    }
+    aside {
+      top : $sm / 2 - $retina / 2;
+      left : $sm / 2 - $retina / 2;
+    }
+  }
+
+}

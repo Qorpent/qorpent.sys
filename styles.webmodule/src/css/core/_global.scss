@@ -4,6 +4,12 @@
   * {
     box-sizing: border-box;
   }
+  .fa {
+    font-family: skin(font) !important;
+    &:before {
+      font-family: FontAwesome !important;
+    }
+  }
   @include std-colors();
   .box {
     display: flex;
@@ -12,6 +18,10 @@
     }
     &.row {
       flex-direction: row;
+      @include in-size(xsm, (flex-direction:column));
+    }
+    &.wrap {
+      flex-wrap: wrap;
     }
   }
   input, textarea {
@@ -41,6 +51,19 @@
       background-position: 1000px 0;
     }
   }
+  .clickable {
+    cursor: pointer;
+  }
+  a.fa, a.fa:visited {
+    text-decoration: none;
+  }
+  a:not(.fa), a:visited:not(.fa) {
+    color: color(primary);
+    text-decoration: underline;
+    &:hover {
+      color: slighten(color(primary), 10%);
+    }
+  }
   .progress {
     height: 30px;
     background: color(primary) url("progress.png") repeat;
@@ -52,6 +75,12 @@
     -webkit-animation-timing-function: linear;
     animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;
+  }
+  @page  {
+    margin: 1cm;
+  }
+  .filler {
+    flex-grow:1;
   }
   html {
     background: {
@@ -127,12 +156,6 @@
         }
       }
     }
-    a, a:visited {
-      color: color(primary);
-      text-decoration: underline;
-      &:hover {
-        color: slighten(color(primary), 10%);
-      }
-    }
+
   }
 }
