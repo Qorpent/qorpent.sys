@@ -12,10 +12,13 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 e.addClass('toolwindow dialog');
                 e.addClass(attr['theDialog'] || 'modal');
                 var form = e.children('form');
-                if(0==form.length){
+                if(null==form || 0==form.length){
+
                     form = $('<form name="handler.forms.dialog"></form>').appendTo(e);
+
                 }
                 e = form;
+
                 if (0 == e.children('.content').length) {
                         $("<div ng-show='handler.template||handler.getTemplate' class='content'></div>").appendTo(e);
                         $("<div ng-show='!(handler.template||handler.getTemplate)' class='content' ng-include='handler.getView()'></div>").appendTo(e);
@@ -32,6 +35,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     "<i ng-if='handler.getShowCancel()' ng-click='handler.close()' class='button default'>Отмена</i>" +
                     "</nav>").appendTo(e);
                 }
+
                 if (0 == $(document.body).children('.modalback').length) {
                     $('<div class="modalback"></div>').appendTo(document.body);
                 }
