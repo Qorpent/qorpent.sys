@@ -1,23 +1,6 @@
 @import "../_utils";
 $config: (
-        nav: (
-                link: (
-                        after: (
-                                content: ''
-                        )
-                )
-        ),
-        color : (
-                dark : #333333,
-                light : #fafafa,
-                disabled: #ccc,
-                primary : #4C81AF,
-                default : #D7D7D7, //#B5B5B5,
-                success : #5E994B, //#67B34E,
-                info : #F9D264, //#FFF68E,
-                danger :#E7582E,
-                warn : #FA9357 //#FFAC51
-        ),
+
 
         body-shadow: true,
         rounded-body-corners: true,
@@ -28,6 +11,35 @@ $config: (
         form-factor-direct: true,
         icons : true,
         toolwindow: true,
+        buttons: true,
+        inputs: true,
+
+        color : (
+                disabled: #ccc,
+                dark : #333333,
+                light : #fafafa,
+                primary : #4C81AF,
+                default : #D7D7D7, //#B5B5B5,
+                success : #5E994B, //#67B34E,
+                info : #F9D264, //#FFF68E,
+                danger :#E7582E,
+                warn : #FA9357, //#FFAC51
+
+        ),
+
+
+
+
+
+        nav: (
+                link: (
+                        after: (
+                                content: ''
+                        )
+                )
+        ),
+
+
 
         sizes : (
                 wide : (

@@ -1,0 +1,56 @@
+@mixin input($basesize) {
+  $vpad : skin(button vpad, 2px);
+  $hpad : skin(button hpad, 10px);
+  $lh : $basesize + $vpad * 2;
+  input, select {
+    font-size: $basesize;
+    line-height: $lh;
+    text-align: left;
+    padding: $vpad $hpad $vpad $hpad;
+    margin : 1px;
+    color : color(dark);
+    border-radius: 3px;
+
+    border : solid 1px color(primary);
+
+    &.xlg {
+      font-size: $basesize + 8px;
+      line-height: $lh + 8px;
+    }
+    &.lg {
+      font-size: $basesize + 4px;
+      line-height: $lh + 4px;
+    }
+    &.sm {
+      font-size: $basesize - 4px;
+      line-height: $lh - 4px;
+    }
+
+    &.disabled {
+      @include user-select(none);
+      background-color: color(default);
+      border : solid 1px color(defaultdark);
+      opacity: 0.5;
+    }
+
+  }
+
+  .condence {
+    input, select  {
+      margin-right : 0px;
+      margin-left : 0px;
+    }
+  }
+  .distrib {
+    input, select  {
+      margin-right : 2px;
+      margin-left : 2px;
+    }
+  }
+}
+@mixin inputs (){
+  @include input(skin(sizes default font-size));
+  @at-root html.site body.form-factor-wide {
+    @include button(skin(sizes wide font-size));
+  }
+}

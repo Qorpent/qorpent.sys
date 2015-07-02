@@ -1,5 +1,5 @@
 @import "colorizer";
-
+@import "compass/css3";
 @mixin global() {
   * {
     box-sizing: border-box;
@@ -24,33 +24,8 @@
       flex-wrap: wrap;
     }
   }
-  input, textarea {
-    font-size: 100%!important;
-  }
-  @-moz-keyframes progress_light {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-  @-webkit-keyframes progress_light {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-  @keyframes progress_light {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
+
+
   .clickable {
     cursor: pointer;
   }
@@ -64,11 +39,18 @@
       color: slighten(color(primary), 10%);
     }
   }
-  .progress {
-    height: 30px;
-    background: color(primary) url("progress.png") repeat;
-    animation-name: progress_light;
-    -webkit-animation-name: progress_light;
+  @include keyframes(progress_anim) {
+    0% {background-position: 0% 0%;}
+    100% {background-position: 1000px 0%;}
+  }
+  .progress{
+    position: relative;
+    background-image: url('progress.png');
+    background-repeat: repeat;
+    animation-name: progress_anim;
+    -webkit-animation-name: progress_anim;
+    background-blend-mode: soft-light;
+    opacity: 0.8;
     animation-duration: 15s;
     -webkit-animation-duration: 15s;
     animation-timing-function: linear;
@@ -81,6 +63,19 @@
   }
   .filler {
     flex-grow:1;
+  }
+
+  em {
+    padding:3px 5px 3px 5px;
+    background-color: color(infolight);
+    color: color(primary);
+    border-bottom: solid 2px color(info);
+    display: inline-block;
+    text-indent: 0px;
+  }
+
+  .spaced {
+    justify-content: space-between;
   }
   html {
     background: {

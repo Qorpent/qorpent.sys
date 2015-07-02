@@ -2,7 +2,7 @@
 
 @mixin site() {
   html.site {
-    @include flex(column);
+    @include qflex(column);
     min-height: 100%;
     @include site-body();
   }

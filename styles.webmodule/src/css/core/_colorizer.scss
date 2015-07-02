@@ -16,6 +16,40 @@
   }
 }
 
+@mixin colorize($ajust:0, $style : false) {
+  $baseajust : $ajust;
+  @each $k, $v in skin(color) {
+    $c : $v;
+    $a : $baseajust;
+    @if $k == light {
+      $a : - $a;
+    }
+    @if $a > 0 {
+      $c : slighten($c,$a);
+    }@else{
+      $c : darken($c, - $a);
+    }
+    @if $k==disabled {
+      &.#{$k}{
+        @if $style {
+          #{$style} : $c;
+        }@else {
+          @include colored-background($c);
+        }
+      }
+    }@else {
+      &.#{$k}:not(.disabled){
+        @if $style {
+          #{$style} : $c;
+        }@else {
+          @include colored-background($c);
+        }
+      }
+    }
+
+  }
+}
+
 @mixin std-colors() {
   @each $k, $v in skin(color) {
 

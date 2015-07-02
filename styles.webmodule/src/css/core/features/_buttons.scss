@@ -1,0 +1,73 @@
+@mixin button($basesize) {
+  $vpad : skin(button vpad, 2px);
+  $hpad : skin(button hpad, 10px);
+  $lh : $basesize + $vpad * 2;
+  .button, button {
+    font-size: $basesize;
+    line-height: $lh;
+    text-align: center;
+    padding: $vpad $hpad $vpad $hpad;
+    margin : 1px;
+    border-width: 1px;
+    border-style: solid;
+    cursor: pointer;
+    @include user-select(none);
+    &.xlg {
+      font-size: $basesize + 8px;
+      line-height: $lh + 8px;
+    }
+    &.lg {
+      font-size: $basesize + 4px;
+      line-height: $lh + 4px;
+    }
+    &.sm {
+      font-size: $basesize - 4px;
+      line-height: $lh - 4px;
+    }
+    @include colorize(-10%,border-color);
+    @include colorize();
+    &:hover:not(.progress):not(.disabled) {
+      @include colorize(10%);
+      &:active {
+        @include colorize( - 10% );
+      }
+    }
+    &.disabled {
+      opacity: 0.5;
+    }
+    &.checked {
+      @include colorize(10%);
+    }
+    &.plight {
+      background-color: color(light);
+      color : color(dark);
+      border : solid 1px color(default);
+      &.checked {
+        background-color: color(primary);
+        color : color(light);
+      }
+      &:hover {
+        background-color: color(primarylight);
+        color : color(light);
+
+      }
+    }
+  }
+  .condence {
+    .button, button {
+      margin-right : 0px;
+      margin-left : 0px;
+    }
+  }
+  .distrib {
+    .button, button {
+      margin-right : 2px;
+    }
+  }
+}
+@mixin buttons (){
+  @include button(skin(sizes default font-size));
+  @at-root html.site body.form-factor-wide {
+    @include button(skin(sizes wide font-size));
+  }
+}

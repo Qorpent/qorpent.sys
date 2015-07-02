@@ -123,7 +123,7 @@
 
 
 
-@mixin flex($orient:row,$justify:false,$align:false){
+@mixin qflex($orient:row,$justify:false,$align:false){
   display: -webkit-box;
   display: flex;
   flex-direction: $orient;

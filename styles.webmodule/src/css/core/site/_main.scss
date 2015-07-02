@@ -4,7 +4,7 @@
     flex-grow: 1;
     min-height:500px;
     background-color: color(light);
-    @include flex(row);
+    @include qflex(row);
     flex-wrap: wrap;
     @include skin-styles(main);
     @include in-size((sm xsm),(flex-direction:column,flex-wrap:nowrap));
@@ -23,12 +23,24 @@
       &.lg {
         min-width: 60%;
       }
+      &.fs {
+        min-width: 99%;
+      }
+
+      > div:not(:first-child){
+        margin-top:5px;
+      }
+
+      &.readtext > article {
+        font-size:120%;
+        line-height: 1.4;
+      }
 
       > h1:first-child {
         font-size:18px;
         @include in-size((sm xsm),(font-size:14px));
         @include in-size(wide,(font-size:22px));
-        @include flex(row,space-between,center);
+        @include qflex(row,space-between,center);
       }
       &.list {
         > article {
@@ -52,7 +64,7 @@
           }
         }
         .legend {
-          @include flex(row,space-between,center);
+          @include qflex(row,space-between,center);
           font-size: 90%;
           color: colormode(default,dark);
           a.fa {

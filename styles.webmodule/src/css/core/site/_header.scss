@@ -2,7 +2,7 @@
 @mixin site-header(){
   >header {
     flex-shrink: 0;
-    @include flex(row,false,center);
+    @include qflex(row,false,center);
     @include skin-styles(header);
 
     $h : skin(header height);
