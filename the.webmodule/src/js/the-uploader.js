@@ -16,8 +16,8 @@ define(["the-root","the-angular"], function (the) {
             }
             var fd = new FormData();
             var file = $(e)[0].files[0];
-            if (file.size > 10000000) {
-                the.dialog.alert("Недопустимый файл - размер более 5мб", "Невозможно подгрузить файл");
+            if (file.size > 26214400) {
+                the.dialog.alert("Недопустимый файл - размер более 25мб", "Невозможно подгрузить файл");
                 return;
             }
             fd.append('file', file);
