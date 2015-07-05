@@ -951,9 +951,9 @@ html.site body.form-factor-xsm > header {
   flex-wrap: wrap;
 }
 /* line 17, core/site/_header.scss */
-html.site body > header a, html.site body > header i, html.site body > header label {
-  margin-right: 10px;
-  font-size: 24px;
+html.site body > header a, html.site body > header i {
+  margin-right: 16px;
+  font-size: 30px;
 }
 @media screen and (max-width: 1023px) {
   /* line 34, core/site/_size.scss */
@@ -964,12 +964,6 @@ html.site body > header a, html.site body > header i, html.site body > header la
 @media screen and (max-width: 1023px) {
   /* line 34, core/site/_size.scss */
   html.site body.form-factor-dynamic > header i {
-    font-size: 16px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  /* line 34, core/site/_size.scss */
-  html.site body.form-factor-dynamic > header label {
     font-size: 16px;
   }
 }
@@ -981,10 +975,6 @@ html.site body.form-factor-sm > header a {
 html.site body.form-factor-sm > header i {
   font-size: 16px;
 }
-/* line 69, core/site/_size.scss */
-html.site body.form-factor-sm > header label {
-  font-size: 16px;
-}
 @media screen and (max-width: 799px) {
   /* line 34, core/site/_size.scss */
   html.site body.form-factor-dynamic > header a {
@@ -997,12 +987,6 @@ html.site body.form-factor-sm > header label {
     font-size: 16px;
   }
 }
-@media screen and (max-width: 799px) {
-  /* line 34, core/site/_size.scss */
-  html.site body.form-factor-dynamic > header label {
-    font-size: 16px;
-  }
-}
 /* line 69, core/site/_size.scss */
 html.site body.form-factor-xsm > header a {
   font-size: 16px;
@@ -1011,18 +995,47 @@ html.site body.form-factor-xsm > header a {
 html.site body.form-factor-xsm > header i {
   font-size: 16px;
 }
+/* line 23, core/site/_header.scss */
+html.site body > header label {
+  margin-right: 10px;
+  font-size: 24px;
+}
+@media screen and (max-width: 1023px) {
+  /* line 34, core/site/_size.scss */
+  html.site body.form-factor-dynamic > header label {
+    font-size: 16px;
+  }
+}
+/* line 69, core/site/_size.scss */
+html.site body.form-factor-sm > header label {
+  font-size: 16px;
+}
+@media screen and (max-width: 799px) {
+  /* line 34, core/site/_size.scss */
+  html.site body.form-factor-dynamic > header label {
+    font-size: 16px;
+  }
+}
 /* line 69, core/site/_size.scss */
 html.site body.form-factor-xsm > header label {
   font-size: 16px;
 }
-/* line 23, core/site/_header.scss */
+/* line 29, core/site/_header.scss */
+html.site body > header label.sm {
+  font-size: 16px;
+}
+/* line 33, core/site/_header.scss */
+html.site body > header a, html.site body > header i {
+  cursor: pointer;
+}
+/* line 37, core/site/_header.scss */
 html.site body > header > img:first-child, html.site body > header > img.logo {
   min-height: 50px;
   max-height: 50px;
   margin-right: 30px;
   flex-shrink: 0;
 }
-/* line 36, core/site/_header.scss */
+/* line 50, core/site/_header.scss */
 html.site body > header.with-logo {
   background-image: url("/img/logo-toolbar.png");
   background-position: left center;
@@ -1030,7 +1043,7 @@ html.site body > header.with-logo {
   background-size: 80px 60px;
   padding-left: 100px !important;
 }
-/* line 43, core/site/_header.scss */
+/* line 57, core/site/_header.scss */
 html.site body > header > .tab {
   color: #fafafa;
   text-decoration: none;
@@ -1045,16 +1058,16 @@ html.site body > header > .tab {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 58, core/site/_header.scss */
+/* line 72, core/site/_header.scss */
 html.site body > header > .tab:first-child {
   margin-left: 10px;
 }
-/* line 61, core/site/_header.scss */
+/* line 75, core/site/_header.scss */
 html.site body > header > .tab.active {
   background: #fafafa;
   color: #4C81AF;
 }
-/* line 65, core/site/_header.scss */
+/* line 79, core/site/_header.scss */
 html.site body > header > .tab:not(.active):hover {
   background: #6e9ac0;
   color: #fafafa !important;
@@ -1242,7 +1255,7 @@ html.site body > main > section > article .legend {
   margin-top: 5px;
 }
 /* line 86, core/site/_main.scss */
-html.site body > main > section > article .legend a.fa {
+html.site body > main > section > article .legend a.fa, html.site body > main > section > article .legend i.fa {
   font-size: 130%;
 }
 /* line 93, core/site/_main.scss */

@@ -14,10 +14,24 @@
 
 
 
-    a , i, label {
+    a , i {
+      margin-right:16px;
+      font-size:skin(header label font-size,30px);
+      @include in-size((sm xsm),(font-size:16px));
+    }
+
+    label {
       margin-right:10px;
       font-size:skin(header label font-size,24px);
       @include in-size((sm xsm),(font-size:16px));
+    }
+
+    label.sm {
+      font-size:16px;
+    }
+
+    a, i {
+      cursor: pointer;
     }
 
     > img:first-child, >img.logo {
