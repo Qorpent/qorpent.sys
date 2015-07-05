@@ -2,6 +2,29 @@
   $vpad : skin(button vpad, 2px);
   $hpad : skin(button hpad, 10px);
   $lh : $basesize + $vpad * 2;
+  .ibutton {
+    font-size: $basesize;
+    line-height: $lh;
+    text-align: center;
+    padding: $vpad $vpad $vpad $vpad;
+    margin : 1px;
+    cursor: pointer;
+    &.xlg {
+      font-size: $basesize + 8px;
+      line-height: $lh + 8px;
+    }
+    &.lg {
+      font-size: $basesize + 4px;
+      line-height: $lh + 4px;
+    }
+    &.sm {
+      font-size: $basesize - 4px;
+      line-height: $lh - 4px;
+    }
+    & + .ibutton {
+      margin-left: 5px;
+    }
+  }
   .button, button {
     font-size: $basesize;
     line-height: $lh;

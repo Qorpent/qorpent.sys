@@ -1,3 +1,7 @@
 @import "compass/reset";
+
 @import "core/all";
+textarea {
+  font-family: skin(font);
+}
 @include all();

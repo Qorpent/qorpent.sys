@@ -2,7 +2,7 @@
   $vpad : skin(button vpad, 2px);
   $hpad : skin(button hpad, 10px);
   $lh : $basesize + $vpad * 2;
-  input, select {
+  input, select, textarea {
     font-size: $basesize;
     line-height: $lh;
     text-align: left;
