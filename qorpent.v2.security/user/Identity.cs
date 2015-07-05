@@ -62,6 +62,8 @@ namespace qorpent.v2.security.user {
         public string Name { get; set; }
         public string AuthenticationType { get; set; }
         public bool IsAuthenticated { get; set; }
+        public Token DisabledToken { get; set; }
+
         public void Write(TextWriter output, string mode, ISerializationAnnotator annotator) {
             if (string.IsNullOrWhiteSpace(mode)) {
                 mode = "admin";

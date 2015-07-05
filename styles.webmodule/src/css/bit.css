@@ -736,6 +736,58 @@ body table td, body table th {
 body table td .not-important, body table th .not-important {
   opacity: 0.5;
 }
+/* line 5, core/features/_dropdown.scss */
+body .dropdown {
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  z-index: -2100;
+  position: absolute;
+}
+/* line 11, core/features/_dropdown.scss */
+body .dropdown.shown {
+  visibility: visible;
+  z-index: 2100;
+}
+/* line 17, core/features/_dropdown.scss */
+body .dropdown.menu {
+  border: solid 1px #D7D7D7;
+  background-color: #4C81AF;
+  padding: 3px;
+  box-shadow: 2px 2px 4px #4C81AF;
+}
+/* line 26, core/features/_dropdown.scss */
+body .dropdown .menuitem {
+  border-top: solid 1px #4C81AF;
+}
+/* line 29, core/features/_dropdown.scss */
+body .dropdown .menuitem.submenu {
+  font-weight: bold !important;
+}
+/* line 31, core/features/_dropdown.scss */
+body .dropdown .menuitem.submenu * {
+  font-weight: normal;
+}
+/* line 34, core/features/_dropdown.scss */
+body .dropdown .menuitem.submenu:after {
+  text-align: right;
+  float: right;
+}
+/* line 42, core/features/_dropdown.scss */
+body .dropdown .menuitem:first-child {
+  border-top: none;
+}
+/* line 47, core/features/_dropdown.scss */
+body .dropdown.debug {
+  background: #4C81AF;
+  color: #4C81AF;
+  border: solid 2px #4C81AF;
+  padding: 20px;
+}
+/* line 56, core/features/_dropdown.scss */
+body body.isdropdown .dropdownback {
+  display: block;
+}
 
 /* line 4, core/_site.scss */
 html.site {

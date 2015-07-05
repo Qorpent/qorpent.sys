@@ -648,11 +648,31 @@ namespace Qorpent.Experiments {
             return Select(data, path);
         }
 
-        public static string str(this object data, string path) {
+        public static string str(this object data, string path)
+        {
             var result = Get(data, path);
-            if(null==result)return null;
-            return result.ToStr();
+            string r = null;
+            if (null != result)
+            {
+                r = result.ToStr();
+            }
+            return r;
         }
+
+        public static string resolvestr(this object data, string path, params string[] paths) {
+            var result = Get(data, path);
+            string r = null;
+            if (null != result) {
+                r = result.ToStr();
+            }
+            if (!string.IsNullOrWhiteSpace(r)) return r;
+            if (null == paths || 0 == paths.Length) return r;
+            return paths.FirstOrDefault(_ =>!string.IsNullOrWhiteSpace( str(data, _)));
+        }
+
+
+
+
 
         public static int num(this object data, string path)
         {

@@ -33,7 +33,9 @@ namespace qorpent.v2.security.authentication {
             if (currentToken != null && TokenService.IsValid(request, currentToken)) {
                 return AuthenticateWithValidToken(request, currentToken);
             }
-            return DefaultIdentitySource.GetUserIdentity(request);
+            var result = (Identity)DefaultIdentitySource.GetUserIdentity(request);
+            result.DisabledToken = currentToken;
+            return result;
         }
 
         private IIdentity AuthenticateWithValidToken(IHttpRequestDescriptor request, Token currentToken) {
