@@ -47,6 +47,14 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                         $('<div class="modalback"></div>').appendTo(document.body);
                     }
                     dialog.modalBack = $(document.body).children('.modalback');
+                    $(document).keydown(function(event){
+                        if(null==dialog.current)return true;
+                        if(27!=event.keyCode)return true;
+                        if(!dialog.current.__handler)return true;
+                        dialog.current.__handler.close();
+                        event.stopPropagation();
+                        return false;
+                    });
                     dialog._initialized = true;
                 }
             }
@@ -98,12 +106,14 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
 
                 scope = angular.element(element[0]).scope();
 
-
+                element[0].__scope = scope;
+                element[0].__handler = scope.handler;
                 return scope.handler;
             }
 
             dialog.alert = function(message,label,callback,createOnly){
                 if(typeof(message)=="object"){
+
                     label = message.label;
                     callback = message.callback;
                     createOnly= message.createOnly;
@@ -196,14 +206,19 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 return d;
             }
 
+            dialog.current = null;
+
             dialog.show = function (element) {
                 dialog.init();
                 var je = $(element);
+                var e = je[0];
                 if(je.is(':visible'))return;
                 var ismodal = je.hasClass('modal');
                 if(ismodal){
                     dialog.modalCount++;
                     dialog.matchBackPosition();
+                    e.__predialog = dialog.current;
+                    dialog.current = e;
                 }
                 var zindex = 10000;
                 if(ismodal){
@@ -275,6 +290,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
             dialog.hide = function (element) {
                 dialog.init();
                 var je = $(element);
+                var e = je[0];
                 if(!je.is(':visible'))return;
                 var scope = null;
                 var ismodal = je.hasClass('modal');
@@ -282,6 +298,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     if(dialog.modalCount>0) {
                         dialog.modalCount--;
                     }
+                    dialog.current = e.__predialog;
                     dialog.matchBackPosition();
                 }
                 if (!!angular) {
@@ -380,7 +397,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                         getShowExpand: function () {
                             if ('showExpand' in this)return !!handler.showExpand;
                             if ('showExpand' in attr)return !!attr.showExpand;
-                            return true;
+                            return false;
                         },
                         getSuccessText: function () {
                             if ('successText' in handler)return handler.successText;

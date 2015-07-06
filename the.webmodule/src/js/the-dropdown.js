@@ -139,7 +139,6 @@ define([
                     }
                     if(event.keyCode==13){
                         var selected = $e.find(".selected");
-                      //  console.log(selected);
                         if(selected.length>0){
                            setTimeout(function(){
                             $(selected[0]).click();

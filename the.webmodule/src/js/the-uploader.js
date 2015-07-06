@@ -10,15 +10,23 @@ define(["the-root", "the-angular"], function (the) {
                 progress = progress.previousElementSibling;
 
             }
+            var fd = new FormData();
+
+            var file = $(e)[0].files[0];
+            var max = 5242880;
+            var maxtext = "5Мб";
+            if(file.type.match(/video/)){
+                max = 26214400;
+                maxtext = "25Мб";
+            }
+            if (file.size > max) {
+                the.dialog.alert("Недопустимый файл - размер более "+maxtext, "Невозможно подгрузить файл");
+                return;
+            }
+
             if (null != progress) {
                 progress = $(progress);
                 progress.show();
-            }
-            var fd = new FormData();
-            var file = $(e)[0].files[0];
-            if (file.size > 26214400) {
-                the.dialog.alert("Недопустимый файл - размер более 25мб", "Невозможно подгрузить файл");
-                return;
             }
             fd.append('file', file);
             $.ajax({
@@ -28,7 +36,6 @@ define(["the-root", "the-angular"], function (the) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                    console.log('success');
                     if (null != progress) {
                         progress.hide();
                     }
