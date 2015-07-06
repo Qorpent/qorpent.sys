@@ -60,10 +60,36 @@ define([
 
         },
 
+
+        __doSelectByKeyboard : function(e, key){
+            var selected = $(e).find('.selected');
+            if(selected.length!=0){
+                if(key==38){
+                    var newsel = selected.prevAll('.selectable');
+                    if(newsel.length>0){
+                        $(newsel[0]).addClass("selected");
+                        $(selected[0]).removeClass("selected");
+                    }
+                }else{
+                    var newsel = selected.nextAll('.selectable');
+                    if(newsel.length>0){
+                        $(newsel[0]).addClass("selected");
+                        $(selected[0]).removeClass("selected");
+                    }
+                }
+            }else{
+                var selectable = $(e).find('.selectable');
+                if(selectable.length>0){
+                    $(selectable[0]).addClass("selected");
+                }
+            }
+        },
+
         __compileContainerElement: function (e, options) {
             var self = this;
             $e = $(e);
             e = $e[0];
+
             $e.on('mouseleave', function (event) {
                 if (!e.__ddcopened)return;
                 e.__timeout = setTimeout(function () {
@@ -74,6 +100,55 @@ define([
                 if (!e.__ddcopened)return;
                 clearTimeout(e.__timeout);
             });
+            $e.find('.dropdown').on('mousewheel',function(ev){
+              if (!e.__ddcopened)return;
+                    var el = ev.currentTarget;
+                    var ev = ev.originalEvent;
+
+                    var preventScroll = false;
+                    var isScrollingDown = ev.wheelDelta < 0;
+
+                    if (isScrollingDown) {
+                        var isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+
+                        if (isAtBottom) {
+                            preventScroll = true;
+                        }
+                    } else {
+                        var isAtTop = el.scrollTop == 0;
+                        if (isAtTop) {
+                            preventScroll = true;
+                        }
+                    }
+
+                    if (preventScroll) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                    }
+
+            });
+            var input = $e.find('input');
+            if(input.length>0) {
+                $(document).on('keydown', function (event) {
+                    if (!e.__ddcopened)return;
+                    if (event.keyCode == 38 || event.keyCode == 40) {
+                        self.__doSelectByKeyboard(e, event.keyCode);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return false;
+                    }
+                    if(event.keyCode==13){
+                        var selected = $e.find(".selected");
+                      //  console.log(selected);
+                        if(selected.length>0){
+                           setTimeout(function(){
+                            $(selected[0]).click();
+                           },100);
+                        }
+                        self.__closeDropDownContainer(e,options);
+                    }
+                })
+            }
             e.__timeout = null;
             e.__ddcopened = false;
             e.__ddcprepared = true;
