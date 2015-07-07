@@ -788,6 +788,26 @@ body .dropdown.debug {
 body body.isdropdown .dropdownback {
   display: block;
 }
+/* line 3, core/features/_uploader.scss */
+body .uploader i {
+  border: dashed 2px #a4a4a4;
+  border-color: #4C81AF;
+  background-color: white;
+  min-height: 50px;
+  min-width: 100%;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 14, core/features/_uploader.scss */
+body .uploader i.dragging {
+  border: dashed 3px #4C81AF;
+  background-color: #fdefc6;
+  cursor: cell !important;
+}
 
 /* line 4, core/_site.scss */
 html.site {

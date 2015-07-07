@@ -1,5 +1,12 @@
-<form class="uploader">
-    <div style="display:none" class="progress  primary"></div>
-    <i class="button default" onclick="$(this.nextElementSibling).click()">Добавить файл</i>
+<form class="uploader"  >
+    <!--<div style="display:none" class="progress  primary"></div>-->
+    <i
+       ondragover="return false;"
+       ondragenter="angular.element(this).scope().__dragenter(this,event);return false;"
+       ondrop="return angular.element(this).scope().__drop(this,event);return false;"
+       ondragleave="angular.element(this).scope().__dragleave(this,event)"
+       ondragend="angular.element(this).scope().__dragleave(this,event)"
+       onclick="$(this).nextAll('input').click()"
+            >Добавить файл<br/>(нажимте или перетащите файлы)</i>
     <input type="file" style="display:none" name='file' onchange="angular.element(this).scope().__upload(this)" />
 </form>

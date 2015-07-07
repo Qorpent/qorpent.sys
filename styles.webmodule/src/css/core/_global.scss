@@ -157,5 +157,8 @@
     @if skin(dropdown){
       @include dropdown();
     }
+    @if skin(uploader){
+      @include uploader();
+    }
   }
 }

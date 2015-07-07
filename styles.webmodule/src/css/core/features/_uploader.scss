@@ -1,0 +1,26 @@
+@mixin uploader() {
+  .uploader {
+    i {
+      border: dashed 2px color(defaultdark) ;
+      border-color : color(primary);
+      background-color: white;
+      min-height: 50px;
+      min-width: 100%;
+      display:inline-flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:center;text-align:center;
+      cursor: pointer;
+      &.dragging{
+
+
+        border: dashed 3px color(primary);
+        background-color: color(infolight);
+        cursor: cell !important;
+
+      }
+    }
+
+  }
+}
+
