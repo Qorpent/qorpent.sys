@@ -2060,8 +2060,8 @@ html.site body.form-factor-printps, html.site body.form-factor-print {
   background-color: white;
   min-width: 19cm;
   max-width: 19cm;
-  min-height: 27cm;
-  max-height: 27cm;
+  min-height: 26cm;
+  max-height: 26cm;
   font-size: 10pt;
   padding: 0.5cm;
 }
@@ -2074,8 +2074,8 @@ html.site body.form-factor-printps, html.site body.form-factor-print {
 }
 /* line 132, core/site/_size.scss */
 html.site body.form-factor-printls {
-  min-width: 27cm;
-  max-width: 27cm;
+  min-width: 26cm;
+  max-width: 26cm;
   min-height: 19cm;
   max-height: 19cm;
   font-size: 10pt;
@@ -2093,8 +2093,8 @@ html.site body.form-factor-printls {
   html.site body {
     font-family: "Times New Roman" !important;
     background-color: white;
-    min-width: 27cm;
-    max-width: 27cm;
+    min-width: 26cm;
+    max-width: 26cm;
     font-size: 10pt;
   }
 }

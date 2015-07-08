@@ -36,6 +36,7 @@ namespace qorpent.v2.security.user {
                 ReadXml(user, (XElement) jsonsrc);
             }
             var j = alreadyJsonified ? jsonsrc : jsonsrc.jsonify();
+            j = j.map("_source") ?? j;
             user.Id = j.str("_id");
             user.Version = j.num("_version");
             user.CreateTime = j.date("createtime");
@@ -148,11 +149,11 @@ namespace qorpent.v2.security.user {
             jw.WriteProperty("email", user.Email, notnullonly);
             jw.WriteProperty("admin", user.IsAdmin, notnullonly);
             jw.WriteProperty("isgroup", user.IsGroup, notnullonly);
-
+            jw.WriteProperty("active", user.Active, notnullonly);
+            jw.WriteProperty("expire", user.Expire.ToUniversalTime(), notnullonly);
 
             if (usermode == "store" || usermode == "admin") {
-                jw.WriteProperty("active", user.Active, notnullonly);
-                jw.WriteProperty("expire", user.Expire.ToUniversalTime(), notnullonly);
+                
                 jw.WriteProperty("hash", user.Hash, notnullonly);
                 jw.WriteProperty("salt", user.Salt, notnullonly);
                 jw.WriteProperty("resetkey", user.ResetKey, notnullonly);
