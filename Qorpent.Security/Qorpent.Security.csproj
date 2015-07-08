@@ -28,6 +28,13 @@
     <Compile Include="Cryptography\ICryptoSource.cs" />
     <Compile Include="Cryptography\Sources\CryptoSourceExternalOpenSsl.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
+    <Compile Include="SslCa\CaConfig.cs" />
+    <Compile Include="SslCa\CaConfigProvider\DefaultCaConfigProvider.cs" />
+    <Compile Include="SslCa\CaConst.cs" />
+    <Compile Include="SslCa\CaProvider.cs" />
+    <Compile Include="SslCa\CmsDecryptor.cs" />
+    <Compile Include="SslCa\CmsMessage.cs" />
+    <Compile Include="SslCa\ICaConfigProvider.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
   </ItemGroup>
   <ItemGroup>

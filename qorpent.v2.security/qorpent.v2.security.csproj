@@ -20,6 +20,8 @@
     <Compile Include="authentication\TokenEncryptor.cs" />
     <Compile Include="authentication\TrustedOrigin.cs" />
     <Compile Include="authorization\AuthorizationRule.cs" />
+    <Compile Include="authorization\caWrapper\HttpCaWrapper.cs" />
+    <Compile Include="authorization\ICaWrapper.cs" />
     <Compile Include="authorization\NotAuthProcessProvider.cs" />
     <Compile Include="authorization\RoleExpressionEvaluator.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
@@ -29,6 +31,12 @@
     <Compile Include="authorization\HttpAuthorizer.cs" />
     <Compile Include="handlers\HandlerBase.cs" />
     <Compile Include="handlers\HandlerResult.cs" />
+    <Compile Include="handlers\logon\ITokenAuthGetSaltHandler.cs" />
+    <Compile Include="handlers\logon\ITokenAuthProcessHandler.cs" />
+    <Compile Include="handlers\logon\ITokenAuthVerifyCmsHandler.cs" />
+    <Compile Include="handlers\logon\TokenAuthGetSaltHandler.cs" />
+    <Compile Include="handlers\logon\TokenAuthVerifyCmsHandler.cs" />
+    <Compile Include="handlers\logon\TokenAuthProcessHandler.cs" />
     <Compile Include="handlers\UserOpAttribute.cs" />
     <Compile Include="handlers\UserOperation.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />
@@ -94,6 +102,10 @@
     <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
       <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
       <Name>Qorpent.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Security\Qorpent.Security.csproj">
+      <Project>{ecb429bc-3e76-4fcd-897e-235b546c8738}</Project>
+      <Name>Qorpent.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>

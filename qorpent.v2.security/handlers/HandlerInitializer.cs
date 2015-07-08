@@ -17,6 +17,9 @@ namespace qorpent.v2.security.handlers {
         private IResetPasswordHandler _resetPasswordHandler;
         private ISendMailHandler _sendMailHandler;
         private IImpersonateHandler _impersonateHandler;
+	    private ITokenAuthGetSaltHandler _tokenAuthGetSaltHandler;
+		private ITokenAuthProcessHandler _tokenAuthProcessHandler;
+		private ITokenAuthVerifyCmsHandler _tokenAuthVerifyCmsHandler;
 
         [Inject]
         public ILogonHandler LogonHandler {
@@ -81,6 +84,24 @@ namespace qorpent.v2.security.handlers {
             set { _sendMailHandler = value; }
         }
 
+		[Inject]
+		public ITokenAuthGetSaltHandler TokenAuthGetSaltHandler {
+		    get { return _tokenAuthGetSaltHandler ?? (_tokenAuthGetSaltHandler = new TokenAuthGetSaltHandler()); }
+			set { _tokenAuthGetSaltHandler = value; }
+	    }
+
+		[Inject]
+		public ITokenAuthProcessHandler TokenAuthProcessHandler {
+		    get { return _tokenAuthProcessHandler ?? (_tokenAuthProcessHandler = new TokenAuthProcessHandler()); }
+			set { _tokenAuthProcessHandler = value; }
+	    }
+
+		[Inject]
+	    public ITokenAuthVerifyCmsHandler TokenAuthVerifyCmsHandler {
+		    get { return _tokenAuthVerifyCmsHandler ?? (_tokenAuthVerifyCmsHandler = new TokenAuthVerifyCmsHandler()); }
+			set { _tokenAuthVerifyCmsHandler = value; }
+	    }
+
         public void Initialize(IHostServer server) {
             server.Factory.Register("/logon", LogonHandler);
             server.Factory.Register("/logout", LogoutHandler);
@@ -92,6 +113,9 @@ namespace qorpent.v2.security.handlers {
             server.Factory.Register("/resetpwdreq", RequireResetPasswordHandler);
             server.Factory.Register("/sendmail", SendMailHandler);
             server.Factory.Register("/impersonate", ImpersonateHandler);
+			server.Factory.Register("/tokenauthgetsalt", TokenAuthGetSaltHandler);
+			server.Factory.Register("/tokenauthprocess", TokenAuthProcessHandler);
+			server.Factory.Register("/tokenauthverifycms", TokenAuthVerifyCmsHandler);
         }
     }
 }
