@@ -103,13 +103,31 @@
   $form-factor-direct: skin(form-factor-direct);
 
   @if $form-factor-print {
+    &.form-factor-print {
+      main,section,article,header,footer {
+        background-color: white;
+      }
+      box-shadow: none !important;
+    }
+    @media print {
+      main,section,article {
+        background-color: white;
+      }
+      box-shadow: none !important;
+    }
     &.form-factor-printps, &.form-factor-print {
+      font-family: "Times New Roman" !important;
+      background-color:white;
       min-width: $baseps;
       max-width: $baseps;
       min-height: $basels;
       max-height: $basels;
       font-size: 10pt;
-      padding: 2cm;
+      padding: 0.5cm;
+      @media screen {
+        margin-top:20px;
+        margin-bottom:20px;
+      }
     }
     &.form-factor-printls {
       min-width: $basels;
@@ -117,11 +135,17 @@
       min-height: $baseps;
       max-height: $baseps;
       font-size: 10pt;
-      padding: 2cm;
+      padding: 0.5cm;
+      @media screen {
+        margin-top:20px;
+        margin-bottom:20px;
+      }
     }
 
     @media print and (orientation: landscape) {
       & {
+        font-family: "Times New Roman" !important;
+        background-color:white;
         min-width: $basels;
         max-width: $basels;
         font-size: 10pt;
@@ -131,6 +155,8 @@
 
     @media print and (orientation: portrait) {
       & {
+        font-family: "Times New Roman" !important;
+        background-color:white;
         min-width: $baseps;
         max-width: $baseps;
         font-size: 10pt;

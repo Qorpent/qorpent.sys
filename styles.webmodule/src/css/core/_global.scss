@@ -62,7 +62,7 @@
     -webkit-animation-iteration-count: infinite;
   }
   @page  {
-    margin: 1cm;
+    margin: 0.5cm;
   }
   .filler {
     flex-grow:1;
@@ -160,5 +160,42 @@
     @if skin(uploader){
       @include uploader();
     }
+
+    @if skin(icons){
+      @include icons();
+    }
+
+    @if skin(toolwindow){
+      @include toolwindow();
+    }
+
+
+    @if skin(buttons){
+      @include buttons();
+    }
+
+
+    @if skin(inputs){
+      @include inputs();
+    }
+    @media print {
+      .noprint {
+        display: none;
+      }
+      html {
+        background-color: white !important;
+
+      }
+      * {
+        box-shadow : none !important;
+      }
+    }
+    @media screen {
+      .noscreen {
+        display: none;
+      }
+    }
+
+
   }
 }

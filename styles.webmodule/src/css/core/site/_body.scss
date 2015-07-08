@@ -32,23 +32,7 @@
       @include site-footer();
     }
 
-    @if skin(icons){
-      @include icons();
-    }
 
-    @if skin(toolwindow){
-      @include toolwindow();
-    }
-
-
-    @if skin(buttons){
-      @include buttons();
-    }
-
-
-    @if skin(inputs){
-      @include inputs();
-    }
 
   }
 }
