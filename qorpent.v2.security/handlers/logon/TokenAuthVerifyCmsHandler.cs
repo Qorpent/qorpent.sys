@@ -50,7 +50,7 @@ namespace qorpent.v2.security.handlers.logon {
 			}
 			var message = cmsDecryptor.Descrypt(cmsMessage);
 			var result = message != salt ? "false" : "true";
-			context.Write(result);
+			context.Finish(result);
 		}
 	}
 }

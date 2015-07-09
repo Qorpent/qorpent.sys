@@ -82,7 +82,7 @@ namespace qorpent.v2.security.handlers.logon {
 						};
 						Salts[certId] = saltObj;
 					}
-					context.Write("\"" + saltObj.Value + "\"");
+					context.Finish("\"" + saltObj.Value + "\"");
 					CleanUpExpiredSaltsInternal();
 					return;
 				}
@@ -93,7 +93,7 @@ namespace qorpent.v2.security.handlers.logon {
 			}
 			context.ContentType = MimeHelper.JSON;
 			var salt = caProxy.GetSalt(certId);
-			context.Write(salt);
+			context.Finish(salt);
 		}
 		private void CleanUpExpiredSaltsInternal() {
 			var keys = Salts.Where(_ => _.Value.Expire <= DateTime.UtcNow).Select(_ => _.Key).ToArray();

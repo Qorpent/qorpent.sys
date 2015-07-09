@@ -43,7 +43,7 @@ namespace qorpent.v2.security.handlers.logon {
 			}
 			var user = caProxy.ProcessAuth(certId, message);
 			var strUser = user.stringify();
-			context.Write(strUser);
+			context.Finish(strUser);
 		}
 	}
 }
