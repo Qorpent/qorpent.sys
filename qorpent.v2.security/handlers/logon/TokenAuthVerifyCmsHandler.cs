@@ -45,17 +45,9 @@ namespace qorpent.v2.security.handlers.logon {
 				EncryptedMessage = cms
 			};
 			context.ContentType = MimeHelper.JSON;
-			try {
-				var message = cmsDecryptor.Descrypt(cmsMessage);
-				if (message != expected) {
-					context.Write("false");
-					return;
-				}
-				context.Write("true");
-			} catch (Exception exception) {
-				context.Write("false");
-				throw;
-			}
+			var message = cmsDecryptor.Descrypt(cmsMessage);
+			var result = message != expected ? "false" : "true";
+			context.Write(result);
 		}
 	}
 }
