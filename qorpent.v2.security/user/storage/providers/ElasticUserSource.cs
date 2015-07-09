@@ -105,9 +105,10 @@ namespace qorpent.v2.security.user.storage.providers {
                 throw new Exception("not enabled");
             }
             lock (this) {
-                if (EsClient.InvalidConnection) {
+                /*if (EsClient.InvalidConnection) {
                     throw new Exception("cannot store due to invalid connection");
-                }
+                }*/
+                Console.WriteLine("1");
                 user.Id = UserSerializer.GetId(user);
                 if (user.CreateTime.Year <= 1900) {
                     user.CreateTime = DateTime.Now.ToUniversalTime();
@@ -126,6 +127,7 @@ namespace qorpent.v2.security.user.storage.providers {
                 var version = j.num("_version");
                 user.Version = version;
                 _cache[user.Login] = user;
+                Console.WriteLine("2");
                 return user;
             }
         }
