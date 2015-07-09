@@ -113,6 +113,18 @@ namespace Qorpent.Bridge.Tests.Utils {
 ";
 
         [Test]
+        public void CanSearch() {
+            var obj = new {a = new {b = new {c = 1}}}.jsonify();
+            Assert.AreEqual(1,obj.num("*.c"));
+
+            obj = new { a = new { b = new []{new{ c = 1 } }} }.jsonify();
+            Assert.AreEqual(1, obj.num("*.c"));
+            var json = @"{""response"":{""GeoObjectCollection"":{""metaDataProperty"":{""GeocoderResponseMetaData"":{""request"":"", Асбест, Ленинградская, 26-2"",""found"":""1"",""results"":""10""}},""featureMember"":[{""GeoObject"":{""metaDataProperty"":{""GeocoderMetaData"":{""kind"":""house"",""text"":""Россия, Свердловская область, Асбест, Ленинградская улица, 26К2"",""precision"":""exact"",""AddressDetails"":{""Country"":{""AddressLine"":""Свердловская область, Асбест, Ленинградская улица, 26К2"",""CountryNameCode"":""RU"",""CountryName"":""Россия"",""AdministrativeArea"":{""AdministrativeAreaName"":""Свердловская область"",""SubAdministrativeArea"":{""SubAdministrativeAreaName"":""городской округ Асбест"",""Locality"":{""LocalityName"":""Асбест"",""Thoroughfare"":{""ThoroughfareName"":""Ленинградская улица"",""Premise"":{""PremiseNumber"":""26К2""}}}}}}}}},""description"":""Асбест, Свердловская область, Россия"",""name"":""Ленинградская улица, 26К2"",""boundedBy"":{""Envelope"":{""lowerCorner"":""61.445942 57.008617"",""upperCorner"":""61.462399 57.017595""}},""Point"":{""pos"":""61.454171 57.013106""}}}]}}}".jsonify();
+            Assert.AreEqual("61.454171 57.013106",json.str("*.pos"));
+        }
+
+
+        [Test]
         public void CanParseComplexObject() {
             var res = Experiments.Json.Parse(complexJson.Replace("'", "\"")) as IDictionary<string, object>;
 
