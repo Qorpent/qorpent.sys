@@ -36,10 +36,8 @@ namespace Qorpent.Security.SslCa {
 			var crtPath = provider.GetUserCertPath(message.CertificateFingerprint);
 			var keyPath = provider.GetUserKeyPath(message.CertificateFingerprint);
 			var cmsPath = Path.GetTempFileName();
-			var argPath = Path.GetTempFileName();
 			File.WriteAllText(cmsPath, realMsg);
 			var arguments = string.Format("smime -decrypt -in {0} -recip {1} -inkey {2} -inform PEM", cmsPath, crtPath, keyPath);
-			File.WriteAllText(argPath, arguments);
 			var startInfo = new ProcessStartInfo {
 				FileName = CaConst.OpenSslProcess,
 				Arguments = arguments,
@@ -52,6 +50,7 @@ namespace Qorpent.Security.SslCa {
 			process.Start();
 			var output = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
+			File.Delete(cmsPath);
 			return output;
 		}
 		/// <summary>
