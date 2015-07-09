@@ -6,6 +6,7 @@ using Qorpent.IO.Http;
 using Qorpent.IoC;
 using Qorpent.Log;
 using qorpent.v2.security.authorization;
+using qorpent.v2.security.user;
 
 namespace qorpent.v2.security.handlers.logon {
 	/// <summary>
@@ -42,8 +43,22 @@ namespace qorpent.v2.security.handlers.logon {
 				throw new ArgumentException("Empty encrypted message");
 			}
 			var user = caProxy.ProcessAuth(certId, message);
-			var strUser = user.stringify();
-			context.Finish(strUser);
+			if (user != null) {
+				ProcessUserLogin(user, server, context);
+				var strUser = user.stringify();
+				context.Finish(strUser);
+				return;
+			}
+			context.Finish("false");
+		}
+		/// <summary>
+		///		Произведение авторизации и всех сопутствующих процедур
+		/// </summary>
+		/// <param name="user">Пользователь</param>
+		/// <param name="server">Сервер</param>
+		/// <param name="context">Контекст</param>
+		private void ProcessUserLogin(IUser user, IHostServer server, WebContext context) {
+			//todo:implement
 		}
 	}
 }

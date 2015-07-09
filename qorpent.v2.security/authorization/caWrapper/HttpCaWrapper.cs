@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using Qorpent;
 using Qorpent.Host;
-using Qorpent.IO.Net;
 using Qorpent.IoC;
 using qorpent.v2.security.user;
 
@@ -44,7 +43,6 @@ namespace qorpent.v2.security.authorization.caWrapper {
 		public IUser ProcessAuth(string certId, string encryptedSalt) {
 			var uri = GetCaServerUri();
 			bool success;
-			IUser user;
 			using (var webClient = new WebClient()) {
 				var requestUri = new Uri(uri, "tokenauthverifycms");
 				var requestParams = new NameValueCollection {{"cert", certId}, {"message", encryptedSalt}};
@@ -53,11 +51,10 @@ namespace qorpent.v2.security.authorization.caWrapper {
 				success = responseText == "true";
 			}
 			if (success) {
-				user = GetUserByCertId(certId);
-			} else {
-				user = new User {Login = "false", Active = false};
+				var user = GetUserByCertId(certId);
+				return user;
 			}
-			return user;
+			return null;
 		}
 		/// <summary>
 		///		Определяет учётную запись пользователя по идентификатору сопоставленного ему сертификата
