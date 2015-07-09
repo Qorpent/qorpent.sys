@@ -52,8 +52,9 @@ namespace qorpent.v2.security.handlers.logon {
 					return;
 				}
 				context.Write("true");
-			} catch {
+			} catch (Exception exception) {
 				context.Write("false");
+				throw;
 			}
 		}
 	}
