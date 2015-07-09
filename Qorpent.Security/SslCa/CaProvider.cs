@@ -34,7 +34,7 @@ namespace Qorpent.Security.SslCa {
 			}
 			var fisrt = fpParts[0];
 			var second = fpParts[1];
-			var result = Path.Combine(dataDir, fisrt, second);
+			var result = Path.Combine(dataDir, fisrt, second, certFingerprint.Replace(":", ""));
 			return result;
 		}
 		/// <summary>
