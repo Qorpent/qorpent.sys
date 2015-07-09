@@ -35,6 +35,7 @@ namespace qorpent.v2.security.management {
             if (update.ChangedDomain(target)) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot change domain"};
             }
+       
             if (Roles.IsInRole(actor, "SECURE_DOMAIN_ADMIN")) {
                 if (update.ChangedActive(target) && !target.Active) {
                     return new UpdateResult {IsError = true, ErrorMessage = "cannot reactivate yourself"};
@@ -111,7 +112,9 @@ namespace qorpent.v2.security.management {
                 }
             }
 
-            
+            if (update.ChangedPublicKey(target)) {
+                return new UpdateResult { IsError = true, ErrorMessage = "cannot set public key" };
+            }
 
             if (null != update.IsGroup) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot manage groups"};

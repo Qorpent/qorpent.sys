@@ -101,6 +101,7 @@ namespace qorpent.v2.security.user.storage.providers {
 
         public IUser Store(IUser user) {
             if (!WriteUsersEnabled) {
+
                 throw new Exception("not enabled");
             }
             lock (this) {

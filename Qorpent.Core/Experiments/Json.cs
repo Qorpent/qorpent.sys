@@ -721,7 +721,7 @@ namespace Qorpent.Experiments {
         }
         public static DateTime date(this object data, string path)
         {
-            return Get(data, path).ToDate();
+            return Get(data, path).ToDate(true);
         }
         public static object get(this object data, string path)
         {

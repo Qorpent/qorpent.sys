@@ -151,6 +151,7 @@ namespace qorpent.v2.security.user {
             jw.WriteProperty("isgroup", user.IsGroup, notnullonly);
             jw.WriteProperty("active", user.Active, notnullonly);
             jw.WriteProperty("expire", user.Expire.ToUniversalTime(), notnullonly);
+            jw.WriteProperty("publickey", user.PublicKey, notnullonly);
 
             if (usermode == "store" || usermode == "admin") {
                 
@@ -158,7 +159,7 @@ namespace qorpent.v2.security.user {
                 jw.WriteProperty("salt", user.Salt, notnullonly);
                 jw.WriteProperty("resetkey", user.ResetKey, notnullonly);
                 jw.WriteProperty("resetexpire", user.ResetExpire.ToUniversalTime(), notnullonly);
-                jw.WriteProperty("publickey", user.PublicKey, notnullonly);
+                
                 jw.WriteProperty("logable", user.Logable, notnullonly);
             }
             jw.WriteProperty("domain", user.Domain, notnullonly);

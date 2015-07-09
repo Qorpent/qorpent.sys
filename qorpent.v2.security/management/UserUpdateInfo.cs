@@ -21,6 +21,7 @@ namespace qorpent.v2.security.management {
         public DateTime? Expire { get; set; }
         public string Password { get; set; }
         public string Domain { get; set; }
+        public string PublicKey { get; set; }
         public IList<string> Roles { get; set; }
         public IList<string> Groups { get; set; }
         public object Custom { get; set; }
@@ -100,6 +101,10 @@ namespace qorpent.v2.security.management {
             if (ChangedName(targetUser)) {
                 return true;
             }
+            if (ChangedPublicKey(targetUser))
+            {
+                return true;
+            }
             if (ChangedEmail(targetUser)) {
                 return true;
             }
@@ -132,6 +137,17 @@ namespace qorpent.v2.security.management {
             }
             if (ChangedCustom(targetUser)) {
                 return true;
+            }
+            return false;
+        }
+
+        public bool ChangedPublicKey(IUser targetUser) {
+            if (!string.IsNullOrWhiteSpace(PublicKey))
+            {
+                if (PublicKey != targetUser.PublicKey)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -281,6 +297,9 @@ namespace qorpent.v2.security.management {
             }
             if (ChangedEmail(targetUser)) {
                 targetUser.Email = Email;
+            }
+            if (ChangedPublicKey(targetUser)) {
+                targetUser.PublicKey = PublicKey;
             }
             if (ChangedExpire(targetUser)) {
                 targetUser.Expire = Expire.Value.ToUniversalTime();

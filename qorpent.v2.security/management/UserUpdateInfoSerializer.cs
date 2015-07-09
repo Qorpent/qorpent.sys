@@ -24,6 +24,7 @@ namespace qorpent.v2.security.management {
             var _custom = parameters.ReadDict("custom");
             var _roles = parameters.ReadArray("roles");
             var _groups = parameters.ReadArray("groups");
+           
             var result = new[] {
                 new UserUpdateInfo {
                     Login = parameters.Get("login"),
@@ -34,6 +35,7 @@ namespace qorpent.v2.security.management {
                     IsAdmin = string.IsNullOrWhiteSpace(_admin) ? (bool?) null : _admin.ToBool(),
                     Logable = string.IsNullOrWhiteSpace(_logable) ? (bool?) null : _logable.ToBool(),
                     Expire = string.IsNullOrWhiteSpace(_expire) ? (DateTime?) null : _expire.ToDate(),
+                    PublicKey = parameters.Get("publickey"),
                     Password = parameters.Get("password"),
                     Domain = parameters.Get("domain"),
                     Roles = _roles.Length == 0 ? null : _roles.Select(_ => _.ToStr()).ToList(),
@@ -75,6 +77,7 @@ namespace qorpent.v2.security.management {
                 Expire = string.IsNullOrWhiteSpace(_expire) ? (DateTime?) null : _expire.ToDate(),
                 Password = j.str("password"),
                 Domain = j.str("domain"),
+                PublicKey = j.str("publickey"),
                 Roles = (_roles == null || _roles.Length == 0) ? null : _roles.Select(_ => _.ToStr()).ToList(),
                 Groups = (_groups == null || _groups.Length == 0) ? null : _groups.Select(_ => _.ToStr()).ToList(),
                 Custom = (_custom == null || _custom.Count == 0) ? null : _custom
