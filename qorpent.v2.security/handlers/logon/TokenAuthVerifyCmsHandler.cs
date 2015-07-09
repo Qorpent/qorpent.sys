@@ -26,9 +26,8 @@ namespace qorpent.v2.security.handlers.logon {
 				context.PreparedParameters = RequestParameters.Create(context);
 			}
 			var preparedParams = context.PreparedParameters;
-			var fingerprint = preparedParams.Get("fingerprint");
+			var fingerprint = preparedParams.Get("cert");
 			var cms = preparedParams.Get("message");
-			var expected = preparedParams.Get("expected");
 			var container = server.Container;
 			var caConfigProvider = container.Get<ICaConfigProvider>();
 			if (caConfigProvider == null) {
@@ -45,8 +44,12 @@ namespace qorpent.v2.security.handlers.logon {
 				EncryptedMessage = cms
 			};
 			context.ContentType = MimeHelper.JSON;
+			string salt;
+			lock (TokenAuthGetSaltHandler.Sync) {
+				salt = TokenAuthGetSaltHandler.Salts[fingerprint].Value;
+			}
 			var message = cmsDecryptor.Descrypt(cmsMessage);
-			var result = message != expected ? "false" : "true";
+			var result = message != salt ? "false" : "true";
 			context.Write(result);
 		}
 	}
