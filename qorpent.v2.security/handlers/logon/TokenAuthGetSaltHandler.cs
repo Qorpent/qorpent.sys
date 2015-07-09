@@ -16,7 +16,7 @@ namespace qorpent.v2.security.handlers.logon {
 	/// </summary>
 	[UserOp("tokenauthgetsalt", SuccessLevel = LogLevel.Info, Secure = false)]
 	[ContainerComponent(Lifestyle.Singleton, "handler.tokenauthgetsalt", ServiceType = typeof(ITokenAuthGetSaltHandler))]
-	public class TokenAuthGetSaltHandler : HandlerBase, ITokenAuthGetSaltHandler {
+	public class TokenAuthGetSaltHandler : TokenAuthHandlerBase, ITokenAuthGetSaltHandler {
 		/// <summary>
 		///		Соль
 		/// </summary>

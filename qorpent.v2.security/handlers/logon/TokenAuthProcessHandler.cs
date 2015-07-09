@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Security.Principal;
 using System.Threading;
 using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IO.Http;
 using Qorpent.IoC;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
+using qorpent.v2.security.authentication;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.user;
 
@@ -12,9 +15,12 @@ namespace qorpent.v2.security.handlers.logon {
 	/// <summary>
 	///		Обработчик процесса авторизации по токену
 	/// </summary>
-	[UserOp("tokenauthprocess", SuccessLevel = LogLevel.Info, Secure = false)]
+	[UserOp("logonsec", Secure =true, SuccessLevel = LogLevel.Info, ErrorLevel = LogLevel.Warn, TreatFalseAsError = true)]
 	[ContainerComponent(Lifestyle.Singleton, "handler.tokenauthprocess", ServiceType = typeof(ITokenAuthProcessHandler))]
-	public class TokenAuthProcessHandler : HandlerBase, ITokenAuthProcessHandler {
+	public class TokenAuthProcessHandler : TokenAuthHandlerBase, ITokenAuthProcessHandler {
+
+		[Inject]
+		public IHttpTokenService TokenService { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -44,9 +50,9 @@ namespace qorpent.v2.security.handlers.logon {
 			}
 			var user = caProxy.ProcessAuth(certId, message);
 			if (user != null) {
-				ProcessUserLogin(user, server, context);
-				var strUser = user.stringify();
-				context.Finish(strUser);
+				var result = ProcessUserLogin(user, server, context);
+				var strResult = result.Result.stringify();
+				context.Finish(strResult);
 				return;
 			}
 			context.Finish("false");
@@ -57,8 +63,19 @@ namespace qorpent.v2.security.handlers.logon {
 		/// <param name="user">Пользователь</param>
 		/// <param name="server">Сервер</param>
 		/// <param name="context">Контекст</param>
-		private void ProcessUserLogin(IUser user, IHostServer server, WebContext context) {
-			//todo:implement
+		/// <returns>HandlerResult</returns>
+		private HandlerResult ProcessUserLogin(IUser user, IHostServer server, WebContext context) {
+			var identity = new Identity(user) {AuthenticationType = "secure"};
+			context.User = new GenericPrincipal(identity, null);
+			var logondata = new LogonInfo {
+				Identity = identity,
+				RemoteEndPoint = context.Request.RemoteEndPoint,
+				LocalEndPoint = context.Request.LocalEndPoint,
+				UserAgent = context.Request.UserAgent
+			};
+			var token = TokenService.Create(context.Request);
+			TokenService.Store(context.Response, context.Request.Uri, token);
+			return new HandlerResult { Result = true, Data = logondata };
 		}
 	}
 }

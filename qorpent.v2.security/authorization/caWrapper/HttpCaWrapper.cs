@@ -7,6 +7,7 @@ using Qorpent;
 using Qorpent.Host;
 using Qorpent.IoC;
 using qorpent.v2.security.user;
+using qorpent.v2.security.user.storage;
 
 namespace qorpent.v2.security.authorization.caWrapper {
 	/// <summary>
@@ -14,6 +15,15 @@ namespace qorpent.v2.security.authorization.caWrapper {
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton, "httpcawrapper", ServiceType = typeof(ICaWrapper))]
 	public class HttpCaWrapper : ServiceBase, ICaWrapper {
+		private IUserService _userService;
+		/// <summary>
+		///		Сервис юзеров
+		/// </summary>
+		[Inject]
+		public IUserService UserService {
+			get { return _userService ?? (_userService = Container.Get<IUserService>()); }
+			set { _userService = value; }
+		}
 		/// <summary>
 		///		Получение сессионной соли относительно идентификатора сертификата
 		/// </summary>
@@ -62,7 +72,9 @@ namespace qorpent.v2.security.authorization.caWrapper {
 		/// <param name="certId"></param>
 		/// <returns>Представление пользователя</returns>
 		private IUser GetUserByCertId(string certId) {
-			throw new NotImplementedException();
+			var loginString = "!certid:" + certId;
+			var user = UserService.GetUser(loginString);
+			return user;
 		}
 		/// <summary>
 		///		Определяет из текщего контекста адрес сервера CA

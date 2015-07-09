@@ -68,18 +68,24 @@ namespace qorpent.v2.security.user.storage.providers {
                 if (_cache.ContainsKey(login)) {
                     return _cache[login];
                 }
-                var id = UserSerializer.GetId(login);
-                var json = EsClient.ExecuteCommand(GetBaseUrl() + id);
-                if (null == json) {
+	            string json;
+	            if (login.StartsWith("!certid:")) {
+					var post = new {query = new {match = new {publickey = login.Replace("!certid:", "")}}}.stringify();
+					json = EsClient.ExecuteCommand(GetBaseUrl() + "_search", post);
+	            } else {
+					var id = UserSerializer.GetId(login);
+					json = EsClient.ExecuteCommand(GetBaseUrl() + id);		            
+	            }
+	            if (null == json) {
                     return null;
                 }
                 var j = json.jsonify();
-                var found = j.bul("found");
+                var found = j.bul("found") || j.num("*.total") > 0;
                 if (found) {
+	                j = j.map("*._source");
                     var version = j.num("_version");
-                    var src = j.map("_source");
-                    var user = UserSerializer.CreateFromJson(src);
-                    user.Id = id;
+                    var user = UserSerializer.CreateFromJson(j);
+	                user.Id = j.str("_id");
                     user.Version = version;
                     _cache[login] = user;
                 }

@@ -157,21 +157,21 @@ require.config({
                             $http.post('/tokenauthprocess', {
                                 cert: $scope.currentCert,
                                 message: encrypted
-                            }).success(function (result) {
-                                if (result['Login']) {
+                            }).success(function (data) {
+                                if (data) {
                                     var urlref =  document.location.href.match(/referer=([\s\S]+)$/);
                                     if(urlref)urlref = urlref[1];
                                     if(urlref){
                                         document.location.href = urlref;
                                     }
                                     the.login.myinfo(function (data) {
-                                        $scope.$apply(function () {
+                                        $scope.$tryApply(function () {
                                             $scope.user.auth = true;
                                             $scope.user.info = data;
                                         });
                                     });
                                 } else {
-                                    $scope.$apply(function () {
+                                    $scope.$tryApply(function () {
                                         $scope.user.auth = false;
                                         $scope.user.info = null;
                                     });

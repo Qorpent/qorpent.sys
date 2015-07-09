@@ -106,6 +106,9 @@ namespace qorpent.v2.security.authorization {
             if (uri.AbsolutePath == "/resetpwdreq") {
                 return true;
             }
+			if (uri.AbsolutePath.StartsWith("/tokenauth")) {
+				return true;
+			}
             return false;
         }
     }

@@ -64,6 +64,7 @@ namespace Qorpent {
                 }
                 var obj = retriever(key);
                 InternalCache[key] = obj;
+				
                 return obj;
             }
         }

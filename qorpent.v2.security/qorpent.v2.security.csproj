@@ -34,7 +34,9 @@
     <Compile Include="handlers\logon\ITokenAuthGetSaltHandler.cs" />
     <Compile Include="handlers\logon\ITokenAuthProcessHandler.cs" />
     <Compile Include="handlers\logon\ITokenAuthVerifyCmsHandler.cs" />
+    <Compile Include="handlers\logon\LogonInfo.cs" />
     <Compile Include="handlers\logon\TokenAuthGetSaltHandler.cs" />
+    <Compile Include="handlers\logon\TokenAuthHandlerBase.cs" />
     <Compile Include="handlers\logon\TokenAuthVerifyCmsHandler.cs" />
     <Compile Include="handlers\logon\TokenAuthProcessHandler.cs" />
     <Compile Include="handlers\UserOpAttribute.cs" />

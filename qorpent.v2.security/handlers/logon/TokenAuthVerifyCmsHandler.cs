@@ -13,7 +13,7 @@ namespace qorpent.v2.security.handlers.logon {
 	/// </summary>
 	[UserOp("tokenauthverifycms", SuccessLevel = LogLevel.Info, Secure = false)]
 	[ContainerComponent(Lifestyle.Singleton, "handler.tokenauthverifycms", ServiceType = typeof(ITokenAuthVerifyCmsHandler))]
-	public class TokenAuthVerifyCmsHandler : HandlerBase, ITokenAuthVerifyCmsHandler {
+	public class TokenAuthVerifyCmsHandler : TokenAuthHandlerBase, ITokenAuthVerifyCmsHandler {
 		/// <summary>
 		/// 
 		/// </summary>

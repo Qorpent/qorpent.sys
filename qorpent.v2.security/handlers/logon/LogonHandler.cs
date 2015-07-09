@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 using System.Threading;
 using Qorpent.Log.NewLog;
 using qorpent.v2.security.authentication;
@@ -12,7 +11,7 @@ using Qorpent.IO.Http;
 using Qorpent.Log;
 
 namespace qorpent.v2.security.handlers.logon {
-    [ContainerComponent(Lifestyle.Singleton, "handler.logon", ServiceType = typeof (ILogonHandler))]
+	[ContainerComponent(Lifestyle.Singleton, "handler.logon", ServiceType = typeof (ILogonHandler))]
     [UserOp("logon",Secure =true,SuccessLevel = LogLevel.Info,ErrorLevel = LogLevel.Warn,TreatFalseAsError = true)]
     public class LogonHandler : UserOperation,ILogonHandler {
         
@@ -58,13 +57,6 @@ namespace qorpent.v2.security.handlers.logon {
             }
             TokenService.Store(context.Response, context.Request.Uri, null);
             return new HandlerResult {Result = false, Data = logondata};
-        }
-
-        class LogonInfo {
-            public Identity Identity { get; set; }
-            public IPEndPoint RemoteEndPoint { get; set; }
-            public IPEndPoint LocalEndPoint { get; set; }
-            public string UserAgent { get; set; }
         }
 
         public override string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result,WebContext context) {
