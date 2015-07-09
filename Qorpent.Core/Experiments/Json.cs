@@ -35,6 +35,11 @@ namespace Qorpent.Experiments {
             if (null == json) return null;
             
             var parts = path.Split(seps);
+            if (parts.Length > 1 && parts[0] == "*") {
+                json = Search(json, parts[1]);
+                if (null == json) return null;
+                parts = parts.Skip(1).ToArray();
+            }
             for (var i = 0; i < parts.Length; i++) {
                 var p = parts[i];
                 if (p[p.Length-1]==']') {
@@ -65,6 +70,38 @@ namespace Qorpent.Experiments {
             }
             yield break;
         }
+        /// <summary>
+        /// Находит первый объект, содержащий указанное имя
+        /// </summary>
+        /// <param name="pathstart"></param>
+        /// <returns></returns>
+        public static object Search(object root,string pathstart) {
+            var dict = root as IDictionary<string,object>;
+            var arr = root as object[];
+            if (null != dict) {
+                if (dict.ContainsKey(pathstart)) {
+                    return dict;
+                }
+                foreach (var prop in dict) {
+                        var subsearch = Search(prop.Value, pathstart);
+                        if (null != subsearch) {
+                            return subsearch;
+                        }
+                    
+                }
+            }
+            else if (null != arr) {
+                foreach (var o in arr) {
+                    var subresult = Search(o, pathstart);
+                    if (null != subresult) {
+                        return subresult;
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         private static object GetInternal(object json, string[] pathParts) {
             var current = json;

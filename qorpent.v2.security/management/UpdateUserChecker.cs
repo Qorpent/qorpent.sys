@@ -45,6 +45,13 @@ namespace qorpent.v2.security.management {
 
                 return new UpdateResult {Ok = true};
             }
+            if (update.ChangedCustom(target))
+            {
+                if (update.Custom.stringify().ToUpper().Contains("SECURE_"))
+                {
+                    return new UpdateResult { IsError = true, ErrorMessage = "cannot manage secure customs" };
+                }
+            }
 
             if (update.ChangedEmail(target)) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot change email"};
@@ -104,11 +111,7 @@ namespace qorpent.v2.security.management {
                 }
             }
 
-            if (update.ChangedCustom(target)) {
-                if (update.Custom.stringify().ToUpper().Contains("SECURE_")) {
-                    return new UpdateResult {IsError = true, ErrorMessage = "cannot manage secure customs"};
-                }
-            }
+            
 
             if (null != update.IsGroup) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot manage groups"};
