@@ -530,7 +530,22 @@ namespace Qorpent.Utils.Extensions {
 		    //    throw;
 		    //}
 		}
-
+		/// <summary>
+		///		
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="keySelector"></param>
+		/// <returns></returns>
+		public static IDictionary<TKey, TValue> ToDict<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector) {
+			var dict = new Dictionary<TKey, TValue>();
+			foreach (var value in source) {
+				var key = keySelector(value);
+				dict[key] = value;
+			}
+			return dict;
+		}
 		/// <summary>
 		/// 	Converts object properties and values to dictionary
 		/// </summary>
