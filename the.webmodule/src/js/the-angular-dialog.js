@@ -31,7 +31,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                     $("<nav>" +
                     "<i ng-if='handler.getShowExpand() && !handler.expanded' ng-click='handler.expand()' style='cursor:pointer' class='icon iprimary fa fa-arrows-alt'></i>" +
                     "<i ng-if='handler.getShowExpand() && handler.expanded' ng-click='handler.collapse()' class='icon iprimary fa fa-compress'></i>" +
-                    "<i ng-if='handler.getShowSuccess()' ng-click='!handler.isValid || handler.success()' class='button success' ng-disabled='!handler.isValid' ng-bind='handler.getSuccessText()'></i>" +
+                    "<i ng-if='handler.getShowSuccess()' ng-click='[handler.validate(),!handler.isValid || handler.success()]' class='button success' ng-disabled='!handler.validate()' ng-bind='handler.getSuccessText()'></i>" +
                     "<i ng-if='handler.getShowCancel()' ng-click='handler.close()' class='button default'>Отмена</i>" +
                     "</nav>").appendTo(e);
                 }
@@ -357,7 +357,6 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                         },
 
                         validate: function () {
-                           // console.log("validating...")
                             this.isValid = true;
                             if (!!this.onValidate) {
                                 this.isValid = this.onValidate();
@@ -365,13 +364,13 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                             if (this.isValid) {
                                 for (var i in this.forms) {
                                     var form = this.forms[i];
-                                    if (!form.$valid) {
+
+                                    if (form && !form.$valid) {
                                         this.isValid = false;
                                         break;
                                     }
                                 }
                             }
-                         //   console.log(this.isValid);
                             return this.isValid;
                         },
                         getLabel: function () {

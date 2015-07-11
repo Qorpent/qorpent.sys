@@ -185,7 +185,9 @@ namespace qorpent.v2.security.user.storage.providers {
             }
             var currentETag = ETag;
             var currentVersion = Version;
-            var json = EsClient.ExecuteCommand(GetBaseUrl() + "_search?search_type=count", leasequery);
+            var url = GetBaseUrl() + "_search?search_type=count";
+            var query = leasequery;
+            var json = EsClient.ExecuteCommand(url, query);
             if (null == json) {
                 ETag = null;
                 Version = DateTime.MinValue;
@@ -196,7 +198,6 @@ namespace qorpent.v2.security.user.storage.providers {
                 ETag = j.str("aggregations._version.value");
                 Version = j.date("aggregations._timestamp.value_as_string");
             }
-
             if (ETag != currentETag || Version != currentVersion) {
                 _cache.Clear();
             }
