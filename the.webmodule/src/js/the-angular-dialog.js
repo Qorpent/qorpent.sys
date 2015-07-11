@@ -459,7 +459,7 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 }]);
                 module.run(['$templateCache','$sce', function ($templateCache,$sce) {
                     var message = "<div ng-bind-html='handler.message | unsafe'></div>";
-                    var prompt = '<div ng-bind-html="handler.message | unsafe"></div><input size="10" ng-model="handler.value"/>';
+                    var prompt = '<div ng-bind-html="handler.message | unsafe"></div><input size="20" on-enter="!handler.isValid || handler.success()" autoselect ng-model="handler.value"/>';
 
                     $templateCache.put('--message-dialog.html',message );
                     $templateCache.put('--prompt-dialog.html',prompt );
