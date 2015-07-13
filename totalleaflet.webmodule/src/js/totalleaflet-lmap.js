@@ -9,6 +9,7 @@ define(["totalleaflet-utils"],function(utils){
         }
         return result;
     }
+
     return {
         priority:100,
         replace:true,
@@ -304,12 +305,14 @@ define(["totalleaflet-utils"],function(utils){
                     subviews.forEach(function(_){
                         map.subviews[_] = $templateCache.get(_)[1];
                         map.subviews.items.push({name:_,template:map.subviews[_]});
+                        utils.subviews[_] = map.subviews[_];
                     });
                     map.doload();
                 })
             }else{
                 map.doload();
             }
+
 
 
             window.setTimeout(function(){
