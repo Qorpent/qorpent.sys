@@ -13,6 +13,10 @@ define(["totalleaflet-utils"],function(utils){
         priority:100,
         replace:true,
         link : 	function($scope, element, iAttrs){
+            var injector = angular.injector(['THE_ANGULAR_STUB', 'ng']);
+            var $q = injector.get("$q");
+            var $templateCache = injector.get("$templateCache");
+            var $http = injector.get("$http");
             var root = $scope; while(root.$parent){root=root.$parent};
             var getHomeCoordinates = function(uselocal){
                 var hash = document.location.hash.match(/lat=(\d+\.\d+)&lon=(\d+\.\d+)&zoom=(\d+)/);
@@ -278,10 +282,33 @@ define(["totalleaflet-utils"],function(utils){
                 }).addTo(map);
             }
 
-            if(!!iAttrs["onload"]) {
-				if (iAttrs["onload"] in $scope) {
-				    $scope[iAttrs["onload"]](map, element, iAttrs, $scope);
+
+            map.doload = function(){
+                if(!!iAttrs["onload"]) {
+                    if (iAttrs["onload"] in $scope) {
+                        $scope[iAttrs["onload"]](map, element, iAttrs, $scope);
+                    }
                 }
+            };
+
+
+
+            if(!!iAttrs["subviews"]){
+                var subviews = JSON.parse(iAttrs["subviews"]);
+                var awaits = [];
+                subviews.forEach(function(_){
+                    awaits.push($http.get(_, {cache: $templateCache}));
+                });
+                $q.all(awaits).then(function(){
+                    map.subviews = {items:[]};
+                    subviews.forEach(function(_){
+                        map.subviews[_] = $templateCache.get(_)[1];
+                        map.subviews.items.push({name:_,template:map.subviews[_]});
+                    });
+                    map.doload();
+                })
+            }else{
+                map.doload();
             }
 
 
