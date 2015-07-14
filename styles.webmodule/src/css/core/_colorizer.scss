@@ -38,12 +38,15 @@
         }
       }
     }@else {
-      &.#{$k}:not(.disabled){
+      &.#{$k}:not(.disabled):not([disabled]){
         @if $style {
           #{$style} : $c;
         }@else {
           @include colored-background($c);
         }
+      }
+      &.#{$k}.disabled, &.#{$k}[disabled]{
+        @include colored-background(default);
       }
     }
 

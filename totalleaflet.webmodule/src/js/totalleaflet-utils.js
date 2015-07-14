@@ -1,8 +1,18 @@
 /**
  * Created by comdiv on 05.01.2015.
  */
-define([],function(){
-    return {
+define(["leaflet-amd"],function(){
+    var popupMatchDiv = $('<div style="z-index: -1000;visibility: hidden"></div>').appendTo(document.body);
+    try { angular.module("THE_ANGULAR_STUB") } catch(err) { angular.module("THE_ANGULAR_STUB",[])}
+    var injector = angular.injector(['THE_ANGULAR_STUB', 'ng']);
+    var $compile = injector.get("$compile");
+
+    var result = {
+        stubDiv : popupMatchDiv,
+        subviews : {
+            _stub_ : '<div ng-bind="obj"></div>',
+            items:[]
+        },
         getMarkerXY : function(marker){
             var point = marker.getLatLng();
             return this.getXY(point);
@@ -59,6 +69,100 @@ define([],function(){
                 northEast = L.latLng(maxlat, maxlon),
                 bounds = L.latLngBounds(southWest, northEast);
             return bounds;
+        },
+        createDynamicIcon : function(options,callback) {
+            var self = this;
+            options = options || {};
+            var item = options.item || {};
+            var parentscope = options.scope;
+            var onscope = options.onscope || function(item) {
+                    if(parentscope){
+                        var s = parentscope.$new();
+                        s.obj = item;
+                        return s;
+                    }else {
+                        return {obj: item}
+                    }
+                };
+            var view = options.view || '_stub_';
+            var classname = options.classname || "";
+            var scope = onscope(item);
+            var template = self.subviews[view] || self.subviews['_stub_'];
+            var e = $compile(template)(scope)[0];
+
+            setTimeout(function () {
+                var icon = L.divIcon({
+                    className: classname,
+                    html: e.innerHTML
+                });
+                if(!!callback){
+                    callback(icon);
+                }
+
+            },0);
+        },
+        makeDynamicIcon : function(options){
+
+            var marker = options.marker;
+            this.createDynamicIcon(options,function(icon){
+                marker.setIcon(icon);
+            })
+
+        },
+        makeDynamicPopup : function(options) {
+            options = options || {};
+            var item = options.item || {};
+            var parentscope = options.scope;
+            var marker = options.marker || {on:function(){},bindPopup:function(){},openPopup:function(){}};
+            var view = options.view || '_stub_';
+            var onscope = options.onscope || function(item) {
+                    if(parentscope){
+                        var s = parentscope.$new();
+                        s.obj = item;
+                        return s;
+                    }else {
+                        return {obj: item}
+                    }
+                };
+            var margin = options.margin || 20;
+
+            var scope = onscope(item);
+
+            var self = this;
+            var preparePopup = function(show) {
+                var template = self.subviews[view] || self.subviews['_stub_'];
+                var popup = $compile(template)(scope)[0];
+                var jp = $(popup);
+                var ready = function () {
+                    jp.off("show", ready);
+                    var width = jp.outerWidth();
+                    jp.detach();
+                    marker.bindPopup(popup, {maxWidth: width + margin});
+                    marker._popupPrepared = true;
+                    if (show)  marker.openPopup();
+
+                }
+                jp.show(ready);
+                jp.appendTo(self.stubDiv);
+                jp.show();
+                scope.$apply();
+            };
+            marker.on("click", function (e) {
+                if (!marker._popupPrepared) {
+                    preparePopup(true);
+                }
+            });
         }
-    }
+    };
+    L.Marker.prototype.makeDynamicPopup = function(options){
+        options = options || {};
+        options.marker = options.marker || this;
+        result.makeDynamicPopup(options);
+    };
+    L.Marker.prototype.makeDynamicIcon = function(options){
+        options = options || {};
+        options.marker = options.marker || this;
+        result.makeDynamicIcon(options);
+    };
+    return result;
 })
