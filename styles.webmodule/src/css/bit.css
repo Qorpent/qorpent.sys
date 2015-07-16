@@ -63,6 +63,57 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
+/* line 2, core/features/_layers.scss */
+html.app .layer {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 6, core/features/_layers.scss */
+html.app .layer {
+  display: flex;
+  overflow: hidden;
+  background: none;
+  padding-left: 2px;
+}
+/* line 11, core/features/_layers.scss */
+html.app .layer * {
+  pointer-events: all;
+}
+/* line 14, core/features/_layers.scss */
+html.app .row.layer {
+  flex-direction: row;
+  margin: 0 !important;
+}
+/* line 18, core/features/_layers.scss */
+html.app .col.layer {
+  flex-direction: column;
+  margin: 0 !important;
+}
+/* line 23, core/features/_layers.scss */
+html.app .rest.layer {
+  flex-grow: 10;
+}
+/* line 26, core/features/_layers.scss */
+html.app .layer .scroll {
+  overflow-y: auto;
+}
+/* line 29, core/features/_layers.scss */
+html.app .layer .content {
+  background-color: #ffffff;
+}
+/* line 32, core/features/_layers.scss */
+html.app .layer .statusbar {
+  min-height: 40px;
+  max-height: 40px;
+}
+
+/* line 37, core/features/_layers.scss */
+html.app .layer {
+  margin: 0;
+  position: absolute;
+}
+
 /* line 4, bit.scss */
 textarea {
   font-family: Arial, sans-serif;
@@ -3266,7 +3317,16 @@ html.app {
   height: 100%;
   overflow: hidden;
 }
-/* line 2, core/app/_body.scss */
+/* line 47, core/features/_layers.scss */
+html.app .layer {
+  pointer-events: none !important;
+}
+/* line 52, core/features/_layers.scss */
+html.app body.layer, html.app body > .layer, html.app html.layer, html.app html > .layer {
+  top: 0;
+  left: 0;
+}
+/* line 6, core/app/_body.scss */
 html.app body {
   height: 100%;
   overflow: hidden;

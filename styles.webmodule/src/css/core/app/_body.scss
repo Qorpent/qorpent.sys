@@ -1,6 +1,11 @@
 @mixin app-body() {
+
+  @if skin(layers) {
+    @include layers();
+  }
   body {
     height: 100%;
     overflow: hidden;
+
   }
 }

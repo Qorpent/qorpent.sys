@@ -1,0 +1,58 @@
+// Describes layered layout
+%the-fill-old {
+  width : 100%;
+  height: 100%;
+}
+%the-box-old {
+  display: flex;
+  overflow: hidden;
+  background: none;
+  padding-left:2px;
+  * {
+    pointer-events: all;
+  }
+  &.row{
+    flex-direction: row;
+    margin: 0 !important;
+  }
+  &.col{
+    flex-direction: column;
+    margin: 0 !important;
+
+  }
+  &.rest {
+    flex-grow: 10;
+  }
+  .scroll {
+    overflow-y: auto;
+  }
+  .content {
+    background-color:#ffffff;
+  }
+  .statusbar{
+    min-height: 40px;
+    max-height: 40px;
+  }
+}
+%the-layer{
+  @extend %the-box-old;
+  @extend %the-fill-old;
+  margin: 0;
+  position:absolute;
+
+}
+@mixin layers() {
+
+
+    .layer {
+      @extend %the-layer;
+      pointer-events: none !important;
+    }
+    body, html {
+      &.layer, & > .layer {
+        top: 0;
+        left: 0;
+      }
+    }
+
+}

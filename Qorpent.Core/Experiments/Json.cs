@@ -715,6 +715,10 @@ namespace Qorpent.Experiments {
         {
             return Get(data, path).ToInt();
         }
+        public static decimal dec(this object data, string path)
+        {
+            return Get(data, path).ToDecimal();
+        }
         public static bool bul(this object data, string path)
         {
             return Get(data, path).ToBool();
