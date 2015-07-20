@@ -4,8 +4,56 @@ using System.Data.SqlTypes;
 namespace Qorpent.Utils {
     /// <summary>
     /// </summary>
-    public static class GeoProjectionHelper {
+    public static class GeoUtils {
+
+
+
         const double Pole = 20037508.34;
+
+        public static decimal NormalLon(decimal lon)
+        {
+            if (lon >= 180)
+            {
+                return 179.9m;
+            }
+            if (lon <= -180) {
+                return -179.9m;
+            }
+            return lon;
+        }
+
+        public static decimal NormalLat(decimal lat)
+        {
+            if (lat >= 90)
+            {
+                return 89.9m;
+            }
+            if (lat <= -90)
+            {
+                return -89.9m;
+            }
+            return lat;
+        }
+
+        public static double NormalLon(double lon) {
+            if (lon >= 180) {
+                return 179.9;
+            }
+            if (lon <= -180) {
+                return -179.9;
+            }
+            return lon;
+        }
+
+        public static double NormalLat(double lat) {
+            if (lat > 90) {
+                return 89.9;
+            }
+            if (lat < -90) {
+                return -89.9;
+            }
+            return lat;
+        }
 
 
         /// <summary>

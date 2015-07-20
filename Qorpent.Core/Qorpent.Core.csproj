@@ -351,7 +351,7 @@
     <Compile Include="Utils\Extensions\UniSqlQuery.cs" />
     <Compile Include="Utils\Extensions\XmlExtensions.cs" />
     <Compile Include="Utils\FileSystemHelper.cs" />
-    <Compile Include="Utils\GeoProjectionHelper.cs" />
+    <Compile Include="Utils\GeoUtils.cs" />
     <Compile Include="Utils\Git\FileRecord.cs" />
     <Compile Include="Utils\Git\FileState.cs" />
     <Compile Include="Utils\Git\GirFileState.cs" />
