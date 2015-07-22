@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.Json;
@@ -654,6 +655,13 @@ namespace Qorpent.Experiments {
             return Stringify(data,jsonmode);
         }
 
+        public static IDictionary<string, object> jsonifymap(this object data) {
+            var result = data.jsonify();
+            if (null == result) return null;
+            if (result is IDictionary<string, object>) return (IDictionary<string, object>) result;
+            if (result is object[])return new Dictionary<string, object>{{"items",result}};
+            return new Dictionary<string, object>{{"value",result}};
+        } 
         public static object jsonify(this object data) {
             if (data is string) {
                 return Parse(data as string);

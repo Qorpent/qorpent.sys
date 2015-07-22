@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Qorpent.IO.Net;
 
 namespace Qorpent.IO.Http {
     public class WebContext  {
@@ -15,6 +16,8 @@ namespace Qorpent.IO.Http {
 
         public object RequestParametersSync = new object();
         public RequestParameters PreparedParameters = null;
+
+        
 
         public static implicit operator WebContext(HttpListenerContext context) {
             var request = (HttpRequestDescriptor) context;
@@ -31,6 +34,11 @@ namespace Qorpent.IO.Http {
         public static implicit operator WebContext(string url) {
             var request = (HttpRequestDescriptor) url;
             return new WebContext {Request = request};
+        }
+
+        public static implicit operator WebContext(RequestDescriptor request) {
+            var r = (HttpRequestDescriptor) request;
+            return new WebContext{Request = r};
         }
 
         public CookieCollection Cookies { get; set; }

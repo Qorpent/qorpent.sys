@@ -24,6 +24,20 @@ namespace Qorpent.IO.Http {
         public static implicit operator HttpRequestDescriptor(HttpListenerRequest request) {
             return new HttpListenerRequestDescriptor(request);
         }
+
+        public static implicit operator HttpRequestDescriptor(RequestDescriptor request) {
+            var result = new HttpRequestDescriptor {Uri = request.Uri, Method = request.Method};
+            foreach (var header in request.Headers) {
+                result.Headers[header.Key] = header.Value;
+            }
+            if (request.Method == "POST" && !string.IsNullOrWhiteSpace(request.PostData)) {
+                var data = Encoding.UTF8.GetBytes(request.PostData);
+                result.Stream = new MemoryStream(data);
+                result.ContentLength = data.Length;
+            }
+            
+            return result;
+        }
         public static implicit operator HttpRequestDescriptor(WebContext context) {
             return (HttpRequestDescriptor)context.Request;
         }
