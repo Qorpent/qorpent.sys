@@ -288,4 +288,19 @@ define([
     };
     root.modules.ddservice = root.$angular.module("the-ddservice", []).factory('dropdownService', ddservice);
     root.modules.all.factory('dropdownService', ddservice);
+    root.modules.all.directive('ddInput',[
+       "dropdownService",
+        function(dd){
+            return {
+                link : function(s,e,a){
+                    var startdd = function($event){
+                        dd($event);
+                    }
+                    e.bind('click',startdd);
+                    e.bind('keydown',startdd);
+                    e.bind('mouseenter',startdd);
+                }
+            }
+        }
+    ]);
 })

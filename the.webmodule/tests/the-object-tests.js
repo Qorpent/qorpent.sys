@@ -12,6 +12,13 @@ define(["the","chai"],function($the,chai){
                 $.extend({x: 1, y: 2, z: {a: 1, y: {u: 3}}}, {x: 3, z: {b: 2, y: {w: 4}}}).should.eql({ x: 3, y: 2, z: { b: 2, y: {w: 4}} });
             });
 
+            it("'preservefalse' mode",function(){
+                $.extend({x:false,y:true},{x:true,y:false},{preservefalse:true}).should.eql({x:false,y:false});
+                $.extend({x:false,y:true},{x:true,y:false}).should.eql({x:true,y:false});
+            });
+
+
+
             it("'deep' mode", function () {
                 $.extend({x: 1, y: 2, z: {a: 1, y: {u: 3}}}, {x: 3, z: {b: 2, y: {w: 4}}}, {deep: true, extensions: true}).should.eql({ x: 3, y: 2, z: { a: 1, b: 2, y: {u: 3, w: 4} } });
             });

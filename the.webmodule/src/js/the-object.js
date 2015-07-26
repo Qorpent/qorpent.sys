@@ -16,6 +16,7 @@ define(["the-root"], function ($the) {
             this.clone = false;
             this.cloneInternals = false;
             this.functions = true;
+            this.preservefalse = false;
             this.filter = function (_) {
                 return !!_
             };
@@ -135,7 +136,10 @@ define(["the-root"], function ($the) {
                     if (exists && options.deep && $isusr(target[trg]) && $isusr(src)) {
                         self.extend(target[trg], src, options);
                     } else {
+                        if(target[trg]===false && src==true && options.preservefalse){
 
+                            continue;
+                        }
                         target[trg] = src;
                     }
                 }
