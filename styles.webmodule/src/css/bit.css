@@ -3171,7 +3171,7 @@ html.site body > main > section > article .legend a.fa, html.site body > main > 
 }
 /* line 93, core/site/_main.scss */
 html.site body > main p {
-  text-indent: 25px;
+  text-indent: 0px;
 }
 /* line 96, core/site/_main.scss */
 html.site body > main p, html.site body > main li {
