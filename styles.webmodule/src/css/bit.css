@@ -3048,7 +3048,7 @@ html.site body > main > section > div:not(:first-child) {
   margin-top: 5px;
 }
 /* line 35, core/site/_main.scss */
-html.site body > main > section.readtext > article {
+html.site body > main > section.readtext > article, html.site body > main > section.readtext > div > article {
   font-size: 120%;
   line-height: 1.2;
   -moz-hyphens: auto;
@@ -3128,31 +3128,31 @@ html.site body > main > section > label {
   line-height: 1.4;
 }
 /* line 59, core/site/_main.scss */
-html.site body > main > section.list > article {
+html.site body > main > section.list > article, html.site body > main > section.list > div > article {
   margin-top: 5px;
   border-top: solid 1px #4C81AF;
 }
 /* line 61, core/site/_main.scss */
-html.site body > main > section.list > article:first-child {
+html.site body > main > section.list > article:first-child, html.site body > main > section.list > div > article:first-child {
   margin-top: 0px;
 }
 /* line 68, core/site/_main.scss */
-html.site body > main > section > article {
+html.site body > main > section > article, html.site body > main > section > div > article {
   padding: 3px;
 }
 /* line 71, core/site/_main.scss */
-html.site body > main > section > article.row > aside {
+html.site body > main > section > article.row > aside, html.site body > main > section > div > article.row > aside {
   flex-shrink: 0;
   border-right: solid 1px #D7D7D7;
   padding-right: 5px;
   padding-top: 5px;
 }
 /* line 77, core/site/_main.scss */
-html.site body > main > section > article.row > div {
+html.site body > main > section > article.row > div, html.site body > main > section > div > article.row > div {
   padding: 3px 10px 3px 10px;
 }
 /* line 81, core/site/_main.scss */
-html.site body > main > section > article .legend {
+html.site body > main > section > article .legend, html.site body > main > section > div > article .legend {
   display: -webkit-box;
   display: flex;
   flex-direction: row;
@@ -3166,7 +3166,7 @@ html.site body > main > section > article .legend {
   margin-top: 5px;
 }
 /* line 86, core/site/_main.scss */
-html.site body > main > section > article .legend a.fa, html.site body > main > section > article .legend i.fa {
+html.site body > main > section > article .legend a.fa, html.site body > main > section > article .legend i.fa, html.site body > main > section > div > article .legend a.fa, html.site body > main > section > div > article .legend i.fa {
   font-size: 130%;
 }
 /* line 93, core/site/_main.scss */

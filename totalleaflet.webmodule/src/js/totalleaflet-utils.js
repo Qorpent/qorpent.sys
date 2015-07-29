@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 05.01.2015.
  */
-define(["leaflet-amd"],function(){
+define(["leaflet-amd","jquery"],function(){
     var popupMatchDiv = $('<div style="z-index: -1000;visibility: hidden"></div>').appendTo(document.body);
     try { angular.module("THE_ANGULAR_STUB") } catch(err) { angular.module("THE_ANGULAR_STUB",[])}
     var injector = angular.injector(['THE_ANGULAR_STUB', 'ng']);
