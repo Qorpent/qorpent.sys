@@ -105,10 +105,7 @@ namespace qorpent.v2.security.user.storage.providers {
                 throw new Exception("not enabled");
             }
             lock (this) {
-                /*if (EsClient.InvalidConnection) {
-                    throw new Exception("cannot store due to invalid connection");
-                }*/
-                Console.WriteLine("1");
+
                 user.Id = UserSerializer.GetId(user);
                 if (user.CreateTime.Year <= 1900) {
                     user.CreateTime = DateTime.Now.ToUniversalTime();
@@ -116,9 +113,7 @@ namespace qorpent.v2.security.user.storage.providers {
                 user.UpdateTime = DateTime.Now.ToUniversalTime();
                 var json = UserSerializer.GetJson(user, "store");
                 var url = GetBaseUrl() + user.Id;
-                if (user.Version > 0) {
-                    url += "?version=" + user.Version;
-                }
+
                 var result = EsClient.ExecuteCommand(url, json);
                 if (null == result) {
                     throw new Exception("invalid storage operation", EsClient.LastError);
@@ -127,7 +122,6 @@ namespace qorpent.v2.security.user.storage.providers {
                 var version = j.num("_version");
                 user.Version = version;
                 _cache[user.Login] = user;
-                Console.WriteLine("2");
                 return user;
             }
         }

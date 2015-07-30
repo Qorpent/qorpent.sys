@@ -2,6 +2,7 @@
 
 @mixin site() {
   html.site {
+    overflow-x: hidden;
     @include qflex(column);
     min-height: 100%;
     @include site-body();

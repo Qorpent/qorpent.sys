@@ -2664,6 +2664,7 @@ html.site body.form-factor-wide .distrib .button, html.site body.form-factor-wid
 
 /* line 4, core/_site.scss */
 html.site {
+  overflow-x: hidden;
   display: -webkit-box;
   display: flex;
   flex-direction: column;
