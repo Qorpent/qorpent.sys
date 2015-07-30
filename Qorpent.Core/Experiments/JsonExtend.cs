@@ -90,6 +90,9 @@ namespace Qorpent.Experiments
                 if (dict.ContainsKey("_val")) {
                     DoRemove(trg,dict["_val"]);
                 }
+                if (dict.ContainsKey("_idx")) {
+                    trg.RemoveAt(dict["_idx"].ToInt());
+                }
             }
             else if (remover is object[]) {
                 var a = remover as object[];
@@ -98,7 +101,9 @@ namespace Qorpent.Experiments
                 }
             }
             else {
-                trg.Remove(remover);
+                
+                    trg.Remove(remover);
+                
             }
         }
 
