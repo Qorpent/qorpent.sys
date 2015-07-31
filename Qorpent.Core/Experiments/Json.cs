@@ -704,6 +704,9 @@ namespace Qorpent.Experiments {
             return r;
         }
 
+
+        
+
         public static string resolvestr(this object data, string path, params string[] paths) {
             var result = Get(data, path);
             string r = null;
@@ -742,6 +745,11 @@ namespace Qorpent.Experiments {
 
         public static object[] arr(this object data, string path) {
             return (Get(data, path) as object[]);
+        }
+        public static IDictionary<string,object>[] arrobj(this object data, string path) {
+            var result = (Get(data, path) as object[]);
+            if(null==result)return null;
+             return result.OfType<IDictionary<string,object>>().ToArray();
         }
 
         public static object arr0(this object data, string path)
