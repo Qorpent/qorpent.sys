@@ -79,7 +79,7 @@ namespace qorpent.v2.security.messaging.senders {
                 From = new MailAddress(conf.From, conf.Name),
                 BodyEncoding = Encoding.UTF8,
                 IsBodyHtml = true,
-                Body = message.Message,
+                Body = message.Body,
                 SubjectEncoding = Encoding.UTF8,
                 Subject = message.Subject
             };

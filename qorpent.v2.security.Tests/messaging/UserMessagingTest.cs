@@ -20,7 +20,7 @@ namespace qorpent.v2.security.Tests.messaging
             var u = new User {Login = "test", Name = "Иванов", Email = "ivanov@gmail.com"};
             new PasswordManager().MakeRequest(u,24*60);
             var message = um.CompoundMessage(u, "ref:wellcome", "support","test",null);
-            Console.WriteLine(message.Message.Simplify(SimplifyOptions.SingleQuotes));
+            Console.WriteLine(message.Body.Simplify(SimplifyOptions.SingleQuotes));
             Assert.AreEqual(@"<div>
   <h1>Уважаемый(ая) Иванов!</h1>
   <p>
@@ -39,7 +39,7 @@ namespace qorpent.v2.security.Tests.messaging
   <p>
     C Уважением, адмнистрация ресурса 'Супер-Пупер'
   </p>
-</div>".Replace("[KEY]", u.ResetKey), message.Message.Simplify(SimplifyOptions.SingleQuotes));
+</div>".Replace("[KEY]", u.ResetKey), message.Body.Simplify(SimplifyOptions.SingleQuotes));
         }
 
         [Test]

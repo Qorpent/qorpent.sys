@@ -20,7 +20,7 @@ namespace qorpent.v2.security.Tests.messaging
             var message = new PostMessage {
                 Addresses = new[] {"fagim.sadykov@gmail.com"},
                 From = "support",
-                Message = "<h1>Привет</h1>"
+                Body = "<h1>Привет</h1>"
             };
             message = mq.PushMessage(message);
             Assert.Less(10,message.Id.Length);
@@ -41,7 +41,7 @@ namespace qorpent.v2.security.Tests.messaging
             {
                 Addresses = new[] { "fagim.sadykov@gmail.com" },
                 From = "support",
-                Message = "<h1>Привет</h1>"
+                Body = "<h1>Привет</h1>"
             };
             message = mq.PushMessage(message);
             mq.MarkSent(message.Id);
@@ -61,7 +61,7 @@ namespace qorpent.v2.security.Tests.messaging
                     Id = "M" + i,
                     Addresses = new[] { "fagim.sadykov@gmail.com" },
                     From = "support",
-                    Message = "<h1>Привет</h1>"
+                    Body = "<h1>Привет</h1>"
                 };
                 if (i%2 == 0) {
                     message.Tags = new Dictionary<string, object> {
@@ -92,7 +92,7 @@ namespace qorpent.v2.security.Tests.messaging
                     Id = "M"+i,
                     Addresses = new[] { "fagim.sadykov@gmail.com" },
                     From = "support",
-                    Message = "<h1>Привет</h1>"
+                    Body = "<h1>Привет</h1>"
                 };
                 if (i > 4) {
                     message.StartTime = DateTime.Now.AddDays(1).ToUniversalTime();

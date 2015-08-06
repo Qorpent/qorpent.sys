@@ -11,8 +11,9 @@ namespace qorpent.v2.security.messaging {
         public DateTime StartTime { get; set; }
         public DateTime SentTime { get; set; }
         public bool WasSent { get; set; }
-        public string Message { get; set; }
+        public string Body { get; set; }
         public bool CanUseDefault { get; set; }
+        public string Type { get; set; }
         public DateTime CreateTime { get; set; }
     }
 }

@@ -152,11 +152,12 @@ namespace qorpent.v2.security.messaging.queues {
             pm.CanUseDefault = _src.bul("CanUseDefault");
             pm.CreateTime = _src.date("CreateTime");
             pm.StartTime = _src.date("StartTime");
-            pm.Message = _src.str("Message");
+            pm.Body = _src.str("Message");
             pm.Subject = _src.str("Subject");
             pm.SentTime = _src.date("SentTime");
             pm.WasSent = _src.bul("WasSent");
             pm.Tags = _src.map("Tags");
+            pm.Type = _src.str("Type");
             return pm;
         }
 

@@ -75,7 +75,7 @@ namespace qorpent.v2.security.messaging {
                 From = @from,
                 CanUseDefault = true,
                 Subject = subject,
-                Message = resultmessage.ToString(),
+                Body = resultmessage.ToString(),
                 Tags = new Dictionary<string, object>()
             };
             foreach (var pair in scope) {

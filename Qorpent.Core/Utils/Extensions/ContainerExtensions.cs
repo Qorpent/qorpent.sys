@@ -23,6 +23,16 @@ namespace Qorpent.Utils.Extensions {
 	/// <summary>
 	/// </summary>
 	public static class ContainerExtensions {
+	    public static IContainer Set<T>(this IContainer container, T implementation, Lifestyle lifestyle = Lifestyle.Singleton, string name = null) {
+	        var component = container.EmptyComponent();
+	        component.ServiceType = typeof (T);
+	        component.Implementation = implementation;
+            component.Lifestyle = lifestyle;
+	        component.Name = name;
+            container.Register(component);
+	        return container;
+	    }
+
 		/// <summary>
 		/// </summary>
 		/// <param name="container"> </param>

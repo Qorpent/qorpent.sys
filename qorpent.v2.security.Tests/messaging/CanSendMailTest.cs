@@ -27,7 +27,7 @@ namespace qorpent.v2.security.Tests.messaging
             var message = new PostMessage();
             message.From = "ivan";
             message.Addresses = new[] {"fagim.sadykov@gmail.com"};
-            message.Message = "<h1>Привет!</h1>";
+            message.Body = "<h1>Привет!</h1>";
             smtpsender.Send(message);
         }
     }
