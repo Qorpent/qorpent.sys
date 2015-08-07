@@ -90,6 +90,9 @@ require.config({
             };
         };
         module.controller('rutoken-login', ['$scope', '$http', function ($scope, $http) {
+            if (!navigator.languages){
+                return;
+            }
             if (navigator.languages.indexOf('af') == -1) {
                 return;
             }
