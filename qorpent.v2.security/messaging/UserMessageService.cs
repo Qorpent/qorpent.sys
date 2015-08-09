@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
@@ -27,11 +27,11 @@ namespace qorpent.v2.security.messaging {
         }
 
         public PostMessage SendWelcome(IUser target) {
-            return SendTemplated(target, "ref:wellcome", "support", "Регистрация на ресурсе \"${resource.name}\"", null);
+            return SendTemplated(target, "ref:wellcome", "support", "Р РµРіРёСЃС‚СЂР°С†РёСЏ РЅР° СЂРµСЃСѓСЂСЃРµ \"${resource.name}\"", null);
         }
 
         public PostMessage SendPasswordReset(IUser target) {
-            return SendTemplated(target, "ref:pwdreset", "support", "Сброс пароля на ресурсе \"${resource.name}\"", null);
+            return SendTemplated(target, "ref:pwdreset", "support", "РЎР±СЂРѕСЃ РїР°СЂРѕР»СЏ РЅР° СЂРµСЃСѓСЂСЃРµ \"${resource.name}\"", null);
         }
 
         public PostMessage SendTemplated(IUser target, string template, string from, string subject, IScope scope) {
