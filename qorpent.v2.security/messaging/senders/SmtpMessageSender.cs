@@ -86,7 +86,9 @@ namespace qorpent.v2.security.messaging.senders {
                 Subject = message.Subject
             };
             m.Body += "<div style='color:gray;font-size:8pt'>messageid:" + message.Id + "</div>";
-            m.Subject += "; messageid:" + message.Id;
+            if (message.Type != "subscribe") {
+                 m.Subject += "; messageid:" + message.Id;
+            }
             foreach (var address in message.Addresses) {
                 m.Bcc.Add(new MailAddress(address));
             }
