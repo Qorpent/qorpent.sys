@@ -7,7 +7,7 @@ define(["the-object"], function ($the) {
                 decode = true;
                 userhash = document.location.hash;
             }
-            userhash = userhash || "";
+            userhash = userhash || document.location.search || "";
             if(decode){
                 name = encodeURIComponent(name);
             }
@@ -15,7 +15,7 @@ define(["the-object"], function ($the) {
             if(decode){
                 searchName = searchName.replace(/%20/g,'(\\+|%20)')
             }
-            var regex = new RegExp("[/&\\#]" + searchName + "=([^&]*)","i");
+            var regex = new RegExp("[/&\\#\\?]" + searchName + "=([^&]*)","i");
             var match = userhash.match(regex);
             if (match){
                 var val = match[match.length-1];

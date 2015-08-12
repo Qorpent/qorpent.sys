@@ -32,15 +32,26 @@ namespace Qorpent.Utils.Extensions {
             container.Register(component);
 	        return container;
 	    }
+        public static IContainer Set<T,I>(this IContainer container, Lifestyle lifestyle = Lifestyle.Singleton, string name = null)
+            where I:T
+        {
+            var component = container.EmptyComponent();
+            component.ServiceType = typeof(T);
+            component.ImplementationType = typeof (I);
+            component.Lifestyle = lifestyle;
+            component.Name = name;
+            container.Register(component);
+            return container;
+        }
 
-		/// <summary>
-		/// </summary>
-		/// <param name="container"> </param>
-		/// <param name="name"> </param>
-		/// <param name="value"> </param>
-		/// <typeparam name="T"> </typeparam>
-		/// <returns> </returns>
-		public static IContainer SetParameter<T>(this IContainer container, string name, object value) {
+        /// <summary>
+        /// </summary>
+        /// <param name="container"> </param>
+        /// <param name="name"> </param>
+        /// <param name="value"> </param>
+        /// <typeparam name="T"> </typeparam>
+        /// <returns> </returns>
+        public static IContainer SetParameter<T>(this IContainer container, string name, object value) {
 			if (null != container) {
 				var component = container.GetComponents().FirstOrDefault(x => x.ServiceType == typeof (T) || x.ImplementationType==typeof(T));
 				if (null != component) {

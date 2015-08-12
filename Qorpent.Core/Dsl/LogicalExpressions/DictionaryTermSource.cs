@@ -20,6 +20,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.LogicalExpressions {
@@ -42,9 +43,23 @@ namespace Qorpent.LogicalExpressions {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public override string Value(string name) {
-			return _all.ContainsKey(name) ? _all[name].ToStr() : "";
+
+		    if (_all.ContainsKey(name)) {
+		        return _all[name].ToStr();
+		    }
+		    if (name.Contains(".")) {
+		        return _all.str(name);
+		    }
+		    return "";
 		}
-		/// <summary>
+
+	    private object json
+	    {
+	        get { return _json ?? (_json = _all.jsonify()); }
+	    }
+
+
+	    /// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
@@ -79,5 +94,6 @@ namespace Qorpent.LogicalExpressions {
 		}
 
 		private readonly IDictionary<string, V> _all;
+	    private object _json;
 	}
 }

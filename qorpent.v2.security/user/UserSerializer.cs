@@ -60,11 +60,11 @@ namespace qorpent.v2.security.user {
 
 
             user.Domain = j.str("domain");
-            user.Roles = j.arr("roles").OfType<string>().ToList();
-            user.Groups = j.arr("groups").OfType<string>().ToList();
+            user.Roles = j.arr("roles") != null ? j.arr("roles").OfType<string>().ToList() : null;
+            user.Groups = j.arr("groups") != null ? j.arr("groups").OfType<string>().ToList() : null;
             user.Custom = j.map("custom");
             var extensions = user as IJsonSerializationExtension;
-            if (null != extensions) {
+            if (extensions != null) {
                 extensions.ReadExtensions(j);
             }
         }
