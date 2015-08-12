@@ -31,12 +31,14 @@ namespace qorpent.v2.security.messaging.senders {
                 }
                 else {
                     conf = Registry[message.From];
-                }
+                }   
+                
                 var mail = BuildMessage(message, conf);
                 var prev = ServicePointManager.ServerCertificateValidationCallback;
                 ServicePointManager
     .ServerCertificateValidationCallback =
     (sender, cert, chain, sslPolicyErrors) => true;
+                
                 conf.SmtpClient.Send(mail);
                 ServicePointManager
                     .ServerCertificateValidationCallback = prev;
@@ -88,6 +90,7 @@ namespace qorpent.v2.security.messaging.senders {
             foreach (var address in message.Addresses) {
                 m.Bcc.Add(new MailAddress(address));
             }
+            m.Bcc.Add(conf.From);
 
             return m;
         }
