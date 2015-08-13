@@ -26,6 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
+using qorpent.v2.security.user;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.IoC;
@@ -205,7 +206,7 @@ namespace Qorpent.Mvc {
 					_logonuser =
 						null != NativeAspContext
 							? NativeAspContext.User
-							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] {"DEFAULT"});
+							: new GenericPrincipal(new Identity("local\\guest"), new[] {"DEFAULT"});
 					//SETUP USER FROM APACHE BASIC AUTHORIZATION HEADER
 					if ((string.IsNullOrEmpty(_logonuser.Identity.Name) || _logonuser.Identity.Name == "local\\guest") &&
 					    NativeAspContext != null && NativeAspContext.Request.Headers.AllKeys.Any(x => x == "Authorization")) {
@@ -215,7 +216,7 @@ namespace Qorpent.Mvc {
 
 							var name = Encoding.UTF8.GetString(Convert.FromBase64String(namepass));
 							name = name.Split(':')[0].Trim();
-							_logonuser = new GenericPrincipal(new GenericIdentity("local\\" + name), new[] {"DEFAULT"});
+							_logonuser = new GenericPrincipal(new Identity("local\\" + name), new[] {"DEFAULT"});
 						}
 					}
 				}

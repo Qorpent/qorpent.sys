@@ -18,6 +18,13 @@ namespace qorpent.v2.security.user {
             this.User = new User {Login = Name};
         }
 
+        public Identity(string name) {
+            this.AuthenticationType = "embed";
+            this.IsAuthenticated = true;
+            this.User = new User {Login = name};
+            this.Name = name;
+        }
+
         public Identity(IUser usr) {
             this.AuthenticationType = "embed";
             this.User = usr;

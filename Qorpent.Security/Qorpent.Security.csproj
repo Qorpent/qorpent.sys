@@ -35,7 +35,6 @@
     <Compile Include="SslCa\CmsDecryptor.cs" />
     <Compile Include="SslCa\CmsMessage.cs" />
     <Compile Include="SslCa\ICaConfigProvider.cs" />
-    <Compile Include="Watchdog\ParanoidProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml" />
