@@ -380,8 +380,8 @@
     <Compile Include="..\Qorpent.Core\Utils\FileSystemHelper.cs">
       <Link>ImportCode\FileSystemHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\GeoProjectionHelper.cs">
-      <Link>ImportCode\GeoProjectionHelper.cs</Link>
+    <Compile Include="..\Qorpent.Core\Utils\GeoUtils.cs">
+      <Link>ImportCode\GeoUtils.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\Hex.cs">
       <Link>ImportCode\Hex.cs</Link>

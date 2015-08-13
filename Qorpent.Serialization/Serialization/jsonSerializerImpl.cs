@@ -83,9 +83,8 @@ namespace Qorpent.Serialization {
 			}
 			else if (value is DateTime) {
 				var d = (DateTime) value;
-				var utcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(d);
 				d = d.ToUniversalTime();
-				Output.Write("\"" + d.ToString("yyyy-MM-ddTHH:mm:ss" + ((utcOffset < TimeSpan.Zero) ? "-" : "+") + utcOffset.ToString("hhmm")) + "\"");
+				Output.Write("\"" + d.ToString("yyyy-MM-ddTHH:mm:ss+0000") + "\"");
 			}
 			else if (value is int) {
 			    Output.Write(value.ToString());

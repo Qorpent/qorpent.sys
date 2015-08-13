@@ -48,6 +48,7 @@ namespace qorpent.v2.security.handlers.logon {
             {
                 var token = TokenService.Create(context.Request);
 	            var strRemoteIp = logondata.RemoteEndPoint.Address.ToString();
+                identity.User = identity.User ?? new User {Login = identity.Name};
 	            var resolvedUsername = identity.User.Login;
 				if (!string.IsNullOrWhiteSpace(identity.User.Domain)) {
 					resolvedUsername = resolvedUsername + "@" + identity.User.Domain;
