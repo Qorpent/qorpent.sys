@@ -12,6 +12,7 @@ namespace Qorpent.Core.Tests.Http
     public class RequestDescriptorTest
     {
         [Test]
+        [Category("NOTC")]
         public void GetParameters() {
             var req = RequestDescriptor.Create(new {
                 param = new {
@@ -22,6 +23,7 @@ namespace Qorpent.Core.Tests.Http
             Assert.AreEqual("http://127.0.0.1/?x=1ф&y=2 ф%2B1", req.Uri.ToString());
         }
         [Test]
+        [Category("NOTC")]
         public void GetParametersJsonMode()
         {
             var req = RequestDescriptor.Create(new
