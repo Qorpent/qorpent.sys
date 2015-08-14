@@ -91,7 +91,7 @@ namespace Qorpent.IO.Http {
             if (null == dictionary) return "";
             return string.Join("&",
                 dictionary.Select(_ => Uri.EscapeDataString(_.Key) + "=" + 
-                    Uri.EscapeDataString(GetValueString(_.Value)).Replace(" ","%20")));
+                    Uri.EscapeDataString(GetValueString(_.Value)).Replace(" ","%20").Replace("+","%2B").Replace("%2C",",")));
         }
 
         private static string GetValueString(object val) {
