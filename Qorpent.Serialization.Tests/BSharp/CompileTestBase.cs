@@ -6,7 +6,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
 	public class CompileTestBase {
-		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null, object globals =null , BSharpConfig _cfg = null) {
+		protected BSharpContext Compile(string code, object globals = null, IDictionary<string, string> conditions = null, BSharpConfig _cfg = null) {
 			var cfg = new BSharpConfig();
 			cfg.Conditions = conditions;
 			if (null != globals){

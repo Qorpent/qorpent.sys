@@ -12,7 +12,7 @@ namespace Qorpent.Serialization.Tests.BSharp{
 		[Test]
 		public void CanInterpolateWithGlobals(){
 			var result = Compile(@"
-class A a=z${x} b=${y} y=3",null,new{x=1,y=2,z=3});
+class A a=z${x} b=${y} y=3",new{x=1,y=2,z=3}, null);
 			var a = result.Get("A");
 			var x = a.Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(x);
@@ -23,7 +23,7 @@ class A a=z${x} b=${y} y=3",null,new{x=1,y=2,z=3});
 		public void BugCanInterpolateWithGlobalsForReports()
 		{
 			var result = Compile(@"
-class A y='${tp.year:2014}' p='${tp.period:1}'", null, new Dictionary<string,object>{{"tp.year",2013},{"tp.period",2}});
+class A y='${tp.year:2014}' p='${tp.period:1}'", new Dictionary<string,object>{{"tp.year",2013},{"tp.period",2}}, null);
 			var a = result.Get("A");
 			var x = a.Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(x);
@@ -37,7 +37,7 @@ class A y='${tp.year:2014}' p='${tp.period:1}'", null, new Dictionary<string,obj
 			g.y = 2;
 			g.z = 3;
 			var result = Compile(@"
-class A a=z${x} b=${y} y=3", null, g);
+class A a=z${x} b=${y} y=3", g, null);
 			var a = result.Get("A");
 			var x = a.Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(x);

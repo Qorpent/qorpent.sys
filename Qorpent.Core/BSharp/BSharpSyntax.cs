@@ -233,6 +233,10 @@ namespace Qorpent.BSharp {
 		/// Сгруппированный блок элементов
 		/// </summary>
 		public const string GroupedBlock = "set";
+        /// <summary>
+        /// Блок для применения атрибутов "вверх"   
+        /// </summary>
+	    public const string UpSetBlock = "up-set";
 
 		/// <summary>
 		/// Определение экспортируемого словаря класса

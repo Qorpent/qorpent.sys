@@ -97,8 +97,16 @@ namespace Qorpent.Utils.LogicalExpressions {
 				else if (sec.Type == LETokenType.Literal) {
 					var eq = new EqualNode();
 					n = eq;
-					eq.FirstLiteral = fst.Value;
-					eq.SecondLiteral = sec.Value;
+				    if (fst.Type == LETokenType.String) {
+				        var eq2= new EqualValueNode();
+                        eq2.Literal = sec.Value;
+				        eq2.Value = fst.Value;
+				        n = eq2;
+				    }
+				    else {
+				        eq.FirstLiteral = fst.Value;
+				        eq.SecondLiteral = sec.Value;
+				    }
 				}
 				else {
 					var eq = new EqualValueNode();
@@ -265,6 +273,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 			        _skipnext--;
                     continue;
 			    }
+			    var next = idx<expression.Length-1 ? expression[idx+1]:'\0';
 				switch (c) {
 					case '(':
 						if (State.InLiteral == _state) {
@@ -309,7 +318,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 							_state = State.AfterString;
 							break;
 						}
-						if (State.AfterBinaryOperator != _state) {
+						if (State.AfterBinaryOperator != _state && State.None!=_state) {
 							throw new Exception("QUOT is at wrong place " + idx);
 						}
 						_state = State.InString;
@@ -321,24 +330,42 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("& is at wrong place " + idx);
 						}
-						_tokenlist.Add(new Token {Type = LETokenType.And});
+                        if (next == '&')
+                        {
+                            _skipnext = 1;
+                        }
+                        _tokenlist.Add(new Token {Type = LETokenType.And});
 						_state = State.AfterAndOrOr;
 						break;
 					case '|':
 						if (State.InLiteral == _state) {
 							Closeliteral();
 						}
-						if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
+                       
+                        if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("| is at wrong place " + idx);
 						}
-						_tokenlist.Add(new Token {Type = LETokenType.Or});
+                        if (next == '|')
+                        {
+                            _skipnext = 1;
+                        }
+                        _tokenlist.Add(new Token {Type = LETokenType.Or});
 						_state = State.AfterAndOrOr;
 						break;
 					case '=':
-						if (State.AfterLiteral == _state) {
+                        if (State.InLiteral == _state)
+                        {
+                            Closeliteral();
+                        }
+				        
+                        if (State.AfterLiteral == _state || State.AfterString==_state) {
 							_tokenlist.Add(new Token {Type = LETokenType.Eq});
 							_state = State.AfterBinaryOperator;
-							break;
+                            if (next == '=')
+                            {
+                               _skipnext = 1;
+                            }
+                            break;
 						}
 						if (State.InNeq == _state) {
 							_tokenlist.Add(new Token {Type = LETokenType.Neq});
@@ -347,8 +374,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						}
 						throw new Exception("= is at wrong place " + idx);
                     case '>':
+                        if (State.InLiteral == _state)
+                        {
+                            Closeliteral();
+                        }
                         if (State.AfterLiteral == _state) {
-                            var next = expression[_idx + 1];
+                            next = expression[_idx + 1];
                             if (next == '=') {
                                 _tokenlist.Add(new Token { Type = LETokenType.GreaterOrEq });
                                 _skipnext = 1;
@@ -362,9 +393,13 @@ namespace Qorpent.Utils.LogicalExpressions {
                         
                         throw new Exception("> is at wrong place " + idx);
                     case '<':
+                        if (State.InLiteral == _state)
+                        {
+                            Closeliteral();
+                        }
                         if (State.AfterLiteral == _state)
                         {
-                            var next = expression[_idx + 1];
+                            next = expression[_idx + 1];
                             if (next == '=')
                             {
                                 _tokenlist.Add(new Token { Type = LETokenType.LowerOrEq });

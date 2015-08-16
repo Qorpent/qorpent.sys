@@ -32,6 +32,7 @@
     <Compile Include="BSharp\RequireSupportForPreBuildPackages.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
+    <Compile Include="BSharp\UpSetSupportQ510\UpSetSupport.cs" />
     <Compile Include="BSharp\V1_2\Q188ImplicitElements.cs" />
     <Compile Include="BSharp\V1_2\Q189TruePartialClasses.cs" />
     <Compile Include="BSharp\V1_2\Q196PlainNamespaces.cs" />

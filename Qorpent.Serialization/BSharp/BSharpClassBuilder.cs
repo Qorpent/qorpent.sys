@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
@@ -400,16 +401,20 @@ namespace Qorpent.BSharp{
 			SupplyClassAttributesForEvaluations();
           //  Console.WriteLine("SupplyClassAttributesForEvaluations " + _cls.Name);
 			InitializeBuildIndexes();
-           // Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
-			DownFallEmbedAttribute();
+            // Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
+            MergeClassLevelUpSets();
+            DownFallEmbedAttribute();
           //  Console.WriteLine("DownFallEmbedAttribute " + _cls.Name);
 			IntializeMergeIndexes();
+		    
 			InterpolateFields();
 			BindParametersToCompiledClass();
+		    RemoveClassLevelUpSets();
 			MergeInternals();
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
 			PerformMergingWithElements();
+		    ProcessInElementUpSets();
 			InterpolateElements();
 			CleanupElementsWithConditions();
 			ExecutePreSimpleIncludeExtensions();
@@ -418,8 +423,83 @@ namespace Qorpent.BSharp{
 			CheckoutRequireLinkingRequirements();
 		}
 
+	    private void ProcessInElementUpSets() {
+	        var elements = _cls.Compiled.Descendants(BSharpSyntax.UpSetBlock).ToArray();
+	        if (0 == elements.Length) return;
+            var scope = new Scope(_cls.ParamIndex);
+            var le= new LogicalExpressionEvaluator();
+	        foreach (var element in elements) {
+	            var condition = element.Attribute(BSharpSyntax.ConditionalAttribute);
+	            if (null != condition) {
+	                if(!le.Eval(condition.Value,scope))continue;
+	            }
+                ApplyUpset(element,element.Parent);
+	        }
+            elements.Remove();
+	    }
 
-		private void SupplyClassAttributesForEvaluations(){
+	    private void RemoveClassLevelUpSets() {
+	        _cls.Compiled.Elements(BSharpSyntax.UpSetBlock).ToArray().Remove();
+	    }
+
+	    private void MergeClassLevelUpSets() {
+	        var upsets = GetAllUpSets().ToArray();
+	        if (0 != upsets.Length) {
+                var scope = new Scope(_cls.ParamIndex);
+	            if (null != _compiler) {
+	                scope.AddParent(_compiler.Global);
+	            }
+                var le = new LogicalExpressionEvaluator();
+	            foreach (var element in GetAllUpSets()) {
+	                var condition = element.Attribute(BSharpSyntax.ConditionalAttribute);
+	                if (null != condition) {
+	                    if(!le.Eval(condition.Value,scope))continue;
+	                    
+	                }
+                    ApplyUpset(element);
+                }
+               
+	        }
+	    }
+
+	    private void ApplyUpset(XElement e) {
+	        foreach (var attribute in e.Attributes()) {
+                var n = attribute.Name.LocalName;
+                if (n == "_file" || n == "_line" || n == "if") continue;
+	            _cls.ParamIndex[n] = attribute.Value;
+	            _cls.ParamSourceIndex[n] = attribute.Value;
+                _cls.Source.SetAttributeValue(n,attribute.Value);
+	            if (null != _cls.Compiled) {
+	                _cls.Compiled.SetAttributeValue(n,attribute.Value);
+	            }
+	        }
+	    }
+
+        private void ApplyUpset(XElement e, XElement target)
+        {
+            foreach (var attribute in e.Attributes())
+            {
+                var n = attribute.Name.LocalName;
+                if (n == "_file" || n == "_line" || n == "if") continue;
+               target.SetAttributeValue(n, attribute.Value);
+            }
+        }
+
+        private IEnumerable<XElement> GetAllUpSets() {
+            foreach (var cls in _cls.AllImports)
+            {
+                foreach (var upset in cls.Source.Elements(BSharpSyntax.UpSetBlock)) {
+                    yield return upset;
+                }
+            }
+            foreach (var upset in _cls.Source.Elements(BSharpSyntax.UpSetBlock))
+            {
+                yield return upset;
+            }
+        } 
+
+
+	    private void SupplyClassAttributesForEvaluations(){
 			foreach (BSharpEvaluation d in _cls.AllEvaluations){
 				if (d.ResultType == "attribute" && d.Target == "class"){
 					if (null == _cls.Compiled.Attribute(d.Code) && !_cls.ParamSourceIndex.ContainsKey(d.Code)){

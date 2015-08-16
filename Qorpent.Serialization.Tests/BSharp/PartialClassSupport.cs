@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
@@ -18,6 +20,9 @@ class X
 			Assert.NotNull(r);
 			Console.WriteLine(r.Compiled.ToString());
 		}
+
+	   
+
 		[Test]
 		public void CanDefineClassFromOverride() {
 			var code = @"

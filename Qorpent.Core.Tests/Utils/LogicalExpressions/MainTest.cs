@@ -21,6 +21,33 @@ namespace Qorpent.Core.Tests.Utils.LogicalExpressions
             Assert.False(le.Eval("my2",new{my=true}));
             Assert.False(le.Eval("my",new{my=false}));
         }
+
+        [Test]
+        public void LiteralsWithUnderscore_Q515() {
+            
+            Assert.True(le.Eval("my_1",new {my_1=true}));
+        }
+
+        [Test]
+        public void NoSpace() {
+            Assert.True(le.Eval("my_1='x'", new { my_1 = "x" }));
+        }
+
+        [Test]
+        public void DoubleSyntax_Q517() {
+            Assert.True(le.Eval("my_1 == 'x'", new { my_1 = "x" }));
+            Assert.True(le.Eval("my_1&& my_1", new { my_1 = "x" }));
+            Assert.True(le.Eval("my_1 ||my_1", new { my_1 = "x" }));
+        }
+
+        [Test]
+        public void CompareStringFirst() {
+            Assert.True(le.Eval("my_1 == 'x'", new { my_1 = "x" }));
+            Assert.False(le.Eval("my_1 == 'y'", new { my_1 = "x" }));
+            Assert.True(le.Eval("'x' == my_1", new { my_1 = "x" }));
+            Assert.False(le.Eval("'y' == my_1", new { my_1 = "x" }));
+        }
+
         [Test]
         public void NotSign() {
             Assert.False(le.Eval("!my", new {my = true}));

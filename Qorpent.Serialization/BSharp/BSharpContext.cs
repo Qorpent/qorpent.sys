@@ -859,6 +859,7 @@ namespace Qorpent.BSharp{
 			}
 			foreach (IBSharpClass cls in partials){
 				if (basis == cls) continue;
+                if(IsIgnored(cls))continue;
 				MergePartial(basis, cls);
 			}
 			if (reg) return basis;
@@ -927,7 +928,7 @@ namespace Qorpent.BSharp{
 					foreach (XAttribute attribute in element.Attributes()){
 						string n = attribute.Name.LocalName;
 						string v = attribute.Value;
-						if (n == "_file" || n == "_line" || n == "code" || n == "id") continue;
+						if (n == "_file" || n == "_line" || n == "code" || n == "id" || n=="if") continue;
 						string ex = existed.Attr(n);
 						if (ex == v) continue;
 						if (string.IsNullOrWhiteSpace(ex)){
@@ -982,18 +983,19 @@ namespace Qorpent.BSharp{
 			foreach (
 				IBSharpClass c in
 					RawClasses.Values.Where(_ => null != _.Source.Attribute(BSharpSyntax.ConditionalAttribute)).ToArray()){
-				IScope options = null == Compiler ? new Scope() : Compiler.GetConditions();
-				foreach (XAttribute a in c.Source.Attributes()){
-					if (!options.ContainsKey(a.Name.LocalName)){
-						options.Set(a.Name.LocalName, a.Value);
-					}
-				}
-				var src = new DictionaryTermSource<object>(options);
-				if (!new LogicalExpressionEvaluator().Eval(c.Source.Attr(BSharpSyntax.ConditionalAttribute), src)){
-					c.Set(BSharpClassAttributes.Ignored);
-				}
+			    if (IsIgnored(c)) {
+                    c.Set(BSharpClassAttributes.Ignored);
+                }
 			}
 		}
+
+	    private bool IsIgnored(IBSharpClass cls) {
+	        var condition = cls.Source.Attribute(BSharpSyntax.ConditionalAttribute);
+	        if (null == condition) return false;
+	        var scope = (Scope)(null == Compiler ? new Scope() : Compiler.GetConditions());
+	        scope.ApplyXml(cls.Source);
+	        return !new LogicalExpressionEvaluator().Eval(condition.Value, scope);
+	    }
 
 		private void ApplyExtensions(){
 			foreach (IBSharpClass o in Extensions){

@@ -78,7 +78,7 @@ namespace Qorpent.BSharp{
 		/// </summary>
 		/// <returns></returns>
 		public IScope GetConditions(){
-			return new Scope(_config.Conditions);
+			return  new Scope(Global);
 		}
 
 		/// <summary>
@@ -105,10 +105,17 @@ namespace Qorpent.BSharp{
 					_global[cond.Key] = cond.Value;
 				}
 			}
+		    SetupDefaults(_global);
 		}
 
+	    private void SetupDefaults(IScope scope) {
+	        if (!scope.ContainsKey("MACHINE_NAME")) {
+	            scope["MACHINE_NAME"] = Environment.MachineName;
+	        }
+	    }
 
-		/// <summary>
+
+	    /// <summary>
 		///     Компилирует источники в перечисление итоговых классов
 		/// </summary>
 		/// <param name="sources"></param>
