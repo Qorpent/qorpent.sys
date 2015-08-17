@@ -130,10 +130,10 @@ class A x=1  if='z'
 	    [Test]
 	    public void Has_MACHINE_NAME_global_ByDefault_Q513() {
 	        var machinename = Environment.MachineName;
-	        var code = $@"
-class A if=""MACHINE_NAME=='{machinename}'""
-class B if=""MACHINE_NAME=='no{machinename}'""
-";
+	        var code = string.Format(@"
+class A if=""MACHINE_NAME=='{0}'""
+class B if=""MACHINE_NAME=='no{0}'""
+", machinename);
 	        var ctx = Compile(code);
             Assert.Null(ctx.Get("B"));
             Assert.NotNull(ctx.Get("A"));
