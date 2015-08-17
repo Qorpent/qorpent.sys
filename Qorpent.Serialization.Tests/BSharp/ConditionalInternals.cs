@@ -143,7 +143,7 @@ class B if=""MACHINE_NAME=='no{0}'""
         public void CanSet_explicit_MACHINE_NAME_global_Q513()
         {
             var MACHINE_NAME = "test";
-            var code = $@"
+            var code = @"
 class A if=""MACHINE_NAME=='test'""
 class B if=""MACHINE_NAME=='notest'""
 ";
