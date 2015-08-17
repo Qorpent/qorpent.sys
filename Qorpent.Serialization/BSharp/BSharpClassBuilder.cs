@@ -426,7 +426,7 @@ namespace Qorpent.BSharp{
 	    private void ProcessInElementUpSets() {
 	        var elements = _cls.Compiled.Descendants(BSharpSyntax.UpSetBlock).ToArray();
 	        if (0 == elements.Length) return;
-            var scope = new Scope(_cls.ParamIndex);
+            var scope = new Scope(_cls.ParamIndex,_compiler.Global);
             var le= new LogicalExpressionEvaluator();
 	        foreach (var element in elements) {
 	            var condition = element.Attribute(BSharpSyntax.ConditionalAttribute);
@@ -1048,7 +1048,7 @@ namespace Qorpent.BSharp{
 			IScope compilerOptions = _compiler.GetConditions();
 			IScope srcp = _cls.ParamIndex;
 			if (null != compilerOptions){
-				compilerOptions.SetParent(srcp);
+				compilerOptions.AddParent(srcp);
 				srcp = compilerOptions;
 			}
 			var src = new DictionaryTermSource<object>(srcp);

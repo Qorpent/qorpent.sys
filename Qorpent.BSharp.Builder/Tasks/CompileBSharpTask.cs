@@ -42,7 +42,8 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                 UseInterpolation = true,
 				IgnoreElements = Project.IgnoreElements.SmartSplit().ToArray(),
 				Global = Project.Global,
-			    DefaultNamespace = Project.DefaultNamespace
+			    DefaultNamespace = Project.DefaultNamespace,
+                Conditions = Project.Conditions
             };
             if (null != Project.Definition)
             {
@@ -53,6 +54,8 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 			}
 
             config.SetParent(Project);
+
+
 
             return config;
         }
