@@ -67,6 +67,11 @@
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
     <Compile Include="CacheServiceBase.cs" />
+    <Compile Include="Config\ConfigurationLoader.cs" />
+    <Compile Include="Config\ConfigurationOptions.cs" />
+    <Compile Include="IO\FileSet.cs" />
+    <Compile Include="Config\GenericConfiguration.cs" />
+    <Compile Include="Config\IConfigurationLoader.cs" />
     <Compile Include="Experiments\JsonExtend.cs" />
     <Compile Include="Experiments\JsonWriter.cs" />
     <Compile Include="ExtensibleServiceBase.cs" />

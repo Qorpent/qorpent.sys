@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Qorpent.IO;
-using Qorpent.IO.Net;
 
-namespace qorpent.v2.security.utils {
+namespace Qorpent.IO.Net {
     public class ElasticSearchClient {
         public ElasticSearchClient() {
             ConnectionTimeout = 200;

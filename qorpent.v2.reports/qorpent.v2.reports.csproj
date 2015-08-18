@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>45CAF48F-8084-4233-AD08-119D116D431C</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>qorpent.v2.reports</RootNamespace>
+    <AssemblyName>qorpent.v2.reports</AssemblyName>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>

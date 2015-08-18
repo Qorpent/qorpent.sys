@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.authorization;
 using Qorpent.Applications;
+using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.Data;
 using Qorpent.Experiments;
@@ -90,6 +91,10 @@ namespace Qorpent.Host {
         /// <returns></returns>
         public HostConfig GetConfig() {
             return Config;
+        }
+
+        public IBSharpContext GetContext() {
+            return Config.BSharpContext;
         }
 
         /// <summary>

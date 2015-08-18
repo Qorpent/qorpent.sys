@@ -147,7 +147,8 @@ namespace Qorpent.BSharp{
 		/// <summary>
 		/// </summary>
 		public IScope Global{
-			get { return _global; }
+			get { return _global ?? (_global = new Scope()); }
+
 		}
 
 		/// <summary>

@@ -381,6 +381,7 @@ namespace Qorpent.Host{
 					break;
 				}
 		    }
+	        this.BSharpContext = context;
 	        this.Definition = xml;
             RootFolder = xml.ResolveValue("root", RootFolder);
 	        RootFolder = xml.ResolveValue(HostUtils.RootFolderXmlName, RootFolder);	      
@@ -563,6 +564,8 @@ namespace Qorpent.Host{
         /// Мапинг локальных кэшей (в виде файлов конфигурации)
         /// </summary>
 	    public IDictionary<string,XElement> StaticContentCacheMap { get; private set; }
+
+	    public IBSharpContext BSharpContext { get; set; }
 
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {

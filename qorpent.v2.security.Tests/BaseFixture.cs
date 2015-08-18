@@ -9,6 +9,7 @@ using qorpent.v2.security.logon.services;
 using qorpent.v2.security.Tests.user;
 using qorpent.v2.security.user;
 using Qorpent;
+using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.Experiments;
 using Qorpent.IoC;
@@ -37,6 +38,10 @@ namespace qorpent.v2.security.Tests
         class configprovider : IConfigProvider {
             public XElement GetConfig() {
                 return config;
+            }
+
+            public IBSharpContext GetContext() {
+                throw new NotImplementedException();
             }
         }
         [SetUp]

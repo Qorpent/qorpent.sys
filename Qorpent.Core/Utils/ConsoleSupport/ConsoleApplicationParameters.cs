@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Bxl;
+using Qorpent.Config;
+using Qorpent.IO;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
@@ -292,31 +292,29 @@ namespace Qorpent.Utils{
             return result;
         }
 
+	    protected ConfigurationOptions ConfigurationOptions
+	    {
+	        get
+	        {
+	            return new ConfigurationOptions {
+	                Name = Arg1,
+	                FileSet = new FileSet(GetBSharpRoot(), "*." + ConfigExtension)
+	            };
+	        }
+	    }
+
+	    
+
 		/// <summary>
 		/// Производит загрузку из проекта B#
 		/// </summary>
-		protected virtual void LoadFromBSharp(){
-			var bsconfigs = Directory.GetFiles(GetBSharpRoot(), "*."+ConfigExtension);
-			if (0 == bsconfigs.Length){
-				throw new Exception("No "+ConfigExtension+" file found");
-			}
-#if BRIDGE
-		    var compiler = new BSharpCompiler();
-		    var bxl = new BxlParser();
-#else
-			var compiler = WellKnownHelper.Create<IBSharpCompiler>();
-			var bxl = new BxlParser();
-#endif
-			var sources = bsconfigs.Select(_ => bxl.Parse(File.ReadAllText(_), _)).ToArray();
-			var context = compiler.Compile(sources,(IBSharpContext)null);
-		    this.BSharpContext = context;
-			var cls = context.Get(Arg1);
-			if (null == cls){
-				throw new Exception("cannot find config with name "+Arg1);
-			}
-		    this.Definition = cls.Compiled;
-			cls.Compiled.Apply(this);
-			foreach (var x in cls.Compiled.Attributes())
+		protected virtual void LoadFromBSharp() {
+		    var config = new ConfigurationLoader(ConfigurationOptions).Load();
+		       BSharpContext = config.GetContext();
+		   var xml = config.GetConfig();
+               xml.Apply(this);
+		    Definition = xml;
+			foreach (var x in xml.Attributes())
 			{
 				
 				var name = x.Name.LocalName;
@@ -324,7 +322,7 @@ namespace Qorpent.Utils{
 					Set(name, x.Value);
 				}
 			}
-			foreach (var x in cls.Compiled.Elements()){
+			foreach (var x in xml.Elements()){
 				var name = x.Name.LocalName;
 				if (!ContainsKey(name)){
 					var val = x.Attr("code");

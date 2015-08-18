@@ -29,6 +29,7 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeServiceTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeTestBase.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptorTests.cs" />
+    <Compile Include="Config\ConfigLoaderTest.cs" />
     <Compile Include="Experiments\JsonWriterTests.cs" />
     <Compile Include="Http\RequestDescriptorTest.cs" />
     <Compile Include="ScopeConfigBaseEqualityTest.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Utils\HexTests.cs" />
     <Compile Include="Utils\IO\FileDescriptorExTest.cs" />
     <Compile Include="Utils\IO\FileSystemHelperTests.cs" />
-    <Compile Include="Utils\LogicalExpressions\MainTest.cs" />
+    <Compile Include="Utils\LogicalExpressions\LogicalExpressionsTest.cs" />
     <Compile Include="Utils\MathTests.cs" />
     <Compile Include="Utils\ReflectionHelperTest.cs" />
     <Compile Include="Utils\SimpleExpression\SimpleExpressionParserTests.cs" />

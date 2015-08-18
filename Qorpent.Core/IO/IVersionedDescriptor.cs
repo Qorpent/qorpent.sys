@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace Qorpent.Utils.IO {
+namespace Qorpent.IO {
     /// <summary>
     /// Интерфейс для описания версионированного ресурса
     /// </summary>
