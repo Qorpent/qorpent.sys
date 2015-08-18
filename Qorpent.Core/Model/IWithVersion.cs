@@ -28,4 +28,9 @@ namespace Qorpent.Model {
 		/// </summary>
 		DateTime Version { get; set; }
 	}
+
+
+    public interface IWithIntVersion {
+        int Version { get; set; }
+    }
 }

@@ -716,10 +716,24 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="e"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static string AttrOrValue(this XElement e, string name){
+		public static string AttrOrValue(this XElement e, string name) {
+		    if (null == e) return null;
 			if (null != e.Attribute(name)) return e.Attribute(name).Value;
 			return e.Value;
 		}
+
+	    public static string AttrOrElement(this XElement e, string name) {
+	        if (null == e) return String.Empty;
+	        var attr = e.Attribute(name);
+	        if (null != attr) {
+	            return attr.Value;
+	        }
+	        var element = e.Element(name);
+	        if (null != element) {
+	            return element.AttrOrValue("code");
+	        }
+	        return String.Empty;
+	    }
 
 		/// <summary>
 		/// 	¬озвращает только собственное значение элемента (конкатенаци€ текстовых элементов через пробел)

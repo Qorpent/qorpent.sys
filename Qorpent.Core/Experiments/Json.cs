@@ -677,6 +677,7 @@ namespace Qorpent.Experiments {
             foreach (var attribute in data.Attributes()) {
                 result[attribute.Name.LocalName] = attribute.Value;
             }
+            result["__name"] = data.Name.LocalName;
             var value = string.Join("\r\n", data.Nodes().OfType<XText>().Select(_ => _.Value));
             if (!string.IsNullOrWhiteSpace(value)) {
                 result["__value"] = value;
@@ -718,6 +719,17 @@ namespace Qorpent.Experiments {
             return paths.FirstOrDefault(_ =>!string.IsNullOrWhiteSpace( str(data, _)));
         }
 
+        public static int resolvenum(this object data, string path, params string[] paths)
+        {
+            var result = Get(data, path);
+            int r = 0;
+            if (null != result) {
+                return result.ToInt();
+            }
+            if (null == paths || 0 == paths.Length) return r;
+            return paths.FirstOrDefault(_ => null!=Get(data,_)).ToInt();
+        }
+
 
 
 
@@ -750,6 +762,16 @@ namespace Qorpent.Experiments {
             var result = (Get(data, path) as object[]);
             if(null==result)return null;
              return result.OfType<IDictionary<string,object>>().ToArray();
+        }
+
+        public static IDictionary<string, object> nestorself(this object obj, string name)
+        {
+            return (Get(obj, name) ?? obj) as IDictionary<string, object>;
+        }
+
+        public static IDictionary<string, object> nest(this object obj, string name)
+        {
+            return Get(obj, name) as IDictionary<string, object>;
         }
 
         public static object arr0(this object data, string path)
@@ -846,7 +868,7 @@ namespace Qorpent.Experiments {
         {
             
             if (data is IJsonSerializable) {
-                (data as IJsonSerializable).Write(output,jsonmode, annotator);
+                (data as IJsonSerializable).WriteAsJson(output,jsonmode, annotator);
             }
             else {
                 output.Write("{");

@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IWithName.cs
 #endregion
+
 namespace Qorpent.Model {
 	/// <summary>
 	/// Named entity concern

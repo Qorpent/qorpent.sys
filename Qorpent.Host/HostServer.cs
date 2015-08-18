@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
+using qorpent.v2.reports.config;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.authorization;
 using Qorpent.Applications;
@@ -617,6 +618,7 @@ namespace Qorpent.Host {
             }
             loader.LoadAssembly(typeof (HostServer).Assembly);
             loader.LoadAssembly(typeof (HttpAuthenticator).Assembly);
+            loader.LoadAssembly(typeof (ReportProvider).Assembly);
             foreach (var assemblyName in Config.AutoconfigureAssemblies) {
                 var assembly = Assembly.Load(assemblyName);
                 loader.LoadAssembly(assembly);

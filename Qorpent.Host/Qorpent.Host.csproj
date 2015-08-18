@@ -80,6 +80,10 @@
       <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
       <Name>Qorpent.IO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\qorpent.v2.reports\qorpent.v2.reports.csproj">
+      <Project>{45CAF48F-8084-4233-AD08-119D116D431C}</Project>
+      <Name>qorpent.v2.reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\qorpent.v2.security\qorpent.v2.security.csproj">
       <Project>{5b887177-d99b-4505-b9cd-592363e9ab51}</Project>
       <Name>qorpent.v2.security</Name>

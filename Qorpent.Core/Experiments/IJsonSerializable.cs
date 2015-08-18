@@ -11,7 +11,7 @@ namespace Qorpent.Experiments {
         /// </summary>
         /// <param name="output"></param>
         /// <param name="annotator"></param>
-        void Write(TextWriter output, string mode, ISerializationAnnotator annotator);
+        void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator);
     }
 
     public interface IJsonDeserializable {

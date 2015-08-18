@@ -5,5 +5,7 @@ namespace Qorpent {
         TItem Get(string key, Func<string, TItem> retriever);
         void Clear();
         int RefreshRate { get; set; }
+        bool Exists(string key);
+        TItem UpSet(string key, Func<string, TItem, TItem> setup);
     }
 }

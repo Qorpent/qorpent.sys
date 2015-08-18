@@ -6,10 +6,10 @@ using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent {
-    public abstract class CacheServiceBase<TItem, TLeaseType> : ExtensibleServiceBase<TLeaseType>, ICacheService<TItem, TLeaseType> where TLeaseType : ICacheLease {
+    public class CacheService<TItem, TLeaseType> : ExtensibleServiceBase<TLeaseType>, ICacheService<TItem, TLeaseType> where TLeaseType : ICacheLease {
         protected IDictionary<string, TItem> InternalCache { get; private set; } 
         
-        public CacheServiceBase() {
+        public CacheService() {
             InternalCache = new Dictionary<string, TItem>();
             RefreshRate = 10000;
         }
@@ -77,6 +77,25 @@ namespace Qorpent {
         }
 
         public int RefreshRate { get; set; }
+        public bool Exists(string key) {
+            return InternalCache.ContainsKey(key);
+
+        }
+
+        public TItem UpSet(string key, Func<string,TItem, TItem> setup = null) {
+            if (Exists(key)) {
+                var existed = InternalCache[key];
+                if (null == setup) return existed;
+                var updated = setup(key, existed);
+                if (!Equals(existed,updated)) {
+                    InternalCache[key] = updated;
+                }
+                return updated;
+            }
+            if (null == setup) return default(TItem);
+            return Get(key, _ => setup(_, default(TItem)));
+        }
+
         public DateTime LastRefresh { get; set; }
     }
 }

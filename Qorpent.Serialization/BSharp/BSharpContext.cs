@@ -202,6 +202,7 @@ namespace Qorpent.BSharp{
 			if (string.IsNullOrWhiteSpace(query)){
 				return Working;
 			}
+            
 			if (query.EndsWith(".*")){
 				return Working.Where(_ => _.Namespace.StartsWith(query.Substring(0, query.Length - 2)));
 			}

@@ -27,7 +27,7 @@ namespace qorpent.v2.security.user {
             UserSerializer.ReadJson(this, jsonsrc);
         }
 
-        public void Write(TextWriter output, string usermode, ISerializationAnnotator annotator) {
+        public void WriteAsJson(TextWriter output, string usermode, ISerializationAnnotator annotator) {
             UserSerializer.WriteJson(this, output, usermode);
         }
 

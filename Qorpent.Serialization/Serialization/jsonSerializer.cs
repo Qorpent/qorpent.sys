@@ -50,7 +50,7 @@ namespace Qorpent.Serialization {
 	        if (null != js) {
 	            i.CustomWrite = true;
                 i.BeginObject("");
-	            js.Write(i.Output,usermode,null);
+	            js.WriteAsJson(i.Output,usermode,null);
                 i.EndObject();
 	            i.CustomWrite = false;
 	            return true;
@@ -90,7 +90,7 @@ namespace Qorpent.Serialization {
 			}
 #endif
 	        if (value is IJsonSerializable) {
-	            ((IJsonSerializable)value).Write(output,usermode,null);
+	            ((IJsonSerializable)value).WriteAsJson(output,usermode,null);
                 return;
 	        }
             base.Serialize(name, value, output,usermode, options);
