@@ -173,5 +173,9 @@ namespace Qorpent.Core.Tests.Experiments {
         public void Dispose() {
             Flush();
         }
+
+        public void WriteObject(object item, string jsonmode = null) {
+            WriteNative(item.stringify(jsonmode));
+        }
     }
 }

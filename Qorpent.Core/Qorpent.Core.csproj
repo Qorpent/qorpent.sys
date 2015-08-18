@@ -391,6 +391,7 @@
     <Compile Include="Utils\XDiff\XDiffOptions.cs" />
     <Compile Include="Utils\XmlInterpolation.cs" />
     <Compile Include="Utils\XsltStdExtensions.cs" />
+    <Compile Include="v2\query\IObjectSource.cs" />
     <Compile Include="v2\security\authentication\IHttpAuthenticator.cs" />
     <Compile Include="v2\security\authentication\IHttpDefaultIdentitySource.cs" />
     <Compile Include="v2\security\authentication\IHttpIdentitySource.cs" />
@@ -429,6 +430,7 @@
     <Compile Include="v2\security\user\storage\IUserSource.cs" />
     <Compile Include="v2\security\user\storage\IUserSourceBound.cs" />
     <Compile Include="v2\security\user\storage\IWriteableUserSource.cs" />
+    <Compile Include="v2\query\SearchResult.cs" />
     <Compile Include="Verdict.cs" />
     <Compile Include="VerdictType.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
@@ -591,6 +593,7 @@
   <ItemGroup>
     <Folder Include="Serialization\IntermediateFormat\" />
     <Folder Include="Utils\Config\" />
+    <Folder Include="v2\reports\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
