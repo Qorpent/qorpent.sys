@@ -68,6 +68,8 @@ namespace Qorpent.Utils.LogicalExpressions {
         Block = 1 << 12,
         GreaterOrEq = 1 << 13,
         LowerOrEq = 1 << 14,
-        Compare = Eq | Neq | Greater | Lower | GreaterOrEq | LowerOrEq
+        Regex = 1 << 15,
+        Compare = Eq | Neq | Greater | Lower | GreaterOrEq | LowerOrEq | Regex,
+        
     }
 }

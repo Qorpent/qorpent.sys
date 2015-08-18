@@ -80,7 +80,14 @@ namespace Qorpent.Utils.LogicalExpressions {
 				var fst = token.Children[0];
 				var sec = token.Children[1];
 				LogicalExpressionNode n;
-			    if (fst.Type == LETokenType.Number) {
+			    if (token.Type == LETokenType.Regex) {
+			        n = new RegexTestNode {
+			            First = fst.Value,
+			            Second = sec.Value,
+			            FirstIsLiteral = fst.Type == LETokenType.Literal,
+			            SecondIsLiteral = sec.Type == LETokenType.Literal
+			        };
+			    }else if (fst.Type == LETokenType.Number) {
                     var eq = new EqualValueNode();
                     n = eq;
                     eq.Literal = sec.Value;
@@ -352,7 +359,25 @@ namespace Qorpent.Utils.LogicalExpressions {
                         _tokenlist.Add(new Token {Type = LETokenType.Or});
 						_state = State.AfterAndOrOr;
 						break;
-					case '=':
+                    case '~':
+                        if (State.InLiteral == _state)
+                        {
+                            Closeliteral();
+                        }
+
+                        if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state)
+                        {
+                            throw new Exception("~ is at wrong place " + idx);
+                        }
+                        if (next == '~')
+                        {
+                            _skipnext = 1;
+                        }
+                        _tokenlist.Add(new Token { Type = LETokenType.Regex });
+                        _state = State.AfterBinaryOperator;
+                        break;
+
+                    case '=':
                         if (State.InLiteral == _state)
                         {
                             Closeliteral();

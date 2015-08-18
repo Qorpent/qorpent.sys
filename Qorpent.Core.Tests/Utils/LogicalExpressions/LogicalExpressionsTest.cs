@@ -98,5 +98,17 @@ namespace Qorpent.Core.Tests.Utils.LogicalExpressions
             Assert.False(le.Eval("! (my )", new { my = true }));
             Assert.True(le.Eval("!(! (my ))", new { my = true }));
         }
+
+        [TestCase("X ~ 'a'", false)]
+        [TestCase("X~'a'", false)]
+        [TestCase("X~ 'b'", true)]
+        [TestCase("X ~'b'", true)]
+        [TestCase("'bbb' ~ 'b'", true)]
+        [TestCase("'b' ~ 'bbb'", false)]
+        [TestCase("'bbbbbb' ~ X", true)]
+        [TestCase("'bb' ~ X", false)]
+        public void RegexSupportQ523(string cond, bool result) {
+            Assert.AreEqual(result,le.Eval(cond,new {X="bbb"}));
+        }
     }
 }
