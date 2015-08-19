@@ -298,7 +298,7 @@ namespace Qorpent.Utils{
 	        {
 	            return new ConfigurationOptions {
 	                Name = Arg1,
-	                FileSet = new FileSet(GetBSharpRoot(), "*." + ConfigExtension)
+	                FileSet = ConfigSet ?? new FileSet(GetBSharpRoot(), "*." + ConfigExtension)
 	            };
 	        }
 	    }
@@ -390,5 +390,7 @@ namespace Qorpent.Utils{
                 Set("ensureshadow", value);
             }
         }
+
+	    public FileSet ConfigSet { get; set; }
 	}
 }

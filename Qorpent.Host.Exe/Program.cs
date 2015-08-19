@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using qorpent.v2.console;
 using Qorpent.Host.Server;
+using Qorpent.Log;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -20,27 +23,34 @@ namespace Qorpent.Host.Exe
 	        var config = arg.BuildServerConfig();
 	        EnsureRequiredApplications(arg,config);
 	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
-            Console.WriteLine("LOGLEVEL " + config.LogLevel);
-	        var hostServer = new HostServer(config);
-
-            LogHostInfo(arg, config);
-	        hostServer.Start();
-            Console.WriteLine("LOGLEVEL " + config.LogLevel);
-	        try {
-		    while(true){
-		      try{
-			var command = Console.ReadLine();
-			if(command=="quit" || command=="exit"){
-			  return 0;
-			}
-		      }catch{
-			
-		      }
-	            }
+            var command = arg.Get("command", "");
+	        if (string.IsNullOrWhiteSpace(command)) {
+	            Console.WriteLine("LOGLEVEL " + config.LogLevel);
 	        }
-	        finally {
+	        var hostServer = new HostServer(config);
+            hostServer.Initialize();
+            var consoleContext = new ConsoleContext
+            {
+                Container = hostServer.Container,
+                Parameters = arg
+            };
+            var listener = new ConsoleListener(consoleContext);
+            
+	        if (!string.IsNullOrWhiteSpace(command)) {
+	            var task = listener.Call(command);
+	            task.Wait();
+	        }
+	        else {
+
+	            LogHostInfo(arg, config);
+	            hostServer.Start();
+	            Console.WriteLine("LOGLEVEL " + config.LogLevel);
+
+	            listener.Log = hostServer.Container.Get<ILoggyManager>().Get("console");
+	            listener.Run();
 	            hostServer.Stop();
 	        }
+	        return 0;
 	    }
 
 	    private static void EnsureRequiredApplications(ServerParameters serverParameters, HostConfig config) {

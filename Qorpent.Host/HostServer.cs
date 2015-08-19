@@ -582,6 +582,14 @@ namespace Qorpent.Host {
         }
 
         private void LoadContainer() {
+            if (null == Container.FindComponent(typeof(IHostConfigProvider), null))
+            {
+                Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
+            }
+            if (null == Container.FindComponent(typeof(IConfigProvider), null))
+            {
+                Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
+            }
             var loader = Container.GetLoader();
             if (Directory.Exists(Config.ConfigFolder)) {
                 var xml = new XElement("result");
@@ -594,14 +602,7 @@ namespace Qorpent.Host {
                 }
                 loader.LoadManifest(xml, true);
             }
-            if (null == Container.FindComponent(typeof(IHostConfigProvider), null))
-            {
-                Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
-            }
-            if (null == Container.FindComponent(typeof(IConfigProvider), null))
-            {
-                Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
-            }
+            
             if (0 != Config.ConnectionStrings.Count) {
                 var connections = Container.Get<IDatabaseConnectionProvider>();
                 if (null == connections) {

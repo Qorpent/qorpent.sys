@@ -15,7 +15,18 @@ namespace Qorpent.Log.NewLog {
         }
 
         protected string GetText(LoggyMessage message) {
+            if (string.IsNullOrWhiteSpace(message.Message) && null != message.Exception) {
+                message.Message =
+                    message.Exception.GetType().Name + ": " +
+                    message.Exception.Message + Environment.NewLine;
+                if (null != message.Exception.StackTrace) {
+                    message.Message +=
+                   message.Exception.StackTrace.Substring(0, Math.Min(message.Exception.StackTrace.Length, 200)) + "...";
+                }
+                
+            }
             var result = message.Message;
+            
             if (!string.IsNullOrWhiteSpace(Format)) {
                 result = Format.Interpolate(message);
             }

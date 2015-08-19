@@ -394,6 +394,15 @@
     <Compile Include="Utils\XDiff\XDiffOptions.cs" />
     <Compile Include="Utils\XmlInterpolation.cs" />
     <Compile Include="Utils\XsltStdExtensions.cs" />
+    <Compile Include="v2\console\ConsoleCallInfo.cs" />
+    <Compile Include="v2\console\ConsoleCommandBase.cs" />
+    <Compile Include="v2\console\ConsoleCommandResult.cs" />
+    <Compile Include="v2\console\ConsoleContext.cs" />
+    <Compile Include="v2\console\ConsoleContextExtensions.cs" />
+    <Compile Include="v2\console\ConsoleListener.cs" />
+    <Compile Include="v2\console\IConsoleCommand.cs" />
+    <Compile Include="v2\console\IConsoleContext.cs" />
+    <Compile Include="v2\console\IConsoleListener.cs" />
     <Compile Include="v2\model\IItem.cs" />
     <Compile Include="v2\model\Item.cs" />
     <Compile Include="v2\query\IObjectSource.cs" />

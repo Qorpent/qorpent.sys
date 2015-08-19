@@ -38,9 +38,10 @@ namespace Qorpent.IO {
             Normalize();
             return 
                 from directory in Directories
+                let ndir = EnvironmentInfo.ResolvePath(directory)
                 from mask in Masks
                 let opts = Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
-                from file in Directory.GetFiles(directory,mask,opts)
+                from file in Directory.GetFiles(ndir, mask,opts)
                 where IsMatch(file) select file;
         }
 
