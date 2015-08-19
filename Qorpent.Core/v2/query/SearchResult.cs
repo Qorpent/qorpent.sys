@@ -21,8 +21,8 @@ namespace qorpent.v2.query {
         public bool Ok;
         public Exception Error;
 
-        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator) {
-            var writer = new JsonWriter(output);
+        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
+            var writer = new JsonWriter(output,pretty:pretty,level:level);
             writer.OpenObject();
             writer.WriteProperty("total", Total);
             writer.WriteProperty("offset", OffSet);

@@ -71,11 +71,11 @@ namespace qorpent.v2.security.user {
         public bool IsAuthenticated { get; set; }
         public Token DisabledToken { get; set; }
 
-        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator) {
+        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
             if (string.IsNullOrWhiteSpace(mode)) {
                 mode = "admin";
             }
-            var jw = new JsonWriter(output);
+            var jw = new JsonWriter(output,pretty:pretty,level:level);
             jw.OpenObject();
             jw.WriteProperty("name",Name);
             jw.WriteProperty("isauth",IsAuthenticated);

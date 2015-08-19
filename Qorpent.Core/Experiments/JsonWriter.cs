@@ -11,11 +11,17 @@ namespace Qorpent.Core.Tests.Experiments {
         private TextWriter _out;
         private SerializeMode _options;
         private IScope scope;
+        private bool _pretty;
+        private int _initiallevel;
+        private int _currentlevel;
 
-        public JsonWriter(TextWriter writer, SerializeMode options = SerializeMode.Serialize)
+        public JsonWriter(TextWriter writer, SerializeMode options = SerializeMode.Serialize, bool pretty = false, int level = 0)
         {
             this._out = writer;
             this._options = options;
+            this._pretty = pretty;
+            this._initiallevel = level;
+            this._currentlevel = level;
             scope= new Scope();
         }
 

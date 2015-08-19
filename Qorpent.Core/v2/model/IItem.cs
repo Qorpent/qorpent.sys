@@ -10,7 +10,7 @@ namespace qorpent.v2.model {
        
     {
         void Read(object src);
-        void Write(TextWriter writer, string mode = null);
+        void Write(TextWriter writer, string mode = null, bool pretty = false, int level = 0);
         void Merge(IItem src);
         IItem Clone();
     }

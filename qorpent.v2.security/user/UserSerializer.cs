@@ -120,12 +120,12 @@ namespace qorpent.v2.security.user {
                     .Replace("-", "_");
         }
 
-        public static void WriteJson(IUser user, TextWriter output, string usermode = "") {
+        public static void WriteJson(IUser user, TextWriter output, string usermode = "", bool pretty = false, int level = 0) {
             if (string.IsNullOrWhiteSpace(usermode)) {
                 usermode = "admin";
             }
             var notnullonly = usermode != "store";
-            var jw = new JsonWriter(output);
+            var jw = new JsonWriter(output,pretty:pretty,level:level);
             if (null == user) {
                 jw.WriteValue(null);
                 return;

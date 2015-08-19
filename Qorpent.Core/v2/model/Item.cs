@@ -26,8 +26,8 @@ namespace qorpent.v2.model
         public string Name { get; set; }
         public IDictionary<string,object> Custom { get; set; } 
 
-        protected void WriteJson(TextWriter output, string mode) {
-            var jw=  new JsonWriter(output);
+        protected void WriteJson(TextWriter output, string mode,bool pretty, int level) {
+            var jw=  new JsonWriter(output,pretty:pretty,level:level);
             jw.OpenObject();          
             WriteJsonInternal(jw, mode);
             jw.CloseObject();
@@ -67,8 +67,8 @@ namespace qorpent.v2.model
         }
 
 
-        void IJsonSerializable.WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator) {
-            WriteJson(output,mode);
+        void IJsonSerializable.WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
+            WriteJson(output,mode,pretty,level);
         }
 
         void IJsonDeserializable.LoadFromJson(object jsonsrc)
@@ -99,8 +99,10 @@ namespace qorpent.v2.model
             }
         }
 
-        public void Write(TextWriter writer, string mode = null) {
-            WriteJson(writer,mode);
+
+
+        public void Write(TextWriter writer, string mode = null, bool pretty = false, int level = 0) {
+            WriteJson(writer,mode,pretty,level);
         }
 
         public const string REMOVER = "_remove";

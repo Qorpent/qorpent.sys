@@ -13,8 +13,9 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api\console\ReportListCommand.cs" />
     <Compile Include="model\Report.cs" />
-    <Compile Include="restful\ReportListAction.cs" />
+    <Compile Include="api\restful\ReportListAction.cs" />
     <Compile Include="storage\ConfigReportSource.cs" />
     <Compile Include="storage\ReportFeedProvider.cs" />
     <Compile Include="storage\ReportProvider.cs" />

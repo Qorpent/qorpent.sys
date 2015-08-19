@@ -10,8 +10,11 @@ namespace Qorpent.Experiments {
         /// 
         /// </summary>
         /// <param name="output"></param>
+        /// <param name="mode"></param>
         /// <param name="annotator"></param>
-        void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator);
+        /// <param name="pretty"></param>
+        /// <param name="level"></param>
+        void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0);
     }
 
     public interface IJsonDeserializable {

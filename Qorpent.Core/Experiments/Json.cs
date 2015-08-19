@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Activation;
 using System.Security;
 using System.Text;
 using System.Xml.Linq;
@@ -645,14 +646,14 @@ namespace Qorpent.Experiments {
         /// <param name="defaultMode"></param>
         /// <param name="annotator"></param>
         /// <returns></returns>
-        public static string Stringify(object data, string jsonmode="", SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator=null) {
+        public static string Stringify(object data, string jsonmode="", SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator=null, bool pretty = false, int level=0) {
             var sw = new StringWriter();
-            Write(data,sw,jsonmode,defaultMode, annotator);
+            Write(data,sw,jsonmode,defaultMode, annotator,pretty,level);
             return sw.ToString();
         }
 
-        public static string stringify(this object data, string jsonmode="") {
-            return Stringify(data,jsonmode);
+        public static string stringify(this object data, string jsonmode="", bool pretty = false, int level = 0) {
+            return Stringify(data,jsonmode,pretty:pretty,level:level);
         }
 
         public static IDictionary<string, object> jsonifymap(this object data) {
@@ -824,9 +825,12 @@ namespace Qorpent.Experiments {
         /// </summary>
         /// <param name="data"></param>
         /// <param name="output"></param>
+        /// <param name="jsonmode"></param>
         /// <param name="defaultMode"></param>
         /// <param name="annotator"></param>
-        public static void Write(object data, TextWriter output, string jsonmode, SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator = null)
+        /// <param name="pretty"></param>
+        /// <param name="level"></param>
+        public static void Write(object data, TextWriter output, string jsonmode, SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator = null, bool pretty = false, int level = 0)
         {
             if (null == data) {
                 output.Write("null");
@@ -845,17 +849,17 @@ namespace Qorpent.Experiments {
             var collection = data as ICollection;
             if (null != collection) {
                 if (collection is IDictionary<string, string>) {
-                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator,pretty,level);
                 }
                 else if (collection is IDictionary<string, object>) {
-                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 else if (collection is IDictionary<int, object>)
                 {
-                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 else {
-                    WriteArray(collection, output,jsonmode,defaultMode, annotator);
+                    WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 return;
                 
@@ -910,7 +914,7 @@ namespace Qorpent.Experiments {
             }
         }
 
-        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator)
+        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level=0)
         {
            output.Write("[");
             bool first = true;
@@ -926,7 +930,7 @@ namespace Qorpent.Experiments {
             output.Write("]");
         }
 
-        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator)
+        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level =0)
         {
             output.Write("{");
             bool first = true;
