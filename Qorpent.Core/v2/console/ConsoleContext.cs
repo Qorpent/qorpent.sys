@@ -79,7 +79,7 @@ namespace qorpent.v2.console {
 
         public ConsoleCallInfo Info
         {
-            get { return _info ?? Parent?.Info; }
+            get { return _info ?? (Parent==null?null:Parent.Info); }
             set { _info = value; }
         }
 
@@ -110,13 +110,13 @@ namespace qorpent.v2.console {
 
         public TextWriter Out
         {
-            get { return _output ?? Parent?.Out ?? Console.Out; }
+            get { return _output ?? (Parent != null ? Parent.Out : Console.Out) ; }
             set { _output = value; }
         }
 
         public TextWriter Error
         {
-            get { return _error ?? Parent?.Error ?? Console.Error; }
+            get { return _error ?? (Parent != null ? Parent.Error : Console.Error) ; }
             set { _error = value; }
         }
 
