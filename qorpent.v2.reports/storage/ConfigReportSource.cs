@@ -3,13 +3,12 @@ using System.Text.RegularExpressions;
 using qorpent.v2.model;
 using qorpent.v2.query;
 using qorpent.v2.reports.model;
-using qorpent.v2.reports.storage;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.Experiments;
 using Qorpent.IoC;
 
-namespace qorpent.v2.reports.config {
+namespace qorpent.v2.reports.storage {
     [ContainerComponent(Lifestyle = Lifestyle.Singleton, ServiceType = typeof(IReportSource), Name = "qorpent.reports.reportconfigsource")]
     public class ConfigReportSource : ObjectSourceBase<IReport>, IReportSource {
         private IBSharpContext _context;

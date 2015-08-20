@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using qorpent.v2.model;
 using Qorpent.Model;
 
 namespace qorpent.v2.reports.model {
-    public interface IReport :IItem,IWithRole{
+    public interface IReport :IItem,IWithRole,IWithDefinition{
+        IList<IReportAgentDefinition> Agents { get; set; }
     }
 }

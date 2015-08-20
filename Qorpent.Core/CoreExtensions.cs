@@ -813,6 +813,14 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return String.IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
+
+	    public static bool ResolveFlag(this XElement e, string flag) {
+	        var attr = e.Attribute(flag);
+	        if (null != attr) return attr.Value.ToBool();
+	        if (e.Attr("name") == flag) return true;
+	        if (e.Attr("code") == flag) return true;
+	        return false;
+	    }
 		/// <summary>
 		/// ѕроизводит резолюцию значений атрибутов, имен атрибутов и возвращает максимально валидный результат
 		/// </summary>

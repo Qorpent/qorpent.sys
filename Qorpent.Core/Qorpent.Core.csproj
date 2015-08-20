@@ -407,7 +407,13 @@
     <Compile Include="v2\model\Item.cs" />
     <Compile Include="v2\query\IObjectSource.cs" />
     <Compile Include="v2\query\ObjectSourceBase.cs" />
+    <Compile Include="v2\reports\core\IReportAgent.cs" />
+    <Compile Include="v2\reports\core\IReportContext.cs" />
+    <Compile Include="v2\reports\core\ReportPhase.cs" />
+    <Compile Include="v2\reports\IReportRequest.cs" />
+    <Compile Include="v2\reports\IReportService.cs" />
     <Compile Include="v2\reports\model\IReport.cs" />
+    <Compile Include="v2\reports\model\IReportAgentDefinition.cs" />
     <Compile Include="v2\reports\model\IReportFeed.cs" />
     <Compile Include="v2\reports\storage\IReportFeedLease.cs" />
     <Compile Include="v2\reports\storage\IReportFeedProvider.cs" />

@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Qorpent;
+using Qorpent.Bxl;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Utils;
@@ -77,6 +79,17 @@ namespace qorpent.v2.console {
         }
 
 
+        public IScope Scope
+        {
+            get { return _scope ?? (_scope= GetScope()); }
+            set { _scope = value; }
+        }
+
+        private IScope GetScope() {
+            if (null == Parent) return new Scope();
+            return new Scope(Parent.Scope);
+        }
+
         public ConsoleCallInfo Info
         {
             get { return _info ?? (Parent==null?null:Parent.Info); }
@@ -89,7 +102,21 @@ namespace qorpent.v2.console {
             if (null == command) {
                 throw new Exception("cannot find command "+commandname );
             }
+            var proxy = this.GetProxy();
+            proxy.Scope.Set("commandname",commandname);
+            proxy.Scope.Set("commandstring",commandstring); 
             return await command.Execute(this, commandname, commandstring, scope);
+        }
+
+        public XElement GetBxl() {
+            var callcontext = Scope;
+            var command = callcontext.Get("commandname", "");
+            var commandstring = callcontext.Get("commandstring", "");
+            var bxl = command + " " + commandstring;
+            if (!string.IsNullOrWhiteSpace(bxl)) {
+               return new BxlParser().Parse(bxl, "", BxlParserOptions.ExtractSingle);
+            }
+            return new XElement("stub");
         }
 
         public IConsoleCommand GetCommand(string commandname, string commandstring = null, IScope scope = null) {
@@ -107,6 +134,10 @@ namespace qorpent.v2.console {
         private ConsoleApplicationParameters _parameters;
         private IContainer _container;
         private ConsoleCallInfo _info;
+        private Stream _outStream;
+        private IScope _scope;
+
+        public Stream OutStream { get; set; }
 
         public TextWriter Out
         {

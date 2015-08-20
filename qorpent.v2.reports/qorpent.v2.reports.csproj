@@ -14,8 +14,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="api\console\ReportListCommand.cs" />
+    <Compile Include="core\ReportContext.cs" />
+    <Compile Include="core\ReportRequest.cs" />
     <Compile Include="model\Report.cs" />
     <Compile Include="api\restful\ReportListAction.cs" />
+    <Compile Include="model\ReportAgentDefintion.cs" />
+    <Compile Include="agents\ReportAgentBase.cs" />
+    <Compile Include="core\ReportService.cs" />
     <Compile Include="storage\ConfigReportSource.cs" />
     <Compile Include="storage\ReportFeedProvider.cs" />
     <Compile Include="storage\ReportProvider.cs" />
@@ -30,5 +35,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

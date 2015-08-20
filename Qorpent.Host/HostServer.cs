@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
-using qorpent.v2.reports.config;
+using qorpent.v2.reports.storage;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.authorization;
 using Qorpent.Applications;

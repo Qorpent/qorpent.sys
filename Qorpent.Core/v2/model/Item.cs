@@ -18,6 +18,9 @@ namespace qorpent.v2.model
     {
         public static T Create<T>(object src) where T : IItem,new() {
             var result = new T();
+            if (result is IWithDefinition) {
+                ((IWithDefinition) result).Definition = src;
+            }
             result.Read(src);
             return result;
         } 
@@ -41,6 +44,10 @@ namespace qorpent.v2.model
             if (null != roled) {
                 jw.WriteProperty("role",roled.Role);
             }
+            var indexed = this as IWithIndex;
+            if (null != indexed) {
+                jw.WriteProperty("idx",indexed.Idx);
+            }
             jw.WriteProperty("custom",Custom,true);
         }
 
@@ -51,7 +58,14 @@ namespace qorpent.v2.model
             Version = src.resolvenum("_version", "version");
             Name = src.str("name");
             Custom = src.map("custom");
-
+            var roled = this as IWithRole;
+            if (null != roled) {
+                roled.Role = src.str("role");
+            }
+            var indexed = this as IWithIndex;
+            if (null != indexed) {
+                indexed.Idx = src.num("idx");
+            }
         }
 
         protected virtual void ReadFromXml(XElement xml) {
@@ -62,7 +76,14 @@ namespace qorpent.v2.model
             if (null != cxml) {
                 Custom = cxml.jsonify() as IDictionary<string,object>;
             }
-
+            var roled = this as IWithRole;
+            if (null != roled) {
+                roled.Role = xml.Attr("role");
+            }
+            var indexed = this as IWithIndex;
+            if (null != indexed) {
+                indexed.Idx = xml.Attr("idx").ToInt();
+            }
 
         }
 

@@ -16,6 +16,7 @@ namespace qorpent.v2.console {
                 using (var sw = new StreamWriter(s)) {
                     var proxy = context.GetProxy(_ => {
                         _.Out = sw;
+                        _.OutStream = s;
                         return _;
                     });
                     result =await proxy.Execute(command, commandstring, scope);
