@@ -49,8 +49,11 @@ namespace qorpent.v2.reports.agents {
             Item = def.str("item");
             BeforeItem = def.str("beforeitem");
             AfterItem = def.str("afteritem");
-            BuildHtml = def.bul("html");
+            BuildHtml = def.bul("buildhtml");
+            HtmlClass = def.str("htmlclass");
         }
+
+        public string HtmlClass { get; set; }
 
         public override async Task Execute(IReportContext context, ReportPhase phase, IScope scope = null) {
             SetupMime(context);
@@ -80,7 +83,7 @@ namespace qorpent.v2.reports.agents {
 
         private void DoBuildHtml(IReportContext context, IScope scope) {
             var htmlconfig = new HtmlConfig();
-            bool standalone = context.IsSet("standalone");
+            bool standalone = context.Request.Standalone;
             if (standalone)
             {
                 htmlconfig.DocHeader = RenderXml(context, scope, DocHeader, null, "DocHeader");
@@ -103,12 +106,14 @@ namespace qorpent.v2.reports.agents {
                     xitem.Before = RenderXml(context, itemScope, BeforeItem, item, "BeforeItem");
                     xitem.Item = RenderXml(context, itemScope, Item, item, "Item");
                     xitem.After = RenderXml(context, itemScope, AfterItem, item, "AfterItem");
-                    xitems.Add(xitem);
+                    if (null != (xitem.Before ?? xitem.After ?? xitem.Before)) {
+                        xitems.Add(xitem);
+                    }
                     i++;
                 }
             }
             htmlconfig.Items = xitems;
-            htmlconfig.Footer = RenderXml(context, scope, Header, null, "Footer");
+            htmlconfig.Footer = RenderXml(context, scope, Footer, null, "Footer");
             XElement docfooter = null;
             if (standalone)
             {
@@ -119,11 +124,11 @@ namespace qorpent.v2.reports.agents {
         }
 
         private XElement CompileHtml(IReportContext context, IScope scope,HtmlConfig htmlconfig) {
-            bool standalone = context.IsSet("standalone");
+            bool standalone = context.Request.Standalone;
             XElement root = null;
             XElement content = XElement.Parse("<section><header></header><main></main><footer></footer></section>");
             if (standalone) {
-                root =XElement.Parse("<html><header></header><body></body></html>");
+                root =XElement.Parse($"<html class='{HtmlClass}'><header><meta charset='UTF-8' /></header><body></body></html>");
                 root.Element("body").Add(content);
                 if (null != htmlconfig.DocHeader) {
                     root.Element("header").Add(htmlconfig.DocHeader.Elements());
@@ -144,7 +149,7 @@ namespace qorpent.v2.reports.agents {
                 main = content.Element("main");
             }
 
-            if (null != htmlconfig.Items) {
+            if (null != htmlconfig.Items && 0!=htmlconfig.Items.Count) {
                 foreach (var item in htmlconfig.Items) {
                     if (null == item.Before && null == item.After) {
                         var e = XElement.Parse("<div class='report_item'></div>");
@@ -179,8 +184,7 @@ namespace qorpent.v2.reports.agents {
         }
 
         private void DoStreamRender(IReportContext context, IScope scope) {
-            bool standalone = context.IsSet("standalone");
-            if (standalone) {
+            if (context.Request.Standalone) {
                 Render(context, scope, DocHeader, null, "DocHeader");
             }
             Render(context, scope, Header, null, "Header");
@@ -200,7 +204,7 @@ namespace qorpent.v2.reports.agents {
                 }
             }
             Render(context, scope, Header, null, "Footer");
-            if (standalone) {
+            if (context.Request.Standalone) {
                 Render(context, scope, DocFooter, null, "DocFooter");
             }
         }
@@ -215,8 +219,13 @@ namespace qorpent.v2.reports.agents {
 
         }
         private IScope Render(IReportContext context, IScope scope, string templateUri,  object item, string templateName, bool cache = false) {
-            if(context.IsSet("-render_"+templateName.ToLowerInvariant()))
-                if (string.IsNullOrWhiteSpace(templateUri)) return null;
+            if (string.IsNullOrWhiteSpace(templateUri)) {
+                return null;
+            }
+            if (context.IsSet("-render_" + templateName.ToLowerInvariant())) {
+                return null;
+            }
+            
             if (!templateCache.ContainsKey(templateUri)) {
                 templateCache[templateUri] = Renders.GetRender(templateUri,scope);
             }
@@ -229,9 +238,9 @@ namespace qorpent.v2.reports.agents {
                 ts = new Scope(ts);
                 ts["store_render"] = true;
                 ts["no_render"] = true;
-                ts["render_name"] = templateUri;
+                ts["render_name"] = templateName;
             }
-            var result = template.Render(context, scope, item);
+            var result = template.Render(context, ts, item);
             return result;
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Dsl.LogicalExpressions;
@@ -236,19 +237,48 @@ namespace Qorpent.Utils {
 	        var result = new List<XElement>();
 
             var scope = source.Attr("xi-scope");
+	        var scope2 = "";
+	        
+	        var expand = source.Attr("xi-expand").ToBool();
+            var rep = source.Attr("xi-repeat");
+            if (rep.Contains(" in "))
+            {
+                scope2 = Regex.Match(rep, @"^([\s\S]+?)\s+in").Groups[1].Value;
+                if (scope2.EndsWith("+")) {
+                    expand = true;
+                    scope2 = scope2.Substring(0, scope2.Length - 1);
+                }
+            }
+            var i = 0;
+
             foreach (var o in a) {
                 var dict = o.ToDict();
+                var cfg = new Scope();    
                 if (!string.IsNullOrWhiteSpace(scope)) {
-                    dict = dict.ToDictionary(_ => scope + "." + _.Key, _ => _.Value);
+                    cfg[scope] = dict;
                 }
-                var cfg = new Scope(dict);              
+                if (!string.IsNullOrWhiteSpace(scope2))
+                {
+                    cfg[scope2] = dict;
+                }
+                if (expand) {
+                    foreach (var p in dict) {
+                        cfg[p.Key] = p.Value;
+                    }
+                }
+
                 var clone = new XElement(source);
                 cfg.Set("this",clone);
                 cfg.Set("parent",source);
                 cfg.SetParent(datasource);
+                cfg.Set("_idx", i);
+                cfg.Set("_num", i + 1);
+                cfg.Set("_i", dict);
                 if (!MatchCondition(clone, cfg,"where")) continue;
 	            
                 clone.SetAttributeValue("xi-repeat",null);
+                clone.SetAttributeValue("xi-scope",null);
+                clone.SetAttributeValue("xi-expand",null);
                 clone = Interpolate(clone, cfg);
                 if (null != clone) {
                     if (clone.Attr("xi-body").ToBool()) {
@@ -260,6 +290,7 @@ namespace Qorpent.Utils {
                         result.Add(clone);
                     }
                 }
+                i++;
             }
 	        return result.ToArray();
 	    }
@@ -267,6 +298,9 @@ namespace Qorpent.Utils {
 	    private static object[] GetDataSource(XElement source, IScope datasource) {
 	        IEnumerable result = null;
 	        var name = source.Attr("xi-repeat");
+	        if (name.Contains(" in ")) {
+	            name = Regex.Replace(name,@"^[\s\S]+?\s+in\s+", "");
+	        }
 	        if (name.StartsWith("$")) {
 	            name = name.Substring(1);
 	            var ds = source.XPathSelectElement("//xi-dataset[@code='" + name + "']");

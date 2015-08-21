@@ -12,8 +12,8 @@ namespace qorpent.v2.reports.renders
         public string FileName { get; set; }
         public  virtual void Initialize(string uri, IScope scope) {
             Uri = new Uri(uri);
-            var filepath = Uri.AbsolutePath;
-            FileName = EnvironmentInfo.ResolvePath(filepath);
+            var filepath = Uri.Host+"/"+ Uri.AbsolutePath;
+            FileName = EnvironmentInfo.ResolvePath("@repos@/"+filepath);
             if (!File.Exists(FileName)) {
                 throw new Exception("cannot find file "+FileName);
             }

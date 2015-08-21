@@ -14,6 +14,8 @@ namespace qorpent.v2.reports {
         WebContext WebContext { get; set; }
         IConsoleContext ConsoleContext { get; set; }
         IIdentity User { get; set; }
+        bool Standalone { get; set; }
+        bool NoFinalizeOnError { get; set; }
         void Initialize();
     }
 }

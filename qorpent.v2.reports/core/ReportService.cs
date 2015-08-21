@@ -8,6 +8,7 @@ using Qorpent;
 using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.Log.NewLog;
+using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.reports.core
 {
@@ -37,15 +38,18 @@ namespace qorpent.v2.reports.core
                     await ExecutePhase(context, ReportPhase.Render, scope);
                 }
                 await ExecutePhase(context, ReportPhase.Finalize, scope);
+                context.Finish();
             }
             catch (Exception e) {
                 Logg.Error(e);
                 context.Error = e;
-                context.Finish(e);
+                if (!context.Request.NoFinalizeOnError) {
+                    context.Finish(e);
+                }
             }
             finally {
                 Logg.Trace(new { op = "success", r = request }.stringify());
-                context.Finish();
+                
             }
             return context;
         }

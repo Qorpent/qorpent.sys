@@ -35,6 +35,8 @@ namespace qorpent.v2.reports.core {
         public string Format { get; set; }
         public object Query { get; set; }
         public object Json { get; set; }
+        public bool Standalone { get; set; }
+        public bool NoFinalizeOnError { get; set; }
 
         public IList<string> Flags
         {
@@ -62,6 +64,7 @@ namespace qorpent.v2.reports.core {
             DataOnly = xml.ResolveFlag("dataonly");
             Format = xml.Attr("format");
             Query = xml.AttrOrValue("query");
+            Standalone = xml.ResolveFlag("standalone");
             var j = xml.Attr("json");
             if (!string.IsNullOrWhiteSpace(j)) {
                 Json = j.jsonify();
@@ -80,6 +83,7 @@ namespace qorpent.v2.reports.core {
             DataOnly = p.Get("dataonly").ToBool();
             Format = p.Get("format");
             Query = p.Get("query");
+            Standalone = p.Get("standalone").ToBool();
             var flags = p.Get("flags").SmartSplit();
                foreach (var f in flags) {
                     Flags.Add(f);
@@ -115,6 +119,7 @@ namespace qorpent.v2.reports.core {
             jw.WriteProperty("format", Format);
             jw.WriteProperty("query", Query);
             jw.WriteProperty("json",this.Json);
+            jw.WriteProperty("standalone",Standalone);
             jw.CloseObject();
         }
     }

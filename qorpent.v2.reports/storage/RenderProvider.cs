@@ -9,6 +9,7 @@ namespace qorpent.v2.reports.storage {
         public IReportRender GetRender(string uri, IScope scope) {
             foreach (var source in Extensions) {
                 var template = source.GetRender(uri, scope);
+                template.Initialize(uri,scope);
                 if (null != template) return template;
             }
             return null;

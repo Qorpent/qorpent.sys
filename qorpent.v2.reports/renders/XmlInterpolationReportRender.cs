@@ -2,6 +2,7 @@ using System.Xml.Linq;
 using qorpent.v2.reports.agents;
 using qorpent.v2.reports.core;
 using Qorpent;
+using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -15,20 +16,21 @@ namespace qorpent.v2.reports.renders {
             scope = scope ?? context.Scope;
             Template = Template ?? XElement.Load(FileName);
 
-            Xi = Xi ?? new XmlInterpolation();
+            Xi = Xi ?? new XmlInterpolation() { UseExtensions = true };
             var ws = new Scope();
             ws["data"] = context.Data;
             ws["context"] = context;
             ws["scope"] = scope;
             ws["item"] = item;
+            ws["items"] = context.Data.arr("items");
             var result = Xi.Interpolate(Template, ws);
             if (scope.Get("store_render").ToBool()) {
-                ws[scope.Get("render_name", "render_result")] = result;
+                scope[scope.Get("render_name", "render_result")] = result;
             }
             if (!scope.Get("no_render").ToBool()) {
                 context.Write(result.ToString());
             }
-            return ws;
+            return scope;
         }
     }
 }
