@@ -114,6 +114,15 @@ namespace Qorpent.Experiments {
             return current;
         }
         private static object GetInternal(object json, string pathPart) {
+            if (json is XElement) {
+                var xml = json as XElement;
+                var attr = xml.Attribute(pathPart);
+                if (null != attr) {
+                    return attr.Value;
+                }
+                var e = xml.Element(pathPart);
+                return e;
+            }
             if (json is Array) {
                 var a = json as object[];
                 if (pathPart.ToLowerInvariant() == "length") return a.Length;
@@ -665,7 +674,11 @@ namespace Qorpent.Experiments {
         } 
         public static object jsonify(this object data) {
             if (data is string) {
-                return Parse(data as string);
+                var s = data as string;
+                if (s.StartsWith("<'")) {
+                    s = s.Replace("<", "{").Replace("'", "\"").Replace(">", "}");
+                }
+                return Parse(s);
             }
             if (data is XElement) {
                 return JsonifyXml((XElement) data);

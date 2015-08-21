@@ -13,9 +13,18 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="storage\DefaultRenderSource.cs" />
+    <Compile Include="storage\RenderProvider.cs" />
+    <Compile Include="agents\TemplateRenderAgent.cs" />
+    <Compile Include="renders\ReportRenderBase.cs" />
+    <Compile Include="renders\XmlInterpolationReportRender.cs" />
+    <Compile Include="api\console\ReportCommand.cs" />
     <Compile Include="api\console\ReportListCommand.cs" />
+    <Compile Include="api\restful\ReportHandler.cs" />
+    <Compile Include="api\restful\ReportHandlerInstaller.cs" />
     <Compile Include="core\ReportContext.cs" />
     <Compile Include="core\ReportRequest.cs" />
+    <Compile Include="fake\FakeData.cs" />
     <Compile Include="model\Report.cs" />
     <Compile Include="api\restful\ReportListAction.cs" />
     <Compile Include="model\ReportAgentDefintion.cs" />

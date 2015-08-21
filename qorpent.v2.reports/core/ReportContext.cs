@@ -11,17 +11,23 @@ using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.reports.core {
+
+    
+
     [ContainerComponent(Lifestyle.Transient,ServiceType = typeof(IReportContext),Name="qorpent.reports.context")]
     public class ReportContext : IReportContext {
         public ReportContext() {
             Agents = new List<IReportAgent>();
+            Data= new Dictionary<string, object>();
         }
 
-        public ReportContext(IReportRequest request) {
+        public ReportContext(IReportRequest request):this() {
             this.Request = request;
                 Console = request.ConsoleContext;
+            if (null != request.WebContext) {
                 Response = request.WebContext.Response;
-            
+            }
+
         }
         private BinaryWriter _binaryWriter;
         private TextWriter _textWriter;
@@ -32,6 +38,7 @@ namespace qorpent.v2.reports.core {
         public IList<IReportAgent> Agents { get; private set; }
         public ILoggy Log { get; set; }
         public Exception Error { get; set; }
+        public IDictionary<string,object> Data { get; private set; }
 
         public Stream Stream
         {
@@ -107,7 +114,7 @@ namespace qorpent.v2.reports.core {
         }
 
         public void Finish(Exception e) {
-            WriteString(e.ToString());
+            this.Error = e;
             if (null != _binaryWriter) {
                 _binaryWriter.Flush();
             }

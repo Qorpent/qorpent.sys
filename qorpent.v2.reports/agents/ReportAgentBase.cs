@@ -11,7 +11,7 @@ namespace qorpent.v2.reports.agents {
         public ReportPhase Phase { get; set; }
         public bool Parallel { get; set; }
 
-        public bool IsMatch(IReportContext context) {
+        public virtual bool IsMatch(IReportContext context) {
             if (context.Request.Flags.Contains("-" + Id)) return false;
             if (context.Request.Flags.Contains("explicit")) {
                 if (!context.Request.Flags.Contains(Id)) return false;
@@ -33,7 +33,7 @@ namespace qorpent.v2.reports.agents {
             Definition = definition;
         }
 
-        public abstract Task Execute(IReportContext context,IScope scope = null);
+        public abstract Task Execute(IReportContext context, ReportPhase phase, IScope scope = null);
 
         public object Definition { get; set; }
     }

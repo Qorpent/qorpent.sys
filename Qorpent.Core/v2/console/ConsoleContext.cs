@@ -105,7 +105,7 @@ namespace qorpent.v2.console {
             var proxy = this.GetProxy();
             proxy.Scope.Set("commandname",commandname);
             proxy.Scope.Set("commandstring",commandstring); 
-            return await command.Execute(this, commandname, commandstring, scope);
+            return await command.Execute(proxy, commandname, commandstring, scope);
         }
 
         public XElement GetBxl() {

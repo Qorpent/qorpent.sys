@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Principal;
 using qorpent.v2.console;
 using Qorpent.IO.Http;
 
@@ -12,6 +13,7 @@ namespace qorpent.v2.reports {
         IList<string> Flags { get; set; }
         WebContext WebContext { get; set; }
         IConsoleContext ConsoleContext { get; set; }
+        IIdentity User { get; set; }
         void Initialize();
     }
 }

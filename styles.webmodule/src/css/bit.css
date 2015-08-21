@@ -3138,22 +3138,22 @@ html.site body > main > section.list > article:first-child, html.site body > mai
   margin-top: 0px;
 }
 /* line 68, core/site/_main.scss */
-html.site body > main > section > article, html.site body > main > section > div > article {
+html.site body > main > section > article, html.site body > main > section > div article {
   padding: 3px;
 }
 /* line 71, core/site/_main.scss */
-html.site body > main > section > article.row > aside, html.site body > main > section > div > article.row > aside {
+html.site body > main > section > article.row > aside, html.site body > main > section > div article.row > aside {
   flex-shrink: 0;
   border-right: solid 1px #D7D7D7;
   padding-right: 5px;
   padding-top: 5px;
 }
 /* line 77, core/site/_main.scss */
-html.site body > main > section > article.row > div, html.site body > main > section > div > article.row > div {
+html.site body > main > section > article.row > div, html.site body > main > section > div article.row > div {
   padding: 3px 10px 3px 10px;
 }
 /* line 81, core/site/_main.scss */
-html.site body > main > section > article .legend, html.site body > main > section > div > article .legend {
+html.site body > main > section > article .legend, html.site body > main > section > div article .legend {
   display: -webkit-box;
   display: flex;
   flex-direction: row;
@@ -3167,7 +3167,7 @@ html.site body > main > section > article .legend, html.site body > main > secti
   margin-top: 5px;
 }
 /* line 86, core/site/_main.scss */
-html.site body > main > section > article .legend a.fa, html.site body > main > section > article .legend i.fa, html.site body > main > section > div > article .legend a.fa, html.site body > main > section > div > article .legend i.fa {
+html.site body > main > section > article .legend a.fa, html.site body > main > section > article .legend i.fa, html.site body > main > section > div article .legend a.fa, html.site body > main > section > div article .legend i.fa {
   font-size: 130%;
 }
 /* line 93, core/site/_main.scss */

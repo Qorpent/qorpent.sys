@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using qorpent.v2.console;
 using Qorpent;
+using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
@@ -11,7 +14,7 @@ using Qorpent.Utils.Extensions.Html;
 
 namespace qorpent.v2.reports.core {
     [ContainerComponent(Lifestyle.Transient,ServiceType = typeof(IReportRequest),Name="qorpent.reports.request")]
-    public class ReportRequest:IReportRequest {
+    public class ReportRequest:IReportRequest,IJsonSerializable {
         private IList<string> _flags;
 
         public ReportRequest() {
@@ -42,6 +45,7 @@ namespace qorpent.v2.reports.core {
         public IScope Scope { get; set; }
         public WebContext WebContext { get; set; }
         public IConsoleContext ConsoleContext { get; set; }
+        public IIdentity User { get; set; }
 
         public void Initialize() {
             if (null != WebContext) {
@@ -71,6 +75,7 @@ namespace qorpent.v2.reports.core {
 
         private void InitializeFromWebContext() {
             var p = RequestParameters.Create(WebContext);
+            User = WebContext.User.Identity;
             Id = p.Get("id");
             DataOnly = p.Get("dataonly").ToBool();
             Format = p.Get("format");
@@ -100,6 +105,17 @@ namespace qorpent.v2.reports.core {
                     }
                 }
             }
+        }
+
+        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
+            var jw = new JsonWriter(output, pretty:pretty, level:level);
+            jw.OpenObject();
+            jw.WriteProperty("id",Id);
+            jw.WriteProperty("dataonly", DataOnly);
+            jw.WriteProperty("format", Format);
+            jw.WriteProperty("query", Query);
+            jw.WriteProperty("json",this.Json);
+            jw.CloseObject();
         }
     }
 }

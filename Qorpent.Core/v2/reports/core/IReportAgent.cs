@@ -9,6 +9,6 @@ namespace qorpent.v2.reports.core {
         bool Parallel { get; set; }
         bool IsMatch(IReportContext context);
         void Initialize(IReportAgentDefinition definition );
-        Task Execute(IReportContext context, IScope scope = null);
+        Task Execute(IReportContext context, ReportPhase phase, IScope scope = null);
     }
 }

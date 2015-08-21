@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using qorpent.v2.reports.storage;
+using qorpent.v2.security.authorization;
 using Qorpent;
 using Qorpent.Experiments;
 using Qorpent.IoC;
@@ -15,6 +16,8 @@ namespace qorpent.v2.reports.core
     {
         [Inject]
         public IReportProvider Storage { get; set; }
+        [Inject]
+        public IRoleResolverService Roles { get; set; }
 
         public async Task<IReportContext> Execute(IReportRequest request) {
             Logg.Debug(new {op="start",r=request}.stringify());
@@ -24,7 +27,15 @@ namespace qorpent.v2.reports.core
                 await ExecutePhase(context, ReportPhase.Init,scope);
                 await ExecutePhase(context, ReportPhase.Data, scope);
                 await ExecutePhase(context, ReportPhase.Prepare, scope);
-                await ExecutePhase(context, ReportPhase.Render, scope);
+                if (request.DataOnly) {
+                    if (null != context.Data) {
+                        context.SetHeader("Content-Type","application/json; charset=utf-8");
+                        context.Write(context.Data.stringify());
+                    }
+                }
+                else {
+                    await ExecutePhase(context, ReportPhase.Render, scope);
+                }
                 await ExecutePhase(context, ReportPhase.Finalize, scope);
             }
             catch (Exception e) {
@@ -44,18 +55,18 @@ namespace qorpent.v2.reports.core
             var agents = context.Agents.Where(_ => _.Phase.HasFlag(phase)).OrderBy(_ => _.Idx).GroupBy(_ => _.Idx).ToArray();
             foreach (var grp in agents) {
                 if (grp.Count() == 1) {
-                    await grp.First().Execute(context, scope);
+                    await grp.First().Execute(context, phase, scope);
                 }
                 else if (grp.All(_ => _.Parallel)) {
                     var waitgroup = new List<Task>();
                     foreach (var agent in grp) {
-                        waitgroup.Add(agent.Execute(context, scope));
+                        waitgroup.Add(agent.Execute(context, phase, scope));
                     }
                     Task.WaitAll(waitgroup.ToArray());
                 }
                 else {
                     foreach (var agent in grp) {
-                        await agent.Execute(context, scope);
+                        await agent.Execute(context, phase, scope);
                     }
                 }
 
@@ -70,9 +81,19 @@ namespace qorpent.v2.reports.core
             if (null == report) {
                 throw new Exception("cannot find report " + request.Id);
             }
+            if (null != request.User) {
+                if (!string.IsNullOrWhiteSpace(report.Role)) {
+                    if (!Roles.IsInRole(request.User, report.Role)) {
+                        throw new Exception("not authorized access to report "+report.Id);
+                    }
+                }
+            }
             context.Report = report;
             foreach (var agentdef in report.Agents) {
                 var agent = ResolveService<IReportAgent>(agentdef.Name);
+                if (null == agent) {
+                    throw new Exception("cannot find agent "+agentdef.Name);
+                }
                 agent.Initialize(agentdef);
                 if (agent.IsMatch(context)) {
                     context.Agents.Add(agent);
