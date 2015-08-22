@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Qorpent.Bxl;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
+using Qorpent.Wiki;
 
 namespace Qorpent.Utils {
 	/// <summary>
@@ -59,8 +62,9 @@ namespace Qorpent.Utils {
 		private XElement InternalInterpolate(XElement source, IScope parentconfig,int level) {
 		    
 			var datasource = PrepareDataSource(source, parentconfig);
-
-			var processchild = InterpolateDataToElement(source, datasource);
+		    XElement changed;
+			var processchild = InterpolateDataToElement(source, datasource, out changed);
+		    source = changed;
 			if (processchild && level>=1){
 				level--;
 				foreach (var e in source.Elements().ToArray()) {
@@ -119,9 +123,33 @@ namespace Qorpent.Utils {
         /// </summary>
 	    public bool UseExtensions { get; set; }
 
-	    private bool InterpolateDataToElement(XElement source, IScope datasource) {
-	        if (UseExtensions) {
+        public IIncludeXmlProvider IncludeXmlProvider { get; set; }
+
+	    private bool InterpolateDataToElement(XElement source, IScope datasource, out XElement result) {
+            result = source;
+            if (UseExtensions) {
+
+	           
 	            if (!MatchCondition(source, datasource,"if")) return false;
+
+	            IncludeXmlProvider = IncludeXmlProvider ?? new IncludeXmlProvider();
+
+	            var globalreplace = source.Attr("xi-replace");
+	            if (!string.IsNullOrWhiteSpace(globalreplace)) {
+	                _stringInterpolation.Interpolate(globalreplace);
+	                var xml = IncludeXmlProvider.GetXml(globalreplace, source,datasource);
+	                if (null == xml) {
+	                    xml = XElement.Parse("<span class='no-ex replace'>no replace "+globalreplace+"</span>");
+	                }
+                    result = xml;
+	                if (null != source.Parent) {
+	                    source.ReplaceWith(xml);
+	                }
+	                source = xml;
+                }
+
+              
+
 	            if (source.Attr("xi-repeat").ToBool()) {
 	                var replace = ProcessRepeat(source, datasource);
 	                if (null == replace) {
@@ -132,10 +160,21 @@ namespace Qorpent.Utils {
 	                }
 	                return false;
 	            }
-                
-                
 
-	        }
+                var include = source.Attr("xi-include");
+                if (!string.IsNullOrWhiteSpace(include))
+                {
+                    _stringInterpolation.Interpolate(include);
+                    var xml = IncludeXmlProvider.GetXml(include, source, datasource);
+                    if (null == xml)
+                    {
+                        xml = XElement.Parse("<span class='no-ex include'>no replace " + include + "</span>");
+                    }
+                    source.ReplaceAll(xml);
+                }
+
+
+            }
 
 			bool processchild = true;
 			if (!string.IsNullOrWhiteSpace(StopAttribute)) {
@@ -339,4 +378,50 @@ namespace Qorpent.Utils {
 
 		}
 	}
+
+    public interface IIncludeXmlProvider {
+        XElement GetXml(string path, XElement current, IScope scope);
+    }
+
+    public class IncludeXmlProvider : IIncludeXmlProvider {
+        public IncludeXmlProvider() {
+            IncludeCache = new Dictionary<string, XElement>();
+        }
+        IDictionary<string, XElement> IncludeCache { get; set; }
+
+        public XElement GetXml(string path, XElement current, IScope scope) {
+
+            var filename = path.Contains("@") ? EnvironmentInfo.ResolvePath(path) : path;
+            if (!Path.IsPathRooted(filename))
+            {
+                var dir = Path.GetDirectoryName(current.Describe().File);
+                filename = Path.Combine(dir, filename);
+            }
+            if (!File.Exists(filename)) return null;
+            if (!IncludeCache.ContainsKey(filename))
+            {
+                XElement result = null;
+                if (filename.Contains(".bxl"))
+                {
+                    result = IncludeCache[filename] = new BxlParser().Parse(File.ReadAllText(filename), filename,
+                        BxlParserOptions.ExtractSingle);
+
+                }
+                else
+                {
+                    result = IncludeCache[filename] = XElement.Load(filename);
+                }
+                Preprocess(result,current,scope);
+                return result;
+            }
+            return IncludeCache[filename];
+        }
+
+        public virtual void Preprocess(XElement result,XElement current,IScope scope) {
+          
+        }
+    }
+
+
+    
 }
