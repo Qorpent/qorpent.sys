@@ -4,6 +4,7 @@ using qorpent.v2.model;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.reports.model
 {
@@ -15,6 +16,8 @@ namespace qorpent.v2.reports.model
         }
         public string Role { get; set; }
         public IList<IReportAgentDefinition> Agents { get; set; }
+        public string OnForm { get; set; }
+        public string OnQuery { get; set; }
 
         public override void Merge(IItem src) {
             base.Merge(src);
@@ -33,10 +36,14 @@ namespace qorpent.v2.reports.model
                     Agents.Add(Create<ReportAgentDefintion>(ag));
                 }
             }
+            OnForm = jsonsrc.str("onform");
+            OnQuery = jsonsrc.str("onquery");
         }
 
         protected override void WriteJsonInternal(JsonWriter jw, string mode) {
             base.WriteJsonInternal(jw, mode);
+            jw.WriteProperty("onform",OnForm,true);
+            jw.WriteProperty("onquery",OnQuery,true);
             jw.OpenProperty("agents");
             jw.OpenArray();
             foreach (var agentDefinition in Agents) {
@@ -48,6 +55,8 @@ namespace qorpent.v2.reports.model
 
         protected override void ReadFromXml(XElement xml) {
             base.ReadFromXml(xml);
+            OnForm = xml.Attr("onform");
+            OnQuery = xml.Attr("onquery");
             var xagents = xml.Elements("agent");
             foreach (var element in xagents) {
                 Agents.Add(Create<ReportAgentDefintion>(element));   

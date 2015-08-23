@@ -16,6 +16,7 @@ namespace qorpent.v2.reports {
         IIdentity User { get; set; }
         bool Standalone { get; set; }
         bool NoFinalizeOnError { get; set; }
+        IDictionary<string, object> Parameters { get; set; }
         void Initialize();
     }
 }

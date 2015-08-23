@@ -18,15 +18,15 @@ namespace qorpent.v2.reports.core {
         private IList<string> _flags;
 
         public ReportRequest() {
-            
+            Parameters = new Dictionary<string, object>();
         }
 
-        public ReportRequest(WebContext context) {
+        public ReportRequest(WebContext context) :this(){
             WebContext = context;
             Initialize();
         }
 
-        public ReportRequest(IConsoleContext context) {
+        public ReportRequest(IConsoleContext context):this() {
             ConsoleContext = context;
             Initialize();
         }
@@ -36,6 +36,7 @@ namespace qorpent.v2.reports.core {
         public object Query { get; set; }
         public object Json { get; set; }
         public bool Standalone { get; set; }
+        public IDictionary<string,object> Parameters { get; set; } 
         public bool NoFinalizeOnError { get; set; }
 
         public IList<string> Flags
@@ -66,6 +67,11 @@ namespace qorpent.v2.reports.core {
             Query = xml.AttrOrValue("query");
             Standalone = xml.ResolveFlag("standalone");
             var j = xml.Attr("json");
+            foreach (var attribute in xml.Attributes()) {
+                if (attribute.Name.LocalName.StartsWith("p.")) {
+                    Parameters[attribute.Name.LocalName.Substring(2)] = attribute.Value;
+                }
+            }
             if (!string.IsNullOrWhiteSpace(j)) {
                 Json = j.jsonify();
             }
@@ -88,7 +94,11 @@ namespace qorpent.v2.reports.core {
                foreach (var f in flags) {
                     Flags.Add(f);
                 }
-            
+            foreach (var parameter in p.GetParameters()) {
+                if (parameter.Key.StartsWith("p.")) {
+                    Parameters[parameter.Key] = parameter.Value;
+                }
+            }
             if (null != p.Json) {
                 Json = p.Json;
                 var jq = p.Json.get("query");
@@ -96,6 +106,7 @@ namespace qorpent.v2.reports.core {
                     Query = jq;
                 }
                 var jflags = p.Json.get("flags");
+
                 if (null != jflags) {
                     if (jflags is string) {
                         foreach (var f in ((string) jflags).SmartSplit()) {
@@ -106,6 +117,13 @@ namespace qorpent.v2.reports.core {
                         foreach (string f in jflags as IEnumerable) {
                             Flags.Add(f);
                         }
+                    }
+                }
+
+                var parameters = p.Json.map("parameters");
+                if (null != parameters) {
+                    foreach (var parameter in parameters) {
+                        Parameters[parameter.Key] = parameter.Value;
                     }
                 }
             }
@@ -120,6 +138,8 @@ namespace qorpent.v2.reports.core {
             jw.WriteProperty("query", Query);
             jw.WriteProperty("json",this.Json);
             jw.WriteProperty("standalone",Standalone);
+            jw.WriteProperty("parameters",this.Parameters);
+            jw.WriteProperty("flags",this.Flags);
             jw.CloseObject();
         }
     }
