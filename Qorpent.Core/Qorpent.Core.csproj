@@ -364,6 +364,8 @@
     <Compile Include="Utils\Git\MergeStrategyOption.cs" />
     <Compile Include="Utils\Git\RevisionDistance.cs" />
     <Compile Include="Utils\Hex.cs" />
+    <Compile Include="Utils\IXmlIncludeProvider.cs" />
+    <Compile Include="Utils\XmlIncludeProvider.cs" />
     <Compile Include="Utils\IO\FileDescriptorEx.cs" />
     <Compile Include="Utils\Iterator.cs" />
     <Compile Include="Utils\ListUtils.cs" />
@@ -376,6 +378,7 @@
     <Compile Include="Utils\LogicalExpressions\LiteralNode.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionParser.cs" />
+    <Compile Include="Utils\LogicalExpressions\RegexTestNode.cs" />
     <Compile Include="Utils\ParamMappingHelper.cs" />
     <Compile Include="Utils\ReflectionExtensionsException.cs" />
     <Compile Include="Utils\ReflectionHelper.cs" />
@@ -387,6 +390,7 @@
     <Compile Include="Utils\StringInterpolation.cs" />
     <Compile Include="Utils\ValueMember.cs" />
     <Compile Include="Utils\WellKnownHelper.cs" />
+    <Compile Include="Utils\XDiff\ParentCondition.cs" />
     <Compile Include="Utils\XDiff\XDiffAction.cs" />
     <Compile Include="Utils\XDiff\XDiffExtensions.cs" />
     <Compile Include="Utils\XDiff\XDiffGenerator.cs" />

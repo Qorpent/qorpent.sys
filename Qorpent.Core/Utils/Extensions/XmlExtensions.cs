@@ -55,6 +55,23 @@ namespace Qorpent.Utils.Extensions {
             throw new Exception("multiple instance");
         }
 
+	    public static XElement Load(string filename, BxlParserOptions options = BxlParserOptions.None) {
+	        var f = filename;
+	        if (!File.Exists(f)) {
+	            f = filename + ".xml";
+	        }
+	        if (!File.Exists(f)) {
+	            f = filename + ".bxl";
+	        }
+	        if (!File.Exists(f)) {
+	            return null;
+	        }
+	        var ext = Path.GetExtension(f);
+	        if (ext.StartsWith(".bxl")) {
+	            return new BxlParser().Parse(File.ReadAllText(f),f,options);
+	        }
+            return XElement.Load(f);
+	    }
 
 	    public static XElement toRoot(this XElement e) {
 	        return e.AncestorsAndSelf().Last();

@@ -17,8 +17,7 @@ namespace qorpent.v2.reports.renders {
         
         public override IScope Render(IReportContext context, IScope scope, object item) {
             scope = scope ?? context.Scope;
-            Template = Template ?? LoadTemplate();
-
+            Template = Template ?? XmlExtensions.Load(FileName,BxlParserOptions.ExtractSingle);
             Xi = Xi ?? new XmlInterpolation() { UseExtensions = true };
             var ws = new Scope();
             ws["data"] = context.Data;
@@ -27,24 +26,18 @@ namespace qorpent.v2.reports.renders {
             ws["item"] = item;
             ws["items"] = context.Data.arr("items");
             var result = Xi.Interpolate(Template, ws);
-            foreach (var element in result.DescendantsAndSelf()) {
-                element.SetAttributeValue("_file",null);
-                element.SetAttributeValue("_line",null);
-            }
-            if (scope.Get("store_render").ToBool()) {
-                scope[scope.Get("render_name", "render_result")] = result;
-            }
-            if (!scope.Get("no_render").ToBool()) {
-                context.Write(result.ToString());
-            }
+            RemoveDebugInfo(scope, result);
+            Finalize(context, scope, result);
             return scope;
         }
 
-        private XElement LoadTemplate() {
-            if (FileName.EndsWith(".bxl")) {
-                return new BxlParser().Parse(File.ReadAllText(FileName), FileName, BxlParserOptions.ExtractSingle);
+        private static void RemoveDebugInfo(IScope scope, XElement result) {
+            if (!scope.Get("debug_render", false)) {
+                foreach (var element in result.DescendantsAndSelf()) {
+                    element.SetAttributeValue("_file", null);
+                    element.SetAttributeValue("_line", null);
+                }
             }
-            return XElement.Load(FileName);
         }
     }
 }

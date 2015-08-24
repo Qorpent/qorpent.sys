@@ -389,6 +389,9 @@
     <Compile Include="..\Qorpent.Core\Utils\Iterator.cs">
       <Link>ImportCode\Iterator.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\IXmlIncludeProvider.cs">
+      <Link>ImportCode\IXmlIncludeProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\Utils\ListUtils.cs">
       <Link>ImportCode\ListUtils.cs</Link>
     </Compile>
@@ -416,6 +419,9 @@
     <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\LogicalExpressionParser.cs">
       <Link>ImportCode\LogicalExpressionParser.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\RegexTestNode.cs">
+      <Link>ImportCode\RegexTestNode.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\Utils\ReflectionExtensionsException.cs">
       <Link>ImportCode\ReflectionExtensionsException.cs</Link>
     </Compile>
@@ -439,6 +445,9 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\ValueMember.cs">
       <Link>ImportCode\ValueMember.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\XmlIncludeProvider.cs">
+      <Link>ImportCode\XmlIncludeProvider.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\XmlInterpolation.cs">
       <Link>ImportCode\XmlInterpolation.cs</Link>
@@ -543,6 +552,7 @@
       <Link>ImportCode\Startup.cs</Link>
     </Compile>
     <Compile Include="BxlFunctions.cs" />
+    <Compile Include="EnvironmentInfo.cs" />
     <Compile Include="GeneratorFunctions.cs" />
     <Compile Include="HtmlFunctions.cs" />
     <Compile Include="ListAggregate.cs" />
