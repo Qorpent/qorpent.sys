@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using qorpent.v2.model;
+using qorpent.v2.reports.core;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 using Qorpent.IoC;
@@ -13,6 +15,7 @@ namespace qorpent.v2.reports.model
     {
         public Report() {
             Agents = new List<IReportAgentDefinition>();
+            Parameters = new Dictionary<string, ReportParameter>();
         }
         public string Role { get; set; }
         public IList<IReportAgentDefinition> Agents { get; set; }
@@ -23,9 +26,12 @@ namespace qorpent.v2.reports.model
             base.Merge(src);
             var report = src as Report;
             if (null != report) {
-              
+                foreach (var p  in report.Parameters) {
+                    Parameters[p.Key] = p.Value;
+                }
             }
         }
+        
 
         protected override void LoadFromJson(object jsonsrc) {
             base.LoadFromJson(jsonsrc);
@@ -38,19 +44,79 @@ namespace qorpent.v2.reports.model
             }
             OnForm = jsonsrc.str("onform");
             OnQuery = jsonsrc.str("onquery");
+            var parameters = jsonsrc.arr("parameters");
+            if (null != parameters && 0 != parameters.Length) {
+                SetupParameters(parameters.Select(Create<ReportParameter>));
+            }
+            var dparameters = jsonsrc.map("parameters");
+            if (null != dparameters) {
+                SetupParameters(dparameters.Select(_ => {
+                    var i = new ReportParameter();
+                    var s = _.Value as string;
+                    if (s != null) {
+                        i.Name = s;
+                    }
+                    else {
+                        i.Read(_.Value);
+                    }
+                    if (string.IsNullOrWhiteSpace(i.Id)) {
+                        i.Id = _.Key;
+                    }
+                    if (i.Id == "_empty_") {
+                        i.Id = "";
+                    }
+                    return i;
+                }));
+            }
+
         }
 
+        private void SetupParameters(IEnumerable<ReportParameter> rawparameters) {
+            var idx = 1000;
+            var ps = rawparameters.ToArray();
+            foreach (var p in ps  ) {
+                if (p.Idx == 0) {
+                    p.Idx = idx++;
+                }
+                if (string.IsNullOrWhiteSpace(p.Default)) {
+                    if (p.List.Count > 0) {
+                        p.Default = p.List[0].Id;
+                    }
+                    else {
+                        p.Default = "";
+                    }
+                }
+                else if (p.Default == "_empty_") {
+                    p.Default = "";
+                }
+            }
+            foreach (var p in ps.OrderBy(_=>_.Idx)) {
+                Parameters[p.Id] = p;
+            }
+        }
+
+    
+
         protected override void WriteJsonInternal(JsonWriter jw, string mode) {
+            mode = mode ?? "";
             base.WriteJsonInternal(jw, mode);
             jw.WriteProperty("onform",OnForm,true);
             jw.WriteProperty("onquery",OnQuery,true);
-            jw.OpenProperty("agents");
-            jw.OpenArray();
-            foreach (var agentDefinition in Agents) {
-               jw.WriteObject(agentDefinition,mode);
+            if (!mode.Contains("noagents")) {
+                jw.OpenProperty("agents");
+                jw.OpenArray();
+                foreach (var agentDefinition in Agents) {
+                    jw.WriteObject(agentDefinition, mode);
+                }
+
+                jw.CloseArray();
+                jw.CloseProperty();
+                
             }
-            jw.CloseArray();
-            jw.CloseProperty();
+            if (!mode.Contains("noparams"))
+            {
+                jw.WriteProperty("parameters", Parameters.Select(_=>_.Value as object).ToArray());
+            }
         }
 
         protected override void ReadFromXml(XElement xml) {
@@ -61,8 +127,11 @@ namespace qorpent.v2.reports.model
             foreach (var element in xagents) {
                 Agents.Add(Create<ReportAgentDefintion>(element));   
             }
+            var parameters = xml.Elements("param");
+            SetupParameters(parameters.Select(Create<ReportParameter>));
         }
 
         public object Definition { get; set; }
+        public IDictionary<string,ReportParameter> Parameters { get; set; }
     }
 }

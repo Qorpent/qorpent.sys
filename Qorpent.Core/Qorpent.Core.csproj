@@ -420,6 +420,7 @@
     <Compile Include="v2\reports\model\IReport.cs" />
     <Compile Include="v2\reports\model\IReportAgentDefinition.cs" />
     <Compile Include="v2\reports\model\IReportFeed.cs" />
+    <Compile Include="v2\reports\core\ReportParameter.cs" />
     <Compile Include="v2\reports\storage\IReportFeedLease.cs" />
     <Compile Include="v2\reports\storage\IReportFeedProvider.cs" />
     <Compile Include="v2\reports\storage\IReportFeedSource.cs" />

@@ -1,4 +1,5 @@
 ﻿using qorpent.v2.reports.storage;
+using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.Mvc;
 using Qorpent.Mvc.Binding;
@@ -12,8 +13,11 @@ namespace qorpent.v2.reports.api.restful
         public IReportProvider ReportProvider { get; set; }
         [Bind]
         public string Query { get; set; }
+        [Bind]
+        public string Mode { get; set; }
         protected override object MainProcess() {
-            return ReportProvider.Search(Query);
+            var result = ReportProvider.Search(Query);
+            return result.stringify(Mode);
         }
     }
 }
