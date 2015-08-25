@@ -277,6 +277,7 @@ namespace Qorpent.Utils {
                     scope2 = scope2.Substring(0, scope2.Length - 1);
                 }
             }
+            
             var i = 0;
 
             foreach (var o in a) {

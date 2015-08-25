@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using Qorpent.Bxl;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Tests {
@@ -30,6 +31,30 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("112", x.Attribute("y").Value);
 		}
 
+	    [Test]
+	    public void NestRepeat() {
+	        var x = XElement.Parse("<z><a xi-repeat='i in items'><b xi-repeat='j in i.items'>${j.id}</b></a></z>");
+	        var scope =new Scope( new {
+	            items = new object[] {
+	                new {
+	                    items = new object[] {
+	                        new {id = 1},
+	                        new {id = 2},
+	                    }
+	                },
+	                new {
+	                    items = new object[] {
+	                        new {id = 3},
+	                        new {id = 4},
+	                    }
+	                }
+	            }
+	        }.jsonify());
+	        var xi = new XmlInterpolation {UseExtensions = true};
+	        var xml = xi.Interpolate(x, scope);
+	        var str = xml.ToString().Simplify(SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+	    }
 		/// <summary>
 		/// Тест в котором один атрибут просто прошивается в другой в одном элементе,
 		/// но при этом производится 2 преобразования
@@ -56,7 +81,7 @@ namespace Qorpent.Utils.Tests {
 	    public void RepeatExtension() {
 	        var x = new BxlParser().Parse(@"
 e u=33
-    x ${mycode} ${myname} z=${u} xi-repeat=data 
+    x ${mycode} ${myname} z=${u} xi-repeat=data xi-expand 
 ",options:BxlParserOptions.NoLexData|BxlParserOptions.ExtractSingle);
 	        _xi = new XmlInterpolation {UseExtensions = true};
 	        var ctx = new {data = new object[] {new {mycode = 2, myname = "Two"}, new {mycode = 3, myname = "Three"}}};
@@ -74,7 +99,7 @@ e u=33
         {
             var x = new BxlParser().Parse(@"
 e mycode=1 myname=2
-    x ${x.mycode} ${x.myname} mc=${mycode} mn=${myname} xi-repeat=data xi-scope=x 
+    x ${x.mycode} ${x.myname} mc=${mycode} mn=${myname} xi-repeat=data xi-scope=x
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
@@ -82,8 +107,8 @@ e mycode=1 myname=2
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e mycode='1' myname='2'>
-  <x code='2' id='2' name='Two' mc='1' mn='2' xi-scope='x' />
-  <x code='3' id='3' name='Three' mc='1' mn='2' xi-scope='x' />
+  <x code='2' id='2' name='Two' mc='1' mn='2' />
+  <x code='3' id='3' name='Three' mc='1' mn='2' />
 </e>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
         }
 
@@ -92,7 +117,7 @@ e mycode=1 myname=2
         {
             var x = new BxlParser().Parse(@"
 e mycode=1 myname=aa
-    x ${x.mycode} ${x.myname} mf=${upper(myname)} mc=${mycode} mn=${myname} xi-repeat=data xi-scope=x 
+    x ${x.mycode} ${x.myname} mf=${upper(myname)} mc=${mycode} mn=${myname} xi-repeat=data xi-scope=x
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
@@ -101,8 +126,8 @@ e mycode=1 myname=aa
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e mycode='1' myname='aa'>
-  <x code='2' id='2' name='Two' mf='AA' mc='1' mn='aa' xi-scope='x' />
-  <x code='3' id='3' name='Three' mf='AA' mc='1' mn='aa' xi-scope='x' />
+  <x code='2' id='2' name='Two' mf='AA' mc='1' mn='aa' />
+  <x code='3' id='3' name='Three' mf='AA' mc='1' mn='aa' />
 </e>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
         }
 
@@ -143,9 +168,9 @@ root x=true
         {
             var x = new BxlParser().Parse(@"
 xi-dataset x
-    x x=${mycode} y=${myname} xi-repeat=data  
+    x x=${mycode} y=${myname} xi-repeat=data    xi-expand
 e u=33
-    i ${x}${x} ${y}${y} z=${u} xi-repeat=$x 
+    i ${x}${x} ${y}${y} z=${u} xi-repeat=$x  xi-expand
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
             x = x.Interpolate(ctx);
@@ -167,7 +192,7 @@ e u=33
         {
             var x = new BxlParser().Parse(@"
 e 
-    x xi-repeat=data xi-body
+    x xi-repeat=data xi-body xi-expand
         x-code ${mycode}
         x-name ${myname}   
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
@@ -187,10 +212,10 @@ e
         {
             var x = new BxlParser().Parse(@"
 e b=true
-    x  xi-repeat=data xi-body xi-where=include xi-if=!b
+    x  xi-repeat=data xi-body xi-where=include xi-if=!b  xi-expand
         x-code ${mycode} x=1 xi-if=mycode
         x-name ${myname} x=1 xi-if=myname
-    x  xi-repeat=data xi-body xi-where=include xi-if=b
+    x  xi-repeat=data xi-body xi-where=include xi-if=b  xi-expand
         x-code ${mycode} x=2 xi-if=mycode
         x-name ${myname} x=2 xi-if=myname
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
@@ -217,9 +242,9 @@ e b=true
         {
             var x = new BxlParser().Parse(@"
 e 
-    was-excluded ${mycode} xi-repeat=data xi-where=!include
-    not-complete ${mycode} ${myname} xi-repeat=data xi-where='!(mycode & myname)'
-    more-than-2 ${mycode} ${myname} xi-repeat=data xi-where='mycode > 2'
+    was-excluded ${mycode} xi-repeat=data xi-where=!include xi-expand
+    not-complete ${mycode} ${myname} xi-repeat=data xi-where='!(mycode & myname)'  xi-expand
+    more-than-2 ${mycode} ${myname} xi-repeat=data xi-where='mycode > 2'  xi-expand
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new

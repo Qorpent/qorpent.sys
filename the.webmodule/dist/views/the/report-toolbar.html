@@ -2,5 +2,6 @@
     <label ng-bind="i.name"></label>
     <select ng-if="currentreport.lists[i._id]" ng-model="currentreport.params[i._id]"
             ng-options="l._id as l.name for l in currentreport.lists[i._id]"></select>
-    <input size="2" ng-if="!currentreport.lists[i._id]" ng-model="currentreport.params[i._id]"/>
+    <input size="2" ng-if="!currentreport.lists[i._id] && i.type!='bool'" ng-model="currentreport.params[i._id]"/>
+    <input size="2" type="checkbox" ng-if="i.type=='bool'" ng-model="currentreport.params[i._id]"/>
 </div>

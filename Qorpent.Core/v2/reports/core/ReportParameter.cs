@@ -17,12 +17,14 @@ namespace qorpent.v2.reports.core {
         public string Default { get; set; }
         public int Idx { get; set; }
         public string IfCondition { get; set; }
+        public string Type { get; set; }
         public IList<IItem> List { get; set; }
 
         protected override void WriteJsonInternal(JsonWriter jw, string mode) {
             base.WriteJsonInternal(jw, mode);
             jw.WriteProperty("default",Default);
             jw.WriteProperty("ngif",IfCondition,true);
+            jw.WriteProperty("type",Type,true);
             jw.WriteProperty("list",List.OfType<object>().ToArray());
         }
 
@@ -30,6 +32,7 @@ namespace qorpent.v2.reports.core {
             base.ReadFromXml(xml);
             Default = xml.AttrOrValue("default");
             IfCondition = xml.AttrOrValue("ng-if");
+            Type = xml.AttrOrValue("type");
             var listattr = xml.Attr("list");
             if (!string.IsNullOrWhiteSpace(listattr)) {
                 ReadStringList(listattr);
@@ -45,6 +48,7 @@ namespace qorpent.v2.reports.core {
             var j = jsonsrc.nestorself("_source");
             Default = j.str("default");
             IfCondition = j.str("ngif");
+            Type = j.str("type");
             var list = j.get("list");
             ReadList(list);
         }

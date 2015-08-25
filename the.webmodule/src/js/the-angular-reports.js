@@ -35,6 +35,11 @@ define(["the-angular"], function ($the) {
                             if(!!__.list && __.list.length){
                                 _.lists[__._id] = __.list;
                             }
+
+                            if(__.type=='bool'){
+                                console.log(__.default);
+                                _.params[__._id] = __.default=='true' || __.default===true;
+                            }
                         });
                     })
                 }

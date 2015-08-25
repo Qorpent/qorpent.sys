@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent {
@@ -62,7 +63,7 @@ namespace Qorpent {
         }
 
         public T Get<T>(string key, T def = default(T), ScopeOptions options = null) {
-            var result = Get(key, options);
+            var result = this.get(key);
             if (null == result) {
                 return def;
             }
