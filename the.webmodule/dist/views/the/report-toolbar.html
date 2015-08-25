@@ -1,0 +1,6 @@
+<div class="report parameter {{i._id}}" ng-repeat="i in currentreport.parameters" ng-show="i.show()">
+    <label ng-bind="i.name"></label>
+    <select ng-if="currentreport.lists[i._id]" ng-model="currentreport.params[i._id]"
+            ng-options="l._id as l.name for l in currentreport.lists[i._id]"></select>
+    <input size="2" ng-if="!currentreport.lists[i._id]" ng-model="currentreport.params[i._id]"/>
+</div>

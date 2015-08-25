@@ -17,6 +17,7 @@ define([
     'the-angular-autocomplete',
     'the-angular-autoselect',
     'the-angular-ellipse',
+    'the-angular-reports',
     'the-angular-datetimepicker',
     'the-uploader',
     'the-angular-dialog',

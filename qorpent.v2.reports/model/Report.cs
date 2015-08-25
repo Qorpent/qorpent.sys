@@ -21,6 +21,7 @@ namespace qorpent.v2.reports.model
         public IList<IReportAgentDefinition> Agents { get; set; }
         public string OnForm { get; set; }
         public string OnQuery { get; set; }
+        public string ToolView { get; set; }
 
         public override void Merge(IItem src) {
             base.Merge(src);
@@ -44,6 +45,7 @@ namespace qorpent.v2.reports.model
             }
             OnForm = jsonsrc.str("onform");
             OnQuery = jsonsrc.str("onquery");
+            ToolView = jsonsrc.str("toolview");
             var parameters = jsonsrc.arr("parameters");
             if (null != parameters && 0 != parameters.Length) {
                 SetupParameters(parameters.Select(Create<ReportParameter>));
@@ -102,6 +104,7 @@ namespace qorpent.v2.reports.model
             base.WriteJsonInternal(jw, mode);
             jw.WriteProperty("onform",OnForm,true);
             jw.WriteProperty("onquery",OnQuery,true);
+            jw.WriteProperty("toolview",ToolView,true);
             if (!mode.Contains("noagents")) {
                 jw.OpenProperty("agents");
                 jw.OpenArray();
@@ -123,6 +126,7 @@ namespace qorpent.v2.reports.model
             base.ReadFromXml(xml);
             OnForm = xml.Attr("onform");
             OnQuery = xml.Attr("onquery");
+            ToolView = xml.Attr("toolview");
             var xagents = xml.Elements("agent");
             foreach (var element in xagents) {
                 Agents.Add(Create<ReportAgentDefintion>(element));   
