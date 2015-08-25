@@ -37,7 +37,7 @@ namespace qorpent.v2.reports.storage {
             return new SearchResult<IReport> {
                 Total = reports.Length,
                 Size = reports.Length,
-                Items = reports.Select(_=>Item.Create<Report>(_.Compiled)).ToArray()
+                Items = reports.Select(_=>Item.Create<Report>(_.Compiled)).OrderBy(_=>_.Idx).ToArray()
             };
         }
 

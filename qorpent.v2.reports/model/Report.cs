@@ -137,5 +137,6 @@ namespace qorpent.v2.reports.model
 
         public object Definition { get; set; }
         public IDictionary<string,ReportParameter> Parameters { get; set; }
+        public int Idx { get; set; }
     }
 }

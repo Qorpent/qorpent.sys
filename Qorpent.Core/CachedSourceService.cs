@@ -65,7 +65,12 @@ namespace Qorpent {
                     }
                 }
             }
-            result.Items = items.ToArray();
+            if (typeof (IWithIndex).IsAssignableFrom(typeof (TResult))) {
+                result.Items = items.OfType<IWithIndex>().OrderBy(_ => _.Idx).OfType<TResult>().ToArray();
+            }
+            else {
+                result.Items = items.ToArray();
+            }
             return result;
 
         }
