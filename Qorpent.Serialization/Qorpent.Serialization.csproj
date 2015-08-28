@@ -4,7 +4,7 @@
     <Configuration>Debug</Configuration>
     <ProjectGuid>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Qorpent</RootNamespace>
+    <RootNamespace>qorpent</RootNamespace>
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -158,6 +158,18 @@
     <Compile Include="Uson\UObjSerializeMode.cs" />
     <Compile Include="Uson\UObjSerializerSupport.cs" />
     <Compile Include="Uson\UsonExtensions.cs" />
+    <Compile Include="v2\data\agg\AggregateNode.cs" />
+    <Compile Include="v2\data\agg\Aggregator.cs" />
+    <Compile Include="v2\data\agg\Collector.cs" />
+    <Compile Include="v2\data\agg\CountCollector.cs" />
+    <Compile Include="v2\data\agg\CountDistinctCollector.cs" />
+    <Compile Include="v2\data\agg\Finalizer.cs" />
+    <Compile Include="v2\data\agg\ICollector.cs" />
+    <Compile Include="v2\data\agg\IFinalizer.cs" />
+    <Compile Include="v2\data\agg\IRouter.cs" />
+    <Compile Include="v2\data\agg\RouteKey.cs" />
+    <Compile Include="v2\data\agg\Router.cs" />
+    <Compile Include="v2\data\agg\SumCollector.cs" />
     <Compile Include="Video\FFMpeg.cs" />
   </ItemGroup>
   <ItemGroup>

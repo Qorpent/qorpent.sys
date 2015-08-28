@@ -12,18 +12,20 @@ using Qorpent.Utils.Extensions;
 namespace qorpent.v2.reports.core {
     public class ReportParameter : Item, IWithIndex {
         public ReportParameter() {
-            List= new List<IItem>();
+            List= new List<ListItem>();
         }
         public string Default { get; set; }
         public int Idx { get; set; }
         public string IfCondition { get; set; }
+        public string OnChange { get; set; }
         public string Type { get; set; }
-        public IList<IItem> List { get; set; }
+        public IList<ListItem> List { get; set; }
 
         protected override void WriteJsonInternal(JsonWriter jw, string mode) {
             base.WriteJsonInternal(jw, mode);
             jw.WriteProperty("default",Default);
             jw.WriteProperty("ngif",IfCondition,true);
+            jw.WriteProperty("ngchange",OnChange,true);
             jw.WriteProperty("type",Type,true);
             jw.WriteProperty("list",List.OfType<object>().ToArray());
         }
@@ -32,6 +34,7 @@ namespace qorpent.v2.reports.core {
             base.ReadFromXml(xml);
             Default = xml.AttrOrValue("default");
             IfCondition = xml.AttrOrValue("ng-if");
+            OnChange = xml.AttrOrValue("ng-change");
             Type = xml.AttrOrValue("type");
             var listattr = xml.Attr("list");
             if (!string.IsNullOrWhiteSpace(listattr)) {
@@ -39,7 +42,7 @@ namespace qorpent.v2.reports.core {
             }
             var listitems = xml.Elements("item");
             foreach (var listitem in listitems) {
-                List.Add(Create<Item>(listitem));
+                List.Add(Create<ListItem>(listitem));
             }
         }
 
@@ -48,6 +51,7 @@ namespace qorpent.v2.reports.core {
             var j = jsonsrc.nestorself("_source");
             Default = j.str("default");
             IfCondition = j.str("ngif");
+            OnChange = j.str("ngchange");
             Type = j.str("type");
             var list = j.get("list");
             ReadList(list);
@@ -72,7 +76,7 @@ namespace qorpent.v2.reports.core {
 
         private void ReadDictionaryList(IDictionary<string, object> dictlist) {
             foreach (var i in dictlist) {
-                var item = new Item();
+                var item = new ListItem();
                 if (i.Value is IDictionary<string, object>) {
                     item.Read(i.Value);
                     if (string.IsNullOrWhiteSpace(item.Id)) {
@@ -95,15 +99,15 @@ namespace qorpent.v2.reports.core {
                 if (null == i) continue;
                 var si = i as string;
                 if (null != si) {
-                    List.Add(new Item {Id = si, Name = si});
+                    List.Add(new ListItem {Id = si, Name = si});
                     continue;
                 }
                 var di = i as IDictionary<string, object>;
                 if (null != di) {
-                    List.Add(Create<Item>(di));
+                    List.Add(Create<ListItem>(di));
                     continue;
                 }
-                List.Add(new Item {Id = i.ToStr(), Name = i.ToStr()});
+                List.Add(new ListItem {Id = i.ToStr(), Name = i.ToStr()});
             }
         }
 
@@ -121,7 +125,7 @@ namespace qorpent.v2.reports.core {
         private void ReadStringList(string strlist) {
             var dict = listreader.Parse(strlist);
             foreach (var p in dict) {
-                var i = new Item();
+                var i = new ListItem();
                 i.Id = p.Key;
                 i.Name = p.Value;
                 if (string.IsNullOrWhiteSpace(i.Name)) {

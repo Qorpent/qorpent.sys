@@ -414,6 +414,7 @@
     <Compile Include="v2\reports\core\IReportRender.cs" />
     <Compile Include="v2\reports\core\IReportAgent.cs" />
     <Compile Include="v2\reports\core\IReportContext.cs" />
+    <Compile Include="v2\reports\core\ListItem.cs" />
     <Compile Include="v2\reports\core\ReportPhase.cs" />
     <Compile Include="v2\reports\IReportRequest.cs" />
     <Compile Include="v2\reports\IReportService.cs" />
@@ -468,6 +469,7 @@
     <Compile Include="v2\security\user\storage\IUserSourceBound.cs" />
     <Compile Include="v2\security\user\storage\IWriteableUserSource.cs" />
     <Compile Include="v2\query\SearchResult.cs" />
+    <Compile Include="v2\xdom\XDom.cs" />
     <Compile Include="Verdict.cs" />
     <Compile Include="VerdictType.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />

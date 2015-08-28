@@ -96,7 +96,7 @@ namespace qorpent.v2.reports.core {
                 }
             foreach (var parameter in p.GetParameters()) {
                 if (parameter.Key.StartsWith("p.")) {
-                    Parameters[parameter.Key] = parameter.Value;
+                    Parameters[parameter.Key.Substring(2)] = parameter.Value;
                 }
             }
             if (null != p.Json) {

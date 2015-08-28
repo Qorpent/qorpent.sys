@@ -25,11 +25,14 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Microsoft.SqlServer.Server;
 using Qorpent.Bxl;
 using Qorpent.Json;
 using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Extensions {
+
+   
 	/// <summary>
 	/// 	Xml related extensions of common XNodes
 	/// </summary>
@@ -55,7 +58,10 @@ namespace Qorpent.Utils.Extensions {
             throw new Exception("multiple instance");
         }
 
-	    public static XElement Load(string filename, BxlParserOptions options = BxlParserOptions.None) {
+	    
+
+
+        public static XElement Load(string filename, BxlParserOptions options = BxlParserOptions.None) {
 	        var f = filename;
 	        if (!File.Exists(f)) {
 	            f = filename + ".xml";

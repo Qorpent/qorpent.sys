@@ -1,7 +1,12 @@
-<div class="report parameter {{i._id}}" ng-repeat="i in currentreport.parameters" ng-show="i.show()">
+<div class="box col report parameter {{i._id}}" ng-repeat="i in currentreport.parameters" ng-show="i.show()" >
+
     <label ng-bind="i.name"></label>
-    <select ng-if="currentreport.lists[i._id]" ng-model="currentreport.params[i._id]"
-            ng-options="l._id as l.name for l in currentreport.lists[i._id]"></select>
-    <input size="2" ng-if="!currentreport.lists[i._id] && i.type!='bool'" ng-model="currentreport.params[i._id]"/>
-    <input size="2" type="checkbox" ng-if="i.type=='bool'" ng-model="currentreport.params[i._id]"/>
+    <div class="box row centered" style="height:25px">
+    <select ng-if="currentreport.lists[i._id]" ng-model="currentreport.params[i._id]" ng-change="i.change()">
+            <option ng-repeat="l in currentreport.lists[i._id]" ng-selected="currentreport.params[i._id] == l._id" ng-bind="l.name" value="{{l._id}}" ng-show="l.show()"></option>
+        </select>
+    <input size="2" ng-if="!currentreport.lists[i._id] && i.type!='bool'" ng-model="currentreport.params[i._id]" ng-change="i.change()"/>
+    <input size="2" type="checkbox" ng-if="i.type=='bool'" ng-model="currentreport.params[i._id]" ng-change="i.change()"/>
+    </div>
 </div>
+<div class="filler"></div>

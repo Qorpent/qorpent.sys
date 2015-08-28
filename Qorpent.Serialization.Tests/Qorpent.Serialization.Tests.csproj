@@ -79,6 +79,7 @@
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
     <Compile Include="Uson\UsonMainTest.cs" />
+    <Compile Include="v2\agg\AggregationTest.cs" />
     <Compile Include="Video\VideoToolkitTest.cs" />
     <Compile Include="XHtml5XmlWriterTests.cs" />
     <Compile Include="XmlJson2WayConversionTest.cs" />

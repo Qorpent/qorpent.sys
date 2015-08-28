@@ -140,5 +140,15 @@ namespace Qorpent.Utils {
 			}
 			return result;
 		}
+
+	    public static string SetList(string first, string second, char delimiter = ';', char valdelimiter=':') {
+	        var list1 = Parse(first, partdelimiter: delimiter,valuedelimiter:valdelimiter);
+	        var list2 = Parse(second, partdelimiter: delimiter, valuedelimiter: valdelimiter);
+	        foreach (var p  in list2 ) {
+	            list1[p.Key] = p.Value;
+	        }
+	        return string.Join(delimiter.ToString(),
+	            list1.Select(_ => string.IsNullOrWhiteSpace(_.Value) ? _.Key : (_.Key + valdelimiter + _.Value.ToStr())));
+	    }
 	}
 }

@@ -10,23 +10,33 @@ namespace qorpent.v2.reports.renders
 {
     public abstract class ReportRenderBase : IReportRender {
 
+        public ReportRenderBase() {
+            ResolveToFile = true;
+        }
         public Uri Uri { get; set; }
+        public bool ResolveToFile { get; set; }
         public string FileName { get; set; }
         public  virtual void Initialize(string uri, IScope scope) {
             Uri = new Uri(uri);
-            var filepath = Uri.Host+"/"+ Uri.AbsolutePath;
-            FileName = EnvironmentInfo.ResolvePath("@repos@/"+filepath);
-            var f = FileName;
-            if (!File.Exists(f)) {
-                f = FileName + ".xml";
+            ResolveFileName();
+        }
+
+        private void ResolveFileName() {
+            if (ResolveToFile) {
+                var filepath = Uri.Host + "/" + Uri.AbsolutePath;
+
+                FileName = EnvironmentInfo.ResolvePath("@repos@/" + filepath);
+                var f = FileName;
                 if (!File.Exists(f)) {
-                    f = FileName + ".bxl";
+                    f = FileName + ".xml";
+                    if (!File.Exists(f)) {
+                        f = FileName + ".bxl";
+                    }
+                    if (!File.Exists(f)) {
+                        throw new Exception("cannot find file " + FileName);
+                    }
+                    FileName = f;
                 }
-                if (!File.Exists(f))
-                {
-                    throw new Exception("cannot find file " + FileName);
-                }
-                FileName = f;
             }
         }
 

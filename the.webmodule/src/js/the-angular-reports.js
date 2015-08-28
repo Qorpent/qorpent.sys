@@ -31,13 +31,26 @@ define(["the-angular"], function ($the) {
                                 }
                                 return true;
                             }
+                            __.change = function(){
+                                if(!!__.ngchange){
+                                    return $scope.$eval(__.ngchange,{report:_,params: _.params});
+                                }
+                                return true;
+                            }
                             _.params[__._id] = __.default;
                             if(!!__.list && __.list.length){
                                 _.lists[__._id] = __.list;
+                                __.list.forEach(function(l){
+                                    l.show = function(){
+                                        if(!!l.ngif){
+                                            return $scope.$eval(l.ngif,{report:_,params: _.params});
+                                        }
+                                        return true;
+                                    }
+                                })
                             }
 
                             if(__.type=='bool'){
-                                console.log(__.default);
                                 _.params[__._id] = __.default=='true' || __.default===true;
                             }
                         });

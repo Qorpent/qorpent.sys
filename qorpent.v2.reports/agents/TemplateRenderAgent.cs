@@ -120,10 +120,10 @@ namespace qorpent.v2.reports.agents {
             XElement root = null;
             XElement content = XElement.Parse("<section><header></header><main></main><footer></footer></section>");
             if (standalone) {
-                root = XElement.Parse("<html class='" + HtmlClass + "'><header><meta charset='UTF-8' /></header><body></body></html>");
+                root = XElement.Parse("<html class='" + HtmlClass + "'><head><meta charset='UTF-8' /></head><body></body></html>");
                 root.Element("body").Add(content);
                 if (null != htmlconfig.DocHeader) {
-                    root.Element("header").Add(htmlconfig.DocHeader.Elements());
+                    root.Element("head").Add(htmlconfig.DocHeader.Elements());
                 }
 
             } else {
