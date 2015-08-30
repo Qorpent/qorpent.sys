@@ -59,7 +59,6 @@ namespace Qorpent.Utils {
         ///     Использование расширенной интерполяции (новые функции)
         /// </summary>
         public bool UseExtensions { get; set; }
-
         public IXmlIncludeProvider XmlIncludeProvider { get; set; }
 
         /// <summary>
@@ -133,9 +132,9 @@ namespace Qorpent.Utils {
                 if (!MatchCondition(source, datasource, "if")) {
                     return false;
                 }
-
+#if !EMBEDQPT
                 XmlIncludeProvider = XmlIncludeProvider ?? new XmlIncludeProvider();
-
+#endif
                 var globalreplace = source.Attr("xi-replace");
                 if (!string.IsNullOrWhiteSpace(globalreplace)) {
                     _stringInterpolation.Interpolate(globalreplace);

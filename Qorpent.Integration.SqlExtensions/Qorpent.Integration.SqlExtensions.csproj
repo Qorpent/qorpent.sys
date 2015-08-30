@@ -446,9 +446,6 @@
     <Compile Include="..\Qorpent.Core\Utils\ValueMember.cs">
       <Link>ImportCode\ValueMember.cs</Link>
     </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\XmlIncludeProvider.cs">
-      <Link>ImportCode\XmlIncludeProvider.cs</Link>
-    </Compile>
     <Compile Include="..\Qorpent.Core\Utils\XmlInterpolation.cs">
       <Link>ImportCode\XmlInterpolation.cs</Link>
     </Compile>
