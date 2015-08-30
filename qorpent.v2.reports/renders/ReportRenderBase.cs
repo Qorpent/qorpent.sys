@@ -4,11 +4,12 @@ using System.Xml.Linq;
 using qorpent.v2.reports.agents;
 using qorpent.v2.reports.core;
 using Qorpent;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.reports.renders
 {
-    public abstract class ReportRenderBase : IReportRender {
+    public abstract class ReportRenderBase : IReportRender, IXmlInterpolationComponent {
 
         public ReportRenderBase() {
             ResolveToFile = true;
@@ -49,6 +50,19 @@ namespace qorpent.v2.reports.renders
             if (!scope.Get("no_render").ToBool()) {
                 context.Write(result.ToString());
             }
+        }
+
+        public XElement Create(string uri, XElement current, IScope scope) {
+            scope = new Scope(scope);
+            scope["store_render"] = true;
+            scope["render_name"] = "render_result";
+            scope["no_render"] = true;
+            Render(null, scope, null);
+            var result = scope.Get<XElement>("render_result");
+            if (null == result) {
+                throw new Exception("component not processed");
+            }
+            return result;
         }
     }
 }

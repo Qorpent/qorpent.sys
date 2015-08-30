@@ -8,7 +8,7 @@ using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.data.agg {
     public class AggregateNode:IJsonSerializable {
-
+      
         private  IDictionary<string, AggregateNode> _children;
         private IDictionary<string, object> _values;
 
@@ -26,6 +26,7 @@ namespace qorpent.v2.data.agg {
 
         protected int IDBASIS = 0;
         private int _id=-1;
+        private IDictionary<string, object> _meta;
 
         public RouteKey RouteKey { get; set; }
 
@@ -40,7 +41,11 @@ namespace qorpent.v2.data.agg {
             return Parent.GetRoot();
         }
 
-        public IDictionary<string,object> Meta { get; set; } =  new Dictionary<string, object>();
+        public IDictionary<string, object> Meta
+        {
+            get { return _meta??(_meta=new Dictionary<string, object>()); }
+            set { _meta = value; }
+        }
 
         public int Level
         {
