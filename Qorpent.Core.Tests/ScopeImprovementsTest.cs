@@ -22,6 +22,18 @@ namespace Qorpent.Core.Tests {
                 );
         }
 
+
+        [Test]
+        public void SupportDotedNamesForJson()
+        {
+            var cfg = new Scope();
+            cfg.Set("a", new {b=1});
+            var cfg2 = new Scope(cfg);
+            cfg2.Set("a", new {b=3});
+            Assert.AreEqual(3, cfg2.Get("a.b"));
+            Assert.AreEqual(1, cfg2.Get(".a.b"));
+        }
+
         [Test]
         public void RequiredLevelPathOperator() {
      

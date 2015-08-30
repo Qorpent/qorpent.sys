@@ -7,7 +7,7 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Core.Tests
 {
     [TestFixture]
-	public class ScopeScopeEqualityTest
+	public class ScopeConfigBaseEqualityTest
 	{
 		[Test]
 		public void OverridesParent() {
@@ -182,6 +182,18 @@ namespace Qorpent.Core.Tests
         [Test]
         public void BugMustCreateWithNulls() {
             var scope = new Scope(null);
+        }
+
+        [Test]
+        public void SupportDotedNames() {
+            var cfg = new Scope();
+            cfg.Set("a.b",1);
+            cfg.Set("a.c",2);
+            var cfg2 = new Scope(cfg);
+            cfg2.Set("a.b", 3);
+            Assert.AreEqual(3,cfg2.Get("a.b"));
+            Assert.AreEqual(1,cfg2.Get(".a.b"));
+            Assert.AreEqual(2,cfg2.Get("a.c"));
         }
 
 	}

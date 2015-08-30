@@ -114,6 +114,7 @@ namespace Qorpent.Experiments {
             return current;
         }
         private static object GetInternal(object json, string pathPart) {
+            if (null == json) return null;
             if (json is XElement) {
                 var xml = json as XElement;
                 var attr = xml.Attribute(pathPart);
@@ -138,6 +139,35 @@ namespace Qorpent.Experiments {
                 if (d.ContainsKey(pathPart)) return d[pathPart];
                 return null;
             }
+            return ByReflection(json, pathPart);
+        }
+
+        private static object ByReflection(object json, string pathPart) {
+            var type = json.GetType();
+            var prop = json.GetType().GetProperty(pathPart);
+            if (null != prop) {
+                return prop.GetValue(json);
+            }
+            var fld = json.GetType().GetField(pathPart);
+            if (null != fld) {
+                return fld.GetValue(json);
+            }
+
+            prop = json.GetType()
+                .GetProperty(pathPart,
+                    BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.Public |
+                    BindingFlags.IgnoreCase);
+            if (null != prop) {
+                return prop.GetValue(json);
+            }
+            fld = json.GetType()
+                .GetField(pathPart,
+                    BindingFlags.Instance | BindingFlags.GetField | BindingFlags.Public |
+                    BindingFlags.IgnoreCase);
+            if (null != fld) {
+                return fld.GetValue(json);
+            }
+
             return null;
         }
 

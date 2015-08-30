@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Experiments;
@@ -62,8 +64,10 @@ namespace Qorpent {
             set { _options = value; }
         }
 
+        
         public T Get<T>(string key, T def = default(T), ScopeOptions options = null) {
-            var result = this.get(key);
+            object result = Get(key,options);
+            
             if (null == result) {
                 return def;
             }
@@ -280,7 +284,19 @@ namespace Qorpent {
         }
 
         private object PreparedValue(string key, ScopeOptions options) {
-            var result = NativeGet(key, options);
+            object result = null;
+            if (key.Contains('.') && !ContainsKey(key)) {
+                var split = key.Split('.');
+                result = NativeGet(split[0], options);
+                if (null != result) {
+                    var jpath = string.Join(".", split.Skip(1));
+                    result = Experiments.Json.Get(result, jpath);
+                }
+            }
+            else
+            {
+                result = NativeGet(key, options);
+            }
             if (result is IScopeBound) {
                 return ((IScopeBound) result).Get(this, key, options);
             }
@@ -399,6 +415,11 @@ namespace Qorpent {
                 return null;
             }
             options = options ?? Options;
+
+
+
+
+
             var resultCount = options.ResultCount;
             object result = null;
             if (options.SkipLevels == 0) {

@@ -17,7 +17,7 @@ namespace qorpent.v2.data.agg {
             Collectors = new List<ICollector>();
             Finalizers = new List<IFinalizer>();
         }
-        protected AggregateNode Node { get; }
+        protected AggregateNode Node { get; private set; }
 
         private IEnumerable<IRouter> AllRoutes(IRouter root = null) {
             if (null == root) {
