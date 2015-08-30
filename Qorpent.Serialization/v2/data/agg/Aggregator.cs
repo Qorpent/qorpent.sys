@@ -49,7 +49,7 @@ namespace qorpent.v2.data.agg {
                             name = c.Name ?? c.Key,
                             shortname = c.ShortName ?? c.Name ?? c.Key,
                             level = c.Level,
-                            parent = c.Parent?.Key
+                            parent = null==c.Parent ? "" : c.Parent.Key
                         }.jsonify()).ToArray();
             Node.Meta["values"] =
                 Collectors.Select(
