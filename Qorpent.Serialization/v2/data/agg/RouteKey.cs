@@ -32,6 +32,8 @@ namespace qorpent.v2.data.agg {
             set { _title = value; }
         }
 
+        public string Condition { get; set; }
+
         public string Comment { get; set; }
     }
 }

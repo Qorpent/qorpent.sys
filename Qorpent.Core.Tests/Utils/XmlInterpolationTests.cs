@@ -366,5 +366,10 @@ test11 x=A
 			Assert.AreEqual("ABC", x.Descendants("test16").First().Attribute("x").Value);
 
 		}
+        
+	    [Test]
+	    public void ComponentSupport() {
+	        
+	    }
 	}
 }

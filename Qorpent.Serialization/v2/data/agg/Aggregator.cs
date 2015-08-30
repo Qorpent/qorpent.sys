@@ -39,22 +39,14 @@ namespace qorpent.v2.data.agg {
 
             }
         }  
+
+
+
         public AggregateNode GetResult() {
             Finalize();
-            Node.Meta["route"] =
-                AllRoutes().Select(
-                    c =>
-                        new {
-                            key = c.Key ?? "nokey",
-                            name = c.Name ?? c.Key,
-                            shortname = c.ShortName ?? c.Name ?? c.Key,
-                            level = c.Level,
-                            parent = null==c.Parent ? "" : c.Parent.Key
-                        }.jsonify()).ToArray();
-            Node.Meta["values"] =
-                Collectors.Select(
-                    c => new {key = c.Key, name = c.Name ?? c.Key, shortname = c.ShortName ?? c.Name ?? c.Key}.jsonify())
-                    .ToArray();
+            Node.Collectors = Collectors.ToArray();
+            Node.Routs = AllRoutes().ToArray();
+            
 
             return Node;
         }

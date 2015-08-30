@@ -4,6 +4,9 @@ using Qorpent;
 namespace qorpent.v2.data.agg {
     public class Collector :ICollector{
         private static int ID = 0;
+        private string _shortName;
+        private string _name;
+
         public Collector()
         {
             Id = ID++;
@@ -11,8 +14,22 @@ namespace qorpent.v2.data.agg {
 
         public int Id { get; set; }
         public string Key { get; set; }
-        public string Name { get; set; }
-        public string ShortName { get; set; }
+
+        public string Name
+        {
+            get { return _name ??Key; }
+            set { _name = value; }
+        }
+
+        public string ShortName
+        {
+            get { return _shortName ?? Name; }
+            set { _shortName = value; }
+        }
+
+        public string Group { get; set; }
+        public string Condition { get; set; }
+        public object Custom { get; set; }
         public Func<object,object , AggregateNode, IScope,object> ValueFunction { get; set; }
         public virtual object GetValue(object src, object currentValue, AggregateNode trg, IScope scope) {
             var result = InternalGetValue(src, currentValue, trg, scope);

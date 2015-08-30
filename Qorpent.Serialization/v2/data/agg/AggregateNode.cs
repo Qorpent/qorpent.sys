@@ -27,6 +27,8 @@ namespace qorpent.v2.data.agg {
         protected int IDBASIS = 0;
         private int _id=-1;
         private IDictionary<string, object> _meta;
+        private ICollector[] _collectors;
+        private IRouter[] _routers;
 
         public RouteKey RouteKey { get; set; }
 
@@ -94,12 +96,65 @@ namespace qorpent.v2.data.agg {
             return Children[name];
         }
 
+        public IEnumerable<string> CollectCondition(string valname = null) {
+            if (null != Parent) {
+                foreach (var c in Parent.CollectCondition()) {
+                    yield return c;
+                }
+            }
+            if (null!=RouteKey && !string.IsNullOrWhiteSpace(RouteKey.Condition)) {
+                yield return this.RouteKey.Condition;
+            }
+            if (!string.IsNullOrWhiteSpace(valname)) {
+                var val = Collectors.First(_ => _.Key == valname);
+                if (!string.IsNullOrWhiteSpace(val.Condition)) {
+                    yield return val.Condition;
+                }
+            }
+        } 
 
-        public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
+        public ICollector[] Collectors
+        {
+            get { return _collectors ?? (null!=Parent?Parent.Collectors:null); }
+            set { _collectors = value; }
+        }
+
+        public IRouter[] Routs
+        {
+            get { return _routers ?? (null != Parent ? Parent.Routs : null); }
+            set { _routers = value; }
+        }
+       
+
+public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
             var jw = new JsonWriter(output,pretty:pretty,level:level);
             jw.OpenObject();
             if (0 != Meta.Count) {
                 jw.WriteProperty("meta",Meta);
+            }
+            if (null == Parent && null != Collectors && 0!=Collectors.Length) {
+                jw.WriteProperty("collectors", Collectors.Select(
+                    c => new
+                    {
+                        key = c.Key,
+                        name = c.Name ?? c.Key,
+                        shortname = c.ShortName ?? c.Name ?? c.Key,
+                        group = c.Group,
+                        condition = c.Condition
+                    }.jsonify()).ToArray());
+            }
+            if (null == Parent && null != Routs && 0 != Routs.Length) {
+                jw.WriteProperty("routs", Routs.Select(
+                    c =>
+                        new
+                        {
+                            key = c.Key ?? "nokey",
+                            name = c.Name ?? c.Key,
+                            shortname = c.ShortName ?? c.Name ?? c.Key,
+                            level = c.Level,
+                            parent = null == c.Parent ? "" : c.Parent.Key,
+                        }.jsonify()).ToArray());
+                
             }
             jw.WriteProperty("id",Id);
             jw.WriteProperty("isbucket",IsBucket);

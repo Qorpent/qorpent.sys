@@ -16,6 +16,7 @@ namespace qorpent.v2.data.agg {
         public string Key { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
+        public object Custom { get; set; }
 
         public int Level
         {

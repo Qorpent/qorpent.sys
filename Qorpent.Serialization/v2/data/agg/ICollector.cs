@@ -8,5 +8,8 @@ namespace qorpent.v2.data.agg {
         string Key { get; set; }
         string Name { get; set; }
         string ShortName { get; set; }
+        string Group { get; set; }
+        object Custom { get; set; }
+        string Condition { get; set; }
     }
 }

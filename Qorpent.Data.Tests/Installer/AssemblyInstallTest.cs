@@ -27,6 +27,7 @@ DROP DATABASE AssemblyInstallTest
         }
 
         [Test]
+        [Category("NOTC")]
         public void CanInstallLibrary() {
             var mycodebase = Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", "");
             var rootdir = Path.GetDirectoryName(Path.GetDirectoryName(mycodebase));

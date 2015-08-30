@@ -11,6 +11,7 @@ namespace qorpent.v2.data.agg {
         int Level { get; }
         string ShortName { get; set; }
         string Name { get; set; }
+        object Custom { get; set; }
         RouteKey GetKey(object obj, IScope scope);
         bool Filter(object o, AggregateNode current, IScope scope);
     }

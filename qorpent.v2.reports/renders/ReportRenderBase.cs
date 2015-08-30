@@ -9,7 +9,7 @@ using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.reports.renders
 {
-    public abstract class ReportRenderBase : IReportRender, IXmlInterpolationComponent {
+    public abstract class ReportRenderBase : IReportRender, IXmlComponent {
 
         public ReportRenderBase() {
             ResolveToFile = true;

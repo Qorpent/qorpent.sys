@@ -364,6 +364,7 @@
     <Compile Include="Utils\Git\MergeStrategyOption.cs" />
     <Compile Include="Utils\Git\RevisionDistance.cs" />
     <Compile Include="Utils\Hex.cs" />
+    <Compile Include="Utils\IXmlComponent.cs" />
     <Compile Include="Utils\IXmlIncludeProvider.cs" />
     <Compile Include="Utils\XmlIncludeProvider.cs" />
     <Compile Include="Utils\IO\FileDescriptorEx.cs" />

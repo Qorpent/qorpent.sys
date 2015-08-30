@@ -1071,5 +1071,50 @@ namespace Qorpent.Experiments {
             }
             output.Write("\"");
         }
+
+        public static IEnumerable<NodeRef> collect(this object json, Func<object , string , NodeFilter> filter ) {
+            var context = "/";
+            foreach (var n in internalCollect(json,"/",filter)) {
+                yield return n;
+            }
+        }
+
+        private static IEnumerable<NodeRef> internalCollect(object json, string context, Func<object, string, NodeFilter> filter) {
+            var result = filter(json, context);
+            if (result.HasFlag(NodeFilter.Return)) {
+                yield return new NodeRef {Path = context, Value = json};
+            }
+            if (!result.HasFlag(NodeFilter.Stop)) {
+                if (json is Map) {
+                    var m = json as Map;
+                    foreach ( var p in m) {
+                        foreach (var r in internalCollect(p.Value,context+"/"+p.Key,filter)) {
+                            yield return r;
+                        }
+                    }
+                }else if (json is Arr) {
+                    var a = (json as Arr).OfType<object>().ToArray();
+                    for (var i = 0; i < a.Length; i++) {
+                        var val = a[i];
+                        foreach (var r in internalCollect(val,context+"["+i+"]",filter)) {
+                            yield return r;
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    [Flags]
+    public enum NodeFilter {
+        None=0,
+        Stop=1,
+        Return=2
+    }
+
+    public class NodeRef {
+        public string Path { get; set; }
+        public object Value { get; set; }
+    }
+
 }
