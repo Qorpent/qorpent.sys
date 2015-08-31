@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        html {
+            max-width:100%;
+            min-width: 100%;
+            max-height: 100%;
+            min-height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            overflow: hidden;
+        }
+        body {
+            max-width:100%;
+            min-width: 100%;
+            max-height: 100%;
+            min-height: 100%;
+            background-color: #00d6b2;
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        main {
+            flex-grow: 1;
+            background-color: blue;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        footer {
+            min-height: 200px;
+            max-height: 200px;
+            background-color: red;
+
+        }
+        header {
+            min-height: 200px;
+            max-height: 200px;
+            background-color: green;
+        }
+        .d1 {
+            min-height: 50px;
+            max-height: 50px;
+            background-color: yellow;
+        }
+        .d2 {
+            background-color: #00dd1c;
+            flex-direction: column;
+            flex:1;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body >
+    <header></header>
+    <main>
+        <div class="d1"></div>
+        <div class="d2">
+            <div style="flex-shrink:0;height:200px;background-color: #00d6b2"></div>
+            <div style="flex-shrink:0;height:200px;background-color: #007e00"></div>
+            <div style="flex-shrink:0;height:200px;background-color:#00d6b2"></div>
+            <div style="flex-shrink:0;height:200px;background-color: #007e00"></div>
+            <div style="flex-shrink:0;height:200px;background-color: #00d6b2"></div>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+</html>
