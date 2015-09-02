@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Xml.Linq;
 using qorpent.tasks.processor;
 using Qorpent;
 using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 
 namespace qorpent.tasks.factory {
     [ContainerComponent(Lifestyle.Singleton, ServiceType = typeof (ITaskFactory))]
@@ -14,6 +16,16 @@ namespace qorpent.tasks.factory {
                 }
             }
             return null;
+        }
+
+        public void UpdateSourceList() {
+            var sources = Container.All<ITaskSource>();
+            foreach (var taskSource in sources) {
+                if (Extensions.All(_ => _.GetType() != taskSource.GetType())) {
+                    Logg.Trace("taskfactory add source of type: "+taskSource.GetType().FullName);
+                    Extensions.Add(taskSource);
+                }
+            }
         }
     }
 }

@@ -19,9 +19,10 @@ namespace qorpent.tasks.tasks {
             Before = new List<ITask>();
             After = new List<ITask>();
             Fallback = new List<ITask>();
-            this.Interpolator = new StringInterpolation {AncorSymbol = '@'};
+            PlainConfig = new Dictionary<string, string>();
+            Interpolator = new StringInterpolation {AncorSymbol = '@'};
         }
-
+        public TaskScope TaskScope { get; set; }
         public StringInterpolation Interpolator { get; set; }
 
         public ITaskFactory TaskFactory { get; set; }
@@ -42,6 +43,20 @@ namespace qorpent.tasks.tasks {
 
         public TaskEnvironment Environment { get; set; }
 
+        public IDictionary<string,string> PlainConfig { get; set; } 
+
+        public T ResolveParam<T>(string name, T def =default(T)) {
+            if (null!=CurrentScope && CurrentScope.ContainsKey(name)) {
+                return CurrentScope[name].To<T>();
+            }
+            if (PlainConfig.ContainsKey(name)) {
+                return PlainConfig[name].To<T>();
+            }
+            var result = Config.AttrOrElement(name);
+            if (!string.IsNullOrWhiteSpace(result)) return result.To<T>();
+            return def;
+        }
+
         public virtual void Initialize(TaskEnvironment environment, ITask parent, XElement config) {
             Environment = environment;
             TaskFactory = TaskFactory ?? environment.Container.Get<ITaskFactory>();
@@ -50,6 +65,7 @@ namespace qorpent.tasks.tasks {
             L = Environment.Log;
             ErrorLevel = config.Attr("errorlevel", "Error").To<LogLevel>();
             Condition = config.Attr("condition");
+            TaskScope = config.Attr("scope").To<TaskScope>();
             var name = config.Attr("name");
             if (!string.IsNullOrWhiteSpace(name)) {
                 Name = name;
@@ -63,9 +79,79 @@ namespace qorpent.tasks.tasks {
 
             TaskCode = config.Attr("code");
             TaskName = config.Attr("name");
+
+            var current = config;
+            while (true) {
+                if(null==current)break;
+                foreach (var a in current.Attributes()) {
+                    if (!PlainConfig.ContainsKey(a.Name.LocalName)) {
+                        PlainConfig[a.Name.LocalName] = a.Value;
+                    }   
+                }
+                current = current.Parent;
+            }
         }
 
+        public IScope ResolveScope( TaskScope taskScope = TaskScope.None, IScope localScope = null) {
+            if (taskScope == TaskScope.None) {
+                taskScope = this.TaskScope;
+            }
+            if (TaskScope == TaskScope.Environment) {
+                throw new Exception("environment level is not resolveable to IScope");
+            }
+            if (taskScope == TaskScope.Project) {
+                taskScope= TaskScope.Global; //for now Projects share same scope by design
+            }
+            if (taskScope == TaskScope.Parent)
+            {
+                if (null == Parent) {
+                    taskScope = TaskScope.Global;
+                }
+                else {
+                    var taskbase = Parent as TaskBase;
+                    if (null == taskbase) {
+                        return (localScope ?? CurrentScope).GetParent();
+                    }
+                    return taskbase.ResolveScope(TaskScope.Local);
+                }
+            }
+            if (taskScope == TaskScope.Target) {
+                if (this is CompoundTask && null == Parent) {
+                    taskScope = TaskScope.Local;
+                }
+                else if (null == Parent) {
+                    throw new Exception("cannot find target scope - invalid task structure");
+                }
+                else {
+                    var target = Parent as TaskBase;
+                    while (true) {
+                        if (null == target) {
+                            throw new Exception("cannot find target scope - invalid task structure");
+                        }
+                        if (target is CompoundTask && null == target.Parent) {
+                            return target.ResolveScope(TaskScope.Local);
+                        }
+                        target = target.Parent as TaskBase;
+                        
+
+                    }
+                }
+
+            }
+            if (taskScope == TaskScope.Global) {
+                return this.Environment.Globals;
+            }
+          
+            if (TaskScope == TaskScope.Local) {
+                return localScope ?? CurrentScope;
+            }
+            throw new Exception("invalid resolve scope request");
+        }
+
+        public IScope CurrentScope { get; set; }
+
         public void Execute(IScope scope) {
+            this.CurrentScope = scope;
             if (IsMatch(scope)) {
                 try {
                     L.Debug(">>> task " + Name);

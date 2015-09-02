@@ -33,17 +33,17 @@
     <Compile Include="tasks\database\DbScriptCommand.cs" />
     <Compile Include="tasks\database\DbTaskBase.cs" />
     <Compile Include="tasks\filesystem\MkDirTask.cs" />
+    <Compile Include="tasks\misc\BSharpLoad.cs" />
+    <Compile Include="tasks\misc\LibTask.cs" />
+    <Compile Include="tasks\misc\MessageTask.cs" />
+    <Compile Include="tasks\TaskScope.cs" />
     <Compile Include="tasks\TaskBase.cs" />
-    <Compile Include="ITask.cs" />
     <Compile Include="processor\ITaskProcessor.cs" />
     <Compile Include="console\TaskProcess.cs" />
     <Compile Include="console\TaskConsoleParameters.cs" />
-    <Compile Include="factory\ITaskSource.cs" />
-    <Compile Include="processor\TaskEnvironment.cs" />
     <Compile Include="factory\TaskFactory.cs" />
     <Compile Include="processor\TaskProcessor.cs" />
     <Compile Include="tasks\CompoundTask.cs" />
-    <Compile Include="TaskFlags.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Elasticsearch.Net">

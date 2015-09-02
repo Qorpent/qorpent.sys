@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
-using qorpent.tasks.console;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.IoC;
@@ -15,7 +14,6 @@ namespace qorpent.tasks.processor {
 
         public XElement Config { get; set; }
         public IBSharpContext Context { get; set; }
-        public TaskConsoleParameters ConsoleCall { get; set; }
         public ILoggy Log { get; set; }
         public IScope Globals { get; set; }
         public string[] Targets { get; set; }

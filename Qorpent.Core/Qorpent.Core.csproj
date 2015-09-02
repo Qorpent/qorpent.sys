@@ -470,6 +470,10 @@
     <Compile Include="v2\security\user\storage\IUserSourceBound.cs" />
     <Compile Include="v2\security\user\storage\IWriteableUserSource.cs" />
     <Compile Include="v2\query\SearchResult.cs" />
+    <Compile Include="v2\tasks\ITask.cs" />
+    <Compile Include="v2\tasks\ITaskSource.cs" />
+    <Compile Include="v2\tasks\TaskEnvironment.cs" />
+    <Compile Include="v2\tasks\TaskFlags.cs" />
     <Compile Include="v2\xdom\XDom.cs" />
     <Compile Include="Verdict.cs" />
     <Compile Include="VerdictType.cs" />

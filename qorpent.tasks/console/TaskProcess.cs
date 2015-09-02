@@ -12,7 +12,7 @@ namespace qorpent.tasks.console {
     public class TaskProcess {
         public int Execute(TaskConsoleParameters args) {
             var context = BSharpCompiler.CompileDirectory(args.ScriptDirectory,
-                new BSharpConfig {Global = new Scope(args.Global)});
+                new BSharpConfig {Global = new Scope(args.Global),KeepLexInfo = true});
             var cls = context[args.ScriptClass];
             if (null == cls) {
                 throw new Exception("cannot find class " + args.ScriptClass);
@@ -41,7 +41,6 @@ namespace qorpent.tasks.console {
             var installRequest = new TaskEnvironment {
                 Config = cls.Compiled,
                 Context = context,
-                ConsoleCall = args,
                 Log = loggy,
                 Globals = new Scope(args.Global),
                 Targets = args.Targets.ToArray()
