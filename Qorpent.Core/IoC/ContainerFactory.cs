@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/ContainerFactory.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -187,7 +188,7 @@ namespace Qorpent.IoC {
 				//it is not critical
 			}
 		}
-
+        
 		/// <summary>
 		/// 	Загружает все сконфигурированные при помощи <see cref="ContainerComponentAttribute" /> компоненты из сборки в указанный контейнер
 		/// </summary>

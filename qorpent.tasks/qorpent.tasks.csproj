@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{50DAA5F0-A09B-46C0-860C-9478867045F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>qorpent.tasks</RootNamespace>
+    <AssemblyName>qorpent.tasks</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="factory\DefaultTaskSource.cs" />
+    <Compile Include="factory\ITaskFactory.cs" />
+    <Compile Include="tasks\database\DbCommandTask.cs" />
+    <Compile Include="tasks\database\DbScriptCommand.cs" />
+    <Compile Include="tasks\database\DbTaskBase.cs" />
+    <Compile Include="tasks\filesystem\MkDirTask.cs" />
+    <Compile Include="tasks\TaskBase.cs" />
+    <Compile Include="ITask.cs" />
+    <Compile Include="processor\ITaskProcessor.cs" />
+    <Compile Include="console\TaskProcess.cs" />
+    <Compile Include="console\TaskConsoleParameters.cs" />
+    <Compile Include="factory\ITaskSource.cs" />
+    <Compile Include="processor\TaskEnvironment.cs" />
+    <Compile Include="factory\TaskFactory.cs" />
+    <Compile Include="processor\TaskProcessor.cs" />
+    <Compile Include="tasks\CompoundTask.cs" />
+    <Compile Include="TaskFlags.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Elasticsearch.Net">
+      <HintPath>..\..\qorpent.kernel\Elasticsearch.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\qorpent.kernel\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="zxing">
+      <HintPath>..\..\qorpent.kernel\zxing.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

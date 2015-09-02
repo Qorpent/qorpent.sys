@@ -5,5 +5,6 @@ namespace Qorpent {
     public interface IConfigProvider {
         XElement GetConfig();
         IBSharpContext GetContext();
+        object Custom { get; set; }
     }
 }

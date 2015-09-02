@@ -122,9 +122,9 @@ namespace Qorpent.Core.Tests.Log {
 	        var lateLogger = new LateLogger{Level = LogLevel.All,Available = true};
             IUserLog log = new LoggerBasedUserLog(new []{lateLogger}){Level = LogLevel.All};
             log.Trace("XXX");
-            Assert.AreNotEqual("XXX",lateLogger.OutResult);//сначала проверяем, что так-то все асинхронно
+            Assert.AreNotEqual("XXX",lateLogger.OutResult);//СЃРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ С‚Р°Рє-С‚Рѕ РІСЃРµ Р°СЃРёРЅС…СЂРѕРЅРЅРѕ
             log.Synchronize();
-            Assert.AreEqual("XXX", lateLogger.OutResult);//но можно дождаться
+            Assert.AreEqual("XXX", lateLogger.OutResult);//РЅРѕ РјРѕР¶РЅРѕ РґРѕР¶РґР°С‚СЊСЃСЏ
 	        using (IUserLog slog = new LoggerBasedUserLog(new[] {lateLogger}) {Level = LogLevel.All}) {
 	            slog.Trace("YYY");
 	        }

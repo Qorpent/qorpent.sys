@@ -43,6 +43,8 @@ namespace qorpent.v2.security.Tests
             public IBSharpContext GetContext() {
                 throw new NotImplementedException();
             }
+
+            public object Custom { get; set; }
         }
         [SetUp]
         public virtual void Setup() {

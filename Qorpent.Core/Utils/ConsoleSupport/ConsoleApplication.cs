@@ -27,7 +27,7 @@ namespace Qorpent.Utils{
 		/// <param name="executor"></param>
 		/// <param name="shadowByDefault">Признак использования ShadowRun по умолчанию</param>
 		/// <returns></returns>
-		public static int Execute<TArgs>(string[] args, Func<TArgs, int> executor, bool shadowByDefault = false) where TArgs:ConsoleApplicationParameters,new(){
+		public static int Execute<TArgs>(string[] args, Func<TArgs, int> executor, bool shadowByDefault = false) where TArgs:ConsoleApplicationParameters, new(){
 			if (args.Contains("--debug")) {
 				Debugger.Launch();
 			}

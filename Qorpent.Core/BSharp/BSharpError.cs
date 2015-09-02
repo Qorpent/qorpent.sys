@@ -24,7 +24,7 @@ namespace Qorpent.BSharp {
 		public BSharpErrorDigest GetDigest(){
 		
 			return new BSharpErrorDigest{
-				ErrorLevel=Level, 
+				LogLevel=Level, 
 				Phase=Phase,Message= Message,
 				Type= Type,
 				ClassName=ResolvedClassName(), 

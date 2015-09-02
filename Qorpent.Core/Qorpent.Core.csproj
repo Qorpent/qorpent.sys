@@ -510,7 +510,7 @@
     <Compile Include=".\Dsl\LogicalExpressions\LogicTermSource.cs" />
     <Compile Include=".\EnvironmentInfo.cs" />
     <Compile Include=".\EnvironmentInfoTestObject.cs" />
-    <Compile Include=".\ErrorLevel.cs" />
+    <Compile Include="ErrorLevel.cs" />
     <Compile Include=".\Events\Event.cs" />
     <Compile Include=".\Events\EventHandlerBase.cs" />
     <Compile Include=".\Events\EventManager.cs" />

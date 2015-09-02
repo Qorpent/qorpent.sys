@@ -44,10 +44,10 @@ namespace Qorpent.Integration.BSharp.Builder{
 			sb.AppendLine("\t\t\t\t<th>Номер</th><th>Уровень</th><th>Тип</th><th>Класс</th><th>Сообщение</th><th>Файл</th><th>Строка</th><th>Колонка</th><th>Фаза</th>");
 			sb.AppendLine("\t\t\t</tr>");
 			var id = 1;
-			foreach (var d in errors.Select(_ => _.GetDigest()).OrderByDescending(_ => _.ErrorLevel).ThenBy(_=>_.ClassName).ThenBy(_=>_.FileName)){
-				sb.AppendLine("\t\t\t<tr class='level-"+d.ErrorLevel+"'>");
+			foreach (var d in errors.Select(_ => _.GetDigest()).OrderByDescending(_ => _.LogLevel).ThenBy(_=>_.ClassName).ThenBy(_=>_.FileName)){
+				sb.AppendLine("\t\t\t<tr class='level-"+d.LogLevel+"'>");
 				sb.AppendFormat("\t\t\t\t<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td>\r\n",
-				                id++,d.ErrorLevel,d.Type,d.ClassName,d.Message.Replace("\r\n","<br/>"),d.FileName,d.Line,d.Column,d.Phase
+				                id++,d.LogLevel,d.Type,d.ClassName,d.Message.Replace("\r\n","<br/>"),d.FileName,d.Line,d.Column,d.Phase
 					);
 				sb.AppendLine("\t\t\t</tr>");	
 			}

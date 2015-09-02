@@ -112,7 +112,18 @@ namespace Qorpent.BSharp{
 	        if (!scope.ContainsKey("MACHINE_NAME")) {
 	            scope["MACHINE_NAME"] = Environment.MachineName;
 	        }
-	    }
+            if (!scope.ContainsKey("OS"))
+            {
+                scope["OS"] = Environment.OSVersion.ToString();
+            }
+	        if (!scope.ContainsKey("UNIX")) {
+	            scope["UNIX"] = Environment.OSVersion.Platform == PlatformID.Unix;
+	        }
+            if (!scope.ContainsKey("WINDOWS"))
+            {
+                scope["WINDOWS"] = Environment.OSVersion.Platform.ToString().ToLowerInvariant().Contains("win");
+            }
+        }
 
 
 	    /// <summary>

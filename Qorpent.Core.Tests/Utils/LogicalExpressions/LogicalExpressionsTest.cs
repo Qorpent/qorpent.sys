@@ -100,6 +100,8 @@ namespace Qorpent.Core.Tests.Utils.LogicalExpressions
         }
 
         [TestCase("X ~ 'a'", false)]
+        [TestCase("X !~ 'a'", true)]
+        [TestCase("X !~ 'b'", false)]
         [TestCase("X~'a'", false)]
         [TestCase("X~ 'b'", true)]
         [TestCase("X ~'b'", true)]

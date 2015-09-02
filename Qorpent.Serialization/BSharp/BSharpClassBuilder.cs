@@ -453,6 +453,7 @@ namespace Qorpent.BSharp{
 	            foreach (var element in GetAllUpSets()) {
 	                var condition = element.Attribute(BSharpSyntax.ConditionalAttribute);
 	                if (null != condition) {
+	                    
 	                    if(!le.Eval(condition.Value,scope))continue;
 	                    
 	                }

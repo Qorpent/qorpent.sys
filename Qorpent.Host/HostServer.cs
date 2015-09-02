@@ -98,6 +98,8 @@ namespace Qorpent.Host {
             return Config.BSharpContext;
         }
 
+        public object Custom { get; set; }
+
         /// <summary>
         ///     Акцессор к контейнеру
         /// </summary>

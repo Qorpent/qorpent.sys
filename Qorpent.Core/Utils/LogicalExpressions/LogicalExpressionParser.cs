@@ -365,7 +365,7 @@ namespace Qorpent.Utils.LogicalExpressions {
                             Closeliteral();
                         }
 
-                        if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state)
+                        if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state && State.InNeq!=_state)
                         {
                             throw new Exception("~ is at wrong place " + idx);
                         }
@@ -373,7 +373,8 @@ namespace Qorpent.Utils.LogicalExpressions {
                         {
                             _skipnext = 1;
                         }
-                        _tokenlist.Add(new Token { Type = LETokenType.Regex });
+                        _tokenlist.Add(new Token { Type = LETokenType.Regex,Negation = _state==State.InNeq});
+                        
                         _state = State.AfterBinaryOperator;
                         break;
 

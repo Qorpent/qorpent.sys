@@ -17,5 +17,6 @@ namespace Qorpent.Config {
         public IBSharpContext GetContext() {
             return _context;
         }
+        public object Custom { get; set; }
     }
 }

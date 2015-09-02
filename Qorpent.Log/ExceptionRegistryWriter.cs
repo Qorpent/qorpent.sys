@@ -54,18 +54,18 @@ namespace Qorpent.Log {
 			if (message.Level >= LogLevel.Info && message.Error != null) {
 				var title = message.Message;
 
-				var errorlevel = ErrorLevel.None;
+				var errorlevel = Qorpent.ErrorLevel.None;
 				if (message.Level == LogLevel.Info) {
-					errorlevel = ErrorLevel.Hint;
+					errorlevel = Qorpent.ErrorLevel.Hint;
 				}
 				else if (message.Level == LogLevel.Error) {
-					errorlevel = ErrorLevel.Error;
+					errorlevel = Qorpent.ErrorLevel.Error;
 				}
 				else if (message.Level == LogLevel.Warn) {
-					errorlevel = ErrorLevel.Warning;
+					errorlevel = Qorpent.ErrorLevel.Warning;
 				}
 				else if (message.Level == LogLevel.Fatal) {
-					errorlevel = ErrorLevel.Fatal;
+					errorlevel = Qorpent.ErrorLevel.Fatal;
 				}
 
 				Registry.Send(message.Error, errorlevel, GetAdvancedParams(message), title);

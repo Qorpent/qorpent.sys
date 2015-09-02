@@ -9,7 +9,7 @@
 		/// <param name="other"></param>
 		/// <returns></returns>
 		protected bool Equals(BSharpErrorDigest other){
-			return ErrorLevel == other.ErrorLevel && Phase == other.Phase && string.Equals(Message, other.Message) && Type == other.Type && string.Equals(ClassName, other.ClassName) && string.Equals(FileName, other.FileName) && Line == other.Line && Column == other.Column;
+			return LogLevel == other.LogLevel && Phase == other.Phase && string.Equals(Message, other.Message) && Type == other.Type && string.Equals(ClassName, other.ClassName) && string.Equals(FileName, other.FileName) && Line == other.Line && Column == other.Column;
 		}
 		/// <summary>
 		/// 
@@ -17,7 +17,7 @@
 		/// <returns></returns>
 		public override int GetHashCode(){
 			unchecked{
-				int hashCode = (int) ErrorLevel;
+				int hashCode = (int) LogLevel;
 				hashCode = (hashCode*397) ^ (int) Phase;
 				hashCode = (hashCode*397) ^ (Message != null ? Message.GetHashCode() : 0);
 				hashCode = (hashCode*397) ^ (int) Type;
@@ -43,7 +43,7 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		public ErrorLevel ErrorLevel { get; set; }
+		public ErrorLevel LogLevel { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

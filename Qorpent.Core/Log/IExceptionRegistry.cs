@@ -31,6 +31,6 @@ namespace Qorpent.Log {
 		/// <param name="title">Заголовок ошибки</param>
 		/// <param name="advancedParameters">Дополнительные параметры</param>
 		/// <returns>Уникальный ключ сообщения</returns>
-		string Send(Exception error, ErrorLevel severity, object advancedParameters, string title = "");
+		string Send(Exception error, Qorpent.ErrorLevel severity, object advancedParameters, string title = "");
 	}
 }
