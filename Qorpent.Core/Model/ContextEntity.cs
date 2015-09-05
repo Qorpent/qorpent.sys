@@ -20,26 +20,26 @@ using System;
 
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Плоская реализация IContextEntity
+	/// 	РџР»РѕСЃРєР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ IContextEntity
 	/// </summary>
-	public class ContextEntity : Entity, IContextEntity {
+	public class ContextEntity<T> : Entity<T>, IContextEntity<T> {
 		/// <summary>
-		/// 	True - объект активен
+		/// 	True - РѕР±СЉРµРєС‚ Р°РєС‚РёРІРµРЅ
 		/// </summary>
 		public bool Active { get; set; }
 
 		/// <summary>
-		/// 	Дата начала
+		/// 	Р”Р°С‚Р° РЅР°С‡Р°Р»Р°
 		/// </summary>
 		public DateTime Start { get; set; }
 
 		/// <summary>
-		/// 	Дата окончания
+		/// 	Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ
 		/// </summary>
 		public DateTime Finish { get; set; }
 
 		/// <summary>
-		/// 	Роль (список ролей), которые необходимы для доступа
+		/// 	Р РѕР»СЊ (СЃРїРёСЃРѕРє СЂРѕР»РµР№), РєРѕС‚РѕСЂС‹Рµ РЅРµРѕР±С…РѕРґРёРјС‹ РґР»СЏ РґРѕСЃС‚СѓРїР°
 		/// </summary>
 		public string Role { get; set; }
 	}

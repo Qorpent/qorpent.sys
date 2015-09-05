@@ -17,10 +17,13 @@
 // PROJECT ORIGIN: Qorpent.Core/IEntity.cs
 #endregion
 namespace Qorpent.Model {
+    public interface IEntity : IEntity<long> {
+    };
+    
 	/// <summary>
 	/// 	Базовый интерфейс для классов данных
 	/// </summary>
-	public interface IEntity : IWithId, IWithCode, IWithName, IWithIndex, IWithTag, IWithComment, IWithVersion {
+	public interface IEntity<TId> : IWithId<TId>, IWithCode, IWithName, IWithIndex, IWithTag, IWithComment, IWithVersion {
         /// <summary>
         /// Общий метод установления некоего контекстного объекта, использование зависит от реализации
         /// </summary>

@@ -21,10 +21,13 @@ using System.Collections.Generic;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Model {
+    public class Entity:Entity<long> {
+        
+    }
 	/// <summary>
 	/// Simple <see cref="IEntity"/> implementation
 	/// </summary>
-	public class Entity : IEntity, IWithProperties
+	public class Entity<T> : IEntity<T>, IWithProperties
 	{
 	    private object _context;
 		/// <summary>
@@ -35,7 +38,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// PK ID in database terms
 		/// </summary>
-		public virtual long Id { get; set; }
+		public virtual T Id { get; set; }
 
 		/// <summary>
 		/// Unique memo-code
@@ -60,7 +63,7 @@ namespace Qorpent.Model {
 		public virtual string Tag { get; set; }
 
 		/// <summary>
-		/// Проверяет наличие установленного тега, сверяет его значение
+		/// РџСЂРѕРІРµСЂСЏРµС‚ РЅР°Р»РёС‡РёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕРіРѕ С‚РµРіР°, СЃРІРµСЂСЏРµС‚ РµРіРѕ Р·РЅР°С‡РµРЅРёРµ
 		/// </summary>
 		/// <param name="tagname"></param>
 		/// <param name="testvalue"></param>
@@ -74,7 +77,7 @@ namespace Qorpent.Model {
 		}
 
 		/// <summary>
-		/// Возвращает наличие установленного тега
+		/// Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅР°Р»РёС‡РёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕРіРѕ С‚РµРіР°
 		/// </summary>
 		/// <param name="tagname"></param>
 		/// <returns></returns>
@@ -90,12 +93,12 @@ namespace Qorpent.Model {
 			return Tag.Substring(startindex, length).Trim();
 		}
 		/// <summary>
-		///		Типизированное получение тега
+		///		РўРёРїРёР·РёСЂРѕРІР°РЅРЅРѕРµ РїРѕР»СѓС‡РµРЅРёРµ С‚РµРіР°
 		/// </summary>
-		/// <typeparam name="T">Типизация результата</typeparam>
-		/// <param name="tagname">Имя тега</param>
-		/// <param name="def">Дефолтное значение</param>
-		/// <returns>Типизированный результат</returns>
+		/// <typeparam name="T">РўРёРїРёР·Р°С†РёСЏ СЂРµР·СѓР»СЊС‚Р°С‚Р°</typeparam>
+		/// <param name="tagname">РРјСЏ С‚РµРіР°</param>
+		/// <param name="def">Р”РµС„РѕР»С‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ</param>
+		/// <returns>РўРёРїРёР·РёСЂРѕРІР°РЅРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚</returns>
 		public T TagGet<T>(string tagname, T def) {
 			return TagGet(tagname).To<T>();
 		}
@@ -116,7 +119,7 @@ namespace Qorpent.Model {
 		public virtual string OuterCode { get; set; }
 
 		/// <summary>
-	    /// Общий метод установления некоего контекстного объекта, использование зависит от реализации
+	    /// РћР±С‰РёР№ РјРµС‚РѕРґ СѓСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РЅРµРєРѕРµРіРѕ РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РѕР±СЉРµРєС‚Р°, РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ Р·Р°РІРёСЃРёС‚ РѕС‚ СЂРµР°Р»РёР·Р°С†РёРё
 	    /// </summary>
 	    /// <param name="context"></param>
 	    public virtual  void SetContext(object context) {
@@ -124,7 +127,7 @@ namespace Qorpent.Model {
 	    }
 
 	    /// <summary>
-	    /// Возвращает контекстный объект
+	    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРЅС‚РµРєСЃС‚РЅС‹Р№ РѕР±СЉРµРєС‚
 	    /// </summary>
 	    /// <returns></returns>
 	    public object GetContext() {
@@ -132,7 +135,7 @@ namespace Qorpent.Model {
 	    }
 
 		/// <summary>
-		/// Ключ сортировки
+		/// РљР»СЋС‡ СЃРѕСЂС‚РёСЂРѕРІРєРё
 		/// </summary>
 		/// <returns></returns>
 		public string GetSortKey()

@@ -95,6 +95,7 @@
     <Compile Include="IO\Net\HttpUtils.cs" />
     <Compile Include="Log\NewLog\ElasticSearchAppender.cs" />
     <Compile Include="Model\IWithCustom.cs" />
+    <Compile Include="Model\IWithIntId.cs" />
     <Compile Include="Model\IWithStringId.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />

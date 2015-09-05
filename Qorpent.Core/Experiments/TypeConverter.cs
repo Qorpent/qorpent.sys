@@ -300,7 +300,7 @@ namespace Qorpent.Utils
 		/// <param name="defaultValue"></param>
 		/// <param name="safe"></param>
 		/// <returns>explained in ToInt (with correction to 64bit size)</returns>
-		public static double ToDouble(object source, int defaultValue = 0, bool safe = true)
+		public static double ToDouble(this object source, int defaultValue = 0, bool safe = true)
 		{
 			/* LAST TIMESTAMP CHECKING WITH COMPARENESS TO Qorpent.Sys
 			 * ToInt probes count: 10000000

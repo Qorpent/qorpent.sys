@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IWithHierarchy.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
 
 namespace Qorpent.Model {
@@ -25,22 +27,21 @@ namespace Qorpent.Model {
 	/// <typeparam name="TEntity"></typeparam>
 	public interface IWithSimpleHierarchy<TEntity> {
 		/// <summary>
-		/// 	Ссылка на родительский объект
+		/// 	РЎСЃС‹Р»РєР° РЅР° СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РѕР±СЉРµРєС‚
 		/// </summary>
 		TEntity Parent { get; set; }
 
 		/// <summary>
-		/// 	Коллекция дочерних объектов
+		/// 	РљРѕР»Р»РµРєС†РёСЏ РґРѕС‡РµСЂРЅРёС… РѕР±СЉРµРєС‚РѕРІ
 		/// </summary>
 		ICollection<TEntity> Children { get; set; }
 	}
-
-	/// <summary>
-	/// 	Модельный интерфейс - Нечто с иерархией, понимаемой как родитель, путь, дочерние
+    	/// <summary>
+	/// 	РњРѕРґРµР»СЊРЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ - РќРµС‡С‚Рѕ СЃ РёРµСЂР°СЂС…РёРµР№, РїРѕРЅРёРјР°РµРјРѕР№ РєР°Рє СЂРѕРґРёС‚РµР»СЊ, РїСѓС‚СЊ, РґРѕС‡РµСЂРЅРёРµ
 	/// </summary>
 	public interface IWithHierarchy<TEntity> : IWithSimpleHierarchy<TEntity> where TEntity: IWithCode {
 		/// <summary>
-		/// 	Прямой идентификатор родителя
+		/// 	РџСЂСЏРјРѕР№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЂРѕРґРёС‚РµР»СЏ
 		/// </summary>
 		long? ParentId { get; set; }
 		/// <summary>

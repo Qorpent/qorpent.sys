@@ -11,7 +11,7 @@ define(["the-angular"], function ($the) {
                         if(event.keyCode == 13){
                             event.preventDefault();
                             event.stopPropagation();
-                            scope.$apply(scope.$eval(attr["onEnter"]));
+                            scope.$apply(scope.$eval(attr["onEnter"],{"$event":event}));
                         }
                     });
                 }
@@ -24,7 +24,7 @@ define(["the-angular"], function ($the) {
                         if(event.keyCode == 27){
                             event.preventDefault();
                             event.stopPropagation();
-                            scope.$apply(scope.$eval(attr["onEscape"]));
+                            scope.$apply(scope.$eval(attr["onEscape"],{"$event":event}));
                         }
                     });
                 }

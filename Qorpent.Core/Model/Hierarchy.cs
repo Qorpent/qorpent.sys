@@ -6,7 +6,7 @@ namespace Qorpent.Model {
 	/// <see cref="Entity"/> that implements hierarchy pattern
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public  class Hierarchy<T> : Entity, IWithHierarchy<T> where T:class,IWithId,IWithCode,IWithHierarchy<T> {
+	public  class Hierarchy<T,TID> : Entity<TID>, IWithHierarchy<T> where T:class,IWithId<TID>,IWithCode,IWithHierarchy<T> {
 		/// <summary>
 		/// 
 		/// </summary>
@@ -17,14 +17,17 @@ namespace Qorpent.Model {
 		private string _parentCode;
 
 		/// <summary>
-		/// 	Прямой идентификатор родителя
+		/// 	РџСЂСЏРјРѕР№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЂРѕРґРёС‚РµР»СЏ
 		/// </summary>
 		/// <exception cref="Exception">cannot set ParentId when <see cref="Parent"/> is defined</exception>
 		public long? ParentId {
 			get {
-				return null != _parent ? _parent.Id : _parentId;
+			    if (_parentId != null) {
+			        return null != _parent ? Convert.ToInt64(_parent.Id) : _parentId;
+			    }
+			    return _parentId;
 			}
-			set {
+		    set {
 				if (null != _parent) {
 					throw new Exception("cannot set ParentId when Parent is defined");
 				}
@@ -49,7 +52,7 @@ namespace Qorpent.Model {
 		}
 
 		/// <summary>
-		/// 	Ссылка на родительский объект
+		/// 	РЎСЃС‹Р»РєР° РЅР° СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РѕР±СЉРµРєС‚
 		/// </summary>
 		public T Parent {
 			get {
@@ -61,7 +64,7 @@ namespace Qorpent.Model {
 		}
 
 		/// <summary>
-		/// 	Коллекция дочерних объектов
+		/// 	РљРѕР»Р»РµРєС†РёСЏ РґРѕС‡РµСЂРЅРёС… РѕР±СЉРµРєС‚РѕРІ
 		/// </summary>
 		public ICollection<T> Children {
 			get { return _children ??(_children= new List<T>()); }
@@ -124,7 +127,7 @@ namespace Qorpent.Model {
 			var result = GetHierarchicalCopyBase();
 			if (HasChildren())
 			{
-				(result as Hierarchy<T>)._children = new List<T>();
+				(result as Hierarchy<T,TID>)._children = new List<T>();
 				foreach (var child in Children)
 				{
 					var childcopy = child.GetCopyOfHierarchy();

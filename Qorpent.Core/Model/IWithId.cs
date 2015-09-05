@@ -20,10 +20,11 @@ namespace Qorpent.Model {
 	/// <summary>
 	/// Being with DB PK concern
 	/// </summary>
-	public interface IWithId {
-		/// <summary>
-		/// PK ID in database terms
-		/// </summary>
-		long Id { get; set; }
+	public interface IWithId:IWithId<long> {
+
 	}
+
+    public interface IWithId<T>  {
+        T Id { get; set; }
+    }
 }

@@ -22,14 +22,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Qorpent.Model;
 
 namespace Qorpent.Utils.Extensions{
     /// <summary>
-    /// Устаревший хелпер для работы с тегами, оставленный для совместимости
+    /// РЈСЃС‚Р°СЂРµРІС€РёР№ С…РµР»РїРµСЂ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С‚РµРіР°РјРё, РѕСЃС‚Р°РІР»РµРЅРЅС‹Р№ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё
     /// </summary>
     public static class TagHelper{
         /// <summary>
-        /// Конвертирует словарь в таг-строку
+        /// РљРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ СЃР»РѕРІР°СЂСЊ РІ С‚Р°Рі-СЃС‚СЂРѕРєСѓ
         /// </summary>
         /// <param name="tags"></param>
         /// <returns></returns>
@@ -41,7 +42,7 @@ namespace Qorpent.Utils.Extensions{
             return result.ToString().Trim();
         }
         /// <summary>
-        /// Конвертирует словарь в таг-строку
+        /// РљРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ СЃР»РѕРІР°СЂСЊ РІ С‚Р°Рі-СЃС‚СЂРѕРєСѓ
         /// </summary>
         /// <param name="tags"></param>
         /// <returns></returns>
@@ -55,7 +56,7 @@ namespace Qorpent.Utils.Extensions{
             return result.ToString().Trim();
         }
         /// <summary>
-        /// Производит экранизаци
+        /// РџСЂРѕРёР·РІРѕРґРёС‚ СЌРєСЂР°РЅРёР·Р°С†Рё
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
@@ -64,7 +65,7 @@ namespace Qorpent.Utils.Extensions{
         }
 
         /// <summary>
-        /// Производит де-экранизацию значения
+        /// РџСЂРѕРёР·РІРѕРґРёС‚ РґРµ-СЌРєСЂР°РЅРёР·Р°С†РёСЋ Р·РЅР°С‡РµРЅРёСЏ
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
@@ -72,7 +73,7 @@ namespace Qorpent.Utils.Extensions{
             return val.Replace("~", ":").Replace("`", "/");
         }
         /// <summary>
-        /// Производит сопоставление тега с маской
+        /// РџСЂРѕРёР·РІРѕРґРёС‚ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ С‚РµРіР° СЃ РјР°СЃРєРѕР№
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="tagmask"></param>
@@ -140,7 +141,7 @@ namespace Qorpent.Utils.Extensions{
         }
 
         /// <summary>
-		/// Убирает таг из строки
+		/// РЈР±РёСЂР°РµС‚ С‚Р°Рі РёР· СЃС‚СЂРѕРєРё
 		/// </summary>
 		/// <param name="tags"></param>
 		/// <param name="tag"></param>
@@ -157,7 +158,7 @@ namespace Qorpent.Utils.Extensions{
         }
 
 		/// <summary>
-		/// Устанавливает таг в строке
+		/// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚Р°Рі РІ СЃС‚СЂРѕРєРµ
 		/// </summary>
 		/// <param name="tags"></param>
 		/// <param name="tagname"></param>
@@ -180,7 +181,7 @@ namespace Qorpent.Utils.Extensions{
             return ToString(dict);
         }
 		/// <summary>
-		/// Объединяет две таг строки
+		/// РћР±СЉРµРґРёРЅСЏРµС‚ РґРІРµ С‚Р°Рі СЃС‚СЂРѕРєРё
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="source"></param>
@@ -189,7 +190,7 @@ namespace Qorpent.Utils.Extensions{
 			return ToString(Merge(Parse(target), Parse(source)));
 		}
 		/// <summary>
-		/// Объединяет два словаря
+		/// РћР±СЉРµРґРёРЅСЏРµС‚ РґРІР° СЃР»РѕРІР°СЂСЏ
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="source"></param>
@@ -205,7 +206,7 @@ namespace Qorpent.Utils.Extensions{
             return target;
         }
 		/// <summary>
-		/// Проверяет, есть ли у строки заданный тег
+		/// РџСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё Сѓ СЃС‚СЂРѕРєРё Р·Р°РґР°РЅРЅС‹Р№ С‚РµРі
 		/// </summary>
 		/// <param name="tags"></param>
 		/// <param name="tagname"></param>
@@ -215,7 +216,7 @@ namespace Qorpent.Utils.Extensions{
             return dict.ContainsKey(tagname);
         }
         /// <summary>
-        /// Возвращает значение тага
+        /// Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ С‚Р°РіР°
         /// </summary>
         /// <param name="tags"></param>
         /// <param name="tagname"></param>
@@ -226,7 +227,7 @@ namespace Qorpent.Utils.Extensions{
 	        return "";
         }
 		/// <summary>
-		/// Парсит строку тегов в словарь
+		/// РџР°СЂСЃРёС‚ СЃС‚СЂРѕРєСѓ С‚РµРіРѕРІ РІ СЃР»РѕРІР°СЂСЊ
 		/// </summary>
 		/// <param name="tags"></param>
 		/// <returns></returns>
@@ -252,6 +253,10 @@ namespace Qorpent.Utils.Extensions{
                 }
             }
             return result;
+        }
+
+        public static string TagGet(this IWithTag tagged, string name) {
+            return TagHelper.Value(tagged.Tag, name);
         }
     }
 }

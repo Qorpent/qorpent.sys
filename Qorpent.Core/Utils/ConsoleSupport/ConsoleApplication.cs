@@ -56,7 +56,7 @@ namespace Qorpent.Utils{
 				if (null != log){
 					log.Synchronize();
 				}
-			}
+            }
 		}
 	}
 }

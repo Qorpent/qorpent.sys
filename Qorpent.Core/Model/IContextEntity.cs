@@ -18,7 +18,7 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Базовый интерфейс для классов данных, с поддержкой отнесенности к контексту
+	/// 	Р‘Р°Р·РѕРІС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ РґР»СЏ РєР»Р°СЃСЃРѕРІ РґР°РЅРЅС‹С…, СЃ РїРѕРґРґРµСЂР¶РєРѕР№ РѕС‚РЅРµСЃРµРЅРЅРѕСЃС‚Рё Рє РєРѕРЅС‚РµРєСЃС‚Сѓ
 	/// </summary>
-	public interface IContextEntity : IEntity, IWithActive, IWithDateRange {}
+	public interface IContextEntity<T> : IEntity<T>, IWithActive, IWithDateRange {}
 }

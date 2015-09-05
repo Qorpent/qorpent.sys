@@ -44,7 +44,7 @@ namespace Qorpent.Core.Tests.Experiments {
             }
         }
 
-        public void WriteValue(object obj, bool ignorechecking = false) {
+        public void WriteValue(object obj, bool ignorechecking = false,string mode =null) {
             if (!ignorechecking) {
                 if (InArray) {
                     if (ArrayCount > 0) {
@@ -57,10 +57,10 @@ namespace Qorpent.Core.Tests.Experiments {
                     throw new Exception("invalid state");
                 }
             }
-            Qorpent.Experiments.Json.Write(obj, _out,"", _options);
+            Qorpent.Experiments.Json.Write(obj, _out,mode??"", _options );
         }
 
-        public void WriteProperty(string name, object value, bool notnullonly = false) {
+        public void WriteProperty(string name, object value, bool notnullonly = false,string mode = null) {
             if(notnullonly && !value.ToBool())return;
             if (!InObj) {
                 throw new Exception("invalid state");
@@ -71,7 +71,7 @@ namespace Qorpent.Core.Tests.Experiments {
             PropCount++;
             _out.Write("\""+name.Escape(EscapingType.JsonValue)+"\"");
             _out.Write(":");
-            WriteValue(value,true);
+            WriteValue(value,true,mode);
         }
 
         public bool InObj {
