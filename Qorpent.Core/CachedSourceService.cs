@@ -45,7 +45,7 @@ namespace Qorpent {
             {
                 result.Total += subquery.Total;
                 result.Size += subquery.Size;
-                foreach (var i in subquery.Items)
+                foreach (var i in subquery.TypedItems)
                 {
 
                     items.Add(i);
@@ -66,10 +66,10 @@ namespace Qorpent {
                 }
             }
             if (typeof (IWithIndex).IsAssignableFrom(typeof (TResult))) {
-                result.Items = items.OfType<IWithIndex>().OrderBy(_ => _.Idx).OfType<TResult>().ToArray();
+                result.TypedItems = items.OfType<IWithIndex>().OrderBy(_ => _.Idx).OfType<TResult>().ToArray();
             }
             else {
-                result.Items = items.ToArray();
+                result.TypedItems = items.ToArray();
             }
             return result;
 

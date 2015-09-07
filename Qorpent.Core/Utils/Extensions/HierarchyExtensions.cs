@@ -17,11 +17,11 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="root">root item of hierarchy</param>
 		/// <typeparam name="T"></typeparam>
 		/// <exception cref="Exception">children has illegal parent defined</exception>
-		public static void NormalizeParentInHierarchy<T>(this T root) 
-			where  T: class,IWithHierarchy<T>,IWithId,IWithCode {
+		public static void NormalizeParentInHierarchy<T,TID>(this T root) 
+			where  T: class,IWithHierarchy<T>,IWithId<TID>,IWithCode {
 			if (null == root) return;
 			if (!root.HasChildren()) return;
-			var childrenWithErrorParent = root.Children.Where(_ =>_.ParentId.HasValue && root.Id!=_.ParentId.Value || !string.IsNullOrWhiteSpace(_.ParentCode) && root.Code!=_.ParentCode ).ToArray();
+			var childrenWithErrorParent = root.Children.Where(_ =>_.ParentId.HasValue && root.Id.ToLong()!=_.ParentId.Value || !string.IsNullOrWhiteSpace(_.ParentCode) && root.Code!=_.ParentCode ).ToArray();
 			if (0 != childrenWithErrorParent.Length) {
 				throw new Exception(string.Format("the row {0} has {1} children with not matched parent", root, childrenWithErrorParent.Length));
 			}
@@ -30,7 +30,7 @@ namespace Qorpent.Utils.Extensions {
 				i.Parent =  root;
 			}
 			foreach (var c in root.Children.ToArray()) {
-				c.NormalizeParentInHierarchy();
+				c.NormalizeParentInHierarchy<T,TID>();
 			}
 		}
 
@@ -39,8 +39,8 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static IEnumerable<T> GetAllHierarchy<T>(this T item, bool useDebug = false, int level = 0)
-			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId {
+		public static IEnumerable<T> GetAllHierarchy<T,TID>(this T item, bool useDebug = false, int level = 0)
+			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId<TID> {
 			if (null == item)
 				yield break;
 			yield return item;
@@ -55,7 +55,7 @@ namespace Qorpent.Utils.Extensions {
 				Console.Write("\n");
 			}
 
-			foreach (var k in item.Children.SelectMany(child => child.GetAllHierarchy(useDebug, level + 1))) {
+			foreach (var k in item.Children.SelectMany(child => child.GetAllHierarchy<T,TID>(useDebug, level + 1))) {
 				yield return k;
 			}
 		}	
@@ -66,13 +66,13 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="item"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static IEnumerable<T> GetSelfAndDescendantsFromHierarchy<T>(this T item)
-			where T : class, IWithHierarchy<T>, IWithCode, IWithId
+		public static IEnumerable<T> GetSelfAndDescendantsFromHierarchy<T,TID>(this T item)
+			where T : class, IWithHierarchy<T>, IWithCode, IWithId<TID>
 		{
 			if(null==item)yield break;
 			yield return  item;
 			if(!item.HasChildren())yield break;
-			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromHierarchy())) {
+			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromHierarchy<T,TID>())) {
 				yield return i;
 			}
 		}
@@ -102,14 +102,14 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="items">set of elements that must be joined into hierarchy</param>
 		/// <typeparam name="T"></typeparam>
 		/// <exception cref="Exception"></exception>
-		public static IEnumerable<T> BuildHierarchy<T>(this IEnumerable<T> items)
-			where T : class,IWithHierarchy<T>,IWithId,IWithCode {
+		public static IEnumerable<T> BuildHierarchy<T,TID>(this IEnumerable<T> items)
+			where T : class,IWithHierarchy<T>,IWithId<TID>,IWithCode {
 			var itemsarray = items.ToArray();
 			foreach (var i in itemsarray) {
-				i.NormalizeParentInHierarchy();
+				i.NormalizeParentInHierarchy<T,TID>();
 			}
 			var alldict =
-				itemsarray.SelectMany(_ => _.GetSelfAndDescendantsFromHierarchy())
+				itemsarray.SelectMany(_ => _.GetSelfAndDescendantsFromHierarchy<T,TID>())
 				          .GroupBy(_ =>new{id=_.Id,code=_.Code})
 						  .ToDictionary(_=>_.Key,_ => _.FirstOrDefault(__=>__.IsParentDefined())  ?? _.First());
 			var allvalues = alldict.Values.ToArray();
@@ -118,7 +118,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			foreach (var i in allvalues) {
 				if (i.IsParentDefined()) {
-					var key = new {id = i.ParentId.HasValue ? i.ParentId.Value : 0, code = i.ParentCode ?? ""};
+					var key = new {id = (i.ParentId.HasValue ? i.ParentId.Value : 0).To<TID>(), code = i.ParentCode ?? ""};
 					if (!alldict.ContainsKey(key)) {
 						throw new Exception("some invalid parent definition in "+i+": "+key);
 					}
@@ -156,10 +156,10 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="test"></param>
 		/// <param name="propagation"></param>
 		/// <typeparam name="T"></typeparam>
-		public static void MarkHierarchy<T>(this T hierarchy, string markname, Func<T, bool> test,
+		public static void MarkHierarchy<T,TID>(this T hierarchy, string markname, Func<T, bool> test,
 		                                    HierarchyPropagation propagation = HierarchyPropagation.None)
-			where T : class, IWithHierarchy<T>, IWithId, IWithCode, IWithProperties {
-			var all = hierarchy.GetSelfAndDescendantsFromHierarchy().Reverse().ToArray(); //force leaf nodes to process first
+			where T : class, IWithHierarchy<T>, IWithId<TID>, IWithCode, IWithProperties {
+			var all = hierarchy.GetSelfAndDescendantsFromHierarchy<T,TID>().Reverse().ToArray(); //force leaf nodes to process first
 			foreach (var _ in all) {
 				_.LocalProperties[markname] = false;
 			}
@@ -182,11 +182,11 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="markname"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T CleanupHierarchy<T>(this T hierarchy, string markname)
-			where T : class, IWithHierarchy<T>, IWithId, IWithCode, IWithProperties {
+		public static T CleanupHierarchy<T,TID>(this T hierarchy, string markname)
+			where T : class, IWithHierarchy<T>, IWithId<TID>, IWithCode, IWithProperties {
 			if (!hierarchy.LocalProperties.ContainsKey(markname) || !(bool) hierarchy.LocalProperties[markname]) return null;
 			var nonmarked =
-				hierarchy.GetSelfAndDescendantsFromHierarchy()
+				hierarchy.GetSelfAndDescendantsFromHierarchy<T,TID>()
 				         .Where(_ => !_.LocalProperties.ContainsKey(markname) || !(bool) _.LocalProperties[markname])
 				         .ToArray();
 			foreach (var nm in nonmarked) {

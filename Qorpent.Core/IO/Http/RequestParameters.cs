@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Http
 {
+    public interface IWebContextBound {
+        void SetWebContext(WebContext context,IScope scope);
+    }
+
 	/// <summary>
 	/// Набор параметров запроса
 	/// </summary>
@@ -93,6 +98,17 @@ namespace Qorpent.IO.Http
 	        }
 	        return null;
 	    }
+
+	    public IDictionary<string, object> AsJson() {
+	        var result = new Dictionary<string,object>();
+            result.extend(FormJson);
+            result.extend(QueryJson);
+            foreach (var parameter in GetParameters()) {
+	            result[parameter.Key] = parameter.Value;
+	        }
+	        return result;
+	    }  
+
 		/// <summary>
 		/// 
 		/// </summary>

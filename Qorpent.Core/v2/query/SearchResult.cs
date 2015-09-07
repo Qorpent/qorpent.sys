@@ -2,15 +2,16 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
+using Qorpent;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 
 namespace qorpent.v2.query {
     public  class SearchResult: IJsonSerializable {
         public bool IsLastPage;
-
-        public virtual object[] Native { get; set; }
+        public string Id { get; set; }
+       
+        public virtual object[] Items { get; set; }
         public bool NoChange;
         public int OffSet;
         public int Page;
@@ -19,6 +20,9 @@ namespace qorpent.v2.query {
         public string TimeStamp;
         public int Total;
         public bool Ok;
+        public SearchState Status { get; set; }
+        public IScope Scope { get; set; }
+
         public Exception Error;
 
         public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
@@ -34,6 +38,7 @@ namespace qorpent.v2.query {
 
             writer.WriteProperty("nochange", NoChange);
             writer.WriteProperty("timestamp",TimeStamp);
+            writer.WriteProperty("status",Status);
 
             writer.WriteProperty("ok",Ok);
             if (null != Error) {
@@ -74,7 +79,7 @@ namespace qorpent.v2.query {
         }
 
         protected virtual IEnumerable GetMainItems() {
-            return Native;
+            return Items;
 
         }
 
@@ -82,21 +87,22 @@ namespace qorpent.v2.query {
     }
 
     public class SearchResult<T> : SearchResult {
-        public T[] Items;
+        public T[] TypedItems;
         private object[] _native;
 
-        public override object[] Native
+
+        public override object[] Items
         {
-            get { return _native ?? (_native = Items.OfType<object>().ToArray()); }
+            get { return _native ?? (_native = TypedItems.OfType<object>().ToArray()); }
             set { _native = value; }
         }
 
         protected override IEnumerable GetNative() {
-            return null == Items ? Native : null;
+            return null == TypedItems ? Items : null;
         }
 
         protected override IEnumerable GetMainItems() {
-            return Items ?? (IEnumerable)Native;
+            return TypedItems ?? (IEnumerable)Items;
         }
     }
 }

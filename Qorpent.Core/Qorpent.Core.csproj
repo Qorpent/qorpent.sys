@@ -413,6 +413,7 @@
     <Compile Include="v2\model\Item.cs" />
     <Compile Include="v2\query\IObjectSource.cs" />
     <Compile Include="v2\query\ObjectSourceBase.cs" />
+    <Compile Include="v2\query\SearchState.cs" />
     <Compile Include="v2\reports\core\IReportRender.cs" />
     <Compile Include="v2\reports\core\IReportAgent.cs" />
     <Compile Include="v2\reports\core\IReportContext.cs" />

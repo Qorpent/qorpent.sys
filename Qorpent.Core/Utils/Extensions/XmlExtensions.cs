@@ -327,6 +327,16 @@ namespace Qorpent.Utils.Extensions {
 			return null != attr ? attr.Value : sourceElement.Parent.ResolveAttr(name);
 		}
 
+	    public static XElement GetRoot(this XElement e) {
+	        var c = e;
+	        while (true) {
+	            if (null == c.Parent) {
+	                return c;
+	            }
+	            c = c.Parent;
+	        }
+	    }
+
 		/// <summary>
 		/// 	Replaces all non-match XName symbols in given string with special substitutes
 		/// </summary>

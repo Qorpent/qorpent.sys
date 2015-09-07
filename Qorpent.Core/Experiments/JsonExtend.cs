@@ -28,6 +28,18 @@ namespace Qorpent.Experiments
             return source;
         }
 
+
+        public static IDictionary<string, object> extend(this IDictionary<string, object> target, object source,
+            bool clone = false) {
+            var result = target;
+            if (clone) {
+                result= new Dictionary<string, object>();
+                Extend(result, target);
+            }
+            Extend(result, source);
+            return result;
+        } 
+
         public static object ExtendNotJsoned(object target, object source) {
             if (null == source) return Json.Jsonify(target);
             return Extend(Json.Jsonify(target), Json.Jsonify(source));

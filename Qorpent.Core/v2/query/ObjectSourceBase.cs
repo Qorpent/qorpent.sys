@@ -21,7 +21,7 @@ namespace qorpent.v2.query {
         public abstract SearchResult<T> Search(object query = null, IScope scope = null);
 
         public virtual IEnumerable<T> SearchAll(object query = null, IScope scope = null) {
-            return Search(query, scope).Items;
+            return Search(query, scope).TypedItems;
         }
     }
 }
