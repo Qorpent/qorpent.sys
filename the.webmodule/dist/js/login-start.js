@@ -174,6 +174,12 @@ require.config({
                                         $scope.$tryApply(function () {
                                             $scope.user.auth = true;
                                             $scope.user.info = data;
+                                            $scope.user.info.user = $scope.user.info.user || {
+                                                name : $scope.user.info.name
+                                            }
+                                            $scope.user.info.token = $scope.user.info.token || {
+
+                                            }
                                         });
                                     });
                                 } else {
@@ -285,6 +291,12 @@ require.config({
                                 $scope.$apply(function () {
                                     $scope.user.auth = true;
                                     $scope.user.info = data;
+                                    $scope.user.info.user = $scope.user.info.user || {
+                                        name : $scope.user.info.name
+                                    }
+                                    $scope.user.info.token = $scope.user.info.token || {
+
+                                    }
                                 });
                             });
                         }

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Activation;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.Json;
@@ -713,7 +714,26 @@ namespace Qorpent.Experiments {
             if (data is XElement) {
                 return JsonifyXml((XElement) data);
             }
+            if (data is Exception) {
+                return JsonifyException(data as Exception);
+            }
             return Jsonify(data);
+        }
+
+        public static IDictionary<string,object> JsonifyException(Exception exception) {
+            var result = new Dictionary<string, object> {
+                ["type"] = exception.GetType().Name,
+                ["message"] = exception.Message,
+                ["stack"] = exception.StackTrace
+            };
+            var agg = exception as AggregateException;
+            if (null != agg) {
+                result["exceptions"] = agg.InnerExceptions.Select(JsonifyException).OfType<object>().ToArray();
+            }
+            if (null != exception.InnerException) {
+                result["innerexception"] = JsonifyException(exception.InnerException);
+            }
+            return result;
         }
 
         private static object JsonifyXml(XElement data) {
@@ -738,8 +758,8 @@ namespace Qorpent.Experiments {
             return Select(data, path);
         }
 
-        public static string str(this object data, string path)
-        {
+        public static string str(this object data, string path) {
+            if (null == data) return null;
             var result = Get(data, path);
             string r = null;
             if (null != result)
@@ -747,6 +767,36 @@ namespace Qorpent.Experiments {
                 r = result.ToStr();
             }
             return r;
+        }
+
+
+        public static IDictionary<string, object> renameKeys(this IDictionary<string, object> dict,
+            Func<string, object, string, string> renamer, string path = "") {
+            foreach (var p  in dict.ToArray()) {
+                var k = p.Key;
+                var newkey = renamer(k, p.Value, path);
+                if (k != newkey) {
+                    dict[newkey] = p.Value;
+                    dict.Remove(k);
+                }
+                var subdict = p.Value as IDictionary<string, object>;
+                if (null != subdict) {
+                    subdict.renameKeys(renamer, path == "" ? newkey : (path + "." + newkey));
+                }
+                var subarr = p.Value as object[];
+                if (null != subarr) {
+                    var i = -1;
+                    foreach (var o in subarr) {
+                        i++;
+                        var m = o as Map;
+                        if (null != m) {
+                            m.renameKeys(renamer,
+                                path == "" ? (newkey + "[" + i + "]") : (path + "." + newkey + "[" + i + "]"));
+                        }
+                    }
+                }
+            }
+            return dict;
         }
 
 
@@ -760,7 +810,7 @@ namespace Qorpent.Experiments {
             }
             if (!string.IsNullOrWhiteSpace(r)) return r;
             if (null == paths || 0 == paths.Length) return r;
-            return paths.FirstOrDefault(_ =>!string.IsNullOrWhiteSpace( str(data, _)));
+            return paths.Select(_ => Get(data, _)).FirstOrDefault(_ => null != _).ToStr();
         }
 
         public static int resolvenum(this object data, string path, params string[] paths)
@@ -771,10 +821,12 @@ namespace Qorpent.Experiments {
                 return result.ToInt();
             }
             if (null == paths || 0 == paths.Length) return r;
-            return paths.FirstOrDefault(_ => null!=Get(data,_)).ToInt();
+
+            return paths.Select(_ => Get(data, _)).FirstOrDefault(_ => null != _).ToInt();
+
         }
 
-
+         
 
 
 
@@ -800,6 +852,7 @@ namespace Qorpent.Experiments {
         }
 
         public static object[] arr(this object data, string path) {
+            if (null == data) return null;
             return (Get(data, path) as object[]);
         }
         public static IDictionary<string,object>[] arrobj(this object data, string path) {
@@ -818,22 +871,22 @@ namespace Qorpent.Experiments {
             return Get(obj, name) as IDictionary<string, object>;
         }
 
-        public static object arr0(this object data, string path)
-        {
+        public static object arr0(this object data, string path) {
+            if (null == data) return null;
             var _arr = (Get(data, path) as object[]);
             if (null == _arr || 0 == _arr.Length) return null;
             return _arr[0];
         }
 
-        public static string arr0s(this object data, string path)
-        {
+        public static string arr0s(this object data, string path) {
+            if (null == data) return null;
             var _arr = (Get(data, path) as object[]);
             if (null == _arr || 0 == _arr.Length) return null;
             return _arr[0].ToStr();
         }
 
-        public static Map map(this object data, string path)
-        {
+        public static Map map(this object data, string path) {
+            if (null == data) return null;
             return Get(data, path) as Map;
         }
 

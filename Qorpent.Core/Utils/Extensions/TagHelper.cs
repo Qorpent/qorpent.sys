@@ -81,17 +81,20 @@ namespace Qorpent.Utils.Extensions{
         public static bool Match(string tag, string tagmask) {
             var srcdict = Parse(tag);
             var maskdict = Parse(tagmask);
-            
+            return Match(srcdict, maskdict);
+        }
+
+        private static bool Match(IDictionary<string, string> srcdict, IDictionary<string, string> maskdict) {
             foreach (var md in maskdict) {
                 var key = md.Key;
                 var testval = md.Value;
                 var negateKey = key.StartsWith("!");
-                key = negateKey ? key.Substring(1):key;
+                key = negateKey ? key.Substring(1) : key;
                 var negateValue = testval.StartsWith("!");
                 testval = negateValue ? testval.Substring(1) : testval;
                 var found = false;
                 if (key.StartsWith("*")) {
-                    found = MatchWithRegexKey(srcdict, key.Substring(1),testval,negateKey,negateValue);
+                    found = MatchWithRegexKey(srcdict, key.Substring(1), testval, negateKey, negateValue);
                 }
                 else {
                     if (negateKey) {
@@ -104,7 +107,9 @@ namespace Qorpent.Utils.Extensions{
                         }
                     }
                 }
-                if(!found)return false;
+                if (!found) {
+                    return false;
+                }
             }
             return true;
         }
@@ -189,12 +194,21 @@ namespace Qorpent.Utils.Extensions{
 		public static string Merge(string target, string source) {
 			return ToString(Merge(Parse(target), Parse(source)));
 		}
-		/// <summary>
-		/// Объединяет два словаря
-		/// </summary>
-		/// <param name="target"></param>
-		/// <param name="source"></param>
-		/// <returns></returns>
+
+        public static bool Match(string tag, Dictionary<string, string> tagmatch) {
+            if(null==tagmatch)return true;
+            if (string.IsNullOrWhiteSpace(tag)) return false;
+            if (0 == tagmatch.Count) return true;
+            var dict = Parse(tag);
+            return Match(dict, tagmatch);
+        }
+
+        /// <summary>
+        /// Объединяет два словаря
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IDictionary<string, string> Merge(IDictionary<string, string> target, IDictionary<string, string> source)
         {
             foreach (var val in source){

@@ -26,6 +26,8 @@ namespace Qorpent.IO.Net{
 	///     Утилиты парсинга HTTP
 	/// </summary>
 	public static class HttpUtils{
+        
+
 		/// <summary>
 		///     Преобразует хидер куки в набор объектов куки
 		/// </summary>

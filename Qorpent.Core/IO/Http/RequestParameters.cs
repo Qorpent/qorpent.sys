@@ -103,10 +103,15 @@ namespace Qorpent.IO.Http
 	        var result = new Dictionary<string,object>();
             result.extend(FormJson);
             result.extend(QueryJson);
-            foreach (var parameter in GetParameters()) {
-	            result[parameter.Key] = parameter.Value;
-	        }
-	        return result;
+            foreach (var p in Query)
+            {
+                result[p.Key] = p.Value;
+            }
+            foreach (var p in Form)
+            {
+                result[p.Key] = p.Value;
+            }
+            return result;
 	    }  
 
 		/// <summary>

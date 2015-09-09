@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Qorpent;
@@ -17,11 +18,15 @@ namespace qorpent.v2.query {
         public int Page;
         public int PageCount;
         public int Size;
-        public string TimeStamp;
+        public string Hash;
+        public DateTime Timestamp;
         public int Total;
         public bool Ok;
         public SearchState Status { get; set; }
         public IScope Scope { get; set; }
+        public string Session { get; set; }
+        public int Count { get; set; }
+        public IDictionary<string, object> DebugInfo { get; set; } = new Dictionary<string, object>();
 
         public Exception Error;
 
@@ -31,13 +36,15 @@ namespace qorpent.v2.query {
             writer.WriteProperty("total", Total);
             writer.WriteProperty("offset", OffSet);
             writer.WriteProperty("size", Size);
+            writer.WriteProperty("count", Count);
 
             writer.WriteProperty("page", Page);
             writer.WriteProperty("pagecount", PageCount);
             writer.WriteProperty("islastpage",IsLastPage);
 
             writer.WriteProperty("nochange", NoChange);
-            writer.WriteProperty("timestamp",TimeStamp);
+            writer.WriteProperty("hash",Hash,true);
+            writer.WriteProperty("timestamp",Timestamp,true);
             writer.WriteProperty("status",Status);
 
             writer.WriteProperty("ok",Ok);
@@ -51,24 +58,29 @@ namespace qorpent.v2.query {
                 writer.CloseProperty();
             }
 
-            var mainitems = GetMainItems();
-            writer.OpenProperty("items");
-            writer.OpenArray();
-            foreach (var item in mainitems) {
-                writer.WriteObject(item,mode);
+            if (null != DebugInfo && 0 != DebugInfo.Count) {
+                writer.WriteProperty("debug",DebugInfo);
             }
-            writer.CloseArray();
-            writer.CloseProperty();
-            var native = GetNative();
-            if (null!=native) {
-                writer.OpenProperty("native");
+
+            var mainitems = GetMainItems();
+            if (null != mainitems) {
+                writer.OpenProperty("items");
                 writer.OpenArray();
-                foreach (var item in native)
-                {
+                foreach (var item in mainitems) {
                     writer.WriteObject(item, mode);
                 }
                 writer.CloseArray();
                 writer.CloseProperty();
+                var native = GetNative();
+                if (null != native) {
+                    writer.OpenProperty("native");
+                    writer.OpenArray();
+                    foreach (var item in native) {
+                        writer.WriteObject(item, mode);
+                    }
+                    writer.CloseArray();
+                    writer.CloseProperty();
+                }
             }
             writer.CloseObject();
         }
