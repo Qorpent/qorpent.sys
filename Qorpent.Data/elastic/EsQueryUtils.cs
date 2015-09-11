@@ -43,12 +43,12 @@ namespace bit.cross.accident.services.query {
         }
 
         public static IDictionary<string, object> QSetHighlight(this IDictionary<string, object> query, string field,
-            int number_of_fragments = 1, int fragment_size =10000) {
+            int number_of_fragments = 1, int fragment_size =100000) {
             if (number_of_fragments == 0) {
                 number_of_fragments = 1;
             }
             if (fragment_size == 0) {
-                fragment_size = 20000;
+                fragment_size = 100000;
             }
             var h = query.map("highlight") ?? ((Map) (query["highlight"] = new Map()));
             if (!h.ContainsKey("fields")) {

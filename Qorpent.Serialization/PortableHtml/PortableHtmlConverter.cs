@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Qorpent.PortableHtml{
@@ -421,7 +422,7 @@ namespace Qorpent.PortableHtml{
 		/// <param name="src"></param>
 		/// <param name="size"></param>
 		/// <returns></returns>
-		public string GetDigest(XElement src, int size = 400){
+		public string GetDigest(XElement src, int size = 400, bool keephighlight = false){
 			var images = src.Descendants("img").ToArray();
 			images.Remove();
 			var html = Convert(src);
@@ -429,19 +430,55 @@ namespace Qorpent.PortableHtml{
 			if (pars.Length == 0) {
 				return images.Length == 0 ? "(Документ не содержит текста)" : "(Документ состоит только из изображений)";
 			}
-			var strings = CollectSourceParasForDigest(size, pars);
-			var full = string.Join("... ", strings);
+		    IList<string> highlights = null;
+		    if (keephighlight) {
+                highlights = new List<string>();
+		        foreach (var highlight in src.DescendantsAndSelf("em")) {
+		            if (!highlights.Contains(highlight.Value)) {
+		                highlights.Add(highlight.Value);
+		            }
+		        }
+		    }
+			var strings = CollectSourceParasForDigest(size, pars,keephighlight);
+            if (keephighlight && highlights.Count!=0) {
+                var i = -1;
+                foreach (var s in strings.ToArray()) {
+                    i++;
+                    var _s = s;
+                    
+                    foreach (var highlight in highlights.OrderByDescending(_ => _.Length))
+                    {
+                        _s = _s.Replace(highlight, "<em>" + highlight + "</em>");
+                    }
+
+                    if(_s==s)continue;
+                    
+                    var xml = XElement.Parse("<div>" + _s + "</div>");
+                    var nest = xml.Descendants("em").Where(_ => _.Ancestors("em").Any()).Reverse().ToArray();
+                    foreach (var n in nest)
+                    {
+                        n.ReplaceWith(n.Value);
+                    }
+                    _s = xml.ToString();
+                    _s = _s.Substring(5, _s.Length - 11);
+                    strings[i] = _s;
+                }
+                
+            }
+            var full = string.Join("... ", strings);
 			if (full.Length > size*1.05){
-				CropDigest(size, full, strings);
+				CropDigest(size, full, strings,keephighlight);
 			}
 			else{
 				NoCropDigest(strings);
 					
 			}
+
 			var result = string.Join(" ", strings);	
 			if (result.Trim().Length <= 3){
 				return "(Документ не содержит текста)";
 			}
+		    
 			return result;
 		}
 
@@ -456,31 +493,87 @@ namespace Qorpent.PortableHtml{
 			}
 		}
 
-		private static void CropDigest(int size, string full, List<string> strings){
+		private static void CropDigest(int size, string full, List<string> strings, bool keephighlight){
 			var crop = (full.Length - size)/strings.Count;
-			for (var i = 0; i < strings.Count; i++){
+			for (var i = 0; i < strings.Count; i++) {
+			    var localcrop = crop;
 				var str = strings[i];
-				if (str.Length - crop <= 20){
-					crop += crop/2;
-					continue;
+				if (str.Length - crop <= 20) {
+				    localcrop = str.Length - Math.Min(str.Length, size/strings.Count);
+				    if (i != strings.Count - 1) {
+				        crop = crop + ((crop - localcrop)/(strings.Count - i - 1));
+				    }
 				}
-				var basis = str.Substring(0, str.Length - crop);
-				var ending = basis.LastIndexOf(' ');
-				basis = basis.Substring(0, ending);
-				if (!basis.EndsWith(".")){
-					basis = basis + "...";
-				}
-				else{
-					if (i != strings.Count - 1){
-						basis += "..";
-					}
-				}
+			    string basis = "";
+			    if (keephighlight && str.Contains("<em>")) {
+			        var start = Math.Max(0, str.IndexOf("<em>")-20);
+			        var end = str.LastIndexOf("</em>") + 20;
+			        if ((end - start) <= (size/strings.Count)) {
+			            var add = (size - (end - start))/2;
+			            start = start - add;
+			            end = end + add;
+			            if (start < 0) {
+			                start = 0;
+			            }
+			            if (end > str.Length - 1) {
+			                end = str.Length - 1;
+			            }
+			            basis = str.Substring(start, end - start)+"...";
+			        }
+			        else {
+			            end = str.IndexOf("</em>") + 20;
+			            if (end > str.Length - 1) {
+			                end = str.Length - 1;
+                        }
+                        basis = str.Substring(start, end - start)+"...";
+
+                    }
+
+			    }
+			    else {
+			        basis = str.Substring(0, str.Length - localcrop);
+                    var ending = basis.LastIndexOf(' ');
+                    basis = basis.Substring(0, ending);
+                    if (!basis.EndsWith("."))
+                    {
+                        basis = basis + "...";
+                    }
+                    else
+                    {
+                        if (i != strings.Count - 1)
+                        {
+                            basis += "..";
+                        }
+                    }
+                }
+			    
 				strings[i] = basis;
 			}
 		}
 
-		private static List<string> CollectSourceParasForDigest(int size, XElement[] pars){
-			var strings = new List<string>();
+		private static List<string> CollectSourceParasForDigest(int size, XElement[] pars, bool keephighlight) {
+		    
+            
+		    if (keephighlight) {
+                var realpars = new List<XElement>();
+                var highlighted = pars.Where(_ => _.Descendants("em").Any()).ToArray();
+		        if (highlighted.Length != 0) {
+		            if (highlighted.Length <= 2 && highlighted[0]!=pars[0] && (highlighted.Sum(_=>_.Value.Length)<size) && size>=400) {
+		                realpars.Add(pars[0]);
+		            }
+                    realpars.AddRange(highlighted);
+		            if (realpars.Count <= 2 && realpars[realpars.Count-1]!=pars[pars.Length-1]) {
+		                realpars.Add(pars[pars.Length-1]);
+		            }
+
+		            pars = realpars.ToArray();
+		        }
+		        
+		    }
+            
+		    
+            var strings = new List<string>();
+
 			strings.Add(pars[0].Value);
 			if (pars.Length >= 5 && size >= 600){
 				strings.Add(pars[pars.Length/2 - 1].Value);

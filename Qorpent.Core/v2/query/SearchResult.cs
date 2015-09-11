@@ -27,6 +27,7 @@ namespace qorpent.v2.query {
         public string Session { get; set; }
         public int Count { get; set; }
         public IDictionary<string, object> DebugInfo { get; set; } = new Dictionary<string, object>();
+        public IDictionary<string, object> Custom { get; set; } = new Dictionary<string, object>();
 
         public Exception Error;
 
@@ -60,6 +61,10 @@ namespace qorpent.v2.query {
 
             if (null != DebugInfo && 0 != DebugInfo.Count) {
                 writer.WriteProperty("debug",DebugInfo);
+            }
+            if (null != Custom && 0 != Custom.Count)
+            {
+                writer.WriteProperty("custom", Custom);
             }
 
             var mainitems = GetMainItems();
