@@ -638,13 +638,8 @@ namespace Qorpent.Host {
                         return null;
                     };
                     AppDomain.CurrentDomain.AssemblyResolve += h;
-                    try {
-                        assembly = Assembly.Load(File.ReadAllBytes(file));
-                        Console.WriteLine(assembly.GetName().ToString()+" loaded!");
-                    }
-                    finally {
-                        AppDomain.CurrentDomain.AssemblyResolve -= h;
-                    }
+                    assembly = Assembly.Load(File.ReadAllBytes(file));
+                    
                 }
                 else {
                     assembly = Assembly.Load(assemblyName);
