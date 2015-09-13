@@ -65,7 +65,7 @@ namespace Qorpent.Host.Static {
                 ExactOnly = false,
                 Root = EnvironmentInfo.ResolvePath(_host.Config.RootFolder)
             });
-            foreach (var assembly in  _host.Config.AutoconfigureAssemblies.Select(Assembly.Load).ToArray()) {
+            foreach (var assembly in  _host.Config.AutoconfigureAssemblies.Where(_=>!(_.Contains("\\")||_.Contains("/"))).Select(Assembly.Load).ToArray()) {
                 _host.Config.Log.Info("Resource-Content from " + assembly.GetName().Name + " added");
                 Resolver.Register(new ResourceWebFileProvider {Assembly = assembly});
             }

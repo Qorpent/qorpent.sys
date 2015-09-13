@@ -28,27 +28,29 @@ namespace qorpent.v2.query {
         public int Count { get; set; }
         public IDictionary<string, object> DebugInfo { get; set; } = new Dictionary<string, object>();
         public IDictionary<string, object> Custom { get; set; } = new Dictionary<string, object>();
+        public string Message { get; set; }
 
         public Exception Error;
 
         public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
             var writer = new JsonWriter(output,pretty:pretty,level:level);
             writer.OpenObject();
-            writer.WriteProperty("total", Total);
-            writer.WriteProperty("offset", OffSet);
-            writer.WriteProperty("size", Size);
-            writer.WriteProperty("count", Count);
+            writer.WriteProperty("total", Total,true);
+            writer.WriteProperty("offset", OffSet, true);
+            writer.WriteProperty("size", Size, true);
+            writer.WriteProperty("count", Count, true);
 
-            writer.WriteProperty("page", Page);
-            writer.WriteProperty("pagecount", PageCount);
-            writer.WriteProperty("islastpage",IsLastPage);
+            writer.WriteProperty("page", Page, true);
+            writer.WriteProperty("pagecount", PageCount, true);
+            writer.WriteProperty("islastpage",IsLastPage, true);
 
-            writer.WriteProperty("nochange", NoChange);
+            writer.WriteProperty("nochange", NoChange, true);
             writer.WriteProperty("hash",Hash,true);
             writer.WriteProperty("timestamp",Timestamp,true);
-            writer.WriteProperty("status",Status);
+            writer.WriteProperty("status",Status, true);
 
             writer.WriteProperty("ok",Ok);
+            writer.WriteProperty("message",Message,true);
             if (null != Error) {
                 writer.OpenProperty("error");
                 writer.OpenObject();

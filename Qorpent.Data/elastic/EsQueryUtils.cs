@@ -1,8 +1,79 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+using Qorpent.BSharp;
 using Qorpent.Experiments;
 using Map = System.Collections.Generic.Dictionary<string,object>;
 namespace bit.cross.accident.services.query {
+
+    public enum UpdateOperation {
+        Insert,
+        Update,
+        Ensure,
+        Remove
+    }
+    public static class EsGroovyUtils {
+        public static string BuildUpdateArrayScript(string arrayname, object item,
+            UpdateOperation op = UpdateOperation.Update, string keyname = "key") {
+            if (null == item) {
+                throw new ArgumentNullException(nameof(item));
+            }
+            var sb = new StringBuilder();
+            string n = "";
+            sb.AppendLine("def _src = ctx._source;");
+            sb.AppendLine("def _t = _src;");
+            var path = arrayname.Split('.');
+            for (var i = 0; i < path.Length - 1; i++) {
+                n = path[i];
+                if (op == UpdateOperation.Remove) {
+                    sb.AppendLine(string.Format("if(!_t['{0}'])return;_t=_t['{0}'];", n));
+                }
+                else {
+                    sb.AppendLine(string.Format("if(!_t['{0}']){{_t['{0}']=[,]}};_t=_t['{0}'];", n));
+                }
+            }
+            n = path[path.Length - 1];
+            if (op == UpdateOperation.Remove) {
+                sb.AppendLine(string.Format("if(!_t['{0}'])return;_t=_t['{0}'];", n));
+            }
+            else {
+                sb.AppendLine(string.Format("if(!_t['{0}']){{_t['{0}']=[]}};_t=_t['{0}'];", n));
+            }
+            var jval = item.stringify();
+            if (item is string || item.GetType().IsValueType) {
+
+                sb.AppendLine("_t.remove(" + jval + ");");
+                if (op != UpdateOperation.Remove) {
+                    sb.AppendLine("_t.add(" + jval + ");");
+                }
+            }
+            else {
+                item = item.jsonify();
+                var grovyobj = jval.Replace("{", "[").Replace("}", "]") ;
+                sb.AppendLine("def _ex = _t.find{it." + keyname + "==" + item.get(keyname).stringify() + "};");
+                if (op == UpdateOperation.Remove || op == UpdateOperation.Insert) {
+                    sb.AppendLine("if(_ex)_t.remove(_ex);");
+                }
+                if (op == UpdateOperation.Ensure || op==UpdateOperation.Update) {
+                    sb.AppendLine("if(!_ex){_t.add(" + grovyobj + ")};");
+                }
+                if (op == UpdateOperation.Insert) {
+                    sb.AppendLine("_t.add(" + grovyobj + ");");
+                }
+                if (op == UpdateOperation.Update) {
+                    sb.AppendLine("if(!!_ex){");
+                    foreach (var p in item.jsonifymap()) {
+                        sb.AppendLine("_ex['" + p.Key + "']=" + p.Value.stringify() + ";");
+                    }
+                    sb.AppendLine("}");
+                }
+            }
+            return sb.ToString();
+        }
+    }
+
     public static class EsQueryUtils {
         public static IDictionary<string, object> QSetSortDesc(this IDictionary<string, object> query, string fieldname) {
             query["sort"] = new Dictionary<string,object> {[fieldname]="desc"};
@@ -63,6 +134,21 @@ namespace bit.cross.accident.services.query {
             fld[nameof(fragment_size)] = fragment_size;
             return query;
         }
+
+
+        public static IDictionary<string, object> GetIdsCondition(params string[] ids) {
+            ids = (ids ?? new string[] {}).Where(_ => !string.IsNullOrWhiteSpace(_)).ToArray();
+            if(ids.Length==0)throw new Exception("no ids for condition");
+            return new Map {
+                ["ids"] = new Map {
+                    ["values"] = ids.OfType<object>().ToArray()
+                }
+            };
+        } 
+
+        
+
+
         
         public static IDictionary<string,object> QEnsureBoolPart(this IDictionary<string, object> query, object condition,string boolpart = "must") {
             var qs = condition as string;

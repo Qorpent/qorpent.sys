@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -623,9 +624,39 @@ namespace Qorpent.Host {
             loader.LoadAssembly(typeof (HttpAuthenticator).Assembly);
             loader.LoadAssembly(typeof (ReportProvider).Assembly);
             foreach (var assemblyName in Config.AutoconfigureAssemblies) {
-                var assembly = Assembly.Load(assemblyName);
+                Assembly assembly = null;
+                if (assemblyName.Contains("/") || assemblyName.Contains("\\")) {
+                    var file = EnvironmentInfo.ResolvePath(assemblyName);
+                    var dir = Path.GetDirectoryName(file);
+                    ResolveEventHandler h = (s, a) => {
+                        var name = a.Name.Split(',')[0];
+                        var path = Path.Combine(dir, name + ".dll");
+                        if (File.Exists(path)) {
+                            var bytes = File.ReadAllBytes(path);
+                            return Assembly.Load(bytes);
+                        }
+                        return null;
+                    };
+                    AppDomain.CurrentDomain.AssemblyResolve += h;
+                    try {
+                        assembly = Assembly.Load(File.ReadAllBytes(file));
+                        Console.WriteLine(assembly.GetName().ToString()+" loaded!");
+                    }
+                    finally {
+                        AppDomain.CurrentDomain.AssemblyResolve -= h;
+                    }
+                }
+                else {
+                    assembly = Assembly.Load(assemblyName);
+                }
+          
                 loader.LoadAssembly(assembly);
             }
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve1(object sender, ResolveEventArgs args)
+        {
+            throw new NotImplementedException();
         }
 
         private void InitializeHttpServer() {
