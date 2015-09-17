@@ -2,83 +2,120 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using Qorpent.BSharp;
 using Qorpent.Experiments;
+using Qorpent.Utils.Extensions;
 using Map = System.Collections.Generic.Dictionary<string,object>;
+using IMap = System.Collections.Generic.IDictionary<string,object>;
 namespace bit.cross.accident.services.query {
-
-    public enum UpdateOperation {
-        Insert,
-        Update,
-        Ensure,
-        Remove
-    }
-    public static class EsGroovyUtils {
-        public static string BuildUpdateArrayScript(string arrayname, object item,
-            UpdateOperation op = UpdateOperation.Update, string keyname = "key") {
-            if (null == item) {
-                throw new ArgumentNullException(nameof(item));
-            }
-            var sb = new StringBuilder();
-            string n = "";
-            sb.AppendLine("def _src = ctx._source;");
-            sb.AppendLine("def _t = _src;");
-            var path = arrayname.Split('.');
-            for (var i = 0; i < path.Length - 1; i++) {
-                n = path[i];
-                if (op == UpdateOperation.Remove) {
-                    sb.AppendLine(string.Format("if(!_t['{0}'])return;_t=_t['{0}'];", n));
-                }
-                else {
-                    sb.AppendLine(string.Format("if(!_t['{0}']){{_t['{0}']=[,]}};_t=_t['{0}'];", n));
-                }
-            }
-            n = path[path.Length - 1];
-            if (op == UpdateOperation.Remove) {
-                sb.AppendLine(string.Format("if(!_t['{0}'])return;_t=_t['{0}'];", n));
-            }
-            else {
-                sb.AppendLine(string.Format("if(!_t['{0}']){{_t['{0}']=[]}};_t=_t['{0}'];", n));
-            }
-            var jval = item.stringify();
-            if (item is string || item.GetType().IsValueType) {
-
-                sb.AppendLine("_t.remove(" + jval + ");");
-                if (op != UpdateOperation.Remove) {
-                    sb.AppendLine("_t.add(" + jval + ");");
-                }
-            }
-            else {
-                item = item.jsonify();
-                var grovyobj = jval.Replace("{", "[").Replace("}", "]") ;
-                sb.AppendLine("def _ex = _t.find{it." + keyname + "==" + item.get(keyname).stringify() + "};");
-                if (op == UpdateOperation.Remove || op == UpdateOperation.Insert) {
-                    sb.AppendLine("if(_ex)_t.remove(_ex);");
-                }
-                if (op == UpdateOperation.Ensure || op==UpdateOperation.Update) {
-                    sb.AppendLine("if(!_ex){_t.add(" + grovyobj + ")};");
-                }
-                if (op == UpdateOperation.Insert) {
-                    sb.AppendLine("_t.add(" + grovyobj + ");");
-                }
-                if (op == UpdateOperation.Update) {
-                    sb.AppendLine("if(!!_ex){");
-                    foreach (var p in item.jsonifymap()) {
-                        sb.AppendLine("_ex['" + p.Key + "']=" + p.Value.stringify() + ";");
-                    }
-                    sb.AppendLine("}");
-                }
-            }
-            return sb.ToString();
-        }
-    }
-
     public static class EsQueryUtils {
         public static IDictionary<string, object> QSetSortDesc(this IDictionary<string, object> query, string fieldname) {
             query["sort"] = new Dictionary<string,object> {[fieldname]="desc"};
             return query;
         }
+
+        public static IMap QEnsureFields(this IMap query, params string[] fields) {
+            if (null == fields || 0 == fields.Length)
+            {
+                return query;
+            }
+
+            if (!query.ContainsKey("fields")) {
+                query["fields"] = fields;
+            }
+            else {
+                var l = query.arr("fields").ToList();
+                foreach (var field in fields) {
+                    if (!l.Contains(field)) {
+                        l.Add(field);
+
+                    }
+                }
+            }
+            return query;
+            ;
+        }
+        public static IDictionary<string, object> QIncludeSource(this IDictionary<string, object> query,params string[] fields) {
+            if (null == fields || 0 == fields.Length) {
+                return query;
+            }
+            if (!query.ContainsKey("_source")) {
+                query["_source"] = true;
+            }
+            query.QNormalizeSource();
+            if (Equals(false, query["_source"])) {
+                return query;
+            }
+            var src = query.map("_source");
+            if (!src.ContainsKey("include")) {
+                src["include"] = new object[] {fields};
+            }
+            else {
+                var l = src.arr("include").ToList();
+                l.Remove("*");
+                if (!l.Contains(fields)) {
+                    l.Add(fields);
+                }
+                src["include"] = l.ToArray();
+            }
+            return query;
+        }
+        public static IDictionary<string, object> QExcludeSource(this IDictionary<string, object> query, string fields)
+        {
+            if (null == fields || 0 == fields.Length)
+            {
+                return query;
+            }
+            if (!query.ContainsKey("_source"))
+            {
+                query["_source"] = true;
+            }
+            query.QNormalizeSource();
+            if (Equals(false, query["_source"]))
+            {
+                return query;
+            }
+            var src = query.map("_source");
+            if (!src.ContainsKey("exclude"))
+            {
+                src["exclude"] = new object[] { fields };
+            }
+            else
+            {
+                var l = src.arr("exclude").ToList();
+                l.Remove("*");
+                if (!l.Contains(fields))
+                {
+                    l.Add(fields);
+                }
+                src["exclude"] = l.ToArray();
+            }
+            return query;
+        }
+        public static IDictionary<string, object> QNormalizeSource(this IDictionary<string, object> query) {
+            if (query.ContainsKey("_source"))
+            {
+                var _src = query["_source"];
+                if ((_src is bool) && _src.ToBool())
+                {
+                    _src = new Map
+                    {
+                        ["include"] = new object[] { "*" }
+                    };
+
+                }
+                else if (_src is Array)
+                {
+                    _src = new Map
+                    {
+                        ["include"] = _src
+                    };
+
+                }
+                query["_source"] = _src;
+            }
+            return query;
+        } 
         public static IDictionary<string, object> QSetSort(this IDictionary<string, object> query, string fieldname)
         {
             query["sort"] = new Dictionary<string, object> {[fieldname] = "asc" };

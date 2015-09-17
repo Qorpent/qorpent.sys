@@ -30,7 +30,9 @@
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="DataDiff\TableMap.cs" />
+    <Compile Include="elastic\EsGroovyUtils.cs" />
     <Compile Include="elastic\EsQueryUtils.cs" />
+    <Compile Include="elastic\ArrayUpdateOperation.cs" />
     <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\AssemblyDbUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectDataUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectSchemaUpdateTask.cs" />
