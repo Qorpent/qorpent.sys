@@ -163,16 +163,16 @@ namespace Qorpent.IO.Net{
 							writer.Write(request);
 							var response = _reader.Read(rs);
 							response.Request = request;
+							response.Cookies = request.Cookies;
+							if (null!=response.Cookies && response.RawCookies.Count!=0) {
+								foreach (var cookie in response.RawCookies) {
+									var realcookie = HttpUtils.ParseCookies(cookie).First();
+									response.Cookies.Add(realcookie);
+								}
+							}
 							if (response.IsRedirect && !request.PreventRedirect){
 								request.Uri = response.RedirectUri;
 								return Call(request);
-							}
-							response.Cookies = request.Cookies;
-							if (null!=response.Cookies && response.RawCookies.Count!=0){
-							    foreach (var cookie in response.RawCookies) {
-							        var realcookie = HttpUtils.ParseCookies(cookie).First();
-                                    response.Cookies.Add(realcookie);
-							    }
 							}
 							response.Request = request;
 							return response;
