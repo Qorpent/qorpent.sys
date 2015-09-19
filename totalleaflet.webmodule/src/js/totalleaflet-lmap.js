@@ -80,6 +80,7 @@ define(["totalleaflet-utils"],function(utils){
             }
 
             if("zoomcontrol" in iAttrs || iAttrs.hasOwnProperty("noninteractive")){
+
                 mapConfig.zoomControl = false;//iAttrs["zoomcontrol"]!=="false";
             }
 
@@ -100,6 +101,10 @@ define(["totalleaflet-utils"],function(utils){
 
             if("dblclickzoom" in iAttrs){
                 map.doubleClickZoom.disable();
+            }
+
+            if("scrollwheelzoom" in iAttrs){
+                map.scrollWheelZoom.disable();
             }
 
             map.goHome = function(animate,uselocal){
@@ -288,6 +293,8 @@ define(["totalleaflet-utils"],function(utils){
                 if(!!iAttrs["onload"]) {
                     if (iAttrs["onload"] in $scope) {
                         $scope[iAttrs["onload"]](map, element, iAttrs, $scope);
+                    }else{
+                        $scope.$eval(iAttrs["onload"],{$map:map,$element:element,$attrs:iAttrs,$scope:$scope});
                     }
                 }
             };

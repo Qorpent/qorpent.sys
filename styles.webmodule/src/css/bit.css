@@ -2713,7 +2713,6 @@ html.site body.form-factor-printps, html.site body.form-factor-print {
   min-width: 19cm;
   max-width: 19cm;
   min-height: 26cm;
-  max-height: 26cm;
   font-size: 10pt;
   padding: 0.5cm;
 }
@@ -2724,24 +2723,23 @@ html.site body.form-factor-printps, html.site body.form-factor-print {
     margin-bottom: 20px;
   }
 }
-/* line 132, core/site/_size.scss */
+/* line 131, core/site/_size.scss */
 html.site body.form-factor-printls {
   min-width: 26cm;
   max-width: 26cm;
   min-height: 19cm;
-  max-height: 19cm;
   font-size: 10pt;
   padding: 0.5cm;
 }
 @media screen {
-  /* line 132, core/site/_size.scss */
+  /* line 131, core/site/_size.scss */
   html.site body.form-factor-printls {
     margin-top: 20px;
     margin-bottom: 20px;
   }
 }
 @media print and (orientation: landscape) {
-  /* line 146, core/site/_size.scss */
+  /* line 144, core/site/_size.scss */
   html.site body {
     font-family: "Times New Roman" !important;
     background-color: white;
@@ -2751,7 +2749,7 @@ html.site body.form-factor-printls {
   }
 }
 @media print and (orientation: portrait) {
-  /* line 157, core/site/_size.scss */
+  /* line 155, core/site/_size.scss */
   html.site body {
     font-family: "Times New Roman" !important;
     background-color: white;
@@ -2760,14 +2758,14 @@ html.site body.form-factor-printls {
     font-size: 10pt;
   }
 }
-/* line 167, core/site/_size.scss */
+/* line 165, core/site/_size.scss */
 html.site body.form-factor-dynamic {
   min-width: 1280px;
   max-width: 1280px;
   font-size: 14px;
 }
 @media screen and (max-width: 1279px) {
-  /* line 178, core/site/_size.scss */
+  /* line 176, core/site/_size.scss */
   html.site body.form-factor-dynamic {
     min-width: 1280px;
     max-width: 1280px;
@@ -2775,7 +2773,7 @@ html.site body.form-factor-dynamic {
   }
 }
 @media screen and (max-width: 1279px) {
-  /* line 178, core/site/_size.scss */
+  /* line 176, core/site/_size.scss */
   html.site body.form-factor-dynamic {
     min-width: 1024px;
     max-width: 1024px;
@@ -2783,7 +2781,7 @@ html.site body.form-factor-dynamic {
   }
 }
 @media screen and (max-width: 1023px) {
-  /* line 178, core/site/_size.scss */
+  /* line 176, core/site/_size.scss */
   html.site body.form-factor-dynamic {
     min-width: 800px;
     max-width: 800px;
@@ -2791,38 +2789,38 @@ html.site body.form-factor-dynamic {
   }
 }
 @media screen and (max-width: 799px) {
-  /* line 178, core/site/_size.scss */
+  /* line 176, core/site/_size.scss */
   html.site body.form-factor-dynamic {
     min-width: 320px;
     max-width: 320px;
     font-size: 14px;
   }
 }
-/* line 192, core/site/_size.scss */
+/* line 190, core/site/_size.scss */
 html.site body.form-factor-wide {
   min-width: 100%;
   max-width: 100%;
   font-size: 18px;
 }
-/* line 204, core/site/_size.scss */
+/* line 202, core/site/_size.scss */
 html.site body.form-factor-lg {
   min-width: 1280px;
   max-width: 1280px;
   font-size: 14px;
 }
-/* line 204, core/site/_size.scss */
+/* line 202, core/site/_size.scss */
 html.site body.form-factor-md {
   min-width: 1024px;
   max-width: 1024px;
   font-size: 14px;
 }
-/* line 204, core/site/_size.scss */
+/* line 202, core/site/_size.scss */
 html.site body.form-factor-sm {
   min-width: 800px;
   max-width: 800px;
   font-size: 14px;
 }
-/* line 204, core/site/_size.scss */
+/* line 202, core/site/_size.scss */
 html.site body.form-factor-xsm {
   min-width: 320px;
   max-width: 320px;
