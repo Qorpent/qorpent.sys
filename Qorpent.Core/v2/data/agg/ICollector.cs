@@ -1,15 +1,15 @@
+using System.Security.Cryptography.X509Certificates;
+using qorpent.v2.reports.table;
 using Qorpent;
 using Qorpent.Model;
 
 namespace qorpent.v2.data.agg {
-    public interface ICollector {
+    public interface ICollector:IColumnDescriptor {
         object GetValue(object src, object currentValue, AggregateNode trg, IScope scope);
         bool Filter(object src, AggregateNode trg, IScope scope);
         string Key { get; set; }
-        string Name { get; set; }
-        string ShortName { get; set; }
-        string Group { get; set; }
-        object Custom { get; set; }
         string Condition { get; set; }
+        bool DrillDown { get; set; }
+
     }
 }

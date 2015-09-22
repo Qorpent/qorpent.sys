@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using qorpent.tasks.processor;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.IoC;
 

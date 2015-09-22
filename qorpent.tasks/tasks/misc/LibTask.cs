@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using qorpent.tasks.factory;
 using qorpent.tasks.processor;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.IoC;
 using Qorpent.Log.NewLog;

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Qorpent;
-using Qorpent.v2.query;
 
 namespace qorpent.v2.query {
     public abstract class ObjectSourceBase<T> : InitializeAbleService, IObjectSource<T>,IObjectSource where T : class {

@@ -409,6 +409,11 @@
     <Compile Include="v2\console\IConsoleCommand.cs" />
     <Compile Include="v2\console\IConsoleContext.cs" />
     <Compile Include="v2\console\IConsoleListener.cs" />
+    <Compile Include="v2\data\agg\AggregateNode.cs" />
+    <Compile Include="v2\data\agg\ICollector.cs" />
+    <Compile Include="v2\data\agg\IFinalizer.cs" />
+    <Compile Include="v2\data\agg\IRouter.cs" />
+    <Compile Include="v2\data\agg\RouteKey.cs" />
     <Compile Include="v2\model\IItem.cs" />
     <Compile Include="v2\model\Item.cs" />
     <Compile Include="v2\query\IObjectSource.cs" />
@@ -433,6 +438,7 @@
     <Compile Include="v2\reports\storage\IReportLease.cs" />
     <Compile Include="v2\reports\storage\IRenderProvider.cs" />
     <Compile Include="v2\reports\storage\IRenderSource.cs" />
+    <Compile Include="v2\reports\table\IColumnDescriptor.cs" />
     <Compile Include="v2\security\authentication\IHttpAuthenticator.cs" />
     <Compile Include="v2\security\authentication\IHttpDefaultIdentitySource.cs" />
     <Compile Include="v2\security\authentication\IHttpIdentitySource.cs" />

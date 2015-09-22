@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.IoC;
 using Qorpent.Log.NewLog;

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using qorpent.tasks.processor;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.IoC;

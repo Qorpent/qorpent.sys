@@ -9,7 +9,6 @@ using qorpent.v2.security.authentication;
 using Qorpent;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
-using Qorpent.v2.security.authorization;
 
 namespace qorpent.v2.security.authorization
 {

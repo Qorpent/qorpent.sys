@@ -9,6 +9,7 @@ namespace qorpent.v2.data.agg {
         private int kid = 0;
         private int mid = 0;
         private IScope _scope;
+        private IDictionary<string, object> _metadata;
 
         public Aggregator()
         {
@@ -19,6 +20,7 @@ namespace qorpent.v2.data.agg {
         }
         protected AggregateNode Node { get; private set; }
 
+  
         private IEnumerable<IRouter> AllRoutes(IRouter root = null) {
             if (null == root) {
                 foreach (var router in Routers) {

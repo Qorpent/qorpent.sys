@@ -1,6 +1,6 @@
 using System;
 
-namespace qorpent.tasks {
+namespace qorpent.v2.tasks {
     [Flags]
     public enum TaskFlags {
         None = 0,

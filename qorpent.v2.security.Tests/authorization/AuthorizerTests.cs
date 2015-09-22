@@ -5,9 +5,9 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using qorpent.v2.security.authorization;
 using qorpent.v2.security.user;
 using Qorpent.IO.Http;
-using Qorpent.v2.security.authorization;
 
 namespace qorpent.v2.security.Tests.authorization
 {

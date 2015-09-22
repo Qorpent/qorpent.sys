@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using qorpent.v2.query;
+using Qorpent;
 
-namespace Qorpent.v2.query {
+namespace qorpent.v2.query {
     public interface IObjectSource {
         object Get(string id, IScope scope =null);
         SearchResult Search(object query=null, IScope scope = null);

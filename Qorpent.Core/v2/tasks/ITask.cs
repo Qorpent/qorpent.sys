@@ -1,8 +1,7 @@
 using System.Xml.Linq;
-using qorpent.tasks.processor;
 using Qorpent;
 
-namespace qorpent.tasks {
+namespace qorpent.v2.tasks {
     public interface ITask {
         TaskFlags Flags { get; set; }
         void Initialize(TaskEnvironment environment, ITask parent, XElement config);

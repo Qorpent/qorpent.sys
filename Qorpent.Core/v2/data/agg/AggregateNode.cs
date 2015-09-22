@@ -133,7 +133,7 @@ public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator 
                 jw.WriteProperty("meta",Meta);
             }
             if (null == Parent && null != Collectors && 0!=Collectors.Length) {
-                jw.WriteProperty("collectors", Collectors.Select(
+                jw.WriteProperty("collectors", Collectors.OfType<ICollector>().Select(
                     c => new
                     {
                         key = c.Key,

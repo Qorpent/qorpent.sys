@@ -1,7 +1,6 @@
 using System.Xml.Linq;
-using qorpent.tasks.processor;
 
-namespace qorpent.tasks.factory {
+namespace qorpent.v2.tasks {
     public interface ITaskSource {
         ITask Create(TaskEnvironment environment, XElement definition);
     }

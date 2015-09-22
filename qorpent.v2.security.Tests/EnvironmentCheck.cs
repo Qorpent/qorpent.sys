@@ -17,7 +17,6 @@ using qorpent.v2.security.user.storage;
 using qorpent.v2.security.user.storage.providers;
 using Qorpent;
 using Qorpent.Utils;
-using Qorpent.v2.security.authorization;
 
 namespace qorpent.v2.security.Tests
 {

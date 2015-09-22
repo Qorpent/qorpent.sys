@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Elasticsearch.Net.Connection;
 using Npgsql;
 using qorpent.tasks.processor;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.Log.NewLog;
 using Qorpent.Mvc.Remoting;

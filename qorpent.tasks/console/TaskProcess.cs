@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using qorpent.tasks.processor;
+using qorpent.v2.tasks;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.Config;

@@ -33,11 +33,16 @@
     <Compile Include="storage\ConfigReportSource.cs" />
     <Compile Include="storage\ReportFeedProvider.cs" />
     <Compile Include="storage\ReportProvider.cs" />
+    <Compile Include="table\ColumnCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
       <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,7 @@ namespace qorpent.v2.security.authorization {
         }
 
         public bool IsInRole(IIdentity identity, string role, bool exact = false) {
+            if (string.IsNullOrWhiteSpace(role)) return true;
             role = role.ToUpperInvariant().Trim();
             if (-1 != role.LastIndexOfAny(new[] {' ', '!','+', ',','-','&','|','(',')'})) {
                 return Evaluator.Evaluate(this, identity,role);

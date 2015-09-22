@@ -5,7 +5,7 @@ using Qorpent.BSharp;
 using Qorpent.IoC;
 using Qorpent.Log.NewLog;
 
-namespace qorpent.tasks.processor {
+namespace qorpent.v2.tasks {
     public class TaskEnvironment {
         public TaskEnvironment() {
             Globals = new Scope();
