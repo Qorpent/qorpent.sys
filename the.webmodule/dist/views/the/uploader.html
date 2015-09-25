@@ -8,5 +8,5 @@
        ondragend="angular.element(this).scope().__dragleave(this,event)"
        onclick="$(this).nextAll('input').click()"
             >Добавить файл<br/>(нажимте или перетащите файлы)</i>
-    <input type="file" style="display:none" name='file' onchange="angular.element(this).scope().__upload(this)" />
+    <input type="file" multiple style="display:none" name='file' onchange="angular.element(this).scope().__upload(this)" />
 </form>

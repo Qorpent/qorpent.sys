@@ -246,7 +246,7 @@
                 }
             }
             root.collections = collections;
-
+            root.$c = collections;
 
         })
 

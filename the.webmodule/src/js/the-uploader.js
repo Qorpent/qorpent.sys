@@ -2,8 +2,9 @@
  * Created by comdiv on 20.05.2015.
  */
 define(["the-root", "the-angular"], function (the) {
+    var defaultuploadurl = '/accident/upload';
     the.uploader = {
-        uploadsingle : function(file, success, error){
+        uploadsingle : function(file, success, error, url){
             var max = 5242880;
             var maxtext = "5Мб";
             if(file.type.match(/video/)){
@@ -18,7 +19,7 @@ define(["the-root", "the-angular"], function (the) {
             var fd = new FormData();
             fd.append('file', file);
             $.ajax({
-                url: '/accident/upload',
+                url: url||defaultuploadurl,
                 data: fd,
                 processData: false,
                 contentType: false,
@@ -40,11 +41,10 @@ define(["the-root", "the-angular"], function (the) {
             if(e.files){
                 files = e.files;
             }else{
-                files = $(e)[0].files[0];
+                files = $(e)[0].files;
             }
             var self = this;
             var progress = progress || $(e).prevAll('i');
-            console.log(progress);
             progress.addClass('button progress primary');
             var idx = -1;
             var errors = [];
@@ -118,6 +118,12 @@ define(["the-root", "the-angular"], function (the) {
                 };
 
                 scope.__uploaddrop = function(dt,e){
+                    if(!!attr["onfiles"]){
+                        scope.$eval(attr["onfiles"],{$files:dt.files});
+                    }
+                    if(!!attr["noupload"]){
+                        return;
+                    }
                     the.uploader.upload(dt, e, function (data, e, s, x) {
                         if (!data) {
                             console.error("upload error", e, s, x.responseText);
@@ -135,10 +141,16 @@ define(["the-root", "the-angular"], function (the) {
                                 }
                             });
                         }
-                    });
+                    },attr["uploadurl"]);
                 };
 
                 scope.__upload = function (el) {
+                    if(!!attr["onfiles"]){
+                        scope.$eval(attr["onfiles"],{$files:$(el)[0].files});
+                    }
+                    if(!!attr["noupload"]){
+                        return;
+                    }
                     the.uploader.upload(el,null, function (data, e, s, x) {
                         if (!data) {
                             console.error("upload error", e, s, x.responseText);

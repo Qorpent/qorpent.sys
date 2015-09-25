@@ -23,7 +23,7 @@ namespace Qorpent.IO {
 	public static class MimeHelper
 	{
 		/// <summary>
-		/// Стандартный MIME для HTML
+		/// РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ MIME РґР»СЏ HTML
 		/// </summary>
 		public const string HTML = "text/html";
 		/// <summary>
@@ -113,7 +113,11 @@ namespace Qorpent.IO {
 					return ".xls";
 				case "application/vnd.ms-word":
 					return ".doc";
-				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                case "application/msword":
+			        return ".doc";
+                case "application/msexcel":
+                    return ".xls";
+                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 					return ".docx";
 				case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
 					return ".xlsx";

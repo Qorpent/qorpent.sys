@@ -1,6 +1,7 @@
 
 define([
     "the-root",
+    'the-md5',
     "the-object",
     "the-interpolation",
     "the-jsonify",
@@ -38,9 +39,12 @@ define([
     'the-print',
     'the-dates',
     'the-report',
-    'the-hash',
-    'the-log'
-], function ($the) {
+    'the-hash'
+
+], function ($the,md5) {
+        $the.md5 = md5;
+
     return $the;
+
 });
 //# sourceMappingURL=the.js.map
