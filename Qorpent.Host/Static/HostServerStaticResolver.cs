@@ -161,6 +161,7 @@ namespace Qorpent.Host.Static {
         /// </summary>
         public void DropCache() {
             _cache.Clear();
+            Resolver.Clear();
         }
 
         /// <summary>

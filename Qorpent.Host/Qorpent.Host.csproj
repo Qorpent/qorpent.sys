@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="Handlers\DropStaticCache.cs" />
     <Compile Include="Handlers\LoadHandler.cs" />
     <Compile Include="Handlers\ServerPrint.cs" />
     <Compile Include="Handlers\SaveHandler.cs" />

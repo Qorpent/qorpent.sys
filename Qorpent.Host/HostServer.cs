@@ -398,6 +398,7 @@ namespace Qorpent.Host {
             this.OnContext("/toxml", _ => new SmartXmlHandler().Process(_));
             this.OnContext("/save", _ => new SaveHandler().Run(this, _, null, CancellationToken.None));
             this.OnContext("/load", _ => new LoadHandler().Run(this, _, null, CancellationToken.None));
+            this.OnContext("/dropfilecache", _ => new DropStaticCache().Run(this, _, null, CancellationToken.None));
             this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 
         }
