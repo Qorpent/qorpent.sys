@@ -341,9 +341,10 @@ namespace Qorpent.Host {
                 }
                 if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)) {
                     if ("*" == Config.AccessAllowHeaders) {
-                        if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers")) {
-                            task.Result.Response.AddHeader("Access-Control-Allow-Headers",
-                                task.Result.Request.Headers["Access-Control-Request-Headers"]);
+                        var reqheader = task.Result.Request.Headers.GetValues("Access-Control-Request-Headers");
+                        if (null != reqheader) {
+                            var header = string.Join(", ", reqheader);
+                            task.Result.Response.AddHeader("Access-Control-Allow-Headers",header);
                         }
                     }
                     else {
