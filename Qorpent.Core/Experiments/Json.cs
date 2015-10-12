@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Activation;
+using System.Runtime.Remoting.Channels;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -850,11 +851,54 @@ namespace Qorpent.Experiments {
         {
             return Get(data, path);
         }
+        public static T get<T>(this object data, string path)
+        {
+            var result= Get(data, path);
+            if (null == result) return default(T);
+            if (typeof (IJsonDeserializable).IsAssignableFrom(typeof (T))) {
+                T _result = Activator.CreateInstance<T>();
+                ((IJsonDeserializable)_result).LoadFromJson(result);
+                return _result;
+            }
+            return result.To<T>();
+        }
+
+        public static T jto<T>(this object data) {
+            if (typeof(IJsonDeserializable).IsAssignableFrom(typeof(T))) {
+                var _result = Activator.CreateInstance<T>();
+                ((IJsonDeserializable)_result).LoadFromJson(data);
+                return _result;
+            }
+            return data.To<T>();
+        }
 
         public static object[] arr(this object data, string path) {
             if (null == data) return null;
             return (Get(data, path) as object[]);
         }
+
+        public static T[] arr<T>(this object data, string path)
+        {
+            if (null == data) return new T[] { };
+            var result = (Get(data, path) as object[]);
+            if (null == result) return new T[] {};
+            IList<T> _result = new List<T>();
+            if (typeof (IJsonDeserializable).IsAssignableFrom(typeof (T))) {
+                foreach (var o in result) {
+                    var _item = (IJsonDeserializable)Activator.CreateInstance<T>();
+                    _item.LoadFromJson(o);
+                    _result.Add((T)_item);
+                }
+            }
+            else {
+                foreach (var o in result) {
+                    _result.Add(o.To<T>());
+                }
+            }
+            return _result.ToArray();
+
+        }
+
         public static IDictionary<string,object>[] arrobj(this object data, string path) {
             var result = (Get(data, path) as object[]);
             if(null==result)return null;

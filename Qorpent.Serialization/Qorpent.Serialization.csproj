@@ -51,6 +51,8 @@
     <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProvider.cs" />
+    <Compile Include="ExifReader.cs" />
+    <Compile Include="ExifTags.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatDocument.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatException.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />

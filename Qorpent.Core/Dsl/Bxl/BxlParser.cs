@@ -112,22 +112,29 @@ namespace Qorpent.Bxl {
 				filename = "code.bxl";
 			}
 			init(filename, options);
-			foreach (char c in code) {
+			foreach (char _c in code) {
+			    var c = _c;
 				_info.CharIndex++;
 				_info.Column++;
+			    if (c == 160) {
+			        c = ' ';
+			    }
 				if (c == '\t'){
 					_info.Column += 3;
 				}
+			    if (c == '\r') {
+			        continue;
+			    }
 				map[(int)_mode](c);
 
-				if (c == '\r' || c == '\n' && _last != '\r') {
+				if (c == '\n' ) {
 					_info.Line++;
 					_info.Column = 0;
 				}
 				_last = c;
 			}
 
-			if (code.Last() != '\r' && code.Last() != '\n')
+			if ( code.Last() != '\n')
 				map[(int)_mode]('\n');
 
 			if (_options.HasFlag(BxlParserOptions.ExtractSingle) && _root.Elements().Count() == 1) {

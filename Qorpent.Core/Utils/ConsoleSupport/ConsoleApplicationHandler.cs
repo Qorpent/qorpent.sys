@@ -91,7 +91,9 @@ namespace Qorpent.Utils
 			get { return _null; }
 		}
 
-		/// <summary>
+	    public string[] SendLines { get; set; }
+
+	    /// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
@@ -124,34 +126,7 @@ namespace Qorpent.Utils
 			result.StartInfo = startinfo;
 
 			if (ExePath == "del"){
-				var fullpath = Path.Combine(startinfo.WorkingDirectory, startinfo.Arguments.Replace("\"", "").Trim());
-				var mask = Path.GetFileName(fullpath);
-				var dir = Path.GetDirectoryName(fullpath);
-				try{
-					if (Directory.Exists(dir)){
-						var files = Directory.GetFiles(dir, mask);
-						foreach (var file in files){
-							try{
-								File.Delete(file);
-							}
-							catch{
-								try{
-									Thread.Sleep(10);
-									File.Delete(file);
-								}
-								catch{
-									
-								}
-							}
-						}
-					}
-					result.State = 0;
-				}
-				catch(Exception ex){
-					result.State = -1;
-					result.Exception = ex;
-				}
-				return result;
+				return DoDeleteCommand(startinfo, result);
 			}
 
 			var process = new Process{StartInfo = startinfo};
@@ -179,6 +154,11 @@ namespace Qorpent.Utils
 					process.Start();
 					process.BeginOutputReadLine();
 					process.BeginErrorReadLine();
+				    if (null != SendLines && 0 != SendLines.Length) {
+				        foreach (var sendLine in SendLines) {
+				            process.StandardInput.WriteLine(sendLine);
+				        }
+				    }
 					CheckMessage(process);
 					if (0 != Timeout){
 						wellFinish = process.WaitForExit(Timeout);
@@ -210,7 +190,37 @@ namespace Qorpent.Utils
 			}
 		}
 
-		private void CheckMessage(Process process){
+	    private static ConsoleApplicationResult DoDeleteCommand(ProcessStartInfo startinfo, ConsoleApplicationResult result) {
+	        var fullpath = Path.Combine(startinfo.WorkingDirectory, startinfo.Arguments.Replace("\"", "").Trim());
+	        var mask = Path.GetFileName(fullpath);
+	        var dir = Path.GetDirectoryName(fullpath);
+	        try {
+	            if (Directory.Exists(dir)) {
+	                var files = Directory.GetFiles(dir, mask);
+	                foreach (var file in files) {
+	                    try {
+	                        File.Delete(file);
+	                    }
+	                    catch {
+	                        try {
+	                            Thread.Sleep(10);
+	                            File.Delete(file);
+	                        }
+	                        catch {
+	                        }
+	                    }
+	                }
+	            }
+	            result.State = 0;
+	        }
+	        catch (Exception ex) {
+	            result.State = -1;
+	            result.Exception = ex;
+	        }
+	        return result;
+	    }
+
+	    private void CheckMessage(Process process){
 			if (null != Listener){
 				var message = Listener.GetMessage();
 				if (null != message){

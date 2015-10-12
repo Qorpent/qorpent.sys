@@ -36,10 +36,18 @@ test2
 			Assert.AreEqual(@"http://mstrok.ru/\?id=\d{4}\d*$",x.Element("x").Attr("code"));
 		}
 
+        [Test]
+        public void FindProblem() {
+            var xml = new BxlParser().Parse(@"equalize schema=hsv chanels=1","code",BxlParserOptions.ExtractSingle);
+            Console.WriteLine(xml);
+            xml = new BxlParser().Parse("equalize  schema=hsv channels=2\n\n", "code", BxlParserOptions.ExtractSingle);
+            Console.WriteLine(xml);
+            xml = new BxlParser().Parse("equalize  schema=hsv channels=2\n\n", "code", BxlParserOptions.ExtractSingle);
+            Console.WriteLine(xml);
+        }
 
-		
 
-		[TestCase(@"e x='\n'","\n")]
+        [TestCase(@"e x='\n'","\n")]
 		[TestCase("e x=\"\\n\"", "\n")]
 		[TestCase(@"e x='\r'", "\r")]
 		[TestCase("e x=\"\\r\"", "\r")]
@@ -349,7 +357,7 @@ asdf""""""
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
-			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q")).Value, "qwerty\r\nasdf");
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q")).Value, "qwerty\nasdf");
 		}
 
 		[Test]
@@ -363,7 +371,7 @@ asdf""""""
 			Console.WriteLine(res);
 
 			XElement test1 = res.Elements().First();
-			Assert.AreEqual(test1.Attribute(XName.Get("name")).Value, "1\r\n2 ' ''' \"\"\r\n3");
+			Assert.AreEqual(test1.Attribute(XName.Get("name")).Value, "1\n2 ' ''' \"\"\n3");
 		}
 
 		[Test]
@@ -380,7 +388,7 @@ y""""""
 			Console.WriteLine(res);
 
 			XElement test1 = res.Elements().First();
-			Assert.AreEqual(test1.Attribute(XName.Get("q\r\nw\r\ne".Escape(EscapingType.XmlName))).Value, "r\r\nt\r\ny");
+			Assert.AreEqual(test1.Attribute(XName.Get("q\nw\ne".Escape(EscapingType.XmlName))).Value, "r\nt\ny");
 		}
 
 		[Test]
@@ -394,7 +402,7 @@ nested (expression)
 			Console.WriteLine(res);
 
 			XElement test1 = res.Elements().First();
-			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression)\r\n)");
+			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\nnested (expression)\n)");
 		}
 
 		[Test]
@@ -409,7 +417,7 @@ nested (expression[x{2}])
 			Console.WriteLine(res);
 
 			XElement test1 = res.Elements().First();
-			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression[x{2}])\r\n)");
+			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\nnested (expression[x{2}])\n)");
 		}
 
 		[Test]
@@ -482,7 +490,7 @@ nested (expression[x{2]})
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
-			Assert.AreEqual(res.Elements().First().Value, "qwerty'\r\n\t: 'ololo");
+			Assert.AreEqual(res.Elements().First().Value, "qwerty'\n\t: 'ololo");
 		}
 
 		[Test]
@@ -531,7 +539,7 @@ test";
 			Console.WriteLine(res);
 
 			Assert.AreEqual(res.GetNamespaceOfPrefix("ns1").NamespaceName, "qwerty");
-			Assert.AreEqual(res.GetNamespaceOfPrefix("ns\r\n2".Escape(EscapingType.XmlName)).NamespaceName, "ololo");
+			Assert.AreEqual(res.GetNamespaceOfPrefix("ns\n2".Escape(EscapingType.XmlName)).NamespaceName, "ololo");
 		}
 
 		[Test]
