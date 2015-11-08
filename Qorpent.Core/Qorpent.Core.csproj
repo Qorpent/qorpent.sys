@@ -73,6 +73,7 @@
     <Compile Include="CacheService.cs" />
     <Compile Include="Config\ConfigurationLoader.cs" />
     <Compile Include="Config\ConfigurationOptions.cs" />
+    <Compile Include="IO\PidFile.cs" />
     <Compile Include="IO\FileSet.cs" />
     <Compile Include="Config\GenericConfiguration.cs" />
     <Compile Include="Config\IConfigurationLoader.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="IO\Net\HttpResponseReader.cs" />
     <Compile Include="IO\Net\HttpResponseReaderExecutor.cs" />
     <Compile Include="IO\Net\HttpUtils.cs" />
+    <Compile Include="IO\PidFileMode.cs" />
     <Compile Include="Log\NewLog\ElasticSearchAppender.cs" />
     <Compile Include="Model\IWithCustom.cs" />
     <Compile Include="Model\IWithIntId.cs" />

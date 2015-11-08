@@ -86,6 +86,7 @@
     <Compile Include="Utils\HexTests.cs" />
     <Compile Include="Utils\IO\FileDescriptorExTest.cs" />
     <Compile Include="Utils\IO\FileSystemHelperTests.cs" />
+    <Compile Include="Utils\IO\PidFileTests.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionsTest.cs" />
     <Compile Include="Utils\MathTests.cs" />
     <Compile Include="Utils\ReflectionHelperTest.cs" />
