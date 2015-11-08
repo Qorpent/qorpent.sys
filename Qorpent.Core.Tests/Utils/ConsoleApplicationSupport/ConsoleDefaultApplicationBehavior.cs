@@ -54,5 +54,22 @@ class x
 			Assert.AreEqual("1",parameters.Get("y",""));
 			
 		}
+
+	    [Test]
+	    public void CanLoadConfigByFileName() {
+	        var filename = Path.Combine(dir, "test.myconf");
+            File.WriteAllText(filename, @"
+class test
+	logformat='@{Message}'
+	loglevel=Error
+	x 3");
+            var parameters = new ConsoleApplicationParameters();
+            parameters.TreatAnonymousAsBSharpProjectReference = true;
+            parameters.Initialize(filename, "--y", "1");
+            Assert.AreEqual(LogLevel.Error, parameters.Log.Level);
+            Assert.AreEqual("3", parameters.Get("x", ""));
+            Assert.AreEqual("${Message}", parameters.LogFormat);
+            Assert.AreEqual("1", parameters.Get("y", ""));
+        }
 	}
 }

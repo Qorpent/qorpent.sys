@@ -175,11 +175,30 @@ namespace Qorpent.Utils {
             }
         }
 
+        private ConfigurationOptions _configurationOptions;
         protected ConfigurationOptions ConfigurationOptions
         {
             get
             {
-                return new ConfigurationOptions {
+                if(null!=_configurationOptions)return _configurationOptions;
+                
+                if (Arg1.Contains(".")) { //it's path
+                    var path = Arg1;
+                    if (path.Contains("@")) {
+                        path = EnvironmentInfo.ResolvePath(path);
+                    }
+                    if (!File.Exists(path)) {
+                        throw new Exception("cannot find config file "+path);
+                    }
+                    var fullpath = Path.GetFullPath(path);
+                    var name = Path.GetFileNameWithoutExtension(path);
+                    var fileset = new FileSet(Path.GetDirectoryName(fullpath),Path.GetFileName(fullpath));
+                    return _configurationOptions = new ConfigurationOptions {
+                        Name = name,
+                        FileSet = fileset
+                    };
+                }
+                return _configurationOptions= new ConfigurationOptions {
                     Name = Arg1,
                     FileSet = ConfigSet ?? new FileSet(GetBSharpRoot(), "*." + ConfigExtension)
                 };
