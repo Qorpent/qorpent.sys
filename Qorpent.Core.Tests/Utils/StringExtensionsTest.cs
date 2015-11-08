@@ -71,6 +71,13 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("/1//2/3/", result);
 		}
 
+	    [Test]
+	    public void DistanceWorked() {
+	        var s = "_Abc-d";
+	        var t = "abcd";
+            Assert.AreEqual(3, StringExtensions.GetDistance(s,t));
+	    }
+
 		[Test]
 		public void CanSplitByDefaultBehaviour() {
 			var splitresult = "1,2 ;; 3/ 4 /5".SmartSplit();

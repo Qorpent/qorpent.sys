@@ -2,7 +2,7 @@ using System;
 
 namespace Qorpent.Utils.Extensions {
     [Flags]
-    public enum SimplifyOptions {
+    public enum SimplifyOptions : int {
         None = 0,
         Trim = 1,
         LfOnly = 2,
@@ -17,7 +17,7 @@ namespace Qorpent.Utils.Extensions {
         NoUndescores = 64,
         NoDashes = 128,
 
-        Full = Trim | NoWs | SingleQuotes | LowerCase | NoUndescores | NoDashes,
+        Full = Trim | NoWs | SingleQuotes | LowerCase | NoUndescores | NoDashes 
         
     }
 }

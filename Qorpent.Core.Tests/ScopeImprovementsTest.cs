@@ -22,6 +22,12 @@ namespace Qorpent.Core.Tests {
                 );
         }
 
+        [Test]
+        public void FuzzyResolveSupport() {
+            var scope = new Scope(new {__x_X = 2, xxx = 3});
+            Assert.AreEqual(2, scope.FuzzyResolve<int>("XX"));
+        }
+
 
         [Test]
         public void SupportDotedNamesForJson()
