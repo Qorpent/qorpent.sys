@@ -33,26 +33,11 @@ namespace Qorpent {
             
             //first match is exact match
             if (scope.ContainsKey(name)) {
-                return scope.Get<T>(name, def);
+                return scope.Get(name, def);
             }
-            // if not exact match we must collect all matches and choose best
-            // weight is distance from one string to another with keeping all informal chard (DIGITS and NUMBERS)
-            // any case change or non digital non letter removal will be scored
-            string targetKey = null;
-            int currentDistance = MaxValue;
-            var basekey = name.Simplify(SimplifyOptions.Full);
-            foreach (var key in scope.GetKeys()) {
-                var srckey = key.Simplify(SimplifyOptions.Full);
-                if (basekey == srckey) {
-                    var distance = StringExtensions.GetDistance(name, key);
-                    if (distance < currentDistance) {
-                        targetKey = key;
-                        currentDistance = distance;
-                    }
-                }
-            }
+            var targetKey = StringExtensions.FuzzySelect(name, scope.GetKeys());
             if (!string.IsNullOrWhiteSpace(targetKey)) {
-                return scope.Get<T>(targetKey, def);
+                return scope.Get<T>(targetKey);
             }
             return def;
         }

@@ -728,6 +728,37 @@ namespace Qorpent.Utils.Extensions {
 			return result;
 		}
 
+        /// <summary>
+        /// Fuzzy search in collection for best match
+        /// </summary>
+        /// <typeparam name="T">type of collection</typeparam>
+        /// <param name="srcname">base key tester</param>
+        /// <param name="collection">collection, where search is executed</param>
+        /// <param name="mapper">key mapper for collection elements (null -> T.ToString() will be used)</param>
+        /// <param name="keepMean">true if it must have exactly same mean part of key</param>
+        /// <param name="def">value by default</param>
+        /// <returns></returns>
+        public static T FuzzySelect<T>(string srcname, IEnumerable<T> collection, Func<T, string> mapper = null,
+            bool keepMean = true, T def = default(T)) {
+            if (null == collection) return default(T);
+            if (string.IsNullOrWhiteSpace(srcname)) return default(T);
+            var currentdistance = int.MaxValue;
+            var result = def;
+            var mean = keepMean ? srcname.Simplify(SimplifyOptions.Full) : null;
+            foreach (var item in collection) {
+                if(null==item)continue;
+                var itemkey = null == mapper ? item.ToStr() : mapper(item);
+                if (itemkey == srcname) return item; // exact match min distance;
+                if(keepMean && (mean != itemkey.Simplify(SimplifyOptions.Full))) continue;
+                int distance = GetDistance(srcname, itemkey);
+                if (distance < currentdistance) {
+                    currentdistance = distance;
+                    result = item;
+                }
+            }
+            return result;
+        }
+
         public static int GetDistance(string s, string t) {
             int n = s.Length;
             int m = t.Length;

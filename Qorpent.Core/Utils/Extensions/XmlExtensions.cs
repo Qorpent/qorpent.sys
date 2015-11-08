@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -29,6 +30,7 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Bxl;
 using Qorpent.Json;
 using Qorpent.Serialization;
+using Qorpent.Wiki;
 
 namespace Qorpent.Utils.Extensions {
 
@@ -261,6 +263,37 @@ namespace Qorpent.Utils.Extensions {
 			if(val.IsNotEmpty()) return val.To<T>();
 			return def;
 		}
+
+        /// <summary>
+        /// Get element, whose name is equal or Fuzzy-closest to given name
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+	    public static XElement FuzzyElement(this XElement xml, string name) {
+            return StringExtensions.FuzzySelect(name, xml.Elements(), e => e.Name.LocalName);
+        }
+        /// <summary>
+        /// Get attr, whose name is equal or Fuzzy-closest  to given name
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+	    public static XAttribute FuzzyAttr(this XElement xml, string name) {
+            return  StringExtensions.FuzzySelect(name, xml.Attributes(), a => a.Name.LocalName);
+        }
+        /// <summary>
+        /// Get attr value by fuzzy closest name
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="name"></param>
+        /// <param name="def"></param>
+        /// <returns></returns>
+	    public static string FuzzyAttrValue(this XElement xml, string name, string def = "") {
+            var attr = xml.FuzzyAttr(name);
+            if (null == attr) return def;
+            return attr.Value;
+        }
 
        
 		/// <summary>
