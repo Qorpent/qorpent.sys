@@ -123,7 +123,7 @@ namespace Qorpent.Core.Tests.Log {
 	            _task.Wait();
 	        }
 
-	        public bool Active { get; set; }
+	        public bool Active { get; set; } = true;
 	    }
 	    [Test]
 	    public void UserLogIsSynchronized_Q206() {

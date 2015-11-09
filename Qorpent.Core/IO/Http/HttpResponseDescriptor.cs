@@ -24,12 +24,17 @@ namespace Qorpent.IO.Http {
         }
 
         public static implicit operator HttpResponseDescriptor(HttpListenerResponse response) {
-            return new HttpListenerResponseDescriptor(response);
+            return  new HttpListenerResponseDescriptor(response);
+           
         }
 
         public static implicit operator HttpResponseDescriptor(WebContext context) {
-            return (HttpResponseDescriptor) context.Response;
+            var result = (HttpResponseDescriptor) context.Response;
+            result.CallingMethod = context.Request.Method;
+            return result;
         }
+
+        public string CallingMethod { get; set; }
 
         public bool WasClosed { get; set; }
 
@@ -81,17 +86,32 @@ namespace Qorpent.IO.Http {
             if (mime.Contains("text") || mime.Contains("json")) {
                 mime += "; charset=utf-8";
             }
+            
             ContentType = mime;
-            if (null != range) {
-                StatusCode = 206;
-                AddHeader("Content-Range",string.Format("bytes {0}-{1}/{2}",range.Start,range.Finish,range.Total));
-                var length = range.Finish - range.Start + 1;
-                SetHeader("Content-Length",length.ToString());
+
+            if (CallingMethod == "HEAD") {
+                SetHeader("Content-Length", "0");
             }
-            
+            else {
+                if (null != range) {
+                    StatusCode = 206;
+                    AddHeader("Content-Range",
+                        string.Format("bytes {0}-{1}/{2}", range.Start, range.Finish, range.Total));
+                    var length = range.Finish - range.Start + 1;
+                    SetHeader("Content-Length", length.ToString());
+                }
+                else if (data is string && ((string) data).Length < 512) {
+                    SetHeader("Content-Length", Encoding.UTF8.GetByteCount(data as string).ToString());
+                }
+            }
+
             WriteCookies();
-            
-            Write(data, true, range);
+
+
+
+            if (CallingMethod != "HEAD") {
+                Write(data, true, range);
+            }
             Close();
         }
 

@@ -163,7 +163,9 @@ namespace Qorpent.IO.Net{
 		/// Признак наличия конента
 		/// </summary>
 		public bool HasContent{
-			get { return ContentLength != 0 || Chunked || (null != Data && 0!=Data.Length) ; }
+		    get {
+		        return ContentLength != 0 || Chunked || (null != Data && 0!=Data.Length) ;
+		    }
 		}
 		/// <summary>
 		/// Использован GZip

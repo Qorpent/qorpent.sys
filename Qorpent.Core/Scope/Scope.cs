@@ -248,11 +248,12 @@ namespace Qorpent {
             set { _useInheritance = value; }
         }
 
-        public void Set(string key, object value) {
+        public IScope Set(string key, object value) {
             if (null == key) {
                 throw new ArgumentNullException("key");
             }
             _storage[key] = value;
+            return this;
         }
 
         public object Get(string key, ScopeOptions options = null) {

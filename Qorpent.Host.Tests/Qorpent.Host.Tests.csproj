@@ -26,6 +26,7 @@
     <Compile Include="MemoryQWebTest.cs" />
     <Compile Include="ServerParametersTest.cs" />
     <Compile Include="SimpleSocketTest.cs" />
+    <Compile Include="ZeroSizeOutStrem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

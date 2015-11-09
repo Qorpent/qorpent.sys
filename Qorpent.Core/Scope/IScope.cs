@@ -14,7 +14,7 @@ namespace Qorpent {
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        void Set(string key, object value);
+        IScope Set(string key, object value);
 
         /// <summary>
         ///     Получает значение с указанием параметров обхода

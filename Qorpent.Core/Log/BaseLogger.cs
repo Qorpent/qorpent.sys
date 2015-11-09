@@ -28,6 +28,8 @@ namespace Qorpent.Log {
 	/// 	Базовая реализация логгера
 	/// </summary>
 	public class BaseLogger : ServiceBase, ILogger {
+	    private static int INSTANCE_ID = 1;
+	    public int InstanceId = INSTANCE_ID++;
         /// <summary>
         ///     Объект для локинга
         /// </summary>
@@ -220,7 +222,7 @@ namespace Qorpent.Log {
 				try {
 					var lm = (LogMessage) message;
 
-					foreach (var w in Writers) {
+					foreach (var w in Writers.ToArray()) {
 						if (w.Level <= lm.Level) {
 							w.Write((LogMessage) message);
 						}

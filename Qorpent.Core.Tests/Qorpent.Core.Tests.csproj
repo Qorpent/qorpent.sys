@@ -128,10 +128,6 @@
       <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
       <Name>Qorpent.IoC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Log\Qorpent.Log.csproj">
-      <Project>{77D47855-A3D4-4B92-9FC0-C2EDEE27A8A7}</Project>
-      <Name>Qorpent.Log</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Mvc\Qorpent.Mvc.csproj">
       <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
       <Name>Qorpent.Mvc</Name>

@@ -24,6 +24,7 @@ namespace Qorpent.IO.Http {
             var response = (HttpResponseDescriptor) context;
             response.CorrespondRequest = request;
             response.Range = request.GetHeader("Range");
+            response.CallingMethod = request.Method;
             var result = new WebContext { Request = request, Response = response };
             result.Cookies = result.Cookies ?? context.Request.Cookies;
             request.Cookies = result.Cookies;

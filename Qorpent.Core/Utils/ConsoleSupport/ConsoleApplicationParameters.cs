@@ -253,6 +253,8 @@ namespace Qorpent.Utils {
         ///     Отложенный конструктор, логика подготовки
         /// </summary>
         public virtual ConsoleApplicationParameters Initialize(params string[] arguments) {
+            if (_initialized) return this;
+            _initialized = true;
             SourceArgs = arguments;
             var helper = new ConsoleArgumentHelper();
             helper.Apply(arguments, this);
@@ -434,6 +436,7 @@ namespace Qorpent.Utils {
         private ILogAppender _redirectappender;
         private ILogAppender _cachedAppender;
         private ILoggyManager _redirectedManager;
+        private bool _initialized = false;
 
         private void OnLoggyManager(ILoggyManager manager) {
             SetupLoggyRedirection(manager);
@@ -445,6 +448,7 @@ namespace Qorpent.Utils {
         /// <param name="redirect">overrides ConsoleOut</param>
         /// <remarks>test proposal, tend to be moved to Log but now we have ambigous log/loggy infrastructure so it has to manage it itself</remarks>
         public void RedirectLog(TextWriter sw, bool redirect = true) {
+            Initialize();
             if(null==sw)return;
            
             _redirectconsole = redirect;
