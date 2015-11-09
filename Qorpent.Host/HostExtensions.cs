@@ -28,16 +28,31 @@ namespace Qorpent.Host{
 			return server;
 		}
 
-		/// <summary>
+        /// <summary>
 		///     Регистрирует статический хэндлер со статусом
 		/// </summary>
-		/// <param name="factory"></param>
+		/// <param name="server"></param>
 		/// <param name="path"></param>
 		/// <param name="content"></param>
 		/// <param name="mimeType"></param>
 		/// <param name="status"></param>
 		/// <returns></returns>
-		public static IRequestHandlerFactory On(this IRequestHandlerFactory factory, string path, string content,
+		public static IHostServer On(this IHostServer server, string path, IRequestHandler handler)
+        {
+            server.Factory.Register(path, handler);
+            return server;
+        }
+
+        /// <summary>
+        ///     Регистрирует статический хэндлер со статусом
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        /// <param name="mimeType"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public static IRequestHandlerFactory On(this IRequestHandlerFactory factory, string path, string content,
 		                                        string mimeType = "text/plain", int status = 200){
 			factory.Register(path, new StaticHandler(content, mimeType, status));
 			return factory;
