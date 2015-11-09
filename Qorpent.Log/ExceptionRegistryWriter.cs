@@ -38,17 +38,18 @@ namespace Qorpent.Log {
 		/// <summary>
 		/// </summary>
 		public string RegistryName { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+	    public bool Active { get; set; } = true;
 
-		/// <summary>
+	    /// <summary>
 		/// 	writes message synchronously on down level
 		/// </summary>
 		/// <param name="message"> </param>
 		public void Write(LogMessage message) {
-			if (!_active) {
-				return;
-			}
 			if (null == Registry) {
-				_active = false;
+				Active = false;
 				return;
 			}
 			if (message.Level >= LogLevel.Info && message.Error != null) {
@@ -134,7 +135,6 @@ namespace Qorpent.Log {
 			return result;
 		}
 
-		private bool _active = true;
 		private IExceptionRegistry _registry;
 	}
 }

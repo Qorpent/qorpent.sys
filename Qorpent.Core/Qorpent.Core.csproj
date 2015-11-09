@@ -327,6 +327,7 @@
     <Compile Include="Utils\ConsoleSupport\ConsoleApplicationListener.cs" />
     <Compile Include="Utils\ConsoleSupport\ConsoleApplicationParameters.cs" />
     <Compile Include="Utils\ConsoleSupport\ConsoleApplicationResult.cs" />
+    <Compile Include="Utils\ConsoleSupport\ConsoleApplictionStandardReturnValues.cs" />
     <Compile Include="Utils\ConsoleSupport\ConsoleArgumentHelper.cs" />
     <Compile Include="Utils\ConsoleSupport\ConsoleRenderHelper.cs" />
     <Compile Include="Utils\ConsoleSupport\IConsoleApplicationListener.cs" />
