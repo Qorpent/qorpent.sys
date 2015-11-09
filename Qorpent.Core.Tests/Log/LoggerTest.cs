@@ -36,7 +36,11 @@ namespace Qorpent.Core.Tests.Log {
 			public string Filter { get; set; }
 
 
-			public void Write(LogMessage message) {
+		    public bool Active { get; set; } = true;
+
+		    public void Write(LogMessage message) {
+                if(!Active)return;
+		        
 				if (-1 == timeout) {
 					throw new Exception("myerror");
 				}
@@ -99,10 +103,12 @@ namespace Qorpent.Core.Tests.Log {
             public string OutResult { get; set; }
 	        public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
 	        public bool IsApplyable(object context) {
+	            if (!Active) return false;
 	            return true;
 	        }
 
 	        public void StartWrite(LogMessage message) {
+	            if (!Active) return;
 	            if (null != _task) _task.Wait();
 	            this._message = message.Message;
 	            this._task = Task.Run(() =>
@@ -116,6 +122,8 @@ namespace Qorpent.Core.Tests.Log {
                if(null!=_task)
 	            _task.Wait();
 	        }
+
+	        public bool Active { get; set; }
 	    }
 	    [Test]
 	    public void UserLogIsSynchronized_Q206() {

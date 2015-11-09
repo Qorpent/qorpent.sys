@@ -5,6 +5,7 @@ namespace Qorpent.Log.NewLog {
         void Write(LoggyMessage message);
         void Flush();
         LogLevel Level { get; set; }
+        bool Active { get; set; }
     }
     
 }

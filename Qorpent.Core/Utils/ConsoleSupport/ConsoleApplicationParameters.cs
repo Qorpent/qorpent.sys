@@ -6,6 +6,7 @@ using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.IO;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils {
@@ -422,6 +423,103 @@ namespace Qorpent.Utils {
         /// <returns></returns>
         protected virtual string GetBSharpRoot() {
             return Environment.CurrentDirectory;
+        }
+
+        private bool _redirectconsole = false;
+        private TextWriter _redirection;
+        private ILogWriter _cachedLogWriter;
+        private ILogWriter _redirectedWriter;
+        private BaseLogger _redirectlogger;
+        private ILoggy _loggy;
+        private ILogAppender _redirectappender;
+        private ILogAppender _cachedAppender;
+        private ILoggyManager _redirectedManager;
+
+        private void OnLoggyManager(ILoggyManager manager) {
+            SetupLoggyRedirection(manager);
+        }
+        /// <summary>
+        /// Set output buffer for log
+        /// </summary>
+        /// <param name="sw">text writer to send messages</param>
+        /// <param name="redirect">overrides ConsoleOut</param>
+        /// <remarks>test proposal, tend to be moved to Log but now we have ambigous log/loggy infrastructure so it has to manage it itself</remarks>
+        public void RedirectLog(TextWriter sw, bool redirect = true) {
+            if(null==sw)return;
+           
+            _redirectconsole = redirect;
+            if (null != _redirection) {
+                if (_redirection == sw) return;
+                throw new Exception("already redirected");
+            }
+            _redirection = sw;
+            var lb = (LoggerBasedUserLog) Log;
+            var deflogger = lb.GetLoggers().OfType<BaseLogger>().FirstOrDefault();
+            if (null != deflogger) {
+                _redirectlogger = deflogger;
+                _redirectedWriter = new TextWriterLogWriter(sw) {CustomFormat = LogFormat};
+                _redirectlogger.Writers.Add(_redirectedWriter);
+                if (_redirectconsole) {
+                    _cachedLogWriter = _redirectlogger.Writers.OfType<ConsoleLogWriter>().FirstOrDefault();
+                    if (null != _cachedLogWriter) {
+                        _cachedLogWriter.Active = false;
+                    }
+                }
+            }
+            Loggy.OnChangeManager += OnLoggyManager;
+            SetupLoggyRedirection(Loggy.Manager);
+        }
+
+        private void SetupLoggyRedirection(ILoggyManager manager) {
+            if (_redirectedManager == manager) return;
+            _redirectedManager = manager;
+            _loggy = manager.Get();
+            _redirectappender = new TextWriterAppender(_redirection) {Format = LogFormat};
+            _loggy.Appenders.Add(_redirectappender);
+            if (_redirectconsole) {
+                _cachedAppender = _loggy.Appenders.OfType<ConsoleAppender>().FirstOrDefault();
+                if (null != _cachedAppender) {
+                    _cachedAppender.Active = false;
+                }
+            }
+        }
+
+        public void ResetRedirectLog() {
+            if (null != _redirection) {
+                if (null != _cachedLogWriter) {
+                    _cachedLogWriter.Active = true;
+                    _cachedLogWriter = null;
+                    
+                }
+                if (_redirectlogger!=null && null != _redirectedWriter) {
+                    _redirectedWriter.Active = false;
+                    _redirectlogger.Writers.Remove(_redirectedWriter);
+                }
+                
+                Loggy.OnChangeManager -= OnLoggyManager;
+                if (null != _cachedAppender) {
+                    _cachedAppender.Active = true;
+                    _cachedAppender = null;
+                }
+                if (null != _redirectedManager) {
+                    Loggy.Default.Appenders.Remove(_redirectappender);
+                }
+                _redirection.Flush();
+                _redirection = null;
+                _redirectedWriter = null;
+                _redirectlogger = null;
+                _redirectappender = null;
+                _redirectconsole = false;
+                _redirectedManager = null;
+            }
+        }
+
+        /// <summary>
+        /// Explicitly wait for log operation finish
+        /// </summary>
+        public void WaitLog() {
+            Log.Synchronize();
+            Loggy.Flush();
         }
     }
 }

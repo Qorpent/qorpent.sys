@@ -21,44 +21,48 @@ using System.Text.RegularExpressions;
 
 namespace Qorpent.Log {
 	/// <summary>
-    ///     Абстрактный менеджер записи в лог с Thread-safe обёрткой к райтеру
+    ///     РђР±СЃС‚СЂР°РєС‚РЅС‹Р№ РјРµРЅРµРґР¶РµСЂ Р·Р°РїРёСЃРё РІ Р»РѕРі СЃ Thread-safe РѕР±С‘СЂС‚РєРѕР№ Рє СЂР°Р№С‚РµСЂСѓ
 	/// </summary>
 	public abstract class BaseLogWriter : ServiceBase, ILogWriter {
         /// <summary>
-        /// 	Минимальный уровень логгирования
+        /// 	РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРіРёСЂРѕРІР°РЅРёСЏ
         /// </summary>
         public LogLevel Level { get; set; }
-		/// <summary>
-		/// 	Формат выходящих сообщений
+
+	    public bool Active { get; set; } = true;
+
+	    /// <summary>
+		/// 	Р¤РѕСЂРјР°С‚ РІС‹С…РѕРґСЏС‰РёС… СЃРѕРѕР±С‰РµРЅРёР№
 		/// </summary>
 		public string CustomFormat { get; set; }
 		/// <summary>
-		/// 	Записывает сообщение <see cref="LogMessage"/> в лог на нижний уровень
+		/// 	Р—Р°РїРёСЃС‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёРµ <see cref="LogMessage"/> РІ Р»РѕРі РЅР° РЅРёР¶РЅРёР№ СѓСЂРѕРІРµРЅСЊ
 		/// </summary>
-        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
+        /// <param name="message">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="LogMessage"/></param>
 		public void Write(LogMessage message) {
+		    if (!Active) return;
 			lock (Sync) {
 				InternalWrite(message);
 			}
 		}
         /// <summary>
-        ///     Внутренняя операция записи в лог
+        ///     Р’РЅСѓС‚СЂРµРЅРЅСЏСЏ РѕРїРµСЂР°С†РёСЏ Р·Р°РїРёСЃРё РІ Р»РѕРі
         /// </summary>
-        /// <param name="message">Текст сообщения в формате <see cref="LogMessage"/></param>
+        /// <param name="message">РўРµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ РІ С„РѕСЂРјР°С‚Рµ <see cref="LogMessage"/></param>
 		protected abstract void InternalWrite(LogMessage message);
 		/// <summary>
-		///     Возвращет форматированный текст из представления сообщения <see cref="LogMessage"/>. Фасад над <see cref="GetFormatted"/>
+		///     Р’РѕР·РІСЂР°С‰РµС‚ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅС‹Р№ С‚РµРєСЃС‚ РёР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="LogMessage"/>. Р¤Р°СЃР°Рґ РЅР°Рґ <see cref="GetFormatted"/>
 		/// </summary>
-        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
-		/// <returns>Форматированная строка сообщения</returns>
+        /// <param name="message">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="LogMessage"/></param>
+		/// <returns>Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅР°СЏ СЃС‚СЂРѕРєР° СЃРѕРѕР±С‰РµРЅРёСЏ</returns>
 		protected virtual string GetText(LogMessage message) {
 			return GetFormatted(message);
 		}
 		/// <summary>
-        ///     Возвращет форматированный текст из представления сообщения <see cref="LogMessage"/>
+        ///     Р’РѕР·РІСЂР°С‰РµС‚ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅС‹Р№ С‚РµРєСЃС‚ РёР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="LogMessage"/>
 		/// </summary>
-        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
-        /// <returns>Форматированная строка сообщения</returns>
+        /// <param name="message">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="LogMessage"/></param>
+        /// <returns>Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅР°СЏ СЃС‚СЂРѕРєР° СЃРѕРѕР±С‰РµРЅРёСЏ</returns>
 		protected virtual string GetFormatted(LogMessage message) {
 			string text;
 			if (!string.IsNullOrEmpty(CustomFormat)) {

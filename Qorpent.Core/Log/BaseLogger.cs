@@ -51,7 +51,7 @@ namespace Qorpent.Log {
         /// <summary>
         ///     Внутреннее хранилище массива райтеров
         /// </summary>
-        private ILogWriter[] _writers;
+        private IList<ILogWriter> _writers;
         /// <summary>
         /// 	Регулярное выражение, которое будет применено к тексту сообщения
         /// </summary>
@@ -63,9 +63,9 @@ namespace Qorpent.Log {
         /// <summary>
         /// 	Массив низкоуровневых менеджеров записи лога
         /// </summary>
-        public ILogWriter[] Writers {
-            get { return _writers ?? (_writers = LoadFromXmlSource()); }
-            set { _writers = value; }
+        public IList<ILogWriter> Writers {
+            get { return _writers ?? (_writers = LoadFromXmlSource().ToList()); }
+            set { _writers = value.ToList(); }
         }
         /// <summary>
         /// 	Фильтр на пользователя
@@ -110,6 +110,7 @@ namespace Qorpent.Log {
         /// <param name="context">Контекст</param>
         /// <returns>True, если применим</returns>
 		public virtual bool IsApplyable(object context) {
+            if (!Active) return false;
 			lock (Sync) {
 				if (string.IsNullOrEmpty(Mask) || "*" == Mask) {
 					return true; // логгер поддерживает весь контекст
@@ -127,6 +128,7 @@ namespace Qorpent.Log {
 		/// </summary>
 		/// <param name="message"> </param>
 		public void StartWrite(LogMessage message) {
+		    if (!Active) return;
 			lock (Sync) {
 				if (InvalidMessageText(message)) {
 					return;
@@ -173,7 +175,10 @@ namespace Qorpent.Log {
 				WriteTimeOut = 15000;
 			}
 		}
-        /// <summary>
+
+	    public bool Active { get; set; } = true;
+
+	    /// <summary>
         ///     Загрузка из XML-представления
         /// </summary>
         /// <returns></returns>

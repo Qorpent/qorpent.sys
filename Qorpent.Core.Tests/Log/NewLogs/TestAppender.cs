@@ -28,6 +28,7 @@ namespace Qorpent.Core.Tests.Log.NewLogs {
         public IList<string> Messages = new List<string>();
 
         public void Write(LoggyMessage message) {
+            if (!Active) return;
             var key = message.Level + ":" + message.Message;
             if (!string.IsNullOrWhiteSpace(message.LoggerName))
             {
@@ -40,5 +41,6 @@ namespace Qorpent.Core.Tests.Log.NewLogs {
         }
 
         public LogLevel Level { get; set; }
+        public bool Active { get; set; } = true;
     }
 }

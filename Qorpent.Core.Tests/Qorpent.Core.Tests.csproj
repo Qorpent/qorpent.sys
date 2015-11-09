@@ -75,6 +75,7 @@
     <Compile Include="Utils\ComplexStringTest.cs" />
     <Compile Include="Utils\ConsoleApplicationSupport\ConsoleDefaultApplicationBehavior.cs" />
     <Compile Include="Utils\ConsoleApplicationSupport\ConsoleHandlerTests.cs" />
+    <Compile Include="Utils\ConsoleApplicationSupport\ConsoleParametersLogRedirectionTest.cs" />
     <Compile Include="Utils\ConsoleArgumentHelperTest.cs" />
     <Compile Include="Utils\ConvertExtensionsTest.cs" />
     <Compile Include="Utils\DatabaseExtensionsTest.cs" />

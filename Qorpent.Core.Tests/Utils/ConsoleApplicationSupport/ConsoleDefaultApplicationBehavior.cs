@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Qorpent.Log;
 
 namespace Qorpent.Utils.Tests.ConsoleApplicationSupport{
-	[TestFixture]
+    [TestFixture]
 	public class ConsoleDefaultApplicationBehavior{
 		private string dir;
 

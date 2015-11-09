@@ -20,6 +20,7 @@ namespace Qorpent.Log.NewLog {
         }
 
         public void Write(LoggyMessage message) {
+            if (!Active) return;
             if (IsFor(message.Level)) {
                 if (string.IsNullOrWhiteSpace(message.LoggerName)) {
                     message.LoggerName = this.Name;
@@ -54,6 +55,7 @@ namespace Qorpent.Log.NewLog {
         }
 
         public LogLevel Level { get; set; }
+        public bool Active { get; set; } = true;
 
         public string Name { get; set; }
 

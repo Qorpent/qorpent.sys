@@ -34,6 +34,7 @@ namespace Qorpent.Log.NewLog {
         }
 
         public  void Write(LoggyMessage message) {
+            if (!Active) return;
             try {
                 if (message.Visited.Contains(this.Id)) {
                     return;
@@ -53,5 +54,6 @@ namespace Qorpent.Log.NewLog {
         }
 
         public LogLevel Level { get; set; }
+        public bool Active { get; set; } = true;
     }
 }

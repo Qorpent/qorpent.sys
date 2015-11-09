@@ -99,6 +99,7 @@
     <Compile Include="IO\Net\HttpUtils.cs" />
     <Compile Include="IO\PidFileMode.cs" />
     <Compile Include="Log\NewLog\ElasticSearchAppender.cs" />
+    <Compile Include="Log\NewLog\TextWriterAppender.cs" />
     <Compile Include="Model\IWithCustom.cs" />
     <Compile Include="Model\IWithIntId.cs" />
     <Compile Include="Model\IWithStringId.cs" />

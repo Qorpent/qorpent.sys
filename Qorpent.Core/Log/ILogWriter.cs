@@ -25,8 +25,12 @@ namespace Qorpent.Log {
 		/// 	Minimal log level of writer
 		/// </summary>
 		LogLevel Level { get; set; }
+        /// <summary>
+        /// Common marker of writer activity
+        /// </summary>
+	    bool Active { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// 	writes message synchronously on down level
 		/// </summary>
 		/// <param name="message"> </param>

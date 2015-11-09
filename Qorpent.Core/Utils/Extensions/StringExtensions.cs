@@ -277,6 +277,11 @@ namespace Qorpent.Utils.Extensions {
                         if (!options.HasFlag(SimplifyOptions.NoNewLines)) {
                             sb.Append(c);
                         }
+                        else {
+                            if (c == '\n' && !options.HasFlag(SimplifyOptions.NoInlineWs)) {
+                                sb.Append(' ');
+                            }
+                        }
                     }
                     else {
                         if (!options.HasFlag(SimplifyOptions.NoInlineWs)) {

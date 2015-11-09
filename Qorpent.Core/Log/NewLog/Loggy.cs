@@ -7,9 +7,22 @@ namespace Qorpent.Log.NewLog {
         private static ILoggyManager _manager;
 
         public static ILoggyManager Manager {
-            get { return _manager ?? (_manager = new LoggyManager()); }
-            set { _manager = value; }
-        } 
+            get {
+                if (null == _manager) {
+                    Manager = new LoggyManager();        
+                }
+                return _manager;
+                ;
+            }
+            set {
+                if (_manager != value && value != null) {
+                    _manager = value;
+                    OnChangeManager?.Invoke(_manager);
+                }
+            }
+        }
+
+        public static Action<ILoggyManager> OnChangeManager;
 
         public static ILoggy Default {
             get { return Manager.Get(); }
