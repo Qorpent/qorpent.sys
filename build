@@ -4,8 +4,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Project Include=".\Qorpent.Core\*.csproj;.\Qorpent.Utils\*.csproj" />
-		<Project Include=".\**\*.csproj" Exclude=".\commons\*.csproj;.\**\*.Tests.csproj;.\Qorpent.MongoDBIntegration\*.csproj" />
-		<Project Condition="$(Tests)" Include=".\**\*.Tests.csproj" Exclude=".\Qorpent.MongoDBIntegration.Tests\*.csproj" />
+		<Project Include=".\**\*.csproj" Exclude=".\commons\*.csproj;.\Qorpent.Integration.SqlExtensions\*.csproj;.\**\*.Tests.csproj;.\Qorpent.MongoDBIntegration\*.csproj" />
+		<Project Condition="$(Tests)" Include=".\**\*.Tests.csproj" Exclude=".\Qorpent.Integration.SqlExtensions.Tests\*.csproj;.\Qorpent.MongoDBIntegration.Tests\*.csproj" />
 	</ItemGroup>
 	<Target Name="Build">
 		<MSBuild Projects="@(Project)" Properties="NoProjRef=True" />
