@@ -48,6 +48,7 @@ namespace qorpent.v2.security.Tests
         }
         [SetUp]
         public virtual void Setup() {
+            Console.WriteLine("In setup!!!");
             lock (this) {
                 if (!_envinitialized) {
                     InitializeEnvironment();
@@ -67,6 +68,7 @@ namespace qorpent.v2.security.Tests
         }
 
         private void InitializeEnvironment() {
+            Console.WriteLine("in initialize!!!");
             mainpwd = Path.Combine(FileSystemHelper.ResetTemporaryDirectory(), "pwd.bxls");
             var fileuser = new User {
                 Login = "fuser"
@@ -91,7 +93,7 @@ namespace qorpent.v2.security.Tests
             };
             pwd.SetPassword(esuser, Epass, salt: "esuser_salt");
             ExecuteCommand("http://127.0.0.1:9200/" + esindex, method: "DELETE");
-            var storeesresult = ExecuteCommand("http://127.0.0.1:9200/" + esindex + "/pwd/esuser",
+            var storeesresult = ExecuteCommand("http://127.0.0.1:9200/" + esindex + "/pwd/esuser?refresh=true",
                 esuser.ToString("store"));
             Console.WriteLine("ESSTORERESULT: "+storeesresult);
             if (null == storeesresult) {

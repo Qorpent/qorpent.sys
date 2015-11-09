@@ -811,7 +811,9 @@ namespace Qorpent.Experiments {
             }
             if (!string.IsNullOrWhiteSpace(r)) return r;
             if (null == paths || 0 == paths.Length) return r;
-            return paths.Select(_ => Get(data, _)).FirstOrDefault(_ => null != _).ToStr();
+            var res = paths.Select(_ => Get(data, _)).FirstOrDefault(_ => null != _);
+            if (null == res) return null;
+            return res.ToStr();
         }
 
         public static int resolvenum(this object data, string path, params string[] paths)

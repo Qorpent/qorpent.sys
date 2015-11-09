@@ -82,10 +82,10 @@ namespace qorpent.v2.security.user.storage.providers {
                 var j = json.jsonify();
                 var found = j.bul("found") || j.num("*.total") > 0;
                 if (found) {
-	                j = j.map("*._source");
-                    var version = j.num("_version");
-                    var user = UserSerializer.CreateFromJson(j);
-	                user.Id = j.str("_id");
+	                var src = j.map("*._source");
+                    var version = j.resolvenum("_version","__version");
+                    var user = UserSerializer.CreateFromJson(src);
+	                user.Id = j.resolvestr("_id","__id");
                     user.Version = version;
                     _cache[login] = user;
                 }

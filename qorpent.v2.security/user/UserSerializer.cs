@@ -37,8 +37,8 @@ namespace qorpent.v2.security.user {
             }
             var j = alreadyJsonified ? jsonsrc : jsonsrc.jsonify();
             j = j.map("_source") ?? j;
-            user.Id = j.str("_id");
-            user.Version = j.num("_version");
+            user.Id = j.resolvestr("_id","__id");
+            user.Version = j.resolvenum("_version","__version");
             user.CreateTime = j.date("createtime");
             user.UpdateTime = j.date("updatetime");
 
@@ -131,14 +131,15 @@ namespace qorpent.v2.security.user {
                 return;
             }
             jw.OpenObject();
-            jw.WriteProperty("_id", user.Id, notnullonly);
-            jw.WriteProperty("_version", user.Version, notnullonly);
+            
+            jw.WriteProperty("__id", user.Id, notnullonly);
+            jw.WriteProperty("__version", user.Version, notnullonly);
             jw.WriteProperty("createtime", user.CreateTime.ToUniversalTime(), notnullonly);
             jw.WriteProperty("updatetime", user.UpdateTime.ToUniversalTime(), notnullonly);
 
             if (usermode == "admin" || usermode == "store") {
                 jw.WriteProperty("class", "user");
-                jw.WriteProperty("_type", "user");
+                jw.WriteProperty("__type", "user");
                 var type = user.GetType();
                 jw.WriteProperty("netclass", type.FullName + ", " + type.Assembly.GetName().Name);
             }
