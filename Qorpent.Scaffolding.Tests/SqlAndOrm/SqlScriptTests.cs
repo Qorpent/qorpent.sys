@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.SqlObjects;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
@@ -1021,7 +1022,7 @@ IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
 
 
-".Trim(), digest.Trim());
+".Trim().Simplify(SimplifyOptions.LfOnly), digest.Trim().Simplify(SimplifyOptions.LfOnly));
 		}
 
 

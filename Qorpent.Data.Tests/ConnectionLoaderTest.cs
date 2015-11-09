@@ -34,6 +34,7 @@ namespace Qorpent.Data.Tests
 			File.Delete(file);
 		}
 		[Test]
+        [Category("NOTC")]
 		public void FilePostgresResolutionWorks() {
 			var t = Type.GetType("Npgsql.NpgsqlConnection, Npgsql", false);
 			if(null==t) {

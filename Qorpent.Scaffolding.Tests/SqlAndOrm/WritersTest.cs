@@ -6,6 +6,7 @@ using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Scaffolding.Model.SqlWriters;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 {
@@ -397,7 +398,7 @@ CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int = null  ) RETURNS in
 exec ""dbo"".""aproc""
 		return (select @s*id+@v + ""dbo"".""aGetValue""(@s,@v) from ""dbo"".""a"" where ""dbo"".""a"".Id=0)
 END;
-GO".Trim(), res.Trim());
+GO".Trim().Simplify(SimplifyOptions.LfOnly), res.Trim().Simplify(SimplifyOptions.LfOnly));
 		}
 
 
