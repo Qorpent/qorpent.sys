@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Qorpent.Utils.Extensions;
-using static System.Int32;
 
 namespace Qorpent {
     public static class ScopeExtensions {
@@ -20,6 +16,10 @@ namespace Qorpent {
         {
             if (null == scope) return null;
             return names.Select(name => scope.Get(name).ToStr()).FirstOrDefault(subresult => !string.IsNullOrWhiteSpace(subresult));
+        }
+
+        public static bool IsSet(this IScope scope, string name) {
+            return scope.FuzzyResolve<bool>(name);
         }
         /// <summary>
         /// Resolution with case-symbol-ignorance with weighting

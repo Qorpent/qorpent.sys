@@ -30,13 +30,17 @@ namespace Qorpent.IO {
 		/// 
 		/// </summary>
 		public const string JSON = "application/json";
-
-		/// <summary>
-		/// Converts extension to mime type
+        /// <summary>
+		/// 
 		/// </summary>
-		/// <param name="extension"></param>
-		/// <returns></returns>
-		public static string GetMimeByExtension(string extension)
+		public const string TEXT = "text/plain";
+
+        /// <summary>
+        /// Converts extension to mime type
+        /// </summary>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public static string GetMimeByExtension(string extension)
 		{
 			
 			var ext = extension.Replace(".", "").ToLower();

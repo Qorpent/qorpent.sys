@@ -177,5 +177,24 @@ namespace Qorpent.Utils
 	        }
 	        return header;
 	    }
+
+	    public static void KillFile(string file) {
+	        try {
+	            if (File.Exists(file)) {
+	                File.SetAttributes(file, FileAttributes.Normal);
+	                File.Delete(file);
+	            }
+	        }
+	        catch {
+	            Thread.Sleep(100);
+                if (File.Exists(file))
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+            }
+            
+            
+        }
 	}
 }
