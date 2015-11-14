@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Utils/SecurityExtensions.cs
 #endregion
 using System.Security.Principal;
+using qorpent.Security;
 using qorpent.v2.security.authorization;
 using Qorpent.Applications;
 using Qorpent.IoC;
@@ -30,7 +31,7 @@ namespace Qorpent.Utils.Extensions{
     ///</summary>
     public static class SecurityExtensions{
         /// <summary>
-        /// Объект синхронизации
+        /// РћР±СЉРµРєС‚ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё
         /// </summary>
         public static object sync = new object();
         private static IPrincipalSource _principalSource;
@@ -50,7 +51,7 @@ namespace Qorpent.Utils.Extensions{
        
 
         /// <summary>
-        /// Проверяет доступность элемента пользователю
+        /// РџСЂРѕРІРµСЂСЏРµС‚ РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ СЌР»РµРјРµРЅС‚Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ
         /// </summary>
         /// <param name="roles"></param>
         /// <param name="principal"></param>
@@ -68,7 +69,7 @@ namespace Qorpent.Utils.Extensions{
         
 
         /// <summary>
-        /// Приводит переданную строку с именем пользователя к принципалу
+        /// РџСЂРёРІРѕРґРёС‚ РїРµСЂРµРґР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ СЃ РёРјРµРЅРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рє РїСЂРёРЅС†РёРїР°Р»Сѓ
         /// </summary>
         /// <param name="username"></param>
         /// <param name="roles"></param>
@@ -96,7 +97,7 @@ namespace Qorpent.Utils.Extensions{
         }
 
         /// <summary>
-        /// Признак административной учетной записи текущего пользователя
+        /// РџСЂРёР·РЅР°Рє Р°РґРјРёРЅРёСЃС‚СЂР°С‚РёРІРЅРѕР№ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
         /// </summary>
         /// <param name="resolver"></param>
         /// <returns></returns>
@@ -105,17 +106,17 @@ namespace Qorpent.Utils.Extensions{
         }
 
 	    /// <summary>
-	    /// Признак административной учетной записи
+	    /// РџСЂРёР·РЅР°Рє Р°РґРјРёРЅРёСЃС‚СЂР°С‚РёРІРЅРѕР№ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё
 	    /// </summary>
 	    /// <param name="resolver"></param>
 	    /// <param name="user"> </param>
 	    /// <returns></returns>
 	    public static bool IsAdmin(this IRoleResolverService resolver, IPrincipal user){
-            return resolver.IsInRole(user.Identity, "ADMIN");
+            return resolver.IsInRole(user.Identity, SecurityConst.ROLE_ADMIN);
         }
 
           /// <summary>
-          /// Оболочка проверки роли текущего пользователя
+          /// РћР±РѕР»РѕС‡РєР° РїСЂРѕРІРµСЂРєРё СЂРѕР»Рё С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
           /// </summary>
           /// <param name="resolver"></param>
           /// <param name="role"></param>

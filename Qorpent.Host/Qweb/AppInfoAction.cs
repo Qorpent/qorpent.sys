@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using qorpent.Security;
 using Qorpent.IoC;
 using Qorpent.Mvc;
 
 namespace Qorpent.Host.Qweb
 {
-    [Action("info.app",Role="GUEST")]
+    [Action("info.app",Role=SecurityConst.ROLE_GUEST)]
     public class AppInfoAction:ActionBase
     {
         [Inject]

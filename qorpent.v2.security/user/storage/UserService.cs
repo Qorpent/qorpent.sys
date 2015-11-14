@@ -15,6 +15,18 @@ namespace qorpent.v2.security.user.storage {
             set { _userCache = value; }
         }
 
+        public UserService() {
+            
+        }
+
+        public UserService(params IUserSource[] sources) {
+            if (null != sources) {
+                foreach (var userSource in sources) {
+                    RegisterExtension(userSource);
+                }
+            }
+        }
+
         public int Idx { get; set; }
 
         public IUser GetUser(string login) {
@@ -42,9 +54,10 @@ namespace qorpent.v2.security.user.storage {
                 throw new Exception("requested storage not enabled");
             }
             var realuser = writeable.Store(user);
-
-            _userCache.Clear();
-            _userCache.Refresh();
+            if (null != _userCache) {
+                _userCache.Clear();
+                _userCache.Refresh();
+            }
             return realuser;
         }
 

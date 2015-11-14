@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using qorpent.Security;
 using qorpent.v2.security.user.storage;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
@@ -110,6 +111,19 @@ namespace qorpent.v2.security.user {
 
         public virtual string ToString(string usermode) {
             return UserSerializer.GetJson(this, usermode);
+        }
+        /// <summary>
+        /// Activates new user with given time to use
+        /// </summary>
+        /// <returns></returns>
+        public IUser Activate(bool isdemo = false,TimeSpan lease = default (TimeSpan)) {
+            if (lease.TotalDays < 1) {
+                lease = isdemo ? SecurityConst.LEASE_DEMO : SecurityConst.LEASE_USER;
+            }
+            Active = true;
+            Expire = DateTime.Today.AddDays(1).Date.Add(lease);
+            Logable = true;
+            return this;
         }
     }
 }

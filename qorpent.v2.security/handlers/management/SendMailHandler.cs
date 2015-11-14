@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using qorpent.Security;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.messaging;
 using Qorpent.Experiments;
@@ -29,7 +30,7 @@ namespace qorpent.v2.security.handlers.management {
 
         public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             this.loggy = this.loggy ?? LoggyManager.Get("handler.sendmail");
-            if (!Roles.IsInRole(context.User, "ADMIN")) {
+            if (!Roles.IsInRole(context.User, SecurityConst.ROLE_ADMIN)) {
                 context.Finish(new {error = "notauth"}.stringify(), status: 500);
                 return;
             }

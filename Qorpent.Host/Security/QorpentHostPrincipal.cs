@@ -1,4 +1,5 @@
 ﻿using System.Security.Principal;
+using qorpent.Security;
 
 namespace Qorpent.Host.Security{
 	/// <summary>
@@ -18,7 +19,7 @@ namespace Qorpent.Host.Security{
 		}
 
 		public bool IsInRole(string role){
-			if (role == "DEFAULT" || role == "GUEST") return true;
+			if (role == SecurityConst.ROLE_USER || role == SecurityConst.ROLE_GUEST) return true;
 			if (_info.Type == TokenType.Admin) return true;
 			return false;
 		}

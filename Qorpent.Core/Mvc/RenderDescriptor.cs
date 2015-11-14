@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/RenderDescriptor.cs
 #endregion
 using System;
+using qorpent.Security;
 using Qorpent.Serialization;
 
 namespace Qorpent.Mvc {
@@ -87,7 +88,7 @@ namespace Qorpent.Mvc {
 		/// 	true if render proceed only if ayuthorization passed
 		/// </summary>
 		public bool UseAuthorization {
-			get { return !string.IsNullOrEmpty(Role) && "DEFAULT" != Role; }
+			get { return !string.IsNullOrEmpty(Role) && SecurityConst.ROLE_USER != Role; }
 			set { throw new NotSupportedException(); }
 		}
 

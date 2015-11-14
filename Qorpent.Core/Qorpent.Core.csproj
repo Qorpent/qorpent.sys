@@ -270,6 +270,7 @@
     <Compile Include="Security\ICredentialStorage.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
     <Compile Include="Security\LogonAuthenticationResult.cs" />
+    <Compile Include="Security\SecurityConst.cs" />
     <Compile Include="Security\UserName.cs" />
     <Compile Condition="'$(QISD_DEVEL)'!=''" Include="$(QISD_DEVEL)" />
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />

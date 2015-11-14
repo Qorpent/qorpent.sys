@@ -10,6 +10,16 @@ namespace qorpent.v2.security.user {
     /// <summary>
     /// </summary>
     public class Identity : IIdentity,IJsonSerializable {
+
+        public static string GetIdentityKey(string name) {
+            if (string.IsNullOrWhiteSpace(name)) return string.Empty;
+            if (name.Contains("\\")) {
+                name = name.Split('\\')[1] + "@" + name.Split('\\')[0];
+            }
+            return name.Replace("//", "@").ToLowerInvariant();
+
+        }
+
         public Identity(IIdentity identity) {
             this.Name = identity.Name;
             this.AuthenticationType = identity.AuthenticationType;

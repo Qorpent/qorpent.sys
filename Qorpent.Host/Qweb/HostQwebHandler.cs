@@ -3,6 +3,7 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using qorpent.Security;
 using qorpent.v2.security.authorization;
 using Qorpent.IO.Http;
 using Qorpent.Mvc;
@@ -86,13 +87,13 @@ namespace Qorpent.Host.Qweb
 
 	    private bool Authorize(IHostServer server, IMvcContext context) {
 	        if (!string.IsNullOrWhiteSpace(context.ActionDescriptor.Role)) {
-	            if (!context.ActionDescriptor.Role.Contains("GUEST")) {
+	            if (!context.ActionDescriptor.Role.Contains(SecurityConst.ROLE_GUEST)) {
 	                if (!context.User.Identity.IsAuthenticated) {
                         ProcessError(context, new SecurityException("guest permitted"));
 	                }
 	                var roles = context.ActionDescriptor.Role.SmartSplit();
                     var rr = server.Container.Get<IRoleResolverService>();
-	                if (rr.IsInRole(context.User, "ADMIN")) return true;
+	                if (rr.IsInRole(context.User, SecurityConst.ROLE_ADMIN)) return true;
                     foreach (var role in roles) {
                         if (role.StartsWith("!")) {
                             if (rr.IsInRole(context.User, role.Substring(1))) {

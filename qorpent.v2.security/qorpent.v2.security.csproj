@@ -81,6 +81,7 @@
     <Compile Include="encryption\Encryptor.cs" />
     <Compile Include="logon\LogonService.cs" />
     <Compile Include="user\services\UserStateChecker.cs" />
+    <Compile Include="user\storage\providers\DictionaryUserSource.cs" />
     <Compile Include="user\storage\providers\ElasticUserSource.cs" />
     <Compile Include="user\storage\UserCache.cs" />
     <Compile Include="user\storage\UserService.cs" />

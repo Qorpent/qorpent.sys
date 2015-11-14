@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Policy;
 using System.Security.Principal;
+using qorpent.Security;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
 using Qorpent;
@@ -25,6 +26,21 @@ namespace qorpent.v2.security.authorization {
 
         [Inject]
         public IUserService Users { get; set; }
+
+        public RoleResolverService() {
+            
+        }
+
+        public RoleResolverService(IUserService users = null, params IRoleResolver[] resolvers) {
+            if (null != users) {
+                Users = users;
+            }
+            if (null != resolvers) {
+                foreach (var roleResolver in resolvers) {
+                    RegisterExtension(roleResolver);
+                }
+            }
+        }
 
         /// <summary>
         /// 
@@ -53,11 +69,11 @@ namespace qorpent.v2.security.authorization {
             }
             
             //first rule - GUEST role is allowed for all authenticated users - allow
-            if (role == "GUEST") {
+            if (role == SecurityConst.ROLE_GUEST) {
                 return true;
             }
             //second rule - if ADMIN requested and user is not marked as admin - deny
-            if (role == "ADMIN" && !id.IsAdmin) {
+            if (role == SecurityConst.ROLE_ADMIN && !id.IsAdmin) {
                 return false;
             }
             // third rule - if user IsAdmin - it's any role without checking (except exact mode)
@@ -69,7 +85,7 @@ namespace qorpent.v2.security.authorization {
                 return false;
             }
             // fith - if user is not GUEST any other authenticated users are matched with DEFAULT role
-            if (role == "DEFAULT") {
+            if (role == SecurityConst.ROLE_USER) {
                 return true;
             }
             ///sexth - if it's not GUEST, ADMIN , DEFAULT we must provide extension-based checking

@@ -32,6 +32,7 @@
     <Compile Include="logon\services\PasswordManagerTest.cs" />
     <Compile Include="logon\services\PasswordPolicyTest.cs" />
     <Compile Include="logon\services\SecureLogonServiceTest.cs" />
+    <Compile Include="management\UpdateUserCheckerTest.cs" />
     <Compile Include="messaging\CanSendMailTest.cs" />
     <Compile Include="messaging\MessageQueueTest.cs" />
     <Compile Include="messaging\UserMessagingTest.cs" />
@@ -42,7 +43,6 @@
     <Compile Include="user\UserSerializationTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="management\" />
     <Folder Include="storage\" />
   </ItemGroup>
   <ItemGroup>

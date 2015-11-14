@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Xml.Linq;
+using qorpent.Security;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.IO.Http;
@@ -273,7 +274,7 @@ namespace Qorpent.Host.Qweb
 
 							var name = Encoding.UTF8.GetString(Convert.FromBase64String(namepass));
 							name = name.Split(':')[0].Trim();
-							_logonuser = new GenericPrincipal(new GenericIdentity("local\\" + name), new[] {"DEFAULT"});
+							_logonuser = new GenericPrincipal(new GenericIdentity("local\\" + name), new[] { SecurityConst.ROLE_USER });
 						}
 					}
 				}

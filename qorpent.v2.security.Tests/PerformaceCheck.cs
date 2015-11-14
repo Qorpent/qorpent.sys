@@ -3,6 +3,7 @@ using System.Net;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using qorpent.Security;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.logon;
@@ -35,7 +36,7 @@ namespace qorpent.v2.security.Tests
                 };
                 var roles =(RoleResolverService) _container.Get<IRoleResolverService>();
                 roles.Cache.Clear();
-                var isinrole = roles.IsInRole(identity, "ADMIN");
+                var isinrole = roles.IsInRole(identity, SecurityConst.ROLE_ADMIN);
                 isinrole = roles.IsInRole(identity, "role2");
                 isinrole = roles.IsInRole(identity, "role1");
                 
@@ -77,7 +78,7 @@ namespace qorpent.v2.security.Tests
                 };
                 var roles = (RoleResolverService)_container.Get<IRoleResolverService>();
                 roles.Cache.Clear();
-                var isinrole = roles.IsInRole(identity, "ADMIN");
+                var isinrole = roles.IsInRole(identity, SecurityConst.ROLE_ADMIN);
                 isinrole = roles.IsInRole(identity, "role2");
                 isinrole = roles.IsInRole(identity, "role1");
 

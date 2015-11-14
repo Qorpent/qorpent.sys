@@ -1,4 +1,5 @@
 using System.Threading;
+using qorpent.Security;
 using qorpent.v2.security.authorization;
 using Qorpent.Host;
 using Qorpent.IoC;
@@ -25,7 +26,7 @@ namespace qorpent.v2.security.handlers.userinfo {
             }
             var result = false;
             if (login != context.User.Identity.Name) {
-                if (!Roles.IsInRole(context.User.Identity, "ADMIN")) {
+                if (!Roles.IsInRole(context.User.Identity, SecurityConst.ROLE_ADMIN)) {
                     context.Finish("{\"error\":\"adminrequire\"}", status: 500);
                     return;
                 }
