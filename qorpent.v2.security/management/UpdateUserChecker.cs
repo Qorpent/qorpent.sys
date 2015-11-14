@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using qorpent.Security;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
@@ -36,7 +37,7 @@ namespace qorpent.v2.security.management {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot change domain"};
             }
        
-            if (Roles.IsInRole(actor, "SECURE_DOMAIN_ADMIN")) {
+            if (Roles.IsInRole(actor, SecurityConst.ROLE_DOMAIN_ADMIN)) {
                 if (update.ChangedActive(target) && !target.Active) {
                     return new UpdateResult {IsError = true, ErrorMessage = "cannot reactivate yourself"};
                 }
@@ -96,10 +97,22 @@ namespace qorpent.v2.security.management {
             if (id.IsAdmin) {
                 return new UpdateResult {Ok = true};
             }
-
-            if (null != update.IsAdmin && update.IsAdmin.Value) {
+#region Q543
+            // >>> #Q-543 implementation ROLE_SECURITY_ADMIN can do anything except ADMIN and SECURITY_ADMIN management
+            if (null != update.IsAdmin && update.IsAdmin!=target.IsAdmin) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot set admin"};
             }
+
+            if (update.ChangedRoles(target)) {
+                if (update.Roles.Any(_ => _.Contains(SecurityConst.ROLE_SECURITY_ADMIN))) {
+                    return new UpdateResult { IsError = true, ErrorMessage = $"cannot manage {SecurityConst.ROLE_SECURITY_ADMIN} role" };
+                }
+            }
+            
+            if (Roles.IsInRole(id, SecurityConst.ROLE_SECURITY_ADMIN)) {
+                return new UpdateResult {Ok = true};
+            }
+#endregion
 
             if (update.ChangedRoles(target)) {
                 if (update.Roles.Any(_ => _.ToUpper().Contains("SECURE_"))) {
@@ -132,7 +145,7 @@ namespace qorpent.v2.security.management {
             if (update.ChangedDomain(target)) {
                 return new UpdateResult {IsError = true, ErrorMessage = "cannot change domain"};
             }
-            if (Roles.IsInRole(actor, "SECURE_DOMAIN_ADMIN")) {
+            if (Roles.IsInRole(actor, SecurityConst.ROLE_DOMAIN_ADMIN)) {
                 if (update.ChangedActive(target) && !target.Active) {
                     return new UpdateResult {IsError = true, ErrorMessage = "cannot reactivate yourself"};
                 }
@@ -157,7 +170,7 @@ namespace qorpent.v2.security.management {
             if (string.IsNullOrWhiteSpace(usr.Domain)) {
                 return new UpdateResult {IsError = true, ErrorMessage = "only admins can create becide domain"};
             }
-            if (!Roles.IsInRole(actor, "SECURE_DOMAIN_ADMIN")) {
+            if (!Roles.IsInRole(actor, SecurityConst.ROLE_DOMAIN_ADMIN)) {
                 return new UpdateResult {IsError = true, ErrorMessage = "not domain administrator"};
             }
             if (update.Domain != usr.Domain) {
