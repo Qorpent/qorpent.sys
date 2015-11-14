@@ -58,7 +58,11 @@ define(["the-root"], function ($the, $m) {
                     var rc = this.translitTable[ic];
                     if(!!rc){
                         if(uc){
-                            rc =rc.toUpperCase();
+                            if(rc.length==1) {
+                                rc = rc.toUpperCase();
+                            }else{
+                                rc = rc[0].toUpperCase() + rc.substring(1);
+                            }
                         }
                         r+=rc;
                     }else{
@@ -73,8 +77,9 @@ define(["the-root"], function ($the, $m) {
                 }
                 s = s.replace(/^\s*(ООО)|(ОАО)|(ПО)|(ЗАО)|(ИП)\s+/,"");
                 s = s.replace(/["'-]/g,"");
-                s = s.replace(/\s+/g," ");
                 s = s.trim().toLowerCase();
+                s = s.replace(/\s+/g,"_");
+
 
                 return this.translit(s);
             }

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization
@@ -53,6 +57,97 @@ namespace Qorpent.Serialization
 			}
 			return str;
 		}
+
+        private static IDictionary<char, string> _translitMap = new Dictionary<char, string> {
+
+            {'а', "a"},
+            {'б', "b"},
+            {'в', "v"},
+            {'г', "g"},
+            {'д', "d"},
+            {'е', "e"},
+            {'ё', "e"},
+            {'ж', "zh"},
+            {'з', "z"},
+            {'и', "i"},
+            {'й', "y"},
+            {'к', "k"},
+            {'л', "l"},
+            {'м', "m"},
+            {'н', "n"},
+            {'о', "o"},
+            {'п', "p"},
+            {'р', "r"},
+            {'с', "s"},
+            {'т', "t"},
+            {'у', "u"},
+            {'ф', "f"},
+            {'х', "h"},
+            {'ц', "ts"},
+            {'ч', "ch"},
+            {'ш', "sh"},
+            {'щ', "sh"},
+            {'ъ', ""},
+            {'ы', "i"},
+            {'ь', ""},
+            {'э', "e"},
+            {'ю', "yu"},
+            {'я', "ya"},
+
+        };
+        /// <summary>
+        /// Make rus-eng translit
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Translit(string str) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return string.Empty;
+            }
+            var sb = new StringBuilder();
+            foreach (var c in str) {
+                var ic = char.ToLowerInvariant(c);
+                if (_translitMap.ContainsKey(ic)) {
+                    var oc = _translitMap[ic];
+                    if (ic != c) {
+                        if (oc.Length == 1) {
+                            oc = oc.ToUpperInvariant();
+                        }
+                        else {
+                            oc = oc.Substring(0, 1).ToUpperInvariant() + oc.Substring(1);
+                        }
+                    }
+                    sb.Append(oc);
+                }
+                else {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+        /// <summary>
+        /// Escape russian organization name to transliterated system name
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string OrganizationSysName(string s) {
+            if (string.IsNullOrWhiteSpace(s)) {
+                return string.Empty;
+            }
+            s = Regex.Replace(s, @"^\s*(ООО)|(ОАО)|(ПО)|(ЗАО)|(ИП)\s+", "");
+            s = Regex.Replace(s, @"[\""'-]", "");
+            s = s.Trim().ToLowerInvariant();
+            s = Regex.Replace(s, @"\s+", " ");
+            var words = s.SmartSplit(false, true, ' ');
+            if (words.Count <= 2) {
+                s = string.Join("_", words);
+            }
+            else {
+                s = words[0] + "_" + string.Join("", words.Skip(1).Select(_ => _.Substring(0, 1)));
+            }
+            s = Translit(s);
+            return s;
+        }
 
         /// <summary>
         /// Escape all symbols for given type

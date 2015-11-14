@@ -5,6 +5,20 @@ namespace Qorpent.Serialization.Tests
     [TestFixture]
     public class EscaperTests
     {
+        //translit
+        [TestCase("Привет", "Privet")]
+        [TestCase("Ча ща", "Cha sha")]
+        public void TranslitTest(string input, string result) {
+            Assert.AreEqual(result,Escaper.Translit(input));
+        }
+
+        [TestCase("ОАО \"Ромашка\"", "romashka")]
+        [TestCase("ООО \"Гостюхинский сувенир\"", "gostyuhinskiy_suvenir")]
+        [TestCase("ООО \"Мотовилихинские автомобильные дизельные моторы\"", "motovilihinskie_adm")]
+        public void OrganizationSystemName(string input, string result) {
+            Assert.AreEqual(result, Escaper.OrganizationSysName(input));
+        }
+
         // XML
         [TestCase("in-minus", "in-minus")]
         [TestCase("in1dec", "in1dec")]
