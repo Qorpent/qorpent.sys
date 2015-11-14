@@ -89,6 +89,15 @@ namespace qorpent.v2.security.user {
         public IUserService UserService { get; set; }
         public IUserSource UserSource { get; set; }
 
+        public static implicit  operator Identity(User user)
+        {
+            return new Identity(user);
+        }
+
+        public static implicit operator User(Identity identity) {
+            return identity.User as User;
+        }
+
         public override bool Equals(object obj) {
             var result = base.Equals(obj);
             if (result) {
@@ -122,7 +131,9 @@ namespace qorpent.v2.security.user {
             }
             Active = true;
             Expire = DateTime.Today.AddDays(1).Date.Add(lease);
-            Logable = true;
+            if (!IsGroup) {
+                Logable = true;
+            }
             return this;
         }
     }

@@ -14,6 +14,7 @@ namespace qorpent.v2.security.management {
     [ContainerComponent(Lifestyle.Singleton, "updateuser.processor", ServiceType = typeof (IUpdateUserProcessor))]
     public class UpdateUserProcessor : ServiceBase, IUpdateUserProcessor {
         private IUpdateUserChecker _checker;
+        private IUserPolicyService _userPolicy;
 
         public UpdateUserProcessor() {
             LoggyName = "updateuser.processor";
@@ -32,7 +33,10 @@ namespace qorpent.v2.security.management {
         public IRoleResolverService Roles { get; set; }
 
         [Inject]
-        public IUserPolicyService UserPolicy { get; set; }
+        public IUserPolicyService UserPolicy {
+            get { return _userPolicy ?? (_userPolicy = new UserPolicyService()); }
+            set { _userPolicy = value; }
+        }
 
         [Inject]
         public IUserMessagingService Messendger { get; set; }

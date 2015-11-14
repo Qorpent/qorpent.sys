@@ -12,6 +12,7 @@ namespace qorpent.Security
         public const string ROLE_GUEST = "GUEST";
         public const string ROLE_USER = "DEFAULT";
         public const string ROLE_DOMAIN_ADMIN = "SECURE_DOMAIN_ADMIN";
+        public const string ROLE_DEMO_ACCESS = "SECURE_DEMO";
         public static TimeSpan LEASE_DEMO = TimeSpan.FromDays(7);
         public static TimeSpan LEASE_USER = TimeSpan.FromDays(365);
     }

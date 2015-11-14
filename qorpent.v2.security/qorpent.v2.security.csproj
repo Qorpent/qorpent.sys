@@ -39,6 +39,8 @@
     <Compile Include="handlers\logon\TokenAuthHandlerBase.cs" />
     <Compile Include="handlers\logon\TokenAuthVerifyCmsHandler.cs" />
     <Compile Include="handlers\logon\TokenAuthProcessHandler.cs" />
+    <Compile Include="handlers\management\IInitClientHandler.cs" />
+    <Compile Include="handlers\management\InitClientHandler.cs" />
     <Compile Include="handlers\UserOpAttribute.cs" />
     <Compile Include="handlers\UserOperation.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />
@@ -62,6 +64,10 @@
     <Compile Include="handlers\management\SendMailHandler.cs" />
     <Compile Include="logon\services\PasswordManager.cs" />
     <Compile Include="logon\services\PasswordPolicy.cs" />
+    <Compile Include="management\ClientService.cs" />
+    <Compile Include="management\IClientService.cs" />
+    <Compile Include="management\InitClientRecord.cs" />
+    <Compile Include="management\InitClientResult.cs" />
     <Compile Include="management\UserPolicy.cs" />
     <Compile Include="management\UserPolicyService.cs" />
     <Compile Include="management\IUserPolicyService.cs" />
