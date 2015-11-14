@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using qorpent.v2.security.encryption;
 using qorpent.v2.security.user;
 using Qorpent.IoC;
@@ -80,6 +82,33 @@ namespace qorpent.v2.security.logon.services {
             var resetkey = (Guid.NewGuid() + target.Login + DateTime.Now).GetMd5();
             target.ResetKey = resetkey;
             target.ResetExpire = DateTime.Now.ToUniversalTime().AddMinutes(expireminutes);
+        }
+
+        Random r = new Random();
+
+        public string Generate() {
+            char[] chars = {'z', 'w', 'v', 's', 'f','q'}; //only with nomix ru-eng
+            char[] symbols = {'$', '%', '@', '!', '=', '+'};
+            var b =new StringBuilder();
+            var fst = chars[r.Next(chars.Length)];
+            var sec = chars[r.Next(chars.Length)];
+              if (r.Next(5) <= 3) {
+                fst = char.ToUpperInvariant(fst);
+            }
+            else {
+                sec = char.ToUpperInvariant(sec);
+            }
+            b.Append(fst);
+            b.Append(sec);
+            List<int> ints = new List<int> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            for (var i = 0; i < 5; i++) {
+                var num = r.Next(ints.Count);
+                var val = ints[num];
+                ints.RemoveAt(num);
+                b.Append(val.ToString());
+            }
+            b.Append(symbols[r.Next(symbols.Length)]);
+            return b.ToString();
         }
 
         private static string GetHash(IUser target, string password) {

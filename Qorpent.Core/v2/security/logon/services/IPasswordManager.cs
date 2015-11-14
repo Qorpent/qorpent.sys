@@ -7,5 +7,10 @@ namespace qorpent.v2.security.logon.services {
         bool MatchPassword(IUser target, string password);
         void ResetPassword(IUser target, string password, string key);
         void MakeRequest(IUser target, int expireminutes, string email = null);
+        /// <summary>
+        /// Generates new password that matches policy
+        /// </summary>
+        /// <returns></returns>
+        string Generate();
     }
 }
