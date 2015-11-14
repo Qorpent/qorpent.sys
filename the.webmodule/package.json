@@ -43,6 +43,7 @@
     "the-collections-history-tests",
     "the-expression-tests",
     "the-interpolation-tests",
+    "the-biz-tests",
     {
       "condition":"new",
       "name":"the2-object-tests"

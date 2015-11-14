@@ -39,7 +39,8 @@ define([
     'the-print',
     'the-dates',
     'the-report',
-    'the-hash'
+    'the-hash',
+    'the-biz'
 
 ], function ($the,md5) {
         $the.md5 = md5;
