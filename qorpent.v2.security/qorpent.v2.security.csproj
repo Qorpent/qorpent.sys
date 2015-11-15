@@ -67,7 +67,7 @@
     <Compile Include="management\ClientService.cs" />
     <Compile Include="management\IClientService.cs" />
     <Compile Include="management\InitClientRecord.cs" />
-    <Compile Include="management\InitClientResult.cs" />
+    <Compile Include="management\ClientResult.cs" />
     <Compile Include="management\UserPolicy.cs" />
     <Compile Include="management\UserPolicyService.cs" />
     <Compile Include="management\IUserPolicyService.cs" />

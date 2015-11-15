@@ -75,6 +75,10 @@ namespace qorpent.v2.security.Tests.logon.hash
             };
         }
 
+        public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
+            yield break;
+        }
+
         public bool IsDefault {
             get { throw new NotImplementedException(); }
         }

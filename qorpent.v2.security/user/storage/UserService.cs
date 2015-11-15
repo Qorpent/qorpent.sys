@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent;
 using Qorpent.Experiments;
@@ -32,6 +33,10 @@ namespace qorpent.v2.security.user.storage {
         public IUser GetUser(string login) {
             var key = login.ToLowerInvariant();
             return UserCache.Get(key, InternalGetUser);
+        }
+
+        public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
+            return Extensions.SelectMany(_ => _.SearchUsers(query));
         }
 
         public bool IsDefault {

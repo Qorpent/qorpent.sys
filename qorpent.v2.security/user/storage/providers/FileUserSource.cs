@@ -67,6 +67,10 @@ namespace qorpent.v2.security.user.storage.providers {
             }
         }
 
+        public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
+            return _cache.Values.Where(query.IsMatch);
+        }
+
         public int Idx { get; set; }
 
         public override void Initialize() {

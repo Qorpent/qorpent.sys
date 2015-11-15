@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using qorpent.Security;
 using qorpent.v2.security.user.storage;
 using Qorpent.Core.Tests.Experiments;
@@ -65,7 +66,7 @@ namespace qorpent.v2.security.user {
         /// </summary>
         public IList<string> Roles {
             get { return _roles ?? (_roles = new List<string>()); }
-            set { _roles = value; }
+            set { _roles = value.ToList(); }
         }
 
         public IDictionary<string, string> Tags {

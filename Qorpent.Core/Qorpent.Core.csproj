@@ -477,6 +477,7 @@
     <Compile Include="v2\security\messaging\PostMessage.cs" />
     <Compile Include="v2\security\user\IUser.cs" />
     <Compile Include="v2\security\user\services\IUserStateChecker.cs" />
+    <Compile Include="v2\security\user\storage\UserSearchQuery.cs" />
     <Compile Include="v2\security\user\UserActivityState.cs" />
     <Compile Include="v2\security\user\storage\IUserCache.cs" />
     <Compile Include="v2\security\user\storage\IUserCacheLease.cs" />

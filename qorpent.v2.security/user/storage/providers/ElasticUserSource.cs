@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml.Linq;
 using qorpent.v2.security.authorization;
 using Qorpent;
@@ -93,6 +94,44 @@ namespace qorpent.v2.security.user.storage.providers {
                     _cache[login] = null;
                 }
                 return _cache[login];
+            }
+        }
+
+        public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
+            var q = "login:*";
+            if (!string.IsNullOrWhiteSpace(query.Login)) {
+                q += " AND login:" + query.Login;
+            }
+            if (!string.IsNullOrWhiteSpace(query.Name)) {
+                q += " AND name:" + query.Name;
+            }
+            if (!query.Groups) {
+                q += " AND NOT isgroup:true";
+            }
+            if (!query.Users) {
+                q += " AND isgroup:true";
+            }
+            if (!string.IsNullOrWhiteSpace(query.Domain)) {
+                q += " AND domain:" + query.Domain;
+            }
+            var esquery = new {
+                query = new {query_string = new {query = q}}
+            };
+            var json = EsClient.ExecuteCommand(GetBaseUrl() + "_search", esquery.stringify());
+            if (null == json)
+            {
+                yield break;
+            }
+            var j = json.jsonify();
+            var hits = j.arr("hits.hits");
+            foreach (var hit in hits) {
+                var src = hit.map("*._source");
+                var version = hit.resolvenum("_version", "__version");
+                var user = UserSerializer.CreateFromJson(src);
+                user.Id = hit.resolvestr("_id", "__id");
+                user.Version = version;
+                _cache[user.Login] = user;
+                yield return user;
             }
         }
 

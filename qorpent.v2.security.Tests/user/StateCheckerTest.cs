@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
@@ -93,6 +94,10 @@ namespace qorpent.v2.security.Tests.user
                     return null;
                 }
                 return _cache[login];
+            }
+
+            public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
+                return _cache.Values.Where(query.IsMatch);
             }
         }
 

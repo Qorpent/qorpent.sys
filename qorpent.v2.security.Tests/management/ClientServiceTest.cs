@@ -9,6 +9,7 @@ using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
 using qorpent.v2.security.user.storage;
 using qorpent.v2.security.user.storage.providers;
+using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.Tests.management
 {
@@ -41,7 +42,7 @@ namespace qorpent.v2.security.Tests.management
             userStateChecker = new UserStateChecker {UserService = userService};
         }
 
-        InitClientResult getResult(string userName= null, InitClientRecord record = null) {
+        ClientResult getResult(string userName= null, InitClientRecord record = null) {
             return clientService.Init(userName??SecurityConst.ROLE_ADMIN, record??minimalValidRequest);
         }
         [TestCase(SecurityConst.ROLE_ADMIN)]
@@ -113,6 +114,44 @@ namespace qorpent.v2.security.Tests.management
         public void DoublerNotEnabled() {
             var r = getResult(record: doubleRequest);
             Assert.False(r.OK);
+        }
+
+        [Test]
+        public void CanMoveToWork() {
+            var r = getResult();
+            var exp = r.Group.Expire;
+            var tw = clientService.ToWork(
+                new Identity(userService.GetUser(SecurityConst.ROLE_ADMIN)),
+                r.GeneratedSysName);
+            Assert.True(tw.OK);
+            Assert.NotNull(tw.Group);
+            var g = userService.GetUser(tw.Group.Login);
+            Assert.False(g.Roles.Contains(SecurityConst.ROLE_DEMO_ACCESS));
+            Assert.Greater(g.Expire,exp);
+            var user = userService.GetUser("user000@" + r.GeneratedSysName);
+            Assert.AreEqual(user.Expire,g.Expire);
+        }
+
+        [Test]
+        public void CanMoveToDemo()
+        {
+            var r = getResult();
+            var tw = clientService.ToWork(
+                new Identity(userService.GetUser(SecurityConst.ROLE_ADMIN)),
+                r.GeneratedSysName);
+            var g = userService.GetUser(tw.Group.Login);
+            var exp = g.Expire;
+            var td = clientService.ToDemo(
+                new Identity(userService.GetUser(SecurityConst.ROLE_ADMIN)),
+                r.GeneratedSysName
+                );
+            Assert.True(td.OK);
+            Assert.NotNull(td.Group);
+            g = userService.GetUser(tw.Group.Login);
+            Assert.True(g.Roles.Contains(SecurityConst.ROLE_DEMO_ACCESS));
+            Assert.Greater(exp, g.Expire);
+            var user = userService.GetUser("user000@" + r.GeneratedSysName);
+            Assert.AreEqual(user.Expire, g.Expire);
         }
     }
 }
