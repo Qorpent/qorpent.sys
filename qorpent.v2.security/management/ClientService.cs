@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using System.Security.Principal;
 using qorpent.Security;
@@ -44,11 +45,11 @@ namespace qorpent.v2.security.management {
         [Inject]
         public IPasswordManager PasswordManager { get; set; }
 
-        public InitClientResult Init(string userName, InitClientRecord record) {
+        public ClientResult Init(string userName, InitClientRecord record) {
             return Init(new Identity( Users.GetUser(userName)), record);
         }
-        public InitClientResult Init(IIdentity caller, InitClientRecord record) {
-            var result = new InitClientResult {OK = true};
+        public ClientResult Init(IIdentity caller, InitClientRecord record) {
+            var result = new ClientResult {OK = true};
             try {
                 InternalInit(caller, record, result);
             }
@@ -59,10 +60,108 @@ namespace qorpent.v2.security.management {
             return result;
         }
 
-        private void InternalInit(IIdentity caller, InitClientRecord record, InitClientResult result) {
-            if (!Roles.IsInRole(caller, SecurityConst.ROLE_SECURITY_ADMIN)) {
-                throw new SecurityException("not allowed for caller");
+        public ClientResult ToWork(IIdentity caller, string clientSysName) {
+            var result = new ClientResult {OK = true};
+            try {
+                CheckCaller(caller);
+                InternalToWork( clientSysName,result);
+                if (null != result.Group) {
+                    InternalSetExpire( clientSysName, DateTime.Today.AddDays(1).Add(SecurityConst.LEASE_USER), result);
+                }
             }
+            catch (Exception e) {
+                result.OK = false;
+                result.Error = e;
+            }
+            return result;
+        }
+
+        private void InternalToWork(string clientSysName, ClientResult result) {
+            var group = Users.GetUser(clientSysName + "@groups");
+            if (null == group) {
+                throw new Exception("no group found");
+            }
+            if (!group.Roles.Contains(SecurityConst.ROLE_DEMO_ACCESS)) {
+                return; //already work
+            }
+            group.Roles.Remove(SecurityConst.ROLE_DEMO_ACCESS);
+            group.Roles.Add("writer"); //HACK: it's unlift-related role
+            result.Group = group;
+            Users.Store(group);
+            
+        }
+
+        public ClientResult ToDemo(IIdentity caller, string clientSysName) {
+            var result = new ClientResult { OK = true };
+            try
+            {
+                CheckCaller(caller);
+                InternalToDemo(clientSysName, result);
+                if (null != result.Group)
+                {
+                    InternalSetExpire(clientSysName, DateTime.Today.AddDays(1).Add(SecurityConst.LEASE_DEMO),result);
+                }
+            }
+            catch (Exception e)
+            {
+                result.OK = false;
+                result.Error = e;
+
+            }
+            return result;
+        }
+
+        private void InternalToDemo( string clientSysName, ClientResult result) {
+            var group = Users.GetUser(clientSysName + "@groups");
+            if (null == group)
+            {
+                throw new Exception("no group found");
+            }
+            if (group.Roles.Contains(SecurityConst.ROLE_DEMO_ACCESS))
+            {
+                return; //already demo
+            }
+            group.Roles.Add(SecurityConst.ROLE_DEMO_ACCESS);
+            group.Roles.Remove("writer"); //HACK: it's unlift-related role
+            result.Group = group;
+            Users.Store(group);
+        }
+
+        public ClientResult SetExpire(IIdentity caller, string clientSysName, DateTime newExpire) {
+            var result = new ClientResult { OK = true };
+            try
+            {
+                CheckCaller(caller);
+                InternalSetExpire(clientSysName,newExpire,result);
+
+            }
+            catch (Exception e)
+            {
+                result.OK = false;
+                result.Error = e;
+            }
+            return result;
+        }
+
+        private void InternalSetExpire( string clientSysName, DateTime date, ClientResult result) {
+            result.Group = result.Group ?? Users.GetUser(clientSysName + "@groups");
+            if (null == result.Group)
+            {
+                throw new Exception("no group found");
+            }
+            result.Group.Expire = date;
+            Users.Store(result.Group);
+            var users = Users.SearchUsers(new UserSearchQuery {Domain = clientSysName}).ToArray();
+            foreach (var user in users) {
+                if (user.Active && user.Expire > DateTime.Now) {
+                    user.Expire = result.Group.Expire;
+                    Users.Store(user);
+                }
+            }
+        }
+
+        private void InternalInit(IIdentity caller, InitClientRecord record, ClientResult result) {
+            CheckCaller(caller);
             if (string.IsNullOrWhiteSpace(record.Name))
             {
                 throw new ArgumentException("no client name supplied", nameof(record.Name));
@@ -120,6 +219,12 @@ namespace qorpent.v2.security.management {
             result.GeneratedPassword = pass;
             result.Group = group;
             result.User = user;
+        }
+
+        private void CheckCaller(IIdentity caller) {
+            if (!Roles.IsInRole(caller, SecurityConst.ROLE_SECURITY_ADMIN)) {
+                throw new SecurityException("not allowed for caller");
+            }
         }
     }
 }
