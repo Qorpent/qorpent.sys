@@ -20,6 +20,7 @@ define([
     'the-angular-ellipse',
     'the-angular-reports',
     'the-angular-datetimepicker',
+    'the-angular-validation',
     'the-uploader',
     'the-angular-dialog',
     'the-angular-controlgroup',

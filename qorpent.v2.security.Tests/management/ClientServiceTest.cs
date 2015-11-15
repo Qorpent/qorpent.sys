@@ -19,9 +19,9 @@ namespace qorpent.v2.security.Tests.management
         private DictionaryUserSource userStore;
         private UserService userService;
         private ClientService clientService;
-        private InitClientRecord minimalValidRequest;
+        private ClientRecord minimalValidRequest;
         private IPasswordManager passwordManager;
-        private InitClientRecord doubleRequest;
+        private ClientRecord doubleRequest;
         private IPasswordLogon passLogon;
         private IUserStateChecker userStateChecker;
 
@@ -35,14 +35,14 @@ namespace qorpent.v2.security.Tests.management
             userStore[SecurityConst.ROLE_SECURITY_ADMIN.ToLowerInvariant()] = new User {Login = SecurityConst.ROLE_SECURITY_ADMIN, Roles = new [] {SecurityConst.ROLE_SECURITY_ADMIN}}.Activate();
             userStore[SecurityConst.ROLE_USER.ToLowerInvariant()] = new User {Login = SecurityConst.ROLE_USER }.Activate();
             userStore["existed@groups"] = new User {Login = "existed@groups",IsGroup = true}.Activate();
-            minimalValidRequest = new InitClientRecord {Name = "ОАО Тест",IsDemo = true};
-            doubleRequest = new InitClientRecord {Name = "ОАО Existed",IsDemo = true};
+            minimalValidRequest = new ClientRecord {Name = "ОАО Тест",IsDemo = true};
+            doubleRequest = new ClientRecord {Name = "ОАО Existed",IsDemo = true};
             passwordManager = new PasswordManager();
             passLogon = new PasswordLogon {UserService = userService};
             userStateChecker = new UserStateChecker {UserService = userService};
         }
 
-        ClientResult getResult(string userName= null, InitClientRecord record = null) {
+        ClientResult getResult(string userName= null, ClientRecord record = null) {
             return clientService.Init(userName??SecurityConst.ROLE_ADMIN, record??minimalValidRequest);
         }
         [TestCase(SecurityConst.ROLE_ADMIN)]

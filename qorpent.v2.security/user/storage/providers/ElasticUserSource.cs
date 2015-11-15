@@ -151,7 +151,7 @@ namespace qorpent.v2.security.user.storage.providers {
                 }
                 user.UpdateTime = DateTime.Now.ToUniversalTime();
                 var json = UserSerializer.GetJson(user, "store");
-                var url = GetBaseUrl() + user.Id;
+                var url = GetBaseUrl() + user.Id + "?refresh=true";
 
                 var result = EsClient.ExecuteCommand(url, json);
                 if (null == result) {

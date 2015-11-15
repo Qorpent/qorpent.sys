@@ -14,7 +14,7 @@ namespace qorpent.v2.security.management
         /// <param name="caller"></param>
         /// <param name="record"></param>
         /// <returns></returns>
-        ClientResult Init(IIdentity caller, InitClientRecord record);
+        ClientResult Init(IIdentity caller, ClientRecord record);
         /// <summary>
         /// Move client from demo to working group
         /// </summary>

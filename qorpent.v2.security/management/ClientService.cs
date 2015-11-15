@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Security.Principal;
@@ -45,10 +46,10 @@ namespace qorpent.v2.security.management {
         [Inject]
         public IPasswordManager PasswordManager { get; set; }
 
-        public ClientResult Init(string userName, InitClientRecord record) {
+        public ClientResult Init(string userName, ClientRecord record) {
             return Init(new Identity( Users.GetUser(userName)), record);
         }
-        public ClientResult Init(IIdentity caller, InitClientRecord record) {
+        public ClientResult Init(IIdentity caller, ClientRecord record) {
             var result = new ClientResult {OK = true};
             try {
                 InternalInit(caller, record, result);
@@ -160,7 +161,7 @@ namespace qorpent.v2.security.management {
             }
         }
 
-        private void InternalInit(IIdentity caller, InitClientRecord record, ClientResult result) {
+        private void InternalInit(IIdentity caller, ClientRecord record, ClientResult result) {
             CheckCaller(caller);
             if (string.IsNullOrWhiteSpace(record.Name))
             {
@@ -186,8 +187,10 @@ namespace qorpent.v2.security.management {
                 Login = groupLogin,
                 IsGroup = true,
                 Name = record.Name,
+                Email = record.UserEmail,
                 Roles = new[] {SecurityConst.ROLE_DEMO_ACCESS},
-                Expire = DateTime.Today.AddDays(1).Add(SecurityConst.LEASE_DEMO)
+                Expire = DateTime.Today.AddDays(1).Add(SecurityConst.LEASE_DEMO),
+                Custom = new Dictionary<string,object>{ {"contact" , record.Phone}}
             };
             Users.Store(group);
 
@@ -205,7 +208,8 @@ namespace qorpent.v2.security.management {
                 Domain = record.SysName,
                 Groups = new[] {record.SysName},
                 Active = true,
-                Expire = group.Expire
+                Expire = group.Expire,
+                Roles = new[] { SecurityConst.ROLE_DOMAIN_ADMIN }
             };
             var pass = string.IsNullOrWhiteSpace(record.Password) ? PasswordManager.Generate() : record.Password;
             if (!PasswordManager.GetPolicy(pass).Ok) {

@@ -9,7 +9,7 @@ define(["the-angular","the-rest2"], function ($the) {
                 var result = {
 
                 }
-                result.initClientRequest = function(options){
+                result.clientRequest = function(options){
                     this.name = null;
                     this.sysname = null;
                     this.username = null;
@@ -17,19 +17,36 @@ define(["the-angular","the-rest2"], function ($the) {
                     this.isdemo = false;
                     this.password = null;
                     this.success = null;
+                    this.operation = "init";
+                    this.expire = null;
                     $the.extend(this,options);
                     var self = this;
                 }
-                result.initClientRequest.prototype.getHttpOptions = function(){
+                result.clientRequest.prototype.getHttpOptions = function(){
                     return {
-                        url : "/initclient",
+                        url : "/client",
                         method: "POST",
                         data : $the.jsonify(this,{nulls:false,defaults:false,functions:false})
                     }
                 }
 
                 result.initClient = function(options){
-                    return $rest2.executeCommand(options,"initclient",result.initClientRequest);
+                    return $rest2.executeCommand(options,"initclient",result.clientRequest);
+                }
+
+                result.toWork = function(name){
+                    var options = {sysname:name, operation:"towork"};
+                    return $rest2.executeCommand(options,"towork", result.clientRequest)
+                }
+
+                result.toDemo = function(name){
+                    var options = {sysname:name, operation:"todemo"};
+                    return $rest2.executeCommand(options,"todemo", result.clientRequest)
+                }
+
+                result.setExpire = function(name, expire){
+                    var options = {sysname:name, operation:"setexpire", expire:expire};
+                    return $rest2.executeCommand(options,"setexpire", result.clientRequest)
                 }
 
                 return result;
