@@ -40,7 +40,9 @@ define([
     'the-dates',
     'the-report',
     'the-hash',
-    'the-biz'
+    'the-biz',
+    'the-rest2',
+    'the-angular-initclient'
 
 ], function ($the,md5) {
         $the.md5 = md5;

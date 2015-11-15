@@ -35,6 +35,7 @@ define(["the-angular", "the-action"], function ($the, template) {
         loginActions.requestkey = requestKeyAction;
         loginActions.resetpass = resetPassAction;
 
+
         login.isauth = function (callback) { //callback(result, error)
             login.actions.isauth({
                 success: function (result) {

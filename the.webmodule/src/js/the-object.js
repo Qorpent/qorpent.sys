@@ -38,7 +38,7 @@ define(["the-root"], function ($the) {
         ExtendOptions.ExtendedCast = new ExtendOptions();
         ExtendOptions.ExtendedCast.extensions = true;
         ExtendOptions.ExtendedCast.deep = true;
-        ExtendOptions.DefaultCast.defaultOnNull = true;
+        ExtendOptions.ExtendedCast.defaultOnNull = true;
         ExtendOptions.ExtendedCast.ignoreCase = true;
         ExtendOptions.ExtendedCast.cloneInternals = true;
 
