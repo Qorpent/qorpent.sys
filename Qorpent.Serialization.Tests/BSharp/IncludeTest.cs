@@ -36,8 +36,9 @@ class B x=2
         }
 
 
-	    [Test]
-	    public void InvalidInvclude() {
+	    [Test(Description = "temporal test for complex case investigation")]
+        [Category("NOTC")]
+	    public void CheckInclude() {
 	        var code = File.ReadAllText("./BSharp/bad_include_from_stat_sample.bxl");
 	        var result = Compile(code).Get("stat");
             Console.WriteLine(result.Compiled);
