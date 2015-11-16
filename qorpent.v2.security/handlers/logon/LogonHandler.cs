@@ -16,12 +16,34 @@ namespace qorpent.v2.security.handlers.logon {
     [UserOp("logon",Secure =true,SuccessLevel = LogLevel.Info,ErrorLevel = LogLevel.Warn,TreatFalseAsError = true)]
     public class LogonHandler : UserOperation,ILogonHandler {
         
-       
         [Inject]
         public ILogonService LogonService { get; set; }
 
         [Inject]
         public IHttpTokenService TokenService { get; set; }
+
+        private ILoggy _log;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject(Name = "security.logger")]
+        public ILoggy Log
+        {
+            get
+            {
+                if (null == _log)
+                {
+                    _log = Loggy.Get("security.logger");
+                }
+                return _log;
+            }
+            set
+            {
+                _log = value;
+            }
+        }
+
 
 
         /// <summary>
@@ -44,18 +66,20 @@ namespace qorpent.v2.security.handlers.logon {
                 LocalEndPoint = context.Request.LocalEndPoint,
                 UserAgent = context.Request.UserAgent
             };
-            if (identity.IsAuthenticated && !identity.IsGuest)
-            {
+            var strRemoteIp = logondata.RemoteEndPoint.Address.ToString();
+            if (identity.IsAuthenticated && !identity.IsGuest) {
                 var token = TokenService.Create(context.Request);
-	            var strRemoteIp = logondata.RemoteEndPoint.Address.ToString();
                 identity.User = identity.User ?? new User {Login = identity.Name};
-	            var resolvedUsername = identity.User.Login;
-				if (!string.IsNullOrWhiteSpace(identity.User.Domain)) {
-					resolvedUsername = resolvedUsername + "@" + identity.User.Domain;
-				}
+                var resolvedUsername = identity.User.Login;
+                if (!string.IsNullOrWhiteSpace(identity.User.Domain)) {
+                    resolvedUsername = resolvedUsername + "@" + identity.User.Domain;
+                }
                 TokenService.Store(context.Response, context.Request.Uri, token);
-				Loggy.Info("Login: " + resolvedUsername + ", " + logondata.UserAgent + " from " + strRemoteIp);
+                Log.Info("Login successful: " + resolvedUsername + ", User Agent: [" + logondata.UserAgent + "] from ip: " + strRemoteIp);
                 return new HandlerResult {Result = true, Data = logondata};
+            }
+            if (!identity.IsAuthenticated && !identity.IsGuest) {
+                Log.Warn("Login failed: " + context.User.Identity.Name + ", User Agent: [" + logondata.UserAgent + "] from ip: " + strRemoteIp);
             }
             TokenService.Store(context.Response, context.Request.Uri, null);
             return new HandlerResult {Result = false, Data = logondata};
