@@ -96,6 +96,9 @@
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
+    <Content Include="BSharp\bad_include_from_stat_sample.bxl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Qorpent.Bxl.import" />
     <None Include="Qorpent.Core.import" />
     <None Include="Qorpent.IoC.import" />

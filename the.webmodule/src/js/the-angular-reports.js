@@ -22,8 +22,53 @@ define(["the-angular"], function ($the) {
                             }
                             return "views/the/report-toolbar.html";
                         }
-                        _.params = {};
+                        _.params = {
+                            if_has_level : function(lvl, vals, levelname) {
+                                var l = lvl;
+                                var lb = levelname || "level";
+                                while(true){
+                                    l--;
+                                    if(l==0)return false;
+                                    var name = lb+l;
+                                    if(!this.hasOwnProperty(name))return false;
+                                    var val = this[name];
+                                    if(-1!=vals.indexOf(val))return true;
+                                }
+                                return false;
+                            },
+                            if_no_level : function (lvl, vals, levelname) {
+                                var l = lvl;
+                                var lb = levelname || "level";
+                                while(true){
+                                    l--;
+                                    if(l==0)return true;
+                                    var name = lb+l;
+                                    if(!this.hasOwnProperty(name))return true;
+                                    var val = this[name];
+                                    if(-1!=vals.indexOf(val))return false;
+                                }
+                                return true;
+                            },
+                            level_change :  function(lvl, levelname){
+                                //console.log(['change',lvl,levelname]);
+                                var lb = levelname || "level";
+                                for(var i=lvl+1;i<=10;i++){
+                                    var name = lb + i;
+                                    if(!this.hasOwnProperty(name))return;
+                                    this[name] = 'none';
+                                }
+                            },
+                            level_visible : function(lvl, levelname){
+                                //console.log(['visible',lvl,levelname]);
+                                if(lvl == 1)return true;
+                                var lb = levelname || "level";
+                                var name = lb + (lvl-1);
+                                if (!this.hasOwnProperty(name))return true; //logically first
+                                return this[name]!='none';
+                            }
+                        };
                         _.lists = {};
+                        //console.log(_.parameters);
                         _.parameters.forEach(function(__){
                             __.show = function(){
                                 if(!!__.ngif){

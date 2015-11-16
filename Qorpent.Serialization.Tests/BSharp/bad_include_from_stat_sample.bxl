@@ -1,0 +1,15 @@
+﻿class levelselector embed
+	param id="%{levelname,deflevelname}%{level}" "%{title,deftitle}" 
+		deftitle="> затем:" 
+		deflevelname='level' 
+		ng-if="params.level_visible(%{level},'%{levelname,deflevelname}')"
+		ng-change="params.level_change(%{level},'%{levelname,deflevelname}')"
+		item none "Нет"
+		item domain "Сеть" ng-if="params.if_no_level(%{level},['domain','shop'])"
+		
+	
+
+class stat 	
+	include levelselector body level=1 title="Развернуть по:"
+	include levelselector body level=2
+	include levelselector body level=3

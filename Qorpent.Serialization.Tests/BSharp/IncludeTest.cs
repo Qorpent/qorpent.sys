@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
@@ -20,8 +21,45 @@ class B x=2
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
 
+	    [Test]
+	    public void InternalOverride() {
+            var code = @"
+class A embed
+	test level%{x} a='%{x}'
+class B x=2
+	include A body
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual("2", result.Compiled.Element("test").Attr("a"));
+            Assert.AreEqual("level2", result.Compiled.Element("test").Attr("code"));
+        }
 
-		[Test]
+
+	    [Test]
+	    public void InvalidInvclude() {
+	        var code = File.ReadAllText("./BSharp/bad_include_from_stat_sample.bxl");
+	        var result = Compile(code).Get("stat");
+            Console.WriteLine(result.Compiled);
+	    }
+
+        [Test]
+        public void InternalOverride2()
+        {
+            var code = @"
+class A embed
+	test  level%{x} a='%{x}'
+class B
+	include A body x=2
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual("2",result.Compiled.Element("test").Attr("a"));
+            Assert.AreEqual("level2", result.Compiled.Element("test").Attr("code"));
+        }
+
+
+        [Test]
 		public void IncludeAllWithElementName()
 		{
 			var code = @"
