@@ -17,6 +17,7 @@ namespace qorpent.v2.reports.core {
         public string Default { get; set; }
         public int Idx { get; set; }
         public string IfCondition { get; set; }
+        public bool Hidden { get; set; }
         public string OnChange { get; set; }
         public string Type { get; set; }
         public IList<ListItem> List { get; set; }
@@ -26,6 +27,7 @@ namespace qorpent.v2.reports.core {
             jw.WriteProperty("default",Default);
             jw.WriteProperty("ngif",IfCondition,true);
             jw.WriteProperty("ngchange",OnChange,true);
+            jw.WriteProperty("hidden",Hidden,true);
             jw.WriteProperty("type",Type,true);
             jw.WriteProperty("list",List.OfType<object>().ToArray());
         }
@@ -35,6 +37,7 @@ namespace qorpent.v2.reports.core {
             Default = xml.AttrOrValue("default");
             IfCondition = xml.AttrOrValue("ng-if");
             OnChange = xml.AttrOrValue("ng-change");
+            Hidden = xml.AttrOrValue("hidden").ToBool();
             Type = xml.AttrOrValue("type");
             var listattr = xml.Attr("list");
             if (!string.IsNullOrWhiteSpace(listattr)) {

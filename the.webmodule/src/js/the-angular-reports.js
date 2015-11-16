@@ -71,6 +71,8 @@ define(["the-angular"], function ($the) {
                         //console.log(_.parameters);
                         _.parameters.forEach(function(__){
                             __.show = function(){
+                                console.log(__);
+                                if(__.hidden)return false;
                                 if(!!__.ngif){
                                     return $scope.$eval(__.ngif,{report:_,params: _.params});
                                 }

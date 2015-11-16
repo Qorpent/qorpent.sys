@@ -134,8 +134,8 @@ namespace Qorpent.Serialization
             if (string.IsNullOrWhiteSpace(s)) {
                 return string.Empty;
             }
-            s = Regex.Replace(s, @"^\s*(ООО)|(ОАО)|(ПО)|(ЗАО)|(ИП)\s+", "");
-            s = Regex.Replace(s, @"[\""'-]", "");
+            s = Regex.Replace(s, @"^\s*(ООО)|(ОАО)|(ПО)|(ТС)|(ЗАО)|(ИП)\s+", "");
+            s = Regex.Replace(s, @"[\""'\-]", "");
             s = s.Trim().ToLowerInvariant();
             s = Regex.Replace(s, @"\s+", " ");
             var words = s.SmartSplit(false, true, ' ');

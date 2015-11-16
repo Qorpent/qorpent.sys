@@ -55,8 +55,9 @@ define(["the-root"], function ($the, $m) {
                     var uc = c.toUpperCase()==c;
                     var ic = c;
                     if(uc)ic = c.toLowerCase();
-                    var rc = this.translitTable[ic];
-                    if(!!rc){
+
+                    if(this.translitTable.hasOwnProperty(ic)){
+                        var rc = this.translitTable[ic];
                         if(uc){
                             if(rc.length==1) {
                                 rc = rc.toUpperCase();
@@ -75,13 +76,21 @@ define(["the-root"], function ($the, $m) {
                 if(!s){
                     return "";
                 }
-                s = s.replace(/^\s*(ООО)|(ОАО)|(ПО)|(ЗАО)|(ИП)\s+/,"");
-                s = s.replace(/["'-]/g,"");
+                s = s.replace(/^\s*(ООО)|(ОАО)|(ПО)|(ТС)|(ЗАО)|(ИП)\s+/,"");
+                s = s.replace(/["'\-]/g,"");
                 s = s.trim().toLowerCase();
-                s = s.replace(/\s+/g,"_");
-
-
-                return this.translit(s);
+                s = s.replace(/\s+/g," ");
+                var ss = s.split(/ /);
+                if(ss.length <=2){
+                    s = s.replace(/ /g,'_');
+                    return this.translit(s);
+                }else{
+                    var r = ss[0]+"_";
+                    for(var i=1;i<ss.length;i++){
+                        r+=ss[i][0];
+                    }
+                    return this.translit(r);
+                }
             }
         }
     });
