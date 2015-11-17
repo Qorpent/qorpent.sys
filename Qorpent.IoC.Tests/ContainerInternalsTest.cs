@@ -67,4 +67,6 @@ namespace Qorpent.IoC.Tests {
 			Assert.AreEqual(c1n2, _c.ByNameCache["test2"][0]);
 		}
 	}
+
+    
 }

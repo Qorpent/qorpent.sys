@@ -39,14 +39,16 @@ namespace Qorpent.IoC {
 			Name = "";
 		}
 
-		/// <summary>
-		/// 	creates new component in generic style
-		/// </summary>
-		/// <param name="lifestyle"> </param>
-		/// <param name="priority"> </param>
-		/// <param name="implementation"> </param>
-		/// <param name="name"> </param>
-		public ComponentDefinition(Lifestyle lifestyle = Lifestyle.Default,
+        public IComponentDefinition[] LinkedSingletons { get; set; }
+
+        /// <summary>
+        /// 	creates new component in generic style
+        /// </summary>
+        /// <param name="lifestyle"> </param>
+        /// <param name="priority"> </param>
+        /// <param name="implementation"> </param>
+        /// <param name="name"> </param>
+        public ComponentDefinition(Lifestyle lifestyle = Lifestyle.Default,
 		                           string name = "", int priority = 1000, TImplementation implementation = null) {
 			ServiceType = typeof (TService);
 			ImplementationType = typeof (TImplementation);
@@ -110,7 +112,7 @@ namespace Qorpent.IoC {
 		public string Name { get; set; }
 
 		/// <summary>
-		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="Implementation" />
+		/// 	РџСЂРё РїРµСЂРІРѕРј СЃРѕР·РґР°РЅРёРё Рё РїСЂРё РЅР°Р»РёС‡РёРё СЃС‚РёР»СЏ Р¶РёР·РЅРё Extension - РѕР±СЉРµРєС‚С‹ Р±СѓРґСѓС‚ СЃРѕС…СЂР°РЅСЏС‚СЊСЃСЏ РІ <see cref="Implementation" />
 		/// </summary>
 		public bool CacheInstanceOfExtension { get; set; }
 
@@ -130,12 +132,12 @@ namespace Qorpent.IoC {
 		public string Help { get; set; }
 
 		/// <summary>
-		/// 	Опицональный элемент XML из которого произведена загрузка компонента (при манифестах)
+		/// 	РћРїРёС†РѕРЅР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ XML РёР· РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅР° Р·Р°РіСЂСѓР·РєР° РєРѕРјРїРѕРЅРµРЅС‚Р° (РїСЂРё РјР°РЅРёС„РµСЃС‚Р°С…)
 		/// </summary>
 		public XElement Source { get; set; }
 
 		/// <summary>
-		/// Теги компонента
+		/// РўРµРіРё РєРѕРјРїРѕРЅРµРЅС‚Р°
 		/// </summary>
 		public string Tag { get; set; }
 
@@ -279,5 +281,7 @@ namespace Qorpent.IoC {
 				Implementation = implementation;
 			}
 		}
+
+	    
 	}
 }

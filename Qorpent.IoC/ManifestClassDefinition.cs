@@ -30,42 +30,44 @@ namespace Qorpent.IoC {
 		/// 	generates container manifest of given type
 		/// </summary>
 		/// <param name="type"> </param>
-		public ManifestClassDefinition(Type type, object predesc = null) {
-			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
-			Type = type;
-			predesc = predesc ??
-				type.GetCustomAttributes(true).Where(x =>
-					{
-						var baseType = x.GetType().BaseType;
-						return baseType != null && (x.GetType().Name == typeof (ContainerComponentAttribute).Name
-					                                                                      ||
-					                                                                      baseType.Name == typeof (ContainerComponentAttribute).Name);
-					}).
-					FirstOrDefault();
-			if (null != predesc) {
-				Descriptor = new ContainerComponentAttribute
-					{
-						Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle"),
-						Name = predesc.GetValue<string>("Name"),
-						Help = predesc.GetValue<string>("Help"),
-						Role = predesc.GetValue<string>("Role"),
-						ServiceType = predesc.GetValue<Type>("ServiceType"),
-						Priority = predesc.GetValue<int>("Priority"),
-						Tag = predesc.GetValue<string>("Tag")
-					};
-			}
+		public ManifestClassDefinition(Type type, object[] predesc = null) {
+            
+            // we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
+            Type = type;
+            predesc = predesc ??
+                type.GetCustomAttributes(true).Where(x =>
+                {
+                    var baseType = x.GetType().BaseType;
+                    return baseType != null && (x.GetType().Name == typeof(ContainerComponentAttribute).Name
+                                                                                      ||
+                                                                                      baseType.Name == typeof(ContainerComponentAttribute).Name);
+                }).ToArray();
 
-			if (null != Descriptor) {
-				if (null == Descriptor.ServiceType) {
-					
-					AutoDetectedServiceType =
-// ReSharper disable PossibleNullReferenceException
-						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound)) ??
-						type;
-// ReSharper restore PossibleNullReferenceException
-				}
-			}
-		}
+            foreach (var p in predesc)
+            {
+                var d = new ContainerComponentAttribute
+                {
+                    Lifestyle = p.GetValue<Lifestyle>("Lifestyle"),
+                    Name = p.GetValue<string>("Name"),
+                    Help = p.GetValue<string>("Help"),
+                    Role = p.GetValue<string>("Role"),
+                    ServiceType = p.GetValue<Type>("ServiceType"),
+                    Priority = p.GetValue<int>("Priority"),
+                    Tag = p.GetValue<string>("Tag"),
+                    Names = p.GetValue<string[]>("Names"),
+                    ServiceTypes = p.GetValue<Type[]>("ServiceTypes")
+                };
+                if (null == d.ServiceType && null == d.ServiceTypes)
+                {
+                    d.ServiceType =
+                        type.GetInterfaces()
+                            .Except(type.BaseType.GetInterfaces())
+                            .FirstOrDefault(x => x != typeof(IContainerBound)) ??
+                        type;
+                }
+                Descriptors.Add(d);
+            }
+        }
 
 
 		/// <summary>
@@ -73,32 +75,11 @@ namespace Qorpent.IoC {
 		/// </summary>
 		/// <param name="type"> </param>
 		/// <param name="predesc"> </param>
-		public ManifestClassDefinition(Type type, Attribute predesc) {
+		public ManifestClassDefinition(Type type, Attribute[] predesc) :this(type,predesc?.OfType<object>().ToArray()){
 			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
-			Type = type;
+			
 
-			if (null != predesc) {
-				Descriptor = new ContainerComponentAttribute
-					{
-						Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle"),
-						Name = predesc.GetValue<string>("Name"),
-						Help = predesc.GetValue<string>("Help"),
-						Role = predesc.GetValue<string>("Role"),
-						ServiceType = predesc.GetValue<Type>("ServiceType"),
-						Priority = predesc.GetValue<int>("Priority"),
-						Tag = predesc.GetValue<string>("Tag"),
-					};
-			}
-
-			if (null != Descriptor) {
-				if (null == Descriptor.ServiceType) {
-					AutoDetectedServiceType =
-// ReSharper disable PossibleNullReferenceException
-						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound)) ??
-						type;
-// ReSharper restore PossibleNullReferenceException
-				}
-			}
+			
 		}
 
 
@@ -110,7 +91,7 @@ namespace Qorpent.IoC {
 		/// <summary>
 		/// 	Attribute with component settings
 		/// </summary>
-		public ContainerComponentAttribute Descriptor { get; private set; }
+		public IList<ContainerComponentAttribute> Descriptors { get; private set; } = new List<ContainerComponentAttribute>();
 
 		/// <summary>
 		/// 	Target type
@@ -135,25 +116,52 @@ namespace Qorpent.IoC {
 				                                          x.GetType().BaseType.Name == typeof (ContainerComponentAttribute).Name).
 // ReSharper restore PossibleNullReferenceException
 					OfType<Attribute>().ToArray();
-			return attributes.Select(attribute => new ManifestClassDefinition(type, attribute));
+			return attributes.Select(attribute => new ManifestClassDefinition(type,new [] { attribute}));
 		}
 
 		/// <summary>
 		/// 	generates ioc component definition
 		/// </summary>
 		/// <returns> </returns>
-		public IComponentDefinition GetComponent() {
-			var stype = Descriptor.ServiceType ?? AutoDetectedServiceType;
-			var impltype = Type;
-			var lifestyle = (Descriptor.Lifestyle == Lifestyle.Default && null != AssemblyManifest)
-				                ? AssemblyManifest.Descriptor.Lifestyle
-				                : Descriptor.Lifestyle;
-			var priority = (Descriptor.Priority == -1 && null != AssemblyManifest)
-				               ? AssemblyManifest.Descriptor.Priority
-				               : Descriptor.Priority;
-			var result = new ComponentDefinition(stype, impltype, lifestyle, Descriptor.Name, priority)
-				{Role = Descriptor.Role, Help = Descriptor.Help, Tag=Descriptor.Tag};
-			return result;
+		public IEnumerable<IComponentDefinition> GetComponents() {
+            
+            foreach (var d in Descriptors) {
+                IList<ComponentDefinition> components = new List<ComponentDefinition>();
+                var stype = d.ServiceType ?? AutoDetectedServiceType;
+                var impltype = Type;
+                var lifestyle = (d.Lifestyle == Lifestyle.Default && null != AssemblyManifest)
+                                    ? AssemblyManifest.Descriptor.Lifestyle
+                                    : d.Lifestyle;
+                var priority = (d.Priority == -1 && null != AssemblyManifest)
+                                   ? AssemblyManifest.Descriptor.Priority
+                                   : d.Priority;
+                var names = d.Names ?? new[] { d.Name };
+                var services = d.ServiceTypes ?? new[] { stype };
+
+                foreach (var name in names)
+                {
+                    foreach (var service in services)
+                    {
+                        var subresult = new ComponentDefinition(service, impltype, lifestyle, name, priority)
+                        { Role = d.Role, Help = d.Help, Tag = d.Tag };
+                        components.Add(subresult);
+                    }
+                }
+                if (lifestyle == Lifestyle.Singleton && components.Count != 1)
+                {
+                    foreach (var c in components)
+                    {
+                        c.LinkedSingletons = components.Where(_ => !Equals(_, c)).ToArray();
+                    }
+                }
+
+                foreach (var componentDefinition in components) {
+                    yield return componentDefinition;
+                }
+            }
+
+			
+            
 		}
 	}
 }

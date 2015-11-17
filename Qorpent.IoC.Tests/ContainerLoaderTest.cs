@@ -67,7 +67,7 @@ namespace Qorpent.IoC.Tests {
 			var c = new Container();
 			c.GetLoader().LoadAssembly(typeof (ContainerLoaderTest).Assembly);
 			var components = c.GetComponents().ToArray();
-			Assert.AreEqual(4, components.Length);
+			Assert.AreEqual(14, components.Length);
 			Assert.NotNull(components.FirstOrDefault(x =>
 			                                         x.ServiceType == typeof (ITestService1)
 			                                         &&

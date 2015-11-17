@@ -23,20 +23,76 @@
 
 #endregion
 
+using System.Linq;
 using NUnit.Framework;
 
 namespace Qorpent.IoC.Tests {
 	[TestFixture]
 	public class ComponentManifestTest {
 		public interface ITestServiceForManifestClassTest {}
+		public interface ITestServiceForManifestClassTest2 {}
 
 		[ContainerComponent]
 		public class TestServiceBaseForManifestClassTest : ServiceBase, ITestServiceForManifestClassTest {}
 
-		[Test]
+        [ContainerComponent(Names=new [] {"a","b"},ServiceTypes = new [] {typeof(ITestServiceForManifestClassTest),typeof(ITestServiceForManifestClassTest2) })]
+        public class TestServiceBaseForManifestClassTest2 : ServiceBase, ITestServiceForManifestClassTest, ITestServiceForManifestClassTest2 { }
+
+        [ContainerComponent(Lifestyle = Lifestyle.Singleton, Names = new[] { "a", "b" }, ServiceTypes = new[] { typeof(ITestServiceForManifestClassTest), typeof(ITestServiceForManifestClassTest2) })]
+        public class TestServiceBaseForManifestClassTest3 : ServiceBase, ITestServiceForManifestClassTest, ITestServiceForManifestClassTest2 { }
+
+        [ContainerComponent(Lifestyle = Lifestyle.Singleton, ServiceType = typeof(ITestServiceForManifestClassTest))]
+        [ContainerComponent(Lifestyle = Lifestyle.Singleton, ServiceType = typeof(ITestServiceForManifestClassTest2))]
+        public class TestServiceBaseForManifestClassTest4 : ServiceBase, ITestServiceForManifestClassTest, ITestServiceForManifestClassTest2 { }
+
+
+        [Test]
 		public void InterfaceResolvedWell() {
 			var mcd = new ManifestClassDefinition(typeof (TestServiceBaseForManifestClassTest));
-			Assert.AreEqual(typeof (ITestServiceForManifestClassTest), mcd.GetComponent().ServiceType);
+			Assert.AreEqual(typeof (ITestServiceForManifestClassTest), mcd.GetComponents().FirstOrDefault().ServiceType);
 		}
-	}
+
+	    [Test]
+	    public void MultipleDefinitionTest() {
+	        var mcd = new ManifestClassDefinition(typeof(TestServiceBaseForManifestClassTest2));
+	        var components = mcd.GetComponents().ToArray();
+            Assert.AreEqual(4,components.Length);
+            Assert.True(components.Any(_=>_.Name=="a" && _.ServiceType==typeof(ITestServiceForManifestClassTest)));
+            Assert.True(components.Any(_=>_.Name=="a" && _.ServiceType==typeof(ITestServiceForManifestClassTest2)));
+            Assert.True(components.Any(_=>_.Name=="b" && _.ServiceType==typeof(ITestServiceForManifestClassTest)));
+            Assert.True(components.Any(_=>_.Name=="b" && _.ServiceType==typeof(ITestServiceForManifestClassTest2)));
+	    }
+
+	    [Test]
+	    public void JoinedSingletonInstantiation() {
+	        var mcd = new ManifestClassDefinition(typeof(TestServiceBaseForManifestClassTest3));
+	        var components = mcd.GetComponents().ToArray();
+	        var c = new Container();
+	        foreach (var component  in components) {
+	            c.Register(component);
+	        }
+	        var srv = c.Get<object>("a");
+	        var srv2 = c.Get<object>("b");
+            Assert.AreSame(srv,srv2);
+	    }
+
+        [Test]
+        public void MultiServiceMultiAttributes()
+        {
+            var mcd = new ManifestClassDefinition(typeof(TestServiceBaseForManifestClassTest4));
+            var components = mcd.GetComponents().ToArray();
+            Assert.AreEqual(2,components.Length);
+            var c = new Container();
+            foreach (var component in components)
+            {
+                c.Register(component);
+            }
+            var srv = c.Get<ITestServiceForManifestClassTest>();
+            var srv2 = c.Get<ITestServiceForManifestClassTest2>();
+            Assert.IsInstanceOf<TestServiceBaseForManifestClassTest4>(srv);
+            Assert.IsInstanceOf<TestServiceBaseForManifestClassTest4>(srv2);
+            Assert.AreNotSame(srv, srv2);
+        }
+
+    }
 }

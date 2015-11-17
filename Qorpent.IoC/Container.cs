@@ -172,6 +172,13 @@ namespace Qorpent.IoC {
 					case Lifestyle.Singleton:
 						if (null == component.Implementation) {
 							component.Implementation = CreateInstance(component, ctorArguments);
+						    if (null != component.LinkedSingletons) {
+						        foreach (var linkedSingleton in component.LinkedSingletons) {
+						            if (null == linkedSingleton.Implementation) {
+						                linkedSingleton.Implementation = component.Implementation;
+						            }
+						        }
+						    }
 						}
 						result = component.Implementation;
 						if (!OutgoingCache.ContainsKey(result)) {

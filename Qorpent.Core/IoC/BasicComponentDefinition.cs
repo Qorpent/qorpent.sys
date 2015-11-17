@@ -92,18 +92,20 @@ namespace Qorpent.IoC {
 		public string Help { get; set; }
 
 		/// <summary>
-		/// 	Опицональный элемент XML из которого произведена загрузка компонента (при манифестах)
+		/// 	РћРїРёС†РѕРЅР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ XML РёР· РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅР° Р·Р°РіСЂСѓР·РєР° РєРѕРјРїРѕРЅРµРЅС‚Р° (РїСЂРё РјР°РЅРёС„РµСЃС‚Р°С…)
 		/// </summary>
 		public XElement Source { get; set; }
 
 		/// <summary>
-		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see
+		/// 	РџСЂРё РїРµСЂРІРѕРј СЃРѕР·РґР°РЅРёРё Рё РїСЂРё РЅР°Р»РёС‡РёРё СЃС‚РёР»СЏ Р¶РёР·РЅРё Extension - РѕР±СЉРµРєС‚С‹ Р±СѓРґСѓС‚ СЃРѕС…СЂР°РЅСЏС‚СЊСЃСЏ РІ <see
 		/// 	 cref="IComponentDefinition.Implementation" />
 		/// </summary>
 		public bool CacheInstanceOfExtension { get; set; }
 		/// <summary>
-		/// Теги
+		/// РўРµРіРё
 		/// </summary>
 		public string Tag { get; set; }
+
+	    public IComponentDefinition[] LinkedSingletons { get; set; }
 	}
 }

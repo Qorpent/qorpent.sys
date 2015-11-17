@@ -55,5 +55,6 @@ namespace Qorpent.IoC {
 		public bool CacheInstanceOfExtension { get; set; }
 
 		public string Tag { get; set; }
+	    public IComponentDefinition[] LinkedSingletons { get; set; }
 	}
 }

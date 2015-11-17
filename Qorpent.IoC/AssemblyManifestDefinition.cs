@@ -75,9 +75,8 @@ namespace Qorpent.IoC {
 				                                    baseType.Name == typeof (ContainerComponentAttribute).Name);
 				    }).ToArray();
 				    foreach (var attribute in attributes) {
-                        var clsdef = new ManifestClassDefinition(type,attribute);
-                        if (null != clsdef.Descriptor)
-                        {
+                        var clsdef = new ManifestClassDefinition(type,new [] { attribute});
+				        if (null != clsdef.Descriptors && 0 != clsdef.Descriptors.Count) {
                             ComponentDefinitions.Add(clsdef);
                             clsdef.AssemblyManifest = this;
                         }    

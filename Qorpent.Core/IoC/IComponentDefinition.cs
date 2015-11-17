@@ -97,5 +97,7 @@ namespace Qorpent.IoC {
 		/// Теги
 		/// </summary>
 		string Tag { get; set; }
+
+	    IComponentDefinition[] LinkedSingletons { get; set; }
 	}
 }

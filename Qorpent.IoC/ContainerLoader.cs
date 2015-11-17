@@ -299,9 +299,11 @@ namespace Qorpent.IoC {
 			var result = new List<IComponentDefinition>();
 			if (null != am.Descriptor || !requireManifest){
 				foreach (var definition in am.ComponentDefinitions){
-					var component = definition.GetComponent();
-					_container.Register(component);
-					result.Add(component);
+				    foreach (var componentDefinition in definition.GetComponents()) {
+                        _container.Register(componentDefinition);
+                        result.Add(componentDefinition);
+                    }
+					
 				}
 			}
 			return result.ToArray();
@@ -316,10 +318,10 @@ namespace Qorpent.IoC {
 			var mcd = ManifestClassDefinition.GetAllClassManifests(type).ToArray();
 			IList<IComponentDefinition> components = new List<IComponentDefinition>();
 			foreach (var classDefinition in mcd) {
-				var component = classDefinition.GetComponent();
-
-				_container.Register(component);
-				components.Add(component);
+			    foreach (var component in classDefinition.GetComponents()) {
+                    _container.Register(component);
+                    components.Add(component);
+                }
 			}
 
 			return components.ToArray();

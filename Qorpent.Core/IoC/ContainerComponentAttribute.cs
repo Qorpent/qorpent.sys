@@ -53,6 +53,8 @@ namespace Qorpent.IoC {
 		/// </summary>
 		public Type ServiceType { get; set; }
 
+        public Type[] ServiceTypes { get; set; }
+
 		/// <summary>
 		/// 	Component name for container (for name-style resolution)
 		/// </summary>
@@ -75,8 +77,12 @@ namespace Qorpent.IoC {
 
 
 		/// <summary>
-		/// Тег компонента
+		/// РўРµРі РєРѕРјРїРѕРЅРµРЅС‚Р°
 		/// </summary>
 		public string Tag { get; set; }
+        /// <summary>
+        /// Multiple name attach
+        /// </summary>
+	    public string[] Names { get; set; }
 	}
 }
