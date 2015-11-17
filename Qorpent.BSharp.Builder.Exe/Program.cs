@@ -105,12 +105,10 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 		    var project = new BSharpProject {IsFullyQualifiedProject = true};
 		    project.IsFullyQualifiedProject = true;
 	        var filename = adict.resolvestr("arg1");
-	        if (!string.IsNullOrWhiteSpace(filename)) {
-	            if (filename.Contains(".")) {
+	        if (!string.IsNullOrWhiteSpace(filename) && filename.Contains(".")) {
 	                //direct file
 	                log.Info("Single file compiled");
 	                project = (BSharpProject) SingleFileProject(EnvironmentInfo.ResolvePath(filename), adict, log, builder);
-	            }
 	        }
 	        else {
 	            if (adict.ContainsKey("project")) {
