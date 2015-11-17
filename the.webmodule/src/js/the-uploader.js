@@ -38,11 +38,9 @@ define(["the-root", "the-angular"], function (the) {
         },
         upload: function (e,progress, callback) {
             var files = null;
-            if(e.files){
-                files = e.files;
-            }else{
-                files = $(e)[0].files;
-            }
+            var input = $(e);
+            files = input[0].files;
+
             var self = this;
             var progress = progress || $(e).prevAll('i');
             progress.addClass('button progress primary');
@@ -50,6 +48,7 @@ define(["the-root", "the-angular"], function (the) {
             var errors = [];
             var results = [];
             var emit = function(){
+                input.replaceWith(input.val('').clone(true));
                 if(!!callback){
                     callback(results);
                 }
