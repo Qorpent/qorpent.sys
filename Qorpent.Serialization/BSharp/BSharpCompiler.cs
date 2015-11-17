@@ -543,22 +543,30 @@ namespace Qorpent.BSharp{
 
 	    private void Postprocess(XElement[] batch, IBSharpContext context) {
 	        foreach (var cls in context.Get(BSharpContextDataType.Working).ToArray()) {
-	            if (cls.Compiled.Attr("ordered").ToBool()) {
-	                var attr = cls.Compiled.Attr("ordered");
-	                if (attr == "1") attr = "idx";
-	                var elements = cls.Compiled.Elements().ToArray().OrderBy(_ => {
-	                    var val = _.Attr(attr);
-	                    var keybase = _.Name.LocalName+".";
-	                    if (string.IsNullOrWhiteSpace(val)) {
-	                        val = _.Attr("code");
-	                    }
-	                    if (val.ToInt() != 0) val = (100000000 + val.ToInt()).ToString();
-	                    return keybase + val;
 
-	                }).ToArray();
-                    cls.Compiled.Elements().ToArray().Remove();
-                    cls.Compiled.Add(elements);
+	            ApplyInternalOrder(cls);
+	        }
+	    }
+
+	    private static void ApplyInternalOrder(IBSharpClass cls) {
+	        if (cls.Compiled.Attr("ordered").ToBool()) {
+	            var attr = cls.Compiled.Attr("ordered");
+	            if (attr == "1") {
+	                attr = "idx";
 	            }
+	            var elements = cls.Compiled.Elements().ToArray().OrderBy(_ => {
+	                var val = _.Attr(attr);
+	                var keybase = _.Name.LocalName + ".";
+	                if (string.IsNullOrWhiteSpace(val)) {
+	                    val = _.Attr("code");
+	                }
+	                if (val.ToInt() != 0) {
+	                    val = (100000000 + val.ToInt()).ToString();
+	                }
+	                return keybase + val;
+	            }).ToArray();
+	            cls.Compiled.Elements().ToArray().Remove();
+	            cls.Compiled.Add(elements);
 	        }
 	    }
 

@@ -16,6 +16,7 @@ using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 using Qorpent.Utils.XDiff;
+using Qorpent.Wiki;
 
 namespace Qorpent.BSharp{
 	/// <summary>
@@ -91,27 +92,74 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-		private void DoPostProcess(){
-			XElement[] selects = _cls.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).ToArray();
-			foreach (XElement e in selects){
-				string xpath = e.Attr("xpath");
-				XElement[] elements = _cls.Compiled.XPathSelectElements(xpath).Select(_ => new XElement(_)).ToArray();
-				if (0 != elements.Length){
-					e.ReplaceWith(elements);
-				}
-				else{
-					e.Remove();
-				}
-			}
-			XElement[] removebefores = _cls.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).ToArray();
-			foreach (XElement removebefore in removebefores){
-				string code = removebefore.Attr("code");
-				removebefore.ElementsBeforeSelf(code).ToArray().Remove();
-				removebefore.Remove();
-			}
+		private void DoPostProcess() {
+		    ApplyMacroses();
+		    PostProcessSelection();
+		    PostProcessRemoveBefores();
 		}
 
-		/// <summary>
+	    private void ApplyMacroses() {
+	        var xmli = new XmlInterpolation {AncorSymbol = '~'};
+	        XElement[] macroses = _cls.Compiled.Elements(BSharpSyntax.PostProcessMacroReplace).ToArray();
+            macroses.Remove();
+	        var basescope = new Scope(_cls.Compiled);
+	        foreach (var macro in macroses) {
+	            var xpath = macro.Attr("xpath");
+	            if (string.IsNullOrWhiteSpace(xpath)) {
+	                xpath = "./" + macro.Attr("code");
+	            }
+	            var elements = _cls.Compiled.XPathSelectElements(xpath).ToArray();
+                //elements.Remove();
+                
+	            foreach (var element in elements) {
+                    var m = new XElement(macro);
+                    var scope = new Scope(element,basescope);
+	                var interpolate = xmli.Interpolate(m, scope);
+	                var result = new XElement(element);
+	                foreach (var a in interpolate.Attributes()) {
+	                    if (a.Name.LocalName.StartsWith("set-")) {
+	                        var name = a.Name.LocalName.Substring(4);
+	                        if (name == "xml-name") {
+	                            result.Name = a.Value;
+	                        }
+                            else if (name == "xml-value")
+                            {
+                                result.Value = a.Value == "EMPTY" ? "" : a.Value;
+                            }
+                            else {
+	                            result.SetAttributeValue(a.Name.LocalName.Substring(4), a.Value);
+	                        }
+	                    }
+	                }
+                    element.ReplaceWith(result);
+	            }
+	        }
+	    }
+
+	    private void PostProcessRemoveBefores() {
+	        XElement[] removebefores = _cls.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).ToArray();
+	        foreach (XElement removebefore in removebefores) {
+	            string code = removebefore.Attr("code");
+	            removebefore.ElementsBeforeSelf(code).ToArray().Remove();
+	            removebefore.Remove();
+	        }
+	    }
+
+	    private void PostProcessSelection() {
+	        XElement[] selects = _cls.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).ToArray();
+	        foreach (XElement e in selects) {
+	            string xpath = e.Attr("xpath");
+	            XElement[] elements = _cls.Compiled.XPathSelectElements(xpath).Select(_ => new XElement(_)).ToArray();
+	            if (0 != elements.Length) {
+	                e.ReplaceWith(elements);
+	            }
+	            else {
+	                e.Remove();
+	            }
+	        }
+	    }
+
+	    /// <summary>
 		/// </summary>
 		private void PerformEvaluation(){
 			foreach (BSharpEvaluation definition in _cls.AllEvaluations){

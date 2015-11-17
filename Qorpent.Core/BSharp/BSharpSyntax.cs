@@ -370,8 +370,12 @@ namespace Qorpent.BSharp {
 		/// Дефолт глобальной константы
 		/// </summary>
 		public static readonly string ConstantDefaultDefinition = "+".Escape(EscapingType.XmlName)+ConstantDefinition;
+        /// <summary>
+        /// Элемент макрозамены элемента
+        /// </summary>
+	    public const string PostProcessMacroReplace = "macro-replace";
 
-		/// <summary>
+	    /// <summary>
 		/// Формирует имя класса соединения
 		/// </summary>
 		/// <param name="mode"></param>

@@ -217,6 +217,36 @@ class A
             Assert.AreEqual("1", result.Compiled.Element("item").Attr("y"));
         }
 
+
+	    [Test]
+	    public void MacroReplaceTest() {
+	        var code = @"
+class macroses abstract
+    macro-replace flag 
+        set-xml-name=param 
+        set-type=bool 
+        set-default='~{default,__xmlvalue:true}' 
+        set-hidden='~{hidden:true}'
+        set-xml-value=EMPTY
+class reportbase
+    flag y
+class report
+    import macroses
+    import reportbase
+    flag x
+    flag y : false
+    flag z ZZ hidden=false : false
+";
+	        var result = Compile(code).Get("report");
+	        string res;
+            Console.WriteLine(res= result.Compiled.ToString().Simplify(SimplifyOptions.SingleQuotes));
+           Assert.AreEqual(@"<class code='report' fullcode='report'>
+  <param code='x' type='bool' default='true' hidden='true'></param>
+  <param code='y' type='bool' default='false' hidden='true'></param>
+  <param code='z' name='ZZ' hidden='false' type='bool' default='false'></param>
+</class>", res);
+	    }
+
         [Test]
         public void CanExtendElement()
         {

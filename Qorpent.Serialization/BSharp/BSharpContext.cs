@@ -617,7 +617,8 @@ namespace Qorpent.BSharp{
 		/// <returns></returns>
 		public bool RequrePostProcess(){
 			return Working.Any(_ => _.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).Any()
-			                        || _.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).Any());
+			                        || _.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).Any()
+                                    || _.Compiled.Elements(BSharpSyntax.PostProcessMacroReplace).Any());
 		}
 
 		private void ExecuteGenerator(IBSharpClass generator){
