@@ -9,6 +9,7 @@ using System.Net;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
+using Qorpent.Experiments;
 using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
@@ -81,6 +82,18 @@ namespace Qorpent.IO.Http {
 
         public bool SupportGZip { get; set; }
 
+        public virtual long ConentLength {
+            get {
+                if (null != Headers) {
+                    return Headers.str("Content-Length").ToLong();
+                }
+                return 0;
+            }
+            set {
+                SetHeader("Content-Length", value.ToString());
+            }
+        }
+
         public void Finish(object data, string mime = "application/json", int status = 200, RangeDescriptor range = null) {
             StatusCode = status;
             if (mime.Contains("text") || mime.Contains("json")) {
@@ -90,7 +103,7 @@ namespace Qorpent.IO.Http {
             ContentType = mime;
 
             if (CallingMethod == "HEAD") {
-                SetHeader("Content-Length", "0");
+                ConentLength = 0;
             }
             else {
                 if (null != range) {
@@ -98,10 +111,13 @@ namespace Qorpent.IO.Http {
                     AddHeader("Content-Range",
                         string.Format("bytes {0}-{1}/{2}", range.Start, range.Finish, range.Total));
                     var length = range.Finish - range.Start + 1;
-                    SetHeader("Content-Length", length.ToString());
+                    ConentLength = length;
                 }
-                else if (data is string && ((string) data).Length < 512) {
-                    SetHeader("Content-Length", Encoding.UTF8.GetByteCount(data as string).ToString());
+                else {
+                    var s = data as string;
+                    if (s != null && s.Length < 512) {
+                        ConentLength = Encoding.UTF8.GetByteCount(s);
+                    }
                 }
             }
 

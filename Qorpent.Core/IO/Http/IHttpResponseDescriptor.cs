@@ -16,6 +16,7 @@ namespace Qorpent.IO.Http {
         bool NoCloseStream { get; set; }
         bool WasClosed { get; set; }
         string Range { get; set; }
+        long ConentLength { get; set; }
         void SetHeader(string name, string value);
         string GetETag();
         void SetETag(string etag);

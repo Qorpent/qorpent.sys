@@ -117,7 +117,7 @@ namespace Qorpent.Host.Handlers
 
 				RangeDescriptor range = null;
 				if (0 < staticdescriptor.Length && (staticdescriptor.MimeType.StartsWith("image/")||staticdescriptor.MimeType.StartsWith("video/"))) {
-					context.Response.SetHeader("Content-Length",staticdescriptor.Length.ToString());
+				    context.Response.ConentLength = staticdescriptor.Length;
 					if (staticdescriptor.Length > 4096) {
 						context.Response.SetHeader("Accept-Ranges","bytes");
 					}

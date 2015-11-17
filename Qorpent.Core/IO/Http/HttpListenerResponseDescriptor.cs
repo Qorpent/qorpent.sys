@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using Qorpent.Utils.Extensions;
+using static System.String;
 
 namespace Qorpent.IO.Http {
     internal class HttpListenerResponseDescriptor : HttpResponseDescriptor {
@@ -17,18 +17,27 @@ namespace Qorpent.IO.Http {
             set { _response.Cookies = value; }
         }
 
-
+        public override long ConentLength
+        {
+            get { return _response.ContentLength64; }
+            set { _response.ContentLength64 = value; }
+        }
         public override void SetHeader(string name, string value) {
             if (name == "Content-Length") {
                 _response.ContentLength64 = value.ToLong();
             }
             else {
-                _response.Headers[name] = value ?? String.Empty;
+                try {
+                    _response.Headers[name] = value ?? Empty;
+                }
+                catch (ProtocolViolationException) {
+                    
+                }
             }
         }
 
         public override string GetETag() {
-            return _response.Headers[HttpResponseDescriptor.ETagHeader] ?? "";
+            return _response.Headers[ETagHeader] ?? "";
         }
 
         public override void AddHeader(string name, string value) {
