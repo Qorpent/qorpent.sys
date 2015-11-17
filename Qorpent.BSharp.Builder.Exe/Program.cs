@@ -8,6 +8,7 @@ using System.Threading;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
+using Qorpent.Experiments;
 using Qorpent.Log;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -103,17 +104,27 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 	    private static IBSharpProject SetupProject(IDictionary<string, string> adict, IUserLog log, BSharpBuilder builder) {
 		    var project = new BSharpProject {IsFullyQualifiedProject = true};
 		    project.IsFullyQualifiedProject = true;
-            
-            if (adict.ContainsKey("project")) {
-	            project.ProjectName = adict["project"];
-	            project.IsFullyQualifiedProject = false;
-            }else if (adict.ContainsKey("arg1")) {
-				project.ProjectName = adict["arg1"];
-				project.IsFullyQualifiedProject = false;
-            }
+	        var filename = adict.resolvestr("arg1");
+	        if (!string.IsNullOrWhiteSpace(filename)) {
+	            if (filename.Contains(".")) {
+	                //direct file
+	                log.Info("Single file compiled");
+	                project = (BSharpProject) SingleFileProject(EnvironmentInfo.ResolvePath(filename), adict, log, builder);
+	            }
+	        }
+	        else {
+	            if (adict.ContainsKey("project")) {
+	                project.ProjectName = adict["project"];
+	                project.IsFullyQualifiedProject = false;
+	            }
+	            else if (adict.ContainsKey("arg1")) {
+	                project.ProjectName = adict["arg1"];
+	                project.IsFullyQualifiedProject = false;
+	            }
+	        }
 
 
-            if (!project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.IncludeWork)) {
+	        if (!project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.IncludeWork)) {
                 if (!adict.ContainsKey("noIncludeWork")) {
                     project.OutputAttributes |= BSharpBuilderOutputAttributes.IncludeWork;
                 }
@@ -175,7 +186,17 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 		    return project;
 	    }
 
-	    private static void WriteOutErrors(IBSharpContext resultContext, IUserLog log) {
+        private static IBSharpProject SingleFileProject(string resolvePath, IDictionary<string, string> adict, IUserLog log, BSharpBuilder builder) {
+            var result = new BSharpProject {IsFullyQualifiedProject = true, Log = log};
+            result.RootDirectory = Path.GetDirectoryName(resolvePath);
+            result.Targets.Paths[resolvePath] = BSharpBuilderTargetType.Include;
+            if (adict.ContainsKey("cls")) {
+               result.Targets.Classes[adict["cls"]] = BSharpBuilderTargetType.Include;
+            }
+            return result;
+        }
+
+        private static void WriteOutErrors(IBSharpContext resultContext, IUserLog log) {
 		    foreach (var e in resultContext.GetErrors()) {
 			    var el = LogLevel.Error;
 			    if (e.Level == ErrorLevel.Warning) {

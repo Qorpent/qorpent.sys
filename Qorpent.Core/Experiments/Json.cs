@@ -141,6 +141,12 @@ namespace Qorpent.Experiments {
                 if (d.ContainsKey(pathPart)) return d[pathPart];
                 return null;
             }
+            if (json is IDictionary<string, string>)
+            {
+                var d = json as IDictionary<string, string>;
+                if (d.ContainsKey(pathPart)) return d[pathPart];
+                return null;
+            }
             return ByReflection(json, pathPart);
         }
 

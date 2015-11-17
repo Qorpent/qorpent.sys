@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Qorpent.BSharp.Builder;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Integration.BSharp.Builder.Helpers {
 	/// <summary>
@@ -37,8 +38,11 @@ namespace Qorpent.Integration.BSharp.Builder.Helpers {
 		///     Перечисление путей файлов, подходящих по маске
 		///     к списку инклудов
 		/// </returns>
-		public IEnumerable<string> Collect()
-		{
+		public IEnumerable<string> Collect() {
+	        var directincludes = Includes.Where(File.Exists).Select(_=>_.NormalizePath()).ToArray();
+	        foreach (var directinclude in directincludes) {
+	            yield return directinclude;
+	        }
 		    foreach (var root in Roots){
 
 			    foreach (var mask in SearchMasks){
@@ -47,6 +51,8 @@ namespace Qorpent.Integration.BSharp.Builder.Helpers {
 					    ){
 					    var normalized = f.Replace(root, "").Replace("\\", "/");
 					    if (Includes.Any()){
+                            if(directincludes.Contains(normalized))continue;
+					        
 						    if (!Includes.Any(normalized.Contains)) continue;
 					    }
 					    if (Excludes.Any()){
