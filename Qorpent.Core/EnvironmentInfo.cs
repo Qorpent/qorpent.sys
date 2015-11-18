@@ -454,6 +454,7 @@ namespace Qorpent {
 			while (result.Contains("%")){
 				var expanded = Environment.ExpandEnvironmentVariables(result);
 				if (expanded == result) break;
+			    result = expanded;
 			}
 			if (!string.IsNullOrWhiteSpace(result) && !result.Contains("%") && Directory.Exists(result)) return result;
 			return null;
