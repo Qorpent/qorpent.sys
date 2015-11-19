@@ -103,6 +103,7 @@
     <Compile Include="Model\IWithCustom.cs" />
     <Compile Include="Model\IWithIntId.cs" />
     <Compile Include="Model\IWithStringId.cs" />
+    <Compile Include="OperationResult.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />
     <Compile Include="Scope\Scope.cs" />

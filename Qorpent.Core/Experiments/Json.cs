@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -1011,6 +1012,23 @@ namespace Qorpent.Experiments {
                 }
                 return;
                 
+            }
+            var error = data as Exception;
+            if (null != error) {
+                if (error is IJsonSerializable) {
+                    WriteObject(data, output, defaultMode, jsonmode, annotator);
+                }
+                else {
+                    WriteObject(
+                    new{
+                        type=error.GetType().Name,
+                        message = error.Message,
+                        stack = error.StackTrace,
+                        inner = error.InnerException,
+                        exceptions = (error as AggregateException)?.InnerExceptions
+                    }, output, defaultMode, jsonmode, annotator);
+                }
+                return;
             }
 
             WriteObject(data, output,defaultMode, jsonmode,annotator);
