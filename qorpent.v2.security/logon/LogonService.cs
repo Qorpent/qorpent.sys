@@ -37,7 +37,7 @@ namespace qorpent.v2.security.logon {
                 LogStart(username, password, context, opid);
                 IIdentity result = null;
                 try {
-                    result = ResolveByExtensions(username, password, context)
+                    result = ResolveByExtensions(username, password,opid, context)
                              ?? GetDefaultLogon(username);
                 }
                 catch (Exception ex) {
@@ -176,10 +176,17 @@ namespace qorpent.v2.security.logon {
             }
         }
 
-        private IIdentity ResolveByExtensions(string username, string password, IScope context) {
+        private IIdentity ResolveByExtensions(string username, string password, string opid, IScope context) {
            var extensions = Extensions.OfType<IPasswordLogon>().ToArray();
             foreach (var passwordLogon in extensions) {
+                if (Logg.IsForDebug()) {
+                    Logg.Debug(new {opid,ext=passwordLogon.GetType().Name,message="enter"}.stringify());
+                }
                 var subresult = passwordLogon.Logon(username, password, context);
+                if (Logg.IsForDebug())
+                {
+                    Logg.Debug(new { opid, ext = passwordLogon.GetType().Name, message = null != subresult && subresult.IsAuthenticated }.stringify());
+                }
                 if (null != subresult && subresult.IsAuthenticated) {
                     return subresult;
                 }
