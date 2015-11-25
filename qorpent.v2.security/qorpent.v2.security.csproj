@@ -31,6 +31,8 @@
     <Compile Include="authorization\HttpAuthorizer.cs" />
     <Compile Include="handlers\HandlerBase.cs" />
     <Compile Include="handlers\HandlerResult.cs" />
+    <Compile Include="handlers\logon\IImpersonateHandler.cs" />
+    <Compile Include="handlers\logon\ImpersonateHandler.cs" />
     <Compile Include="handlers\logon\ITokenAuthGetSaltHandler.cs" />
     <Compile Include="handlers\logon\ITokenAuthProcessHandler.cs" />
     <Compile Include="handlers\logon\ITokenAuthVerifyCmsHandler.cs" />
@@ -41,6 +43,8 @@
     <Compile Include="handlers\logon\TokenAuthProcessHandler.cs" />
     <Compile Include="handlers\management\IClientHandler.cs" />
     <Compile Include="handlers\management\ClientHandler.cs" />
+    <Compile Include="handlers\management\IUserListHandler.cs" />
+    <Compile Include="handlers\management\UserListHandler.cs" />
     <Compile Include="handlers\UserOpAttribute.cs" />
     <Compile Include="handlers\UserOperation.cs" />
     <Compile Include="handlers\management\DefineUserHandler.cs" />

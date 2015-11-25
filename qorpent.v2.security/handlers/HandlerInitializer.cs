@@ -21,6 +21,7 @@ namespace qorpent.v2.security.handlers {
 		private ITokenAuthProcessHandler _tokenAuthProcessHandler;
 		private ITokenAuthVerifyCmsHandler _tokenAuthVerifyCmsHandler;
         private IClientHandler _clientHandler;
+        private IUserListHandler _userListHandler;
 
         [Inject]
         public ILogonHandler LogonHandler {
@@ -110,6 +111,13 @@ namespace qorpent.v2.security.handlers {
             set { _clientHandler = value; }
         }
 
+        [Inject]
+        public IUserListHandler UserListHandler
+        {
+            get { return _userListHandler ?? (_userListHandler = new UserListHandler()); }
+            set { _userListHandler = value; }
+        }
+
         public void Initialize(IHostServer server) {
             server.Factory.Register("/logon", LogonHandler);
             server.Factory.Register("/logout", LogoutHandler);
@@ -125,6 +133,7 @@ namespace qorpent.v2.security.handlers {
 			server.Factory.Register("/tokenauthprocess", TokenAuthProcessHandler);
 			server.Factory.Register("/tokenauthverifycms", TokenAuthVerifyCmsHandler);
 			server.Factory.Register("/client", ClientHandler);
+			server.Factory.Register("/usrlist", UserListHandler);
         }
     }
 }

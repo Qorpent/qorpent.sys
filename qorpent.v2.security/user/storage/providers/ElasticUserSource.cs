@@ -98,7 +98,7 @@ namespace qorpent.v2.security.user.storage.providers {
         }
 
         public IEnumerable<IUser> SearchUsers(UserSearchQuery query) {
-            var q = "login:*";
+            var q = string.IsNullOrWhiteSpace(query.Query)? "login:*" : query.Query;
             if (!string.IsNullOrWhiteSpace(query.Login)) {
                 q += " AND login:" + query.Login;
             }
