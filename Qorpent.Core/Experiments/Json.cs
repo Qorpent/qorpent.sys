@@ -852,6 +852,11 @@ namespace Qorpent.Experiments {
         {
             return Get(data, path).ToBool();
         }
+        public static bool bul(this object data, string path, bool def) {
+            var res = Get(data, path);
+            if (null == res) return def;
+            return res.ToBool();
+        }
         public static DateTime date(this object data, string path)
         {
             return Get(data, path).ToDate(true);

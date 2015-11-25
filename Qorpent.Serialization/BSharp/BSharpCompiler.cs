@@ -108,13 +108,17 @@ namespace Qorpent.BSharp{
 		    SetupDefaults(_global);
 		}
 
+	    public void InitGlobals() {
+	        _global = _global ?? new Scope {UseInheritance = false};
+            SetupDefaults(_global);
+	    }
 	    private void SetupDefaults(IScope scope) {
 	        if (!scope.ContainsKey("MACHINE_NAME")) {
-	            scope["MACHINE_NAME"] = Environment.MachineName;
+	            scope["MACHINE_NAME"] = Environment.MachineName.ToLowerInvariant();
 	        }
             if (!scope.ContainsKey("OS"))
             {
-                scope["OS"] = Environment.OSVersion.ToString();
+                scope["OS"] = Environment.OSVersion.ToString().ToLowerInvariant();
             }
 	        if (!scope.ContainsKey("UNIX")) {
 	            scope["UNIX"] = Environment.OSVersion.Platform == PlatformID.Unix;

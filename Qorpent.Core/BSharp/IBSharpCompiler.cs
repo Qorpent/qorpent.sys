@@ -59,6 +59,7 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		IScope Global { get; }
-		
+
+	    void InitGlobals();
 	}
 }

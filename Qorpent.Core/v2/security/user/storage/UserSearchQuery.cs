@@ -1,13 +1,17 @@
 using System.Linq;
+using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.user.storage {
-    public class UserSearchQuery {
+    public class UserSearchQuery:IJsonDeserializable  {
+
+
         public bool Groups { get; set; } = true;
         public bool Users { get; set; } = true;
         public string Domain { get; set; }
         public string Name { get; set; }
         public string Login { get; set; }
+        public string Query { get; set; }
 
         public bool IsMatch(IUser user) {
             if (user.IsGroup) {
@@ -41,6 +45,15 @@ namespace qorpent.v2.security.user.storage {
                 }
             }
             return true;
+        }
+
+        public void LoadFromJson(object j) {
+            Domain = j.str("domain");
+            Name = j.str("name");
+            Login = j.str("login");
+            Groups = j.bul("groups", true);
+            Users = j.bul("users", true);
+            Query = j.str("query");
         }
     }
 }

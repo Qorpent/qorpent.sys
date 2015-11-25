@@ -24,7 +24,7 @@ namespace Qorpent.Config
 		    var compiler = new BSharpCompiler();
 		    var bxl = new BxlParser();
 #else
-            var compiler = WellKnownHelper.Create<IBSharpCompiler>();           
+            var compiler = WellKnownHelper.Create<IBSharpCompiler>();        
             var bxl = new BxlParser();
 #endif
             SetupGlobals(options, compiler);
@@ -48,6 +48,7 @@ namespace Qorpent.Config
         }
 
         private static void SetupGlobals(ConfigurationOptions options, IBSharpCompiler compiler) {
+            compiler.InitGlobals();
             if (options.AddNameToGlobalConditions && !string.IsNullOrWhiteSpace(options.Name)) {
                 var cond = "APP_" + options.Name.ToUpperInvariant();
                 if (!compiler.Global.ContainsKey(cond)) {
