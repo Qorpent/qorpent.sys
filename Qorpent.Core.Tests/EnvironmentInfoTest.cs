@@ -43,7 +43,9 @@ namespace Qorpent.Core.Tests {
 			EnvironmentInfo.Reset();
 		}
 
-
+	    
+	   
+	   
 		private string _currentdir;
 
 		[Test]
@@ -54,6 +56,7 @@ namespace Qorpent.Core.Tests {
 			Assert.AreEqual(Environment.CurrentDirectory, EnvironmentInfo.RootDirectory);
 		}
 
+        
 
-	}
+    }
 }

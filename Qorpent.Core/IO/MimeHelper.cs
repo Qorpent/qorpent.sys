@@ -96,6 +96,8 @@ namespace Qorpent.IO {
 					return "application/json";
                 case "mp4":
 			        return "video/mp4";
+                case "avi":
+			        return "video/x-msvideo";
 			}
 
 			return "bin/unknown";
