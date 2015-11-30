@@ -18,6 +18,17 @@ define(["the","chai"],function($the,chai) {
                     return _ == 1
                 }).should.equal(true);
             });
+            it("supports indexOf([condition])",function(){
+                var i = $([{x:1},{x:2},{x:4}]);
+                i.indexOf(".x>1").should.equal(1);
+                i.indexOf(".x>2").should.equal(2);
+                i.indexOf(".x<2").should.equal(0);
+                i.indexOf(".x<1").should.equal(-1);
+            });
+            it("supports indexOf([condition],startindex)",function(){
+                var i = $([{x:1},{x:2},{x:4}]);
+                i.indexOf(".x>2",2).should.equal(2);
+            });
             it("supports any(function)", function () {
                 var i = $([{Id:1}, {Id:2}, {Id:3}]);
                 i.any().should.equal(true);

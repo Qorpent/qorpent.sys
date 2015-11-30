@@ -9,6 +9,18 @@
                 return this.reset().next($ex(expr));
             };
 
+            Enumeration.prototype.indexOf = function(expr,startindex) {
+                this.reset();
+                startindex = startindex ||0;
+                var e = $ex(expr);
+                while (this.next(e)) {
+                    if(this._index >=  startindex){
+                        return this._index;
+                    }
+                }
+                return -1;
+            }
+
             Enumeration.prototype.count = function (expr) {
                 this.reset();
                 var result = 0;
