@@ -5,6 +5,7 @@ define(["the-root", "the-angular"], function (the) {
     var defaultuploadurl = '/accident/upload';
     the.uploader = {
         uploadsingle : function(file, success, error, url){
+         //   console.trace('here 8');
             var max = 5242880;
             var maxtext = "5Мб";
             if(file.type.match(/video/)){
@@ -36,18 +37,22 @@ define(["the-root", "the-angular"], function (the) {
                 }
             });
         },
-        upload: function (e,progress, callback) {
+        upload: function (dt,e,progress, callback) {
+           // console.trace('here 40');
+          //  console.trace([dt,e,progress,callback]);
             var files = null;
             var input = $(e);
-            files = input[0].files;
+            files = $(dt||e)[0].files;
 
             var self = this;
-            var progress = progress || $(e).prevAll('i');
+            var progress = progress || $(e).prevAll('i') || $(e);
+
             progress.addClass('button progress primary');
             var idx = -1;
             var errors = [];
             var results = [];
             var emit = function(){
+               // console.log(input);
                 input.replaceWith(input.val('').clone(true));
                 if(!!callback){
                     callback(results);
@@ -67,11 +72,11 @@ define(["the-root", "the-angular"], function (the) {
                 }
 
                 var file = files[idx];
-                console.log(file.name,"enter");
+              //  console.log(file.name,"enter");
 
                var result = self.uploadsingle(file,
                     function(data){
-                        console.log(file.name,"upload success");
+                  //      console.log(file.name,"upload success");
                         results.push(data);
                         call();
                     },
@@ -96,23 +101,28 @@ define(["the-root", "the-angular"], function (the) {
             scope: true,
             link: function (scope, e, attr) {
                 scope.__dragenter = function(e, ev){
+                   // console.log('enter');
                    $(e).addClass("dragging");
-                    return false;
+                    return true;
                 };
 
                 scope.__dragover = function(e, ev){
-                   console.log('over');
+                  // console.log('over');
                     return false;
                 };
                 scope.__dragleave = function(e,ev){
+                 //   console.log(ev);
+                 //   console.log('leave');
                     $(e).removeClass("dragging");
                     return false;
                 };
                 scope.__drop = function(e, ev){
+                  //  console.trace("here!!! Firefox!!!")
                     $(e).removeClass("dragging");
-                    console.log('drop',event.dataTransfer);
-                    event.preventDefault();
-                    scope.__uploaddrop(event.dataTransfer, $(e));
+                  //  console.log('drop',ev.dataTransfer);
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    scope.__uploaddrop(ev.dataTransfer, $(e));
                     return false;
                 };
 
@@ -123,7 +133,7 @@ define(["the-root", "the-angular"], function (the) {
                     if(!!attr["noupload"]){
                         return;
                     }
-                    the.uploader.upload(dt, e, function (data, e, s, x) {
+                    the.uploader.upload(dt, null, e, function (data, e, s, x) {
                         if (!data) {
                             console.error("upload error", e, s, x.responseText);
                             if (attr["onuploaderror"]) {
@@ -150,7 +160,7 @@ define(["the-root", "the-angular"], function (the) {
                     if(!!attr["noupload"]){
                         return;
                     }
-                    the.uploader.upload(el,null, function (data, e, s, x) {
+                    the.uploader.upload(null,el,null, function (data, e, s, x) {
                         if (!data) {
                             console.error("upload error", e, s, x.responseText);
                             if (attr["onuploaderror"]) {

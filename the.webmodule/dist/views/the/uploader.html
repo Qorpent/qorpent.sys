@@ -2,7 +2,7 @@
     <!--<div style="display:none" class="progress  primary"></div>-->
     <i
        ondragover="return false;"
-       ondragenter="angular.element(this).scope().__dragenter(this,event);return false;"
+       ondragenter="angular.element(this).scope().__dragenter(this,event);return true;"
        ondrop="return angular.element(this).scope().__drop(this,event);return false;"
        ondragleave="angular.element(this).scope().__dragleave(this,event)"
        ondragend="angular.element(this).scope().__dragleave(this,event)"
