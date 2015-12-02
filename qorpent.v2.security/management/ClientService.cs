@@ -154,7 +154,7 @@ namespace qorpent.v2.security.management {
             Users.Store(result.Group);
             var users = Users.SearchUsers(new UserSearchQuery {Domain = clientSysName}).ToArray();
             foreach (var user in users) {
-                if (user.Active && user.Expire > DateTime.Now) {
+                if (user.Active) {
                     user.Expire = result.Group.Expire;
                     Users.Store(user);
                 }
