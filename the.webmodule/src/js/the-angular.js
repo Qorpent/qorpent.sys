@@ -27,8 +27,11 @@
                     .module("the-all", [])
                     .run(["$rootScope","dropdownService",function($rootScope,dds){
                         root.$rootScope = $rootScope;
-                        $rootScope.$uiVersion = $('html').attr("ui-version") || "0.1";
-
+                        $the.uiversion = $rootScope.$uiVersion = $('html').attr("ui-version") || "0.1";
+                        var ver = $('meta[name=uiversion]');
+                        if(ver.length!=0){
+                            $the.uiversion = $rootScope.$uiVersion = ver.attr("value");
+                        }
                         $rootScope.moment = function () {
                             return  window.moment.apply(null,arguments);
                         }

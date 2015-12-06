@@ -174,7 +174,9 @@ namespace Qorpent.IO.Net{
 								request.Uri = response.RedirectUri;
 								return Call(request);
 							}
-							response.Request = request;
+						    if (response.State >= 400) {
+						        response.Success = false;
+						    }
 							return response;
 						}
 					}
