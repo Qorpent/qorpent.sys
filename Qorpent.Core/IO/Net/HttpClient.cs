@@ -62,13 +62,16 @@ namespace Qorpent.IO.Net{
 	    /// <param name="url"></param>
 	    /// <param name="post"></param>
 	    /// <returns></returns>
-        public string GetString(string url, string post = null, Action<HttpRequest> setup = null)
+        public string GetString(string url, string post = null, Action<HttpRequest> setup = null, int[] allowedStates = null)
         {
 			var resp = Call(url,post,setup);
 			if (resp.Success){
 				return resp.StringData;
 			}
-			throw new IOException("error in response",resp.Error);
+	        if (null != allowedStates && -1 != Array.IndexOf(allowedStates, resp.State)) {
+	            return resp.StringData;
+	        }
+			throw new IOException("error in response: "+resp.State,resp.Error);
 		}
 
         /// <summary>
@@ -77,18 +80,18 @@ namespace Qorpent.IO.Net{
         /// <param name="url"></param>
         /// <param name="post"></param>
         /// <returns></returns>
-        public string GetString(string url, object post , Action<HttpRequest> setup = null) {
+        public string GetString(string url, object post , Action<HttpRequest> setup = null, int[] allowedStates = null) {
             if (post is string) return GetString(url, (string) post, setup);
-            return GetString(url, post.stringify(), setup);
+            return GetString(url, post.stringify(), setup,allowedStates);
         }
 
-	    public object GetObject(string url, object post, Action<HttpRequest> setup = null) {
-	        return GetString(url, post, setup).jsonify();
+	    public object GetObject(string url, object post, Action<HttpRequest> setup = null, int[] allowedStates = null) {
+	        return GetString(url, post, setup,allowedStates).jsonify();
 	    }
 
-        public object GetObject(string url, string post = null, Action<HttpRequest> setup = null)
+        public object GetObject(string url, string post = null, Action<HttpRequest> setup = null, int[] allowedStates = null)
         {
-            return GetString(url, post, setup).jsonify();
+            return GetString(url, post, setup,allowedStates).jsonify();
         }
 
 
