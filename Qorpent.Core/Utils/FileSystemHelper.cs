@@ -24,6 +24,7 @@ namespace Qorpent.Utils
 	    /// <param name="tmproot">Указать, если нужно использовать особенную корневую временную папку</param>
 	    /// <returns></returns>
 	    public static string ResetTemporaryDirectory(string name = null, string tmproot = null) {
+            Thread.Sleep(100);
             var root = Path.GetTempPath();
             if (!String.IsNullOrWhiteSpace(tmproot)) {
                 Directory.CreateDirectory(tmproot);

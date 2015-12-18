@@ -836,7 +836,21 @@ namespace Qorpent.Experiments {
 
         }
 
-         
+        public static decimal resolvedec(this object data, string path, params string[] paths)
+        {
+            var result = Get(data, path);
+            int r = 0;
+            if (null != result)
+            {
+                return result.ToDecimal();
+            }
+            if (null == paths || 0 == paths.Length) return r;
+
+            return paths.Select(_ => Get(data, _)).FirstOrDefault(_ => null != _).ToDecimal();
+
+        }
+
+
 
 
 

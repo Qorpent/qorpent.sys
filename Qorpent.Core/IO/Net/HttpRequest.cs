@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Qorpent.IO.Net
 {
-	/// <summary>
+    /// <summary>
 	/// Объект запроса HTTP
 	/// </summary>
 	public class HttpRequest
@@ -21,6 +21,23 @@ namespace Qorpent.IO.Net
 			Method = "GET";
 			UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0";
 		}
+
+        public static HttpRequest Head(string url) {
+            return new HttpRequest {Uri = new Uri(url), Method = HttpMethod.Head};
+        }
+
+        public static HttpRequest Get(string url) {
+            return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Get };
+        }
+        public static HttpRequest Delete(string url)
+        {
+            return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Delete };
+        }
+        public static HttpRequest Post(string url, string data)
+        {
+            return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Post, PostData = data};
+        }
+
         /// <summary>
         /// Строковое представление POST
         /// </summary>

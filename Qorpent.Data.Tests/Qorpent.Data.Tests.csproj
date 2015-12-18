@@ -10,6 +10,7 @@
     <AssemblyNameBase>Qorpent.Data</AssemblyNameBase>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Elastic\SequenceTest.cs" />
     <Compile Include="PostGresqlSupport.cs" />
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DataDiff\BasicDiffTest.cs" />

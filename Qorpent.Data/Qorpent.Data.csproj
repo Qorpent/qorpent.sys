@@ -33,6 +33,7 @@
     <Compile Include="elastic\EsGroovyUtils.cs" />
     <Compile Include="elastic\EsQueryUtils.cs" />
     <Compile Include="elastic\ArrayUpdateOperation.cs" />
+    <Compile Include="elastic\EsSequence.cs" />
     <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\AssemblyDbUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectDataUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectSchemaUpdateTask.cs" />
