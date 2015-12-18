@@ -37,6 +37,26 @@ namespace Qorpent.Data.Tests.Elastic
             Assert.AreEqual(20, seq2.Next());
         }
 
+        [Test]
+        public void CanBeSet()
+        {
+            var seq = new EsSequence { Index = TEST_INDEX, Url = TEST_URL };
+            Assert.AreEqual(10, seq.Next());
+            Assert.AreEqual(20, seq.Next());
+            seq.Set(10);
+            Assert.AreEqual(20, seq.Next());
+        }
+
+        [Test]
+        public void CanGetCurrent() {
+            var seq = new EsSequence { Index = TEST_INDEX, Url = TEST_URL };
+            Assert.AreEqual(int.MinValue, seq.GetCurrent());
+            Assert.AreEqual(10, seq.Next());
+            Assert.AreEqual(20, seq.Next());
+            Assert.AreEqual(20,seq.GetCurrent());
+            Assert.AreEqual(30, seq.Next());
+        }
+
 
         [Test]
         public void DifferentSteps()
@@ -128,7 +148,7 @@ namespace Qorpent.Data.Tests.Elastic
             Task.WaitAll(tasks.ToArray());
             sw.Stop();
             var ms = sw.ElapsedMilliseconds;
-            Assert.LessOrEqual(ms,2000);
+            Assert.LessOrEqual(ms,3000);
         }
     }
 }

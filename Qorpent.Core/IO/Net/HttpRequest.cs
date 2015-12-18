@@ -22,16 +22,44 @@ namespace Qorpent.IO.Net
 			UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0";
 		}
 
+        public HttpResponse Call() {
+            return new HttpClient().Call(this);
+        }
+
+        public static HttpRequest Head(Uri url)
+        {
+            return new HttpRequest { Uri = url, Method = HttpMethod.Head };
+        }
         public static HttpRequest Head(string url) {
             return new HttpRequest {Uri = new Uri(url), Method = HttpMethod.Head};
         }
 
+        public static HttpRequest Get(Uri url)
+        {
+            return new HttpRequest { Uri = url, Method = HttpMethod.Get };
+        }
         public static HttpRequest Get(string url) {
             return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Get };
+        }
+        public static HttpRequest Delete(Uri url)
+        {
+            return new HttpRequest { Uri = url, Method = HttpMethod.Delete };
         }
         public static HttpRequest Delete(string url)
         {
             return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Delete };
+        }
+        public static HttpRequest Put(Uri url, string data)
+        {
+            return new HttpRequest { Uri = url, Method = HttpMethod.Put, PostData = data };
+        }
+        public static HttpRequest Put(string url, string data)
+        {
+            return new HttpRequest { Uri = new Uri(url), Method = HttpMethod.Put, PostData = data };
+        }
+        public static HttpRequest Post(Uri url, string data)
+        {
+            return new HttpRequest { Uri = url, Method = HttpMethod.Post, PostData = data };
         }
         public static HttpRequest Post(string url, string data)
         {

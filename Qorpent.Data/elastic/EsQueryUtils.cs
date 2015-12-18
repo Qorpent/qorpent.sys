@@ -227,5 +227,26 @@ namespace bit.cross.accident.services.query {
             bl[boolpart] = mustlist.ToArray();
             return query;
         }
+
+        public static IDictionary<string, object> QNoSource(this IDictionary<string, object> q) {
+            q["_source"] = false;
+            return q;
+        }
+
+        public static IDictionary<string,object> GetFieldAgg(string field, string agg, bool onlyaggs = false) {
+            var result = new Dictionary<string,object>();
+            result["aggs"] = new Dictionary<string,object> {
+                [agg] = new Dictionary<string, object> {
+                    [agg] = new Dictionary<string, object> {
+                        ["field"] = field
+                    }
+                }
+            };
+            if (!onlyaggs) {
+                result.QSetSize(0);
+                result.QNoSource();
+            }
+            return result;
+        }
     }
 }
