@@ -852,6 +852,16 @@ namespace Qorpent.Experiments {
 
 
 
+        public static T obj<T>(this object data, string path) where T : class, IJsonDeserializable, new() {
+            var _o = Get(data, path) as IDictionary<string,object>;
+            if (null == _o) {
+                return null;
+            }
+            var result = new T();
+            result.LoadFromJson(_o);
+            return result;
+        }
+
 
 
         public static int num(this object data, string path)

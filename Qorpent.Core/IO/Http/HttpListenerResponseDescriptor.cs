@@ -24,7 +24,10 @@ namespace Qorpent.IO.Http {
         }
         public override void SetHeader(string name, string value) {
             if (name == "Content-Length") {
-                _response.ContentLength64 = value.ToLong();
+                try {
+                    _response.ContentLength64 = value.ToLong();
+                }
+                catch { }
             }
             else {
                 try {

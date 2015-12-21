@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Qorpent;
 using Qorpent.Experiments;
@@ -31,7 +32,7 @@ namespace qorpent.v2.security.user.storage {
         public int Idx { get; set; }
 
         public IUser GetUser(string login) {
-            var key = login.ToLowerInvariant();
+            var key = login.Trim().ToLowerInvariant();
             return UserCache.Get(key, InternalGetUser);
         }
 

@@ -31,7 +31,7 @@ namespace Qorpent.IO.Net {
                             if (!string.IsNullOrWhiteSpace(method)) {
                                 _.Method = method;
                             }
-                        });
+                        }, new[] { 404 });
                         InvalidConnection = false;
                         if (i != 0) {
                             var best = Urls[i];
