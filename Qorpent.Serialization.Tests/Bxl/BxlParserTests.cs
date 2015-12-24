@@ -506,6 +506,118 @@ nested (expression[x{2]})
 			Assert.AreEqual(res.Elements().First().Value, "qwerty");
 		}
 
+        [Test]
+        public void MultilineComentaryAtStart()
+        {
+            var bxl = @"
+/*
+my comment
+*/
+/* my comment */
+/* my
+  /* nest
+     /* nest
+    */
+    comment
+*/*/
+test a
+";
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse(bxl);
+            var str = res.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<rootfile='code.bxl'><testfile='code.bxl'line='12'code='a'id='a'/></root>",str);
+        }
+
+        [Test]
+        public void MultilineComentaryAtEndOfElement()
+        {
+            var bxl = @"
+t a /* c1 */
+t b /* 
+c2
+*/
+t c
+";
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse(bxl);
+            Console.WriteLine(res.ToString());
+            var str = res.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<rootfile='code.bxl'><tfile='code.bxl'line='2'code='a'id='a'/><tfile='code.bxl'line='3'code='b'id='b'/><tfile='code.bxl'line='6'code='c'id='c'/></root>", str);
+        }
+
+        [TestCase("/* c */t a x")]
+        [TestCase("t /* c */ a x")]
+        [TestCase("t/* c */a x")]
+        [TestCase("t a /* c */ x")]
+        [TestCase("t a/* c */x")]
+        [TestCase("t a x : /* c1 */")]
+        public void MultilineComentaryInsideOfElement(string code) {
+            var bxl = code;
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse(bxl, options:BxlParserOptions.NoLexData);
+            Console.WriteLine(res.ToString());
+            var str = res.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<root><tcode='a'id='a'name='x'/></root>", str);
+        }
+
+        [Test]
+        public void MultilineComentaryBetwenElements()
+        {
+            var bxl = @"
+t a
+/* c1 */
+t b
+     /* c2 
+*/
+t c
+";
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse(bxl);
+            Console.WriteLine(res.ToString());
+            var str = res.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<rootfile='code.bxl'><tfile='code.bxl'line='2'code='a'id='a'/><tfile='code.bxl'line='4'code='b'id='b'/><tfile='code.bxl'line='7'code='c'id='c'/></root>", str);
+        }
+
+        [Test]
+        public void MultilineComentary() {
+            var bxl = @"
+/*
+my comment
+*/
+test a
+/* my comment */
+test b
+/* my
+  /* nest
+     /* nest
+    */
+    comment
+*/*/
+test c
+
+test d /* at the 
+end  of line */
+
+test /* in line */ e
+test f : /* c
+
+c*/ xxx 
+test f : xxx /* c
+
+c*/
+";
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse(bxl);
+            Console.WriteLine(res.ToString());
+            var str = res.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<rootfile='code.bxl'><testfile='code.bxl'line='5'code='a'id='a'/><testfile='code.bxl'line='7'code='b'id='b'/><testfile='code.bxl'line='14'code='c'id='c'/><testfile='code.bxl'line='16'code='d'id='d'/><testfile='code.bxl'line='19'code='e'id='e'/><testfile='code.bxl'line='20'code='f'id='f'>xxx</test><testfile='code.bxl'line='23'code='f'id='f'>xxx</test></root>",str);
+        }
+
 		[Test]
 		public void CanUseTextContentWithChildElements() {
 			String[] bxl = {

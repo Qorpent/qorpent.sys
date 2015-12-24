@@ -20,6 +20,7 @@
 		NamespaceName,
 		NamespaceValue,
 		Colon,
-		Commentary
+		Commentary,
+        MultilineCommentary
     }
 }

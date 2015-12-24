@@ -57,6 +57,7 @@ namespace Qorpent.Bxl {
 		private String _prefix;
 		private bool _isString;
 		private bool _isExpression;
+	    private char _next = '\0';
 		private char _last;
 		private LexInfo _info;
 		private readonly CharStack _expStack = new CharStack();
@@ -90,7 +91,8 @@ namespace Qorpent.Bxl {
 				processNamespaceName,
 				processNamespaceValue,
 				processColon,
-				processCommentary
+				processCommentary,
+				processMultilineCommentary
             };
 		}
 
@@ -112,8 +114,20 @@ namespace Qorpent.Bxl {
 				filename = "code.bxl";
 			}
 			init(filename, options);
-			foreach (char _c in code) {
-			    var c = _c;
+		    int _i = 0;
+		    int l = code.Length;
+			for (var i=0;i<l;i++) {
+			    if (_skip > 0) {
+			        _skip--;
+                    continue;
+			    }
+			    var c = code[i];
+			    if (i < code.Length - 1) {
+			        _next = code[i + 1];
+			    }
+			    else {
+			        _next = '\0';
+			    }
 				_info.CharIndex++;
 				_info.Column++;
 			    if (c == 160) {
@@ -183,7 +197,7 @@ namespace Qorpent.Bxl {
 			ANON_CODE = __ + CODE;
 			ANON_ID = __ + ID;
 			ANON_NAME = __ + NAME;
-
+		    _skip = 0;
 			_level = -1;
 			_anon = new List<Stats>() { new Stats() };
 			_symbolCount = 0;
@@ -197,6 +211,7 @@ namespace Qorpent.Bxl {
 			_last = (char)0;
 			_buf.Clear();
 			_stack.Clear();
+		    _next = '\0';
 
 			_root = new XElement(ROOT_NAME);
 			_current = _root;
@@ -253,7 +268,17 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					_buf.Append(c);
 					_mode = ReadMode.ElementName;
 					return;
@@ -311,7 +336,17 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					_buf.Append(c);
 					_mode = ReadMode.ElementName;
 					return;
@@ -364,7 +399,19 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        saveValue();
+                        map[(int)_mode](' ');
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					if (_value.Length != 0) {
 						addNode();
 						_mode = ReadMode.AttributeName;
@@ -452,7 +499,19 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        saveValue();
+                        map[(int)_mode](' ');
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					_buf.Append(c);
 					addAnonAttribute();
 					return;
@@ -744,7 +803,17 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					_buf.Append(c);
 					return;
 			}
@@ -765,7 +834,17 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					throw new BxlException("unexpected symbol " + c, _info.Clone());
 			}
 		}
@@ -812,7 +891,16 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+			        if (_next == '*') {
+			            _stack.Push((char) _mode);
+			            _mode = ReadMode.MultilineCommentary;
+			            mlcdepth = 1;
+			            _skip = 1;
+			            return;
+			        }
+			        goto default;
+			    default:
 					_buf.Append(c);
 					_mode = ReadMode.NamespaceName;
 					return;
@@ -880,7 +968,18 @@ namespace Qorpent.Bxl {
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
 					return;
-				default:
+                case '/':
+                    if (_next == '*')
+                    {
+                        map[(int)_mode](' ');
+                        _stack.Push((char)_mode);
+                        _mode = ReadMode.MultilineCommentary;
+                        mlcdepth = 1;
+                        _skip = 1;
+                        return;
+                    }
+                    goto default;
+                default:
 					_buf.Append(c);
 					if (_value.Length != 0) {
 						addNode();
@@ -978,10 +1077,30 @@ namespace Qorpent.Bxl {
 			if (c == '\n' || c == '\r')
 				_mode = (ReadMode)_stack.Pop();
 		}
+	    private int mlcdepth = 0;
+	    private int _skip;
 
-		//		modifying tree
+	    private void processMultilineCommentary(char c)
+        {
+            if (c == '/') {
+                if (_next == '*') {
+                    mlcdepth++;
+                    _skip = 1;
+                }
+            }else if (c == '*') {
+                if (_next == '/') {
+                    mlcdepth--;
+                    _skip = 1;
+                    if (mlcdepth == 0) {
+                        _mode = (ReadMode)_stack.Pop();
+                    }
+                }
+            }
+        }
 
-		private void addNode() {
+        //		modifying tree
+
+        private void addNode() {
 			String s = _value.Escape(EscapingType.XmlName);
 
 			String ns = resolveNamespace();
