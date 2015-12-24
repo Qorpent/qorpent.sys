@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -32,7 +33,78 @@ class X
 			Assert.NotNull(result);
 		}
 
-		[Test]
+	    [Test]
+	    public void PartialWithIf() {
+	        var code = @"
+class A if=A1 a=1 partial 
+class A b=1 partial
+class B b=2 partial
+class B if=A2 a=2 partial
+";
+	        var result = Compile(code, new {A1 = true});
+	        IBSharpClass c;
+            Assert.NotNull(c=result["A"]);
+            Assert.AreEqual("1",c.Compiled.Attr("a"));
+            Assert.AreEqual("1",c.Compiled.Attr("b"));
+            Assert.NotNull(c=result["B"]);
+            Assert.AreEqual("", c.Compiled.Attr("a"));
+            Assert.AreEqual("2", c.Compiled.Attr("b"));
+            result = Compile(code, new {A2 = true});
+            Assert.NotNull(c = result["B"]);
+            Assert.AreEqual("2", c.Compiled.Attr("a"));
+            Assert.AreEqual("2", c.Compiled.Attr("b"));
+            Assert.NotNull(c=result["A"]);
+            Assert.AreEqual("", c.Compiled.Attr("a"));
+            Assert.AreEqual("1", c.Compiled.Attr("b"));
+            
+        }
+
+        [Test]
+        public void PartialAsClassKeyword()
+        {
+            var code = @"
+partial A if=A1 a=1  
+partial A b=1 
+partial B b=2 
+partial B if=A2 a=2 
+";
+            var result = Compile(code, new { A1 = true });
+            IBSharpClass c;
+            Assert.NotNull(c = result["A"]);
+            Assert.AreEqual("1", c.Compiled.Attr("a"));
+            Assert.AreEqual("1", c.Compiled.Attr("b"));
+            Assert.NotNull(c = result["B"]);
+            Assert.AreEqual("", c.Compiled.Attr("a"));
+            Assert.AreEqual("2", c.Compiled.Attr("b"));
+            result = Compile(code, new { A2 = true });
+            Assert.NotNull(c = result["B"]);
+            Assert.AreEqual("2", c.Compiled.Attr("a"));
+            Assert.AreEqual("2", c.Compiled.Attr("b"));
+            Assert.NotNull(c = result["A"]);
+            Assert.AreEqual("", c.Compiled.Attr("a"));
+            Assert.AreEqual("1", c.Compiled.Attr("b"));
+
+        }
+        [Test]
+        public void PartialWithAllIf()
+        {
+            var code = @"
+partial A all-if=A1 a=1  
+partial A all-if=A2 b=1 
+";
+            var result = Compile(code, new { A1 = true });
+            Assert.Null(result["A"]);
+            result = Compile(code, new { A2 = true });
+            Assert.Null(result["A"]);
+            result = Compile(code);
+            Assert.Null(result["A"]);
+            result = Compile(code, new {A2= true, A1=true});
+            Assert.NotNull(result["A"]);
+        }
+
+
+
+        [Test]
 		public void CanDefineClassFromExtension()
 		{
 			var code = @"

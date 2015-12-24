@@ -229,10 +229,14 @@ namespace Qorpent.BSharp {
 		/// Общий атрибут условной компиляции
 		/// </summary>
 		public const string ConditionalAttribute = "if";
-		/// <summary>
-		/// Сгруппированный блок элементов
+        /// <summary>
+		/// Общий атрибут условной компиляции для всей группы partial - объединяются в одно условие при мерже
 		/// </summary>
-		public const string GroupedBlock = "set";
+		public const string AllConditionalAttribute = "all-if";
+        /// <summary>
+        /// Сгруппированный блок элементов
+        /// </summary>
+        public const string GroupedBlock = "set";
         /// <summary>
         /// Блок для применения атрибутов "вверх"   
         /// </summary>

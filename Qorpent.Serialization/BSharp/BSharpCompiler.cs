@@ -211,7 +211,7 @@ namespace Qorpent.BSharp{
 			if (def.Source.GetSmartValue(BSharpSyntax.ExplicitClassMarker).ToBool()){
 				def.Set(BSharpClassAttributes.ExplicitElements);
 			}
-			if (def.Source.GetSmartValue(BSharpSyntax.PartialClass).ToBool()){
+			if (def.Source.GetSmartValue(BSharpSyntax.PartialClass).ToBool() || def.Source.Name.LocalName==BSharpSyntax.PartialClass){
 				def.Set(BSharpClassAttributes.Partial);
 			}
 			if (!IsOverrideMatch(def)) return null;
@@ -779,6 +779,12 @@ namespace Qorpent.BSharp{
 				else if (e.Name.LocalName == BSharpSyntax.Template){
 					yield return PrepareTemplate(rns, e);
 				}
+                else if (e.Name.LocalName == BSharpSyntax.PartialClass) {
+                    IBSharpClass def = ReadSingleClassSource(e, rns, aliases);
+                    if (null != def) { yield return def;}
+                    
+
+                }
 				else{
 					IBSharpClass def = ReadSingleClassSource(e, rns, aliases);
 					if (null != def) yield return def;
@@ -929,7 +935,7 @@ namespace Qorpent.BSharp{
 				def.Set(BSharpClassAttributes.Abstract);
 				def.Set(BSharpClassAttributes.Static);
 			}
-			if (e.Name.LocalName == BSharpSyntax.Class){
+			if (e.Name.LocalName == BSharpSyntax.Class || e.Name.LocalName==BSharpSyntax.PartialClass){
 				def.Set(BSharpClassAttributes.Explicit);
 			}
 			if (null != e.Attribute(BSharpSyntax.EmbedAttribute) || e.Attr("name") == BSharpSyntax.EmbedAttribute){
@@ -955,6 +961,9 @@ namespace Qorpent.BSharp{
 			else{
 				def.Set(BSharpClassAttributes.Orphan);
 				def.DefaultImportCode = e.Name.LocalName;
+			    if (def.DefaultImportCode == BSharpSyntax.PartialClass) {
+			        def.DefaultImportCode = BSharpSyntax.Class;
+			    }
 				if (null != aliases && aliases.ContainsKey(def.DefaultImportCode)){
 					def.AliasImportCode = def.DefaultImportCode;
 					def.DefaultImportCode = aliases[def.DefaultImportCode];

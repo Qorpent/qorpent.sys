@@ -852,18 +852,33 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-		private IBSharpClass JoinPartials(IEnumerable<IBSharpClass> partials){
-			IBSharpClass basis = partials.First();
+		private IBSharpClass JoinPartials(IEnumerable<IBSharpClass> partials) {
+
+		    IBSharpClass basis = null;
 			bool reg = true;
-			if (RawClasses.ContainsKey(basis.FullName)){
-				basis = RawClasses[basis.FullName];
-				reg = false;
-			}
-			foreach (IBSharpClass cls in partials){
-				if (basis == cls) continue;
-                if(IsIgnored(cls))continue;
-				MergePartial(basis, cls);
-			}
+		    foreach (var cls in partials) {
+                if (basis == cls) continue;
+                if (IsIgnored(cls)) continue;
+		        if (null == basis) {
+		            basis = cls;
+                    if (RawClasses.ContainsKey(basis.FullName))
+                    {
+                        basis = RawClasses[basis.FullName];
+                        reg = false;
+                    }
+                    continue;
+		        }
+                MergePartial(basis, cls);
+            }
+		    var cond = basis.Source.Attr(BSharpSyntax.AllConditionalAttribute);
+		    if (!string.IsNullOrWhiteSpace(cond)) {
+		        basis.Source.SetAttributeValue(BSharpSyntax.ConditionalAttribute,cond);
+                basis.Source.Attribute(BSharpSyntax.AllConditionalAttribute).Remove();
+		        if (IsIgnored(basis)) {
+		            return null;
+		        }
+		    }
+
 			if (reg) return basis;
 			return null;
 		}
@@ -879,6 +894,12 @@ namespace Qorpent.BSharp{
 				string n = attribute.Name.LocalName;
 				string v = attribute.Value;
 				if (n == "_file" || n == "_line" || n == "code" || n == "id" || n=="_dir") continue;
+			    if (n == BSharpSyntax.AllConditionalAttribute) {
+			        var current = basis.Source.Attr(BSharpSyntax.AllConditionalAttribute);
+			        current = string.IsNullOrWhiteSpace(current) ? v : current + " && ( " + v + " )";
+                    basis.Source.SetAttributeValue(BSharpSyntax.AllConditionalAttribute,current);
+                    continue;
+			    }
 				string ex = basis.Source.Attr(n);
 				if (ex == v) continue;
 				if (string.IsNullOrWhiteSpace(ex)){
