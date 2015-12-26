@@ -864,6 +864,7 @@ namespace Qorpent.BSharp{
                     if (RawClasses.ContainsKey(basis.FullName))
                     {
                         basis = RawClasses[basis.FullName];
+                        MergePartial(basis,cls);
                         reg = false;
                     }
                     continue;
@@ -916,24 +917,13 @@ namespace Qorpent.BSharp{
 				}
 			}
 			foreach (XElement element in cls.Source.Elements()){
-				if (string.IsNullOrWhiteSpace(element.GetCode())){
-					RegisterError(new BSharpError{
-						Class = basis,
-						AltClass = cls,
-						Level = ErrorLevel.Error,
-						Type = BSharpErrorType.PartialError,
-						Xml = element,
-						Message = "Only coded elements can be used in partials"
-					});
-					continue;
-				}
 				XElement existed = basis.Source.Elements(element.Name).FirstOrDefault(_ => _.GetCode() == element.GetCode());
 				if (null == existed){
 					basis.Source.Add(element);
 				}
 				else{
-					if (element.Elements().Any()){
-						if (existed.Elements().Any()){
+					if (element.Elements().Any()) {
+					    if (existed.Elements().Any()){
 							RegisterError(new BSharpError{
 								Class = basis,
 								AltClass = cls,
@@ -944,11 +934,9 @@ namespace Qorpent.BSharp{
 							});
 							continue;
 						}
-						else{
-							existed.Add(element.Elements());
-						}
+					    existed.Add(element.Elements());
 					}
-					foreach (XAttribute attribute in element.Attributes()){
+				    foreach (XAttribute attribute in element.Attributes()){
 						string n = attribute.Name.LocalName;
 						string v = attribute.Value;
 						if (n == "_file" || n == "_line" || n == "code" || n == "id" || n=="if") continue;

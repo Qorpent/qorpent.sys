@@ -33,6 +33,22 @@ class X
 			Assert.NotNull(result);
 		}
 
+
+	    [Test]
+	    public void MergesNotCodedElements() {
+            var code = @"
+partial A
+    item x=1
+partial A
+    item y=2
+";
+            var result = Compile(code).Get("A");
+            Console.WriteLine(result.Compiled.ToString());
+	        var str = result.Compiled.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<partialcode='a'fullcode='a'><itemy='2'x='1'/></partial>", str);
+	    }
+
 	    [Test]
 	    public void PartialWithIf() {
 	        var code = @"
