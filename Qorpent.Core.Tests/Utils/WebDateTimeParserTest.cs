@@ -17,9 +17,9 @@ namespace Qorpent.Utils.Tests
 			[TestCase("двадцать минут назад", 20)]
 			[TestCase("пятнадцать минут назад", 15)]
 			public void IsCorrectParsingNMinutesAgo(string str, int o) {
-				var n = new DateTime(2015, 1, 1, 12, o, 0);
+				var n = new DateTime(DateTime.Today.Year, 1, 1, 12, o, 0);
 				var p = WebDateTimeParser.Parse(str, baseDate: n);
-				Assert.AreEqual(2015, p.Year);
+				Assert.AreEqual(DateTime.Today.Year, p.Year);
 				Assert.AreEqual(1, p.Month);
 				Assert.AreEqual(1, p.Day);
 				Assert.AreEqual(12, p.Hour);
@@ -30,9 +30,9 @@ namespace Qorpent.Utils.Tests
 			[TestCase("10 часов назад", 10)]
 			[TestCase("десять часов назад", 10)]
 			public void IsCorrectParsingNHoursAgo(string str, int o) {
-				var n = new DateTime(2015, 1, 1, o, 0, 0);
+				var n = new DateTime(DateTime.Today.Year, 1, 1, o, 0, 0);
 				var p = WebDateTimeParser.Parse(str, baseDate: n);
-				Assert.AreEqual(2015, p.Year);
+				Assert.AreEqual(DateTime.Today.Year, p.Year);
 				Assert.AreEqual(1, p.Month);
 				Assert.AreEqual(1, p.Day);
 				Assert.AreEqual(0, p.Hour);
@@ -48,9 +48,9 @@ namespace Qorpent.Utils.Tests
 			[TestCase("неделю назад", 7)]
 			[TestCase("позавчера", 2)]
 			public void IscorrectPArsingNDaysAgo(string str, int o) {
-				var n = new DateTime(2015, 1, o + 1, 0, 0, 0);
+				var n = new DateTime(DateTime.Today.Year, 1, o + 1, 0, 0, 0);
 				var p = WebDateTimeParser.Parse(str, baseDate: n);
-				Assert.AreEqual(2015, p.Year);
+				Assert.AreEqual(DateTime.Today.Year, p.Year);
 				Assert.AreEqual(1, p.Month);
 				Assert.AreEqual(1, p.Day);
 				Assert.AreEqual(0, p.Hour);
