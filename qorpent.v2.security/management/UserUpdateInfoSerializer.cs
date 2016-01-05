@@ -8,7 +8,7 @@ using Qorpent.Utils.Extensions;
 namespace qorpent.v2.security.management {
     public static class UserUpdateInfoSerializer {
         /// <summary>
-        ///     Вытаскивает сведения об обновлении из параметров
+        ///     Р’С‹С‚Р°СЃРєРёРІР°РµС‚ СЃРІРµРґРµРЅРёСЏ РѕР± РѕР±РЅРѕРІР»РµРЅРёРё РёР· РїР°СЂР°РјРµС‚СЂРѕРІ
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
@@ -19,7 +19,7 @@ namespace qorpent.v2.security.management {
             var _active = parameters.Get("active");
             var _logable = parameters.Get("logable");
             var _isgroup = parameters.Get("isgroup");
-            var _admin = parameters.Get("isadmin");
+            var _admin = parameters.Get("admin");
             var _expire = parameters.Get("expire");
             var _custom = parameters.ReadDict("custom");
             var _roles = parameters.ReadArray("roles");
@@ -59,7 +59,7 @@ namespace qorpent.v2.security.management {
 
         private static UserUpdateInfo ExtractSingle(object j) {
             var _active = j.str("active");
-            var _admin = j.str("isadmin");
+            var _admin = j.str("admin");
             var _expire = j.str("expire");
             var _custom = j.get("custom") as IDictionary<string, object>;
             var _roles = j.get("roles") as object[];
