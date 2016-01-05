@@ -48,9 +48,21 @@ namespace qorpent.v2.data.agg {
             Finalize();
             Node.Collectors = Collectors.ToArray();
             Node.Routs = AllRoutes().ToArray();
-            
-
+            NormalizeRootNodeOnEmptySet();
             return Node;
+        }
+
+        private void NormalizeRootNodeOnEmptySet() {
+            if (Node.Collectors.Length > Node.Values.Count)
+            {
+                foreach (var collector in Node.Collectors)
+                {
+                    if (!Node.Values.ContainsKey(collector.Key))
+                    {
+                        Node.Values[collector.Key] = "";
+                    }
+                }
+            }
         }
 
         private void Finalize() {
