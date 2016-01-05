@@ -50,7 +50,6 @@ define(["the-angular"], function ($the) {
                                 return true;
                             },
                             level_change :  function(lvl, levelname){
-                                //console.log(['change',lvl,levelname]);
                                 var lb = levelname || "level";
                                 for(var i=lvl+1;i<=10;i++){
                                     var name = lb + i;
@@ -59,7 +58,6 @@ define(["the-angular"], function ($the) {
                                 }
                             },
                             level_visible : function(lvl, levelname){
-                                //console.log(['visible',lvl,levelname]);
                                 if(lvl == 1)return true;
                                 var lb = levelname || "level";
                                 var name = lb + (lvl-1);
@@ -68,10 +66,8 @@ define(["the-angular"], function ($the) {
                             }
                         };
                         _.lists = {};
-                        //console.log(_.parameters);
                         _.parameters.forEach(function(__){
                             __.show = function(){
-                                console.log(__);
                                 if(__.hidden)return false;
                                 if(!!__.ngif){
                                     return $scope.$eval(__.ngif,{report:_,params: _.params});
