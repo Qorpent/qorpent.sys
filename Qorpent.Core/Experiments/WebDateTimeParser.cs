@@ -39,6 +39,7 @@ namespace Qorpent.Utils {
 		    "D.MM.yyyy,? HH:mm:ss",
 		    "D.MM.yyyy,? HH:mm",
 		    "D MMM yyyy HH:mm",
+		    "D MMM yyyy?",
 		    "D MMM в HH:mm",
 		    "HH:mm dd.MM.yyyy",
 		    "D.MM.yyyy",

@@ -75,6 +75,8 @@ namespace Qorpent.Utils.Tests
 		[TestCase("сегодня в 13:12", -1, 0, 0, 13, 12, 0, '\0', '\0', "ru-RU", true, true)]
 		[TestCase("26/09/2013", 2013, 9, 26, 0, 0, 0, '/', '\0', "", false, false)]
 		[TestCase("25 сентября 2013, 17:21", 2013, 9, 25, 17, 21, 0, '\0', '\0', "ru-RU", false, false)]
+		[TestCase("21 Декабря 2015    military-informant.com", 2015, 12, 21, 0, 0, 0, '\0', '\0', "ru-RU", false, false)]
+		[TestCase("21 Декабря 2015", 2015, 12, 21, 0, 0, 0, '\0', '\0', "ru-RU", false, false)]
 		[TestCase("Sun, 09 Feb 2014 17:18:42 +0600", 2014, 2, 9, 17, 18, 42, '\0', '\0', "", false, false)]
 		[TestCase("2014-02-09T14:45:18+06:00", 2014, 2, 9, 14, 45, 18, '\0', '\0', "", false, false)]
 		public void CanParse(string input, int y, int m, int d, int h, int min, int s, char dd, char td, string cult, bool dyn = false, bool istoday = false)
