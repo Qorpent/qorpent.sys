@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Security;
 using System.Security.Principal;
 using System.Text;
@@ -109,7 +110,7 @@ namespace Qorpent.Host.Qweb
 	                    }
 
 	                }
-	                ProcessError(context, new SecurityException("access denied"));
+	                ProcessError(context, new SecurityException("access denied"), 403);
                     return false;
 
 	                
@@ -144,9 +145,9 @@ namespace Qorpent.Host.Qweb
 			}
 		}
 
-		private void ProcessError(IMvcContext context, Exception ex)
+		private void ProcessError(IMvcContext context, Exception ex, int status = 500)
 		{
-			context.StatusCode = 500;
+			context.StatusCode = status;
 			context.Error = ex;
 			context.RenderError(ex);
             ((HostMvcContext)context).WebContext.Response.Close();
