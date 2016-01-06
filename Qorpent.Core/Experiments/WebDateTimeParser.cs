@@ -39,7 +39,6 @@ namespace Qorpent.Utils {
 		    "D.MM.yyyy,? HH:mm:ss",
 		    "D.MM.yyyy,? HH:mm",
 		    "D MMM yyyy HH:mm",
-		  //  "D MMM yyyy?",
 		    "D MMM в HH:mm",
 		    "HH:mm dd.MM.yyyy",
 		    "D.MM.yyyy",
@@ -58,8 +57,11 @@ namespace Qorpent.Utils {
 			"mm минут(у{|}ы)? назад",
             "(минуту{|}час) назад",
 			"HH час(а{|}ов)? назад",
-            "неделю назад"
-	    };
+            "неделю назад",
+            "D MMM yyyy,? HH:mm:ss",
+            "D MMM yyyy,? HH:mm",
+            "D MMM yyyy,? [\\s\\S]*",
+        };
 
 	    private static readonly Regex[] FormatRegexes = null;
 		static WebDateTimeParser(){
