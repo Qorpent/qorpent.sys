@@ -16,10 +16,10 @@ namespace Qorpent {
 
         public override void OnContainerCreateInstanceFinished() {
             base.OnContainerCreateInstanceFinished();
-            Refresh();
+            Refresh(true);
         }
 
-        public bool Refresh() {
+        public bool Refresh(bool forse) {
             if (DateTime.Now.AddMilliseconds(-RefreshRate) > LastRefresh) {
                 Logg.Debug(new { cache = "begin refresh" }.stringify());
                 LastRefresh = DateTime.Now;
@@ -27,7 +27,7 @@ namespace Qorpent {
                     var currentEtag = ETag;
                     var currentVersion = Version;
                     foreach (var extension in Extensions) {
-                        extension.Refresh();
+                        extension.Refresh(forse);
                     }
                     if (currentEtag == ETag && currentVersion == Version) return false;
                     Logg.Trace(new{cache="refreshed"}.stringify());
@@ -57,7 +57,7 @@ namespace Qorpent {
         public TItem Get(string key, Func<string, TItem> retriever) {
             lock (this) {
                 if (InternalCache.ContainsKey(key)) {
-                    Refresh();
+                    Refresh(false);
                     if (InternalCache.ContainsKey(key)) {
                         return InternalCache[key];
                     }
@@ -69,10 +69,12 @@ namespace Qorpent {
             }
         }
 
-        public void Clear() {
+        public object Clear() {
             lock (this) {
+                var _size = InternalCache.Count;
                 InternalCache.Clear();
                 LastRefresh = DateTime.MinValue;
+                return _size;
             }
         }
 

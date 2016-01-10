@@ -27,6 +27,7 @@
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.woff2" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="console\ResetCommand.cs" />
     <Compile Include="DefaultRequestHandlerFactory.cs" />
     <Compile Include="Handlers\DropStaticCache.cs" />
     <Compile Include="Handlers\LoadHandler.cs" />

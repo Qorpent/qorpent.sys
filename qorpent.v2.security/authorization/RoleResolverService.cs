@@ -6,12 +6,14 @@ using qorpent.Security;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
 using Qorpent;
+using Qorpent.Events;
 using Qorpent.Experiments;
 using Qorpent.IoC;
 using Qorpent.Log.NewLog;
 
 namespace qorpent.v2.security.authorization {
     [ContainerComponent(Lifestyle.Singleton, "roleresolver.service", ServiceType = typeof (IRoleResolverService))]
+    [RequireReset]
     public class RoleResolverService : ExtensibleServiceBase<IRoleResolver>, IRoleResolverService {
         private IRoleResolverCache _cache;
         private IRoleExpressionEvaluator _evaluator;

@@ -17,6 +17,8 @@ namespace qorpent.v2.security.user.storage.providers {
             return Values.Where(query.IsMatch);
         }
 
+       
+
 
         public bool IsDefault { get; set; }
         public bool WriteUsersEnabled { get; } = true;

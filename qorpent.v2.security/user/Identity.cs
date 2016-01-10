@@ -80,6 +80,9 @@ namespace qorpent.v2.security.user {
         public string AuthenticationType { get; set; }
         public bool IsAuthenticated { get; set; }
         public Token DisabledToken { get; set; }
+        public UserActivityState State { get; set; } = UserActivityState.None;
+
+        public string StateInfo => State.GetInfo();
 
         public void WriteAsJson(TextWriter output, string mode, ISerializationAnnotator annotator, bool pretty = false, int level = 0) {
             if (string.IsNullOrWhiteSpace(mode)) {
@@ -93,6 +96,8 @@ namespace qorpent.v2.security.user {
             jw.WriteProperty("isadmin",IsAdmin,true);
             jw.WriteProperty("isguest",IsGuest,true);
             jw.WriteProperty("iserror",IsError,true);
+            jw.WriteProperty("state",State,true);
+            jw.WriteProperty("stateinfo",StateInfo,true);
     
                 if (null != Token) {
                     jw.OpenProperty("token");

@@ -227,7 +227,7 @@ namespace qorpent.v2.console {
         public IConsoleContext WriteLine(string data) {
             if (null == OnWrite)
             {
-                Out.Write(data);
+                Out.WriteLine(data);
             }
             else
             {

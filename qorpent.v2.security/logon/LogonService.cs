@@ -43,7 +43,13 @@ namespace qorpent.v2.security.logon {
                 catch (Exception ex) {
                     LogError(username, password, context, opid, ex);
                     result = GetErrorLogon(username, ex);
+                    ((Identity)result).State = UserActivityState.Error;
                 }
+                Identity ires = (Identity) result;
+                if (ires.State == UserActivityState.None) {
+                    ires.State = ires.IsAuthenticated ? UserActivityState.Ok : UserActivityState.InvalidLogonInfo;
+                }                
+                
                 LogResult(result, opid);
                 return result;
             }
@@ -87,7 +93,13 @@ namespace qorpent.v2.security.logon {
             }
             catch (Exception ex) {
                 LogError(username, info, context, opid, ex);
-                return GetErrorLogon(username, ex);
+                result = GetErrorLogon(username, ex);
+                ((Identity)result).State = UserActivityState.Error;
+            }
+            Identity ires = (Identity)result;
+            if (ires.State == UserActivityState.None)
+            {
+                ires.State = ires.IsAuthenticated ? UserActivityState.Ok : UserActivityState.InvalidLogonInfo;
             }
             LogResult(result, opid);
             return result;
@@ -178,6 +190,7 @@ namespace qorpent.v2.security.logon {
 
         private IIdentity ResolveByExtensions(string username, string password, string opid, IScope context) {
            var extensions = Extensions.OfType<IPasswordLogon>().ToArray();
+            IIdentity bestresult = null;
             foreach (var passwordLogon in extensions) {
                 if (Logg.IsForDebug()) {
                     Logg.Debug(new {opid,ext=passwordLogon.GetType().Name,message="enter"}.stringify());
@@ -187,11 +200,15 @@ namespace qorpent.v2.security.logon {
                 {
                     Logg.Debug(new { opid, ext = passwordLogon.GetType().Name, message = null != subresult && subresult.IsAuthenticated }.stringify());
                 }
+                if (null != subresult && UserActivityState.None != ((Identity) subresult).State) {
+                    bestresult = subresult;
+                }
+                
                 if (null != subresult && subresult.IsAuthenticated) {
                     return subresult;
                 }
             }
-            return null;
+            return bestresult;
         }
 
         private void LogStart(string username, string password, IScope context, string opid) {

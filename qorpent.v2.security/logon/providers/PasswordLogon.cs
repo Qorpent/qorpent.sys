@@ -65,6 +65,7 @@ namespace qorpent.v2.security.logon.providers {
             var state = StateChecker.GetActivityState(user);
             if (state != UserActivityState.Ok) {
                 Logg.Debug("user is in invalid state "+state);
+                result.State = state;
                 result.IsError = true;
                 result.Error = new SecurityException(state.ToStr());
             }

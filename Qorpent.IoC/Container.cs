@@ -51,7 +51,8 @@ namespace Qorpent.IoC {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
-
+	    private static int _IID = 0;
+	    public int IID = ++_IID;
 		/// <summary>
 		/// 	Журнал контейнера
 		/// </summary>

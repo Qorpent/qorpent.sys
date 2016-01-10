@@ -48,8 +48,8 @@ namespace qorpent.v2.security.user.storage.providers {
         public int CacheRate { get; set; }
         public DateTime LastCheck { get; set; }
 
-        public bool Refresh() {
-            CheckCache(true);
+        public bool Refresh(bool forse) {
+            CheckCache(forse);
             return true;
         }
 
@@ -231,7 +231,7 @@ namespace qorpent.v2.security.user.storage.providers {
                 ETag = j.str("aggregations._version.value");
                 Version = j.date("aggregations._timestamp.value_as_string");
             }
-            if (ETag != currentETag || Version != currentVersion) {
+            if (ETag != currentETag || Version != currentVersion ) {
                 _cache.Clear();
             }
         }

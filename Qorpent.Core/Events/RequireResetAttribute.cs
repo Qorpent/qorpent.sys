@@ -17,45 +17,56 @@
 // PROJECT ORIGIN: Qorpent.Core/RequireResetAttribute.cs
 #endregion
 using System;
+using System.Linq;
+using System.Security.Principal;
 using Qorpent.Applications;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Events {
-	/// <summary>
-	/// 	Помечает класс для автоматической поддержки Reset-инфраструктуры, класс должен быть унаследован от <see
-	/// 	 cref="IResetable" />
-	/// </summary>
-	/// <remarks>
-	/// 	<see cref="ServiceBase" /> поддерживает автоматическую настройку на Reset исходя из этого атрибута и 
-	/// 	использует его в собственном <see cref="IApplicationBound.SetApplication" />
-	/// </remarks>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-	public class RequireResetAttribute : Attribute {
-		/// <summary>
-		/// 	Стандартный конструктор атрибута
-		/// </summary>
-		public RequireResetAttribute() {
-			All = true;
-			UseClassNameAsOption = true;
-		}
+    /// <summary>
+    /// 	РџРѕРјРµС‡Р°РµС‚ РєР»Р°СЃСЃ РґР»СЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РїРѕРґРґРµСЂР¶РєРё Reset-РёРЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂС‹, РєР»Р°СЃСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓРЅР°СЃР»РµРґРѕРІР°РЅ РѕС‚ <see
+    /// 	 cref="IResetable" />
+    /// </summary>
+    /// <remarks>
+    /// 	<see cref="ServiceBase" /> РїРѕРґРґРµСЂР¶РёРІР°РµС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєСѓСЋ РЅР°СЃС‚СЂРѕР№РєСѓ РЅР° Reset РёСЃС…РѕРґСЏ РёР· СЌС‚РѕРіРѕ Р°С‚СЂРёР±СѓС‚Р° Рё 
+    /// 	РёСЃРїРѕР»СЊР·СѓРµС‚ РµРіРѕ РІ СЃРѕР±СЃС‚РІРµРЅРЅРѕРј <see cref="IApplicationBound.SetApplication" />
+    /// </remarks>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class RequireResetAttribute : Attribute {
+        /// <summary>
+        /// 	РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р°С‚СЂРёР±СѓС‚Р°
+        /// </summary>
+        public RequireResetAttribute() {
+            All = true;
+            UseClassNameAsOption = true;
+        }
 
-		/// <summary>
-		/// 	Если установлена данная роль, то для выполнения данного ресетера требуется наличие прав при вызове
-		/// </summary>
-		public string Role { get; set; }
+        /// <summary>
+        /// 	Р•СЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅР° РґР°РЅРЅР°СЏ СЂРѕР»СЊ, С‚Рѕ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РґР°РЅРЅРѕРіРѕ СЂРµСЃРµС‚РµСЂР° С‚СЂРµР±СѓРµС‚СЃСЏ РЅР°Р»РёС‡РёРµ РїСЂР°РІ РїСЂРё РІС‹Р·РѕРІРµ
+        /// </summary>
+        public string Role { get; set; }
 
-		/// <summary>
-		/// 	True (по умолчанию) - сервис будет реагировать на опцию сброса "все"
-		/// </summary>
-		public bool All { get; set; }
+        /// <summary>
+        /// 	True (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ) - СЃРµСЂРІРёСЃ Р±СѓРґРµС‚ СЂРµР°РіРёСЂРѕРІР°С‚СЊ РЅР° РѕРїС†РёСЋ СЃР±СЂРѕСЃР° "РІСЃРµ"
+        /// </summary>
+        public bool All { get; set; }
 
-		/// <summary>
-		/// 	True (по умолчанию) - имя класса является первичной опцией при оценке опций сброса (с игнором регистра)
-		/// </summary>
-		public bool UseClassNameAsOption { get; set; }
+        /// <summary>
+        /// 	True (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ) - РёРјСЏ РєР»Р°СЃСЃР° СЏРІР»СЏРµС‚СЃСЏ РїРµСЂРІРёС‡РЅРѕР№ РѕРїС†РёРµР№ РїСЂРё РѕС†РµРЅРєРµ РѕРїС†РёР№ СЃР±СЂРѕСЃР° (СЃ РёРіРЅРѕСЂРѕРј СЂРµРіРёСЃС‚СЂР°)
+        /// </summary>
+        public bool UseClassNameAsOption { get; set; }
 
-		/// <summary>
-		/// 	Дополнительные опции, на которые будет реагировать класс (может быть пустым)
-		/// </summary>
-		public string[] Options { get; set; }
-	}
+        /// <summary>
+        /// 	Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РѕРїС†РёРё, РЅР° РєРѕС‚РѕСЂС‹Рµ Р±СѓРґРµС‚ СЂРµР°РіРёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃ (РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј)
+        /// </summary>
+        public string[] Options { get; set; }
+
+        public bool IsMatch(Type type,string opt) {
+            var opts = opt.ToLowerInvariant().SmartSplit();
+            if (All && (string.IsNullOrWhiteSpace(opt) || opts.Contains("all"))) return true;
+            if (UseClassNameAsOption && opts.Contains(type.Name.ToLowerInvariant())) return true;
+            if (opts.Any(_ => Options.Contains(_))) return true;
+            return false;
+        }
+    }
 }

@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using Qorpent;
+using Qorpent.Events;
 using Qorpent.Experiments;
 using Qorpent.IoC;
 
 namespace qorpent.v2.security.user.storage {
+    [RequireReset]
     [ContainerComponent(Lifestyle.Singleton, "user.service", ServiceType = typeof (IUserService))]
     public class UserService : ExtensibleServiceBase<IUserSource>, IUserService {
         private IUserCache _userCache;
@@ -18,10 +21,10 @@ namespace qorpent.v2.security.user.storage {
         }
 
         public UserService() {
-            
+
         }
 
-        public UserService(params IUserSource[] sources) {
+        public UserService(params IUserSource[] sources) :this(){
             if (null != sources) {
                 foreach (var userSource in sources) {
                     RegisterExtension(userSource);
@@ -62,13 +65,27 @@ namespace qorpent.v2.security.user.storage {
             var realuser = writeable.Store(user);
             if (null != _userCache) {
                 _userCache.Clear();
-                _userCache.Refresh();
+                _userCache.Refresh(false);
             }
             return realuser;
         }
 
-        public void Clear() {
-            _userCache.Clear();
+        public object Clear() {
+            var result = new Dictionary<string,object>();
+            result["cachesize"] = _userCache.Clear();
+            foreach (var userSource in Extensions) {
+                var clearer = userSource.GetType().GetMethod("Clear");
+                if (null != clearer) {
+                    clearer.Invoke(userSource, Type.EmptyTypes);
+                    result[userSource.GetType().Name.ToLowerInvariant()] = true;
+                }
+            }
+            return result;
+
+        }
+
+        public override object Reset(ResetEventData data) {
+            return Clear();
         }
 
         public override void OnContainerCreateInstanceFinished() {

@@ -55,13 +55,13 @@ namespace qorpent.v2.security.handlers.logon {
 				}
                 TokenService.Store(context.Response, context.Request.Uri, token);
 				Loggy.Info("Login: " + resolvedUsername + ", " + logondata.UserAgent + " from " + strRemoteIp);
-                return new HandlerResult {Result = true, Data = logondata};
+                return new HandlerResult {Result = new{auth=true,state=identity.State,stateinfo=identity.StateInfo}, Data = logondata};
             }
             if (!identity.IsAuthenticated && !identity.IsGuest) {
                 Loggy.Warn("Login failed: " + context.User.Identity.Name + ", User Agent: [" + logondata.UserAgent + "] from ip: " + strRemoteIp);
             }
             TokenService.Store(context.Response, context.Request.Uri, null);
-            return new HandlerResult {Result = false, Data = logondata};
+            return new HandlerResult {Result = new { auth = false, state = identity.State, stateinfo = identity.StateInfo }, Data = logondata};
         }
 
         public override string GetUserOperationLog(bool iserror, LogLevel level, HandlerResult result,WebContext context) {
