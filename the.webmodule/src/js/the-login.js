@@ -7,10 +7,13 @@
 define(["the-angular", "the-action"], function ($the, template) {
     return $the(function (root, privates) {
         if (null == root.modules)return;
-        var loginResult = function (result, error, redirect) {
+        var loginResult = function (result, error, redirect,state,stateinfo) {
+            console.log(arguments)
             this.result = result || false;
             this.error = error || "";
             this.redirect = redirect || "";
+            this.state = state;
+            this.stateinfo = stateinfo;
         };
         var loginRequest = function(login,pass,resource,redirect){
             this.login = login;
@@ -97,7 +100,7 @@ define(["the-angular", "the-action"], function ($the, template) {
                 {
                     method:"POST",
                     success : function(data){
-                        var result = new loginResult(data===true,data===true?"":data);
+                        var result = new loginResult(data.auth,!data.auth?"":data.stateinfo,"",data.state,data.stateinfo);
                         if(!!callback){
                             callback(result);
                         }

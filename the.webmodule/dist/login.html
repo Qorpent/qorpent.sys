@@ -92,8 +92,9 @@
             <i class="button" ng-class="{primary: loginForm.$valid, warn: !loginForm.$valid, disabled: !loginForm.$valid}"
                ng-click="loginForm.$valid && login()">Войти</i>
             <input type="submit" value="true" style="display: none"/>
-            <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
-            <div ng-if="lastwaslogin" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
+            <div ng-if="logonresult.state!='Ok'" class="danger login-comment" ng-cloak ng-bind="logonresult.state"></div>
+            <div ng-if="logonresult.state!='Ok'" class="danger login-comment" ng-cloak ng-bind="logonresult.stateinfo"></div>
+            <div ng-if="logonresult.state=='Ok'" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
             <a href="resetpwdreq.html">Я забыл пароль</a>
 
         </form>

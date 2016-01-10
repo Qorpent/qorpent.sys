@@ -279,6 +279,7 @@ require.config({
                 $scope.login = function () {
                     the.login.logon($scope.req, function (result) {
                         $scope.$apply(function () {
+                            $scope.logonresult = result;
                             $scope.req.login = "";
                             $scope.req.pass = "";
                             if (result.result) {
