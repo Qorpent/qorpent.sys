@@ -233,6 +233,26 @@ namespace bit.cross.accident.services.query {
             return q;
         }
 
+        public static IDictionary<string, object> QSetFieldAgg(this IDictionary<string,object> query, string field, string agg, bool onlyaggs = false)
+        {
+            query["aggs"] = new Dictionary<string, object>
+            {
+                [agg] = new Dictionary<string, object>
+                {
+                    [agg] = new Dictionary<string, object>
+                    {
+                        ["field"] = field
+                    }
+                }
+            };
+            if (onlyaggs)
+            {
+                query.QSetSize(0);
+                query.QNoSource();
+            }
+            return query;
+        }
+
         public static IDictionary<string,object> GetFieldAgg(string field, string agg, bool onlyaggs = false) {
             var result = new Dictionary<string,object>();
             result["aggs"] = new Dictionary<string,object> {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Qorpent;
 
@@ -12,6 +13,8 @@ namespace qorpent.v2.query {
         IEnumerable<object> IObjectSource.SearchAll(object query, IScope scope) {
             return SearchAll(query, scope);
         }
+
+        public abstract DateTime GetMaxVersion(object query = null);
 
         object IObjectSource.Get(string id, IScope scope) {
             return Get(id, scope);

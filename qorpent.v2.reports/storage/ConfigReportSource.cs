@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using qorpent.v2.model;
 using qorpent.v2.query;
@@ -19,6 +20,10 @@ namespace qorpent.v2.reports.storage {
                 return _context ?? (_context = ConfigProvider.GetContext());
             }
             set { _context = value; }
+        }
+
+        public override DateTime GetMaxVersion(object query = null) {
+            return DateTime.MinValue;
         }
 
         public override IReport Get(string id, IScope scope = null) {
