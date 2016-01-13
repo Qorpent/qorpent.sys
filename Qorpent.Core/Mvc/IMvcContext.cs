@@ -23,6 +23,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Xml.Linq;
 using Qorpent.Applications;
+using Qorpent.IO.Http;
 using Qorpent.Security;
 using Qorpent.Serialization;
 
@@ -95,6 +96,9 @@ namespace Qorpent.Mvc {
 		/// 	Render Descriptor, attached to context
 		/// </summary>
 		RenderDescriptor RenderDescriptor { get; set; }
+
+
+	    RequestParameters GetRequestParameters();
 
 		/// <summary>
 		/// 	Uri of request
@@ -233,6 +237,8 @@ namespace Qorpent.Mvc {
 		/// <param name="setup"> </param>
 		/// <returns> </returns>
 		string Get(string name, string def = "", bool setup = false);
+
+	    object GetObject(string name);
 
 		/// <summary>
 		/// 	Retrieves parameter parsed as XML

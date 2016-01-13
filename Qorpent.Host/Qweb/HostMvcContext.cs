@@ -566,7 +566,13 @@ namespace Qorpent.Host.Qweb
 		    return result;
 		}
 
-		/// <summary>
+	    private RequestParameters _requestParameters;
+	    public override RequestParameters GetRequestParameters() {
+	        _requestParameters = _requestParameters ?? RequestParameters.Create(context);
+	        return _requestParameters;
+	    }
+
+	    /// <summary>
 		/// 	Safe method to acess parameters in context
 		/// </summary>
 		/// <param name="name"> </param>

@@ -18,6 +18,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -135,15 +136,25 @@ namespace Qorpent.Mvc.Binding {
 			}
 			else if (TargetType.IsArray) {
 			    object val;
-			    if (_bindattribute.Split) {
-			        var str = context.Get(paramname);
-			        var a = str.SmartSplit().Select(_ => _.ToTargetType(TargetType.GetElementType())).ToArray();
-			        var t = Array.CreateInstance(TargetType.GetElementType(), a.Length);
-			        Array.Copy(a,t,a.Length);
+			    var arr = context.GetObject(paramname);
+			    if (arr is Array) {
+			        var resultArray =
+			            ((IEnumerable) arr).OfType<object>().Select(_ => _.ToTargetType(TargetType.GetElementType())).ToArray();
+			        var t = Array.CreateInstance(TargetType.GetElementType(), resultArray.Length);
+			        Array.Copy(resultArray, t, resultArray.Length);
 			        val = t;
 			    }
 			    else {
-			        val = context.GetArray(TargetType.GetElementType(), paramname);
+			        if (_bindattribute.Split) {
+			            var str = context.Get(paramname);
+			            var a = str.SmartSplit().Select(_ => _.ToTargetType(TargetType.GetElementType())).ToArray();
+			            var t = Array.CreateInstance(TargetType.GetElementType(), a.Length);
+			            Array.Copy(a, t, a.Length);
+			            val = t;
+			        }
+			        else {
+			            val = context.GetArray(TargetType.GetElementType(), paramname);
+			        }
 			    }
 			    SetDirectly(action, val);
 			}

@@ -26,6 +26,7 @@ using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.Dsl;
 using Qorpent.IoC;
+using Qorpent.IO.Http;
 using Qorpent.Security;
 using Qorpent.Serialization;
 
@@ -69,7 +70,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// Обеспечивает признак выходящего запроса - место расположения файла
+		/// РћР±РµСЃРїРµС‡РёРІР°РµС‚ РїСЂРёР·РЅР°Рє РІС‹С…РѕРґСЏС‰РµРіРѕ Р·Р°РїСЂРѕСЃР° - РјРµСЃС‚Рѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р°
 		/// </summary>
 		public abstract string FileDisposition { get; set; }
 
@@ -181,7 +182,14 @@ namespace Qorpent.Mvc {
 			return Get<string>(name, def, setup);
 		}
 
-		/// <summary>
+	    public object GetObject(string name) {
+	        if (null != GetRequestParameters()) {
+	            return GetRequestParameters().GetObject(name);
+	        }
+	        return Get(name);
+	    }
+
+	    /// <summary>
 		/// 	Retrieves parameter parsed as XML
 		/// </summary>
 		/// <param name="name"> </param>
@@ -280,7 +288,11 @@ namespace Qorpent.Mvc {
 			set { _renderDescriptor = value; }
 		}
 
-		/// <summary>
+	    public virtual RequestParameters GetRequestParameters() {
+	        return null;
+	    }
+
+	    /// <summary>
 		/// 	Uri of request
 		/// </summary>
 		public Uri Uri { get; set; }
@@ -419,7 +431,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		///Признак того, что контекст вызвал Redirect
+		///РџСЂРёР·РЅР°Рє С‚РѕРіРѕ, С‡С‚Рѕ РєРѕРЅС‚РµРєСЃС‚ РІС‹Р·РІР°Р» Redirect
 		/// </summary>
 		public bool IsRedirected { get; set; }
 
@@ -487,13 +499,13 @@ namespace Qorpent.Mvc {
 		public abstract object GetFile(string filename);
 
 		/// <summary>
-		/// Выводит в исходящий поток исходный поток
+		/// Р’С‹РІРѕРґРёС‚ РІ РёСЃС…РѕРґСЏС‰РёР№ РїРѕС‚РѕРє РёСЃС…РѕРґРЅС‹Р№ РїРѕС‚РѕРє
 		/// </summary>
 		/// <param name="sourceStream"></param>
 		public abstract void WriteOutStream(Stream sourceStream);
 
 		/// <summary>
-		/// Выводит в исходящий поток данные
+		/// Р’С‹РІРѕРґРёС‚ РІ РёСЃС…РѕРґСЏС‰РёР№ РїРѕС‚РѕРє РґР°РЅРЅС‹Рµ
 		/// </summary>
 		public abstract void WriteOutBytes(byte[] data);
 
@@ -502,7 +514,7 @@ namespace Qorpent.Mvc {
 	    private string _renderMode;
 
 	    /// <summary>
-		/// Выполнить настройку действия на контекст
+		/// Р’С‹РїРѕР»РЅРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєСѓ РґРµР№СЃС‚РІРёСЏ РЅР° РєРѕРЅС‚РµРєСЃС‚
 		/// </summary>
 		public void Bind() {
 			

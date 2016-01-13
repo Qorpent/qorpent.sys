@@ -82,7 +82,11 @@ namespace Qorpent.IO.Http
 		}
         public object GetObject (string name) {
             if (null == Json) return Get(name);
-            return Experiments.Json.Get(Json, name);
+            var result = Json.get(name);
+            if (null == result && name.ToLowerInvariant() != name) {
+                result = Json.get(name.ToLowerInvariant());
+            }
+            return result;
         }
 
 
