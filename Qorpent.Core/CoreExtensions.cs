@@ -47,7 +47,7 @@ namespace Qorpent.Utils.Extensions {
 			return x.ToString();
 		}
 		/// <summary>
-		/// Форматирует MD5Hash в строку из цифр с игнорированием ноля
+		/// Р¤РѕСЂРјР°С‚РёСЂСѓРµС‚ MD5Hash РІ СЃС‚СЂРѕРєСѓ РёР· С†РёС„СЂ СЃ РёРіРЅРѕСЂРёСЂРѕРІР°РЅРёРµРј РЅРѕР»СЏ
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
@@ -132,7 +132,7 @@ namespace Qorpent.Utils.Extensions {
 		/// 	5. IConvertible - by IConvertible.ToBoolean
 		/// 	6. all other reference types => true (not null behavior)
 		/// 	7. DateTime :
-		/// 	7.а G Qorpent.Const.Begin => true
+		/// 	7.Р° G Qorpent.Const.Begin => true
 		/// 	7.b LE Qorpent.Const.Begin => false
 		/// 	8. all other - Convert.ToBoolean
 		/// </summary>
@@ -326,21 +326,22 @@ namespace Qorpent.Utils.Extensions {
 			}
 			catch (Exception ex) {
 				throw new FormatException(
-					String.Format("Cannot convert {0} of type {1} to {2}", "x", x == null ? "no type" : x.GetType().FullName, type),
+				    $"Cannot convert {"x"} of type {(x.GetType().FullName)} to {type}",
 					ex);
 			}
 		}
 
+	    private static readonly char[] enumsplitters = {'+', ',', ';', ' ', '/','-'};
         private static object ConvertEnum(Type type, string x)
         {
-            if (!x.Contains("+"))
+            if (-1==x.IndexOfAny(enumsplitters))
             {
-                return Enum.Parse(type, x as string, true);
+                return Enum.Parse(type, x, true);
             }
             else
             {
                 var result = Activator.CreateInstance(type);
-                var subitems = x.Split('+');
+                var subitems = x.Split(enumsplitters);
 	            var utype = Enum.GetUnderlyingType(type);
                 foreach (var s in subitems)
                 {
@@ -641,7 +642,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 
 			/// <summary>
-			/// 	Собственное значение элемента
+			/// 	РЎРѕР±СЃС‚РІРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°
 			/// </summary>
 			public string Value { get; set; }
 			/// <summary>
@@ -736,7 +737,7 @@ namespace Qorpent.Utils.Extensions {
 	    }
 
 		/// <summary>
-		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
+		/// 	Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РѕР»СЊРєРѕ СЃРѕР±СЃС‚РІРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° (РєРѕРЅРєР°С‚РµРЅР°С†РёСЏ С‚РµРєСЃС‚РѕРІС‹С… СЌР»РµРјРµРЅС‚РѕРІ С‡РµСЂРµР· РїСЂРѕР±РµР»)
 		/// </summary>
 		/// <param name="xElement"> </param>
 		/// <returns> </returns>
@@ -748,7 +749,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		///     Устанавливает атрибут, если значение не null
+		///     РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р°С‚СЂРёР±СѓС‚, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РЅРµ null
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="name"></param>
@@ -822,7 +823,7 @@ namespace Qorpent.Utils.Extensions {
 	        return false;
 	    }
 		/// <summary>
-		/// Производит резолюцию значений атрибутов, имен атрибутов и возвращает максимально валидный результат
+		/// РџСЂРѕРёР·РІРѕРґРёС‚ СЂРµР·РѕР»СЋС†РёСЋ Р·РЅР°С‡РµРЅРёР№ Р°С‚СЂРёР±СѓС‚РѕРІ, РёРјРµРЅ Р°С‚СЂРёР±СѓС‚РѕРІ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РІР°Р»РёРґРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚
 		/// </summary>
 		/// <param name="e"></param>
 		/// <param name="names"></param>
@@ -852,12 +853,12 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 	    /// <summary>
-	    /// Эффективное определение значения
+	    /// Р­С„С„РµРєС‚РёРІРЅРѕРµ РѕРїСЂРµРґРµР»РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ
 	    /// </summary>
 	    /// <param name="e"></param>
 	    /// <param name="code"></param>
 	    /// <param name="def"></param>
-	    /// <returns>Приоритет - атрибут-элемент-ик_атрибут-ик_елемент</returns>
+	    /// <returns>РџСЂРёРѕСЂРёС‚РµС‚ - Р°С‚СЂРёР±СѓС‚-СЌР»РµРјРµРЅС‚-РёРє_Р°С‚СЂРёР±СѓС‚-РёРє_РµР»РµРјРµРЅС‚</returns>
 	    public static string ResolveValue(this XElement e, string code, string def = "") {
 	        if (null == e) return def??"";
 	        //first priority - attribute by full name
@@ -867,7 +868,7 @@ namespace Qorpent.Utils.Extensions {
 	        var es = e.Elements(code).ToArray();
 	        if (es.Length == 1)
 	        {
-	            //причем если элемент пустой - возвращаем код
+	            //РїСЂРёС‡РµРј РµСЃР»Рё СЌР»РµРјРµРЅС‚ РїСѓСЃС‚РѕР№ - РІРѕР·РІСЂР°С‰Р°РµРј РєРѕРґ
 	            if (String.IsNullOrWhiteSpace(es[0].Value))
 	            {
 	                return es[0].Attr("code");
@@ -884,7 +885,7 @@ namespace Qorpent.Utils.Extensions {
 	        es = e.Elements().Where(_ => _.Name.LocalName.ToLowerInvariant() == code.ToLowerInvariant()).ToArray();
 	        if (es.Length == 1)
 	        {
-	            //причем если элемент пустой - возвращаем код
+	            //РїСЂРёС‡РµРј РµСЃР»Рё СЌР»РµРјРµРЅС‚ РїСѓСЃС‚РѕР№ - РІРѕР·РІСЂР°С‰Р°РµРј РєРѕРґ
 	            if (String.IsNullOrWhiteSpace(es[0].Value))
 	            {
 	                return es[0].Attr("code");
@@ -895,15 +896,15 @@ namespace Qorpent.Utils.Extensions {
 	    }
 
 	    /// <summary>
-	    /// Считывает строку как набор ключ-значение
+	    /// РЎС‡РёС‚С‹РІР°РµС‚ СЃС‚СЂРѕРєСѓ РєР°Рє РЅР°Р±РѕСЂ РєР»СЋС‡-Р·РЅР°С‡РµРЅРёРµ
 	    /// </summary>
-	    /// <param name="source">строка - источник</param>
-	    /// <param name="itemDelimiter">разделитель между отдельными элементами словаря</param>
-	    /// <param name="valueDelimiter">разделитель имени и значения</param>
-	    /// <param name="trim">триммирование значений</param>
-	    /// <param name="escape">экранирующий символ</param>
-	    /// <returns>словарь ключ-значение</returns>
-	    /// <remarks>при совпадающих ключах выигрывает последний</remarks>
+	    /// <param name="source">СЃС‚СЂРѕРєР° - РёСЃС‚РѕС‡РЅРёРє</param>
+	    /// <param name="itemDelimiter">СЂР°Р·РґРµР»РёС‚РµР»СЊ РјРµР¶РґСѓ РѕС‚РґРµР»СЊРЅС‹РјРё СЌР»РµРјРµРЅС‚Р°РјРё СЃР»РѕРІР°СЂСЏ</param>
+	    /// <param name="valueDelimiter">СЂР°Р·РґРµР»РёС‚РµР»СЊ РёРјРµРЅРё Рё Р·РЅР°С‡РµРЅРёСЏ</param>
+	    /// <param name="trim">С‚СЂРёРјРјРёСЂРѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№</param>
+	    /// <param name="escape">СЌРєСЂР°РЅРёСЂСѓСЋС‰РёР№ СЃРёРјРІРѕР»</param>
+	    /// <returns>СЃР»РѕРІР°СЂСЊ РєР»СЋС‡-Р·РЅР°С‡РµРЅРёРµ</returns>
+	    /// <remarks>РїСЂРё СЃРѕРІРїР°РґР°СЋС‰РёС… РєР»СЋС‡Р°С… РІС‹РёРіСЂС‹РІР°РµС‚ РїРѕСЃР»РµРґРЅРёР№</remarks>
 	    public static IDictionary<string, string> ReadAsDictionary(this string source, char itemDelimiter = ';',
 	        char valueDelimiter = '=', bool trim = true, char escape = '\\') {
 	        var result = new Dictionary<string, string>();
