@@ -48,14 +48,18 @@ namespace bit.cross.accident.services.query {
             }
             var src = query.map("_source");
             if (!src.ContainsKey("include")) {
-                src["include"] = new object[] {fields};
+                src["include"] = fields.OfType<object>().ToArray();
             }
             else {
                 var l = src.arr("include").ToList();
                 l.Remove("*");
-                if (!l.Contains(fields)) {
-                    l.Add(fields);
+                foreach (var field in fields) {
+                    if (!l.Contains(field))
+                    {
+                        l.Add(field);
+                    }
                 }
+               
                 src["include"] = l.ToArray();
             }
             return query;

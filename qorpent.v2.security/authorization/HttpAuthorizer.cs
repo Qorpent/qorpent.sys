@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using qorpent.v2.security.authentication;
 using Qorpent;
+using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
 
@@ -33,6 +34,9 @@ namespace qorpent.v2.security.authorization
             set { _notAuth = value; }
         }
 
+        [Inject]
+        public IRedirectService Redirector { get; set; }
+
         public HttpAuthorizer() {
             Rules =new List<AuthorizationRule>();
         }
@@ -56,17 +60,33 @@ namespace qorpent.v2.security.authorization
         public AuthorizationReaction Authorize(IHttpRequestDescriptor request) {
             var uri = request.Uri;
             var identity = request.User.Identity;
-            var rule = Rules.Where(_ => _.IsMatch(uri)).OrderByDescending(_ => _.Idx).FirstOrDefault();           
+            var rule = Rules.Where(_ => _.IsMatch(uri)).OrderByDescending(_ => _.Idx).FirstOrDefault();
+            AuthorizationReaction result;
             if (!identity.IsAuthenticated) {
                 if (null != rule && rule.IsForNotAuth) {
-                    return rule.GetNotAuth(request);
+                    result = rule.GetNotAuth(request);
                 }
-                return NotAuth.GetReaction(request);
+                else {
+                    result = NotAuth.GetReaction(request);
+
+                }
             }
-            if (null == rule) return AuthorizationReaction.Allow;
-            if (!rule.CheckRole) return AuthorizationReaction.Allow;
-            if (Roles.IsInRole(request.User.Identity, rule.Role)) return AuthorizationReaction.Allow;
-            return AuthorizationReaction.Deny;
+            else {
+                if (null == rule) result = AuthorizationReaction.Allow;
+                else if (!rule.CheckRole) result = AuthorizationReaction.Allow;
+                else if (Roles.IsInRole(request.User.Identity, rule.Role)) result = AuthorizationReaction.Allow;
+                else return AuthorizationReaction.Deny; 
+            }
+
+            if (result.Process && null != Redirector && string.IsNullOrWhiteSpace(result.Redirect)) {
+                var redirect = Redirector.GetRedirectUrl(request);
+                if (!string.IsNullOrWhiteSpace(redirect)) {
+                    result = new AuthorizationReaction {
+                        Redirect = redirect
+                    };
+                }
+            }
+            return result;
         }
     }
 }

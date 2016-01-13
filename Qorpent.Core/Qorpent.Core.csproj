@@ -73,6 +73,8 @@
     <Compile Include="CacheService.cs" />
     <Compile Include="Config\ConfigurationLoader.cs" />
     <Compile Include="Config\ConfigurationOptions.cs" />
+    <Compile Include="Host\IRedirectService.cs" />
+    <Compile Include="Host\IRedirectSource.cs" />
     <Compile Include="IO\Net\HttpMethod.cs" />
     <Compile Include="IO\PidFile.cs" />
     <Compile Include="IO\FileSet.cs" />

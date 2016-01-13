@@ -264,7 +264,7 @@ namespace Qorpent.Host {
                     Applications.Application.Current.Principal.SetCurrentUser(wc.User);
                 }
                 var authorization = Authorizer.Authorize(wc.Request);
-               
+
                 if (BeforeHandlerProcessed(wc,authorization)) {
                     if (!wc.Response.WasClosed) {
                         wc.Response.Close();
@@ -568,6 +568,10 @@ namespace Qorpent.Host {
 
             if (null == Container.FindComponent(typeof (IEncryptProvider), null)) {
                 Container.Register(Container.NewComponent<IEncryptProvider, Encryptor>(Lifestyle.Transient));
+            }
+            if (null == Container.FindComponent(typeof(IRedirectService), null))
+            {
+                Container.Register(Container.NewComponent<IRedirectService, RedirectService>(Lifestyle.Singleton));
             }
             Factory = Container.Get<IRequestHandlerFactory>();
             Static = Container.Get<IHostServerStaticResolver>();

@@ -37,6 +37,7 @@
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="ProxyHandler.cs" />
     <Compile Include="Qweb\AppInfoAction.cs" />
+    <Compile Include="RedirectService.cs" />
     <Compile Include="Server\ServerParameters.cs" />
     <Compile Include="Static\HostFileNameResolver.cs" />
     <Compile Include="Static\HostServerStaticResolver.cs" />
