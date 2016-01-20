@@ -183,6 +183,16 @@ error:before {
 	
 }
 
+.wiki strong {
+  font-weight: bold;
+}
+.wiki em {
+  font-style: italic;
+  font-size: 100% !important;
+  font-weight: normal;
+  padding: 0px 0px 0px 0px;
+  text-align: left;
+}
 
 .wiki h5:before {
 	

@@ -21,8 +21,9 @@ namespace Qorpent.Host.Handlers{
 		/// </summary>
 		/// <param name="context"></param>
 		public void Process(WebContext context) {
-			var readdata = context.ReadRequestStirngAsync();
-		    var parameters = RequestParameters.Create(context);
+            var parameters = RequestParameters.Create(context);
+		    var script = parameters.PostData;
+		    
 		    string lang = parameters.Get("lang");
 		    string format = parameters.Get("format");
 
@@ -40,9 +41,7 @@ namespace Qorpent.Host.Handlers{
 			else{
 				render = RenderAsNative;
 			}
-			readdata.Wait();
-
-		    string script = readdata.Result;
+			
 			_showroot = script.Contains("##showroot");
 			XElement xml = null;
 			try{
