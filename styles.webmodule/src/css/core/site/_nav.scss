@@ -29,6 +29,12 @@
         background-color: color(primarylight);
         color:color(light);
       }
+      &.inactive {
+        color: color(default);
+        font-size:90%;
+        font-style: italic;
+        background-color: color(defaultlight);
+      }
       &.active {
 
         border :solid 2px color(primary);

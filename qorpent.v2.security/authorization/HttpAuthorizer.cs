@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using qorpent.v2.security.authentication;
 using Qorpent;
 using Qorpent.Host;
 using Qorpent.IoC;

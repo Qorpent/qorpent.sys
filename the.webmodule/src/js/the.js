@@ -23,6 +23,7 @@ define([
     'the-angular-validation',
     'the-uploader',
     'the-angular-dialog',
+    'the-angular-wiki',
     'the-angular-controlgroup',
     'the-angular-viewcontext',
     'the-angular-onenter',

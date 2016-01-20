@@ -3286,17 +3286,24 @@ html.site body > nav > .tab:hover, html.site body > nav > a:hover {
   color: #fafafa;
 }
 /* line 32, core/site/_nav.scss */
+html.site body > nav > .tab.inactive, html.site body > nav > a.inactive {
+  color: #D7D7D7;
+  font-size: 90%;
+  font-style: italic;
+  background-color: #f6f6f6;
+}
+/* line 38, core/site/_nav.scss */
 html.site body > nav > .tab.active, html.site body > nav > a.active {
   border: solid 2px #4C81AF;
   border-bottom: none;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 37, core/site/_nav.scss */
+/* line 43, core/site/_nav.scss */
 html.site body > nav > .tab.active:first-child, html.site body > nav > a.active:first-child {
   border-left: none;
   border-radius: 0px 5px 0px 0px;
 }
-/* line 42, core/site/_nav.scss */
+/* line 48, core/site/_nav.scss */
 html.site body > nav > .tab.active:last-child, html.site body > nav > a.active:last-child {
   border-right: none;
   border-radius: 5px 0px 0px 0px;

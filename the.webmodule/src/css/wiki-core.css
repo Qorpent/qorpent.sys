@@ -1,0 +1,675 @@
+@charset "UTF-8";
+@media print {
+  /* line 4, wiki-core.scss */
+  .wiki hr {
+    page-break-before: always;
+    visibility: hidden;
+  }
+
+  /* line 8, wiki-core.scss */
+  .wiki .sample hr {
+    page-break-before: avoid !important;
+    visibility: visible !important;
+  }
+}
+/* line 13, wiki-core.scss */
+error {
+  display: block;
+  border: solid 1px red;
+}
+
+/* line 17, wiki-core.scss */
+error:before {
+  content: attr(text);
+}
+
+/* line 21, wiki-core.scss */
+.wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+  min-width: 924px;
+  max-width: 924px;
+  margin-left: 20px;
+}
+@media print and (orientation: landscape) {
+  /* line 131, site/_utils.scss */
+  .wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+    min-width: 25cm;
+    max-width: 25cm;
+  }
+}
+@media print and (orientation: portrait) {
+  /* line 139, site/_utils.scss */
+  .wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+    min-width: 17cm;
+    max-width: 17cm;
+  }
+}
+@media screen and (max-width: 974px) {
+  /* line 149, site/_utils.scss */
+  .wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+    min-width: 700px;
+    max-width: 700px;
+  }
+}
+@media screen and (max-width: 750px) {
+  /* line 149, site/_utils.scss */
+  .wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+    min-width: 400px;
+    max-width: 400px;
+  }
+}
+@media screen and (max-width: 450px) {
+  /* line 149, site/_utils.scss */
+  .wk-sized, .wiki .sample, .wiki .wiki-code, .wiki .wiki-outline, .wk-x, .wk-x-error, .wk-x-error-Error {
+    min-width: 200px;
+    max-width: 200px;
+  }
+}
+
+/* line 25, wiki-core.scss */
+.wk-inline, .wiki p, .wiki table, .wiki h1, .wiki h2, .wiki h3, .wiki h4, .wiki h5, .wiki h6, .wiki .wiki-list, .wiki .wiki-list-1, .wiki .wiki-list-2, .wiki .wiki-list-3, .wiki .wiki-list-4, .wiki .wiki-list-5, .wiki .wiki-list-6 {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* line 30, wiki-core.scss */
+.wiki {
+  counter-reset: wiki-head-1 0 wiki-list-1 0 wiki-ref 0 wiki-img 0 wiki-file 0 wiki-h2 0 wiki-code 0 wiki-table 0;
+}
+
+/* line 34, wiki-core.scss */
+.wiki-code, .wiki-sample {
+  counter-reset: wiki-list-1 0;
+}
+
+/* line 38, wiki-core.scss */
+.wiki-img {
+  counter-increment: wiki-img;
+  padding: 10px;
+}
+
+/* line 42, wiki-core.scss */
+.wiki-img img {
+  padding: 3px;
+  margin: 3px;
+  border: solid 2px gray;
+}
+
+/* line 47, wiki-core.scss */
+.wiki-img-title {
+  page-break-after: avoid;
+  font-size: 10pt;
+}
+
+/* line 52, wiki-core.scss */
+.wiki-img-title:before {
+  content: "Рис. " counter(wiki-img) ". ";
+}
+
+/* line 56, wiki-core.scss */
+.wiki p {
+  counter-reset: wiki-list-1 0;
+  text-align: justify;
+  text-indent: 30px;
+}
+
+/* line 63, wiki-core.scss */
+.wiki p, .wiki-list {
+  margin-top: 6pt;
+}
+
+/* line 68, wiki-core.scss */
+.wiki .sample {
+  counter-increment: wiki-sample;
+  background-color: #fafacc;
+  border: solid 1px gray;
+  padding: 5px;
+}
+/* line 75, wiki-core.scss */
+.wiki .sample .wiki-code {
+  min-width: 874px;
+  max-width: 874px;
+}
+@media print and (orientation: landscape) {
+  /* line 131, site/_utils.scss */
+  .wiki .sample .wiki-code {
+    min-width: 24cm;
+    max-width: 24cm;
+  }
+}
+@media print and (orientation: portrait) {
+  /* line 139, site/_utils.scss */
+  .wiki .sample .wiki-code {
+    min-width: 16cm;
+    max-width: 16cm;
+  }
+}
+@media screen and (max-width: 974px) {
+  /* line 149, site/_utils.scss */
+  .wiki .sample .wiki-code {
+    min-width: 650px;
+    max-width: 650px;
+  }
+}
+@media screen and (max-width: 750px) {
+  /* line 149, site/_utils.scss */
+  .wiki .sample .wiki-code {
+    min-width: 350px;
+    max-width: 350px;
+  }
+}
+@media screen and (max-width: 450px) {
+  /* line 149, site/_utils.scss */
+  .wiki .sample .wiki-code {
+    min-width: 150px;
+    max-width: 150px;
+  }
+}
+
+/* line 80, wiki-core.scss */
+.wiki table {
+  counter-increment: wiki-table;
+  border-collapse: collapse;
+}
+
+/* line 86, wiki-core.scss */
+.wiki .wiki-link {
+  counter-increment: wiki-ref;
+  color: #0088CC;
+  cursor: pointer;
+}
+
+/* line 91, wiki-core.scss */
+.wiki .wiki-link:hover {
+  text-decoration: underline;
+}
+
+/* line 95, wiki-core.scss */
+.wiki table td, .wiki table th {
+  border: solid 1px gray;
+  padding: 2px;
+}
+
+/* line 99, wiki-core.scss */
+.wiki table th {
+  background-color: #eeeeee;
+}
+
+/* line 103, wiki-core.scss */
+.wiki h1 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 18pt;
+  counter-increment: wiki-head-1;
+  counter-reset: wiki-head-2;
+}
+
+/* line 112, wiki-core.scss */
+.wiki .sample h1, .wiki .sample h2, .wiki .sample h3, .wiki .sample h4, .wiki .sample h5, .wiki .sample h6 {
+  counter-increment: none;
+  counter-reset: none;
+}
+
+/* line 117, wiki-core.scss */
+.wiki h1:before {
+  content: counter(wiki-head-1) " ";
+}
+/* line 119, wiki-core.scss */
+.embedwiki .wiki h1:before {
+  content: "" !important;
+}
+
+/* line 124, wiki-core.scss */
+.wiki h2 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 16pt;
+  counter-increment: wiki-head-2;
+  counter-reset: wiki-head-3;
+}
+
+/* line 133, wiki-core.scss */
+.wiki h2:before {
+  content: counter(wiki-head-1) "." counter(wiki-head-2) " ";
+}
+/* line 135, wiki-core.scss */
+.embedwiki .wiki h2:before {
+  content: "" !important;
+}
+
+/* line 140, wiki-core.scss */
+.wiki h3 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 14pt;
+  counter-increment: wiki-head-3;
+  counter-reset: wiki-head-4;
+}
+
+/* line 149, wiki-core.scss */
+.wiki h3:before {
+  content: counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) " ";
+}
+/* line 151, wiki-core.scss */
+.embedwiki .wiki h3:before {
+  content: "" !important;
+}
+
+/* line 157, wiki-core.scss */
+.wiki h4 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 14pt;
+  font-style: italic;
+  counter-increment: wiki-head-4;
+  counter-reset: wiki-head-5;
+}
+
+/* line 166, wiki-core.scss */
+.wiki h4:before {
+  content: counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) " ";
+}
+/* line 168, wiki-core.scss */
+.embedwiki .wiki h4:before {
+  content: "" !important;
+}
+
+/* line 175, wiki-core.scss */
+.wiki h5 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 12pt;
+  font-style: italic;
+  counter-increment: wiki-head-5;
+  counter-reset: wiki-head-6;
+}
+
+/* line 187, wiki-core.scss */
+.wiki h5:before {
+  content: counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) " ";
+}
+/* line 190, wiki-core.scss */
+.embedwiki .wiki h5:before {
+  content: "" !important;
+}
+
+/* line 197, wiki-core.scss */
+.wiki h6 {
+  margin-top: 6px;
+  margin-bottom: 3px;
+  font-size: 10pt;
+  font-style: italic;
+  counter-increment: wiki-head-6;
+}
+
+/* line 206, wiki-core.scss */
+.wiki h6:before {
+  content: counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) "." counter(wiki-head-6) ".";
+}
+
+/* line 212, wiki-core.scss */
+.wiki .wiki-list {
+  text-align: justify;
+}
+
+/* line 216, wiki-core.scss */
+.wiki .wiki-list-1 {
+  padding-left: 50px;
+  counter-increment: wiki-list-1;
+  counter-reset: wiki-list-2;
+}
+
+/* line 222, wiki-core.scss */
+.wiki .wiki-list-1:before {
+  content: "●    ";
+}
+
+/* line 225, wiki-core.scss */
+.wiki .wiki-list-1.number:before {
+  content: counter(wiki-list-1) ".";
+}
+
+/* line 228, wiki-core.scss */
+.wiki .wiki-list-2 {
+  padding-left: 70px;
+  counter-increment: wiki-list-2;
+  counter-reset: wiki-list-3;
+}
+
+/* line 234, wiki-core.scss */
+.wiki .wiki-list-2:before {
+  content: "○    ";
+}
+
+/* line 237, wiki-core.scss */
+.wiki .wiki-list-2.number:before {
+  content: counter(wiki-list-1) "." counter(wiki-list-2) ".";
+}
+
+/* line 242, wiki-core.scss */
+.wiki .wiki-list-3 {
+  padding-left: 90px;
+  counter-increment: wiki-list-3;
+  counter-reset: wiki-list-4;
+}
+
+/* line 248, wiki-core.scss */
+.wiki .wiki-list-3:before {
+  content: "¤    ";
+}
+
+/* line 251, wiki-core.scss */
+.wiki .wiki-list-3.number:before {
+  content: counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) ".";
+}
+
+/* line 255, wiki-core.scss */
+.wiki .wiki-list-4 {
+  padding-left: 60px;
+  counter-increment: wiki-list-4;
+  counter-reset: wiki-list-5;
+}
+
+/* line 261, wiki-core.scss */
+.wiki .wiki-list-4:before {
+  content: "●    ";
+}
+
+/* line 264, wiki-core.scss */
+.wiki .wiki-list-4.number:before {
+  content: counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) ".";
+}
+
+/* line 268, wiki-core.scss */
+.wiki .wiki-list-5 {
+  counter-increment: wiki-list-5;
+  counter-reset: wiki-list-6;
+  padding-left: 130px;
+}
+
+/* line 274, wiki-core.scss */
+.wiki .wiki-list-5:before {
+  content: "○    ";
+}
+
+/* line 277, wiki-core.scss */
+.wiki .wiki-list-5.number:before {
+  content: counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) ".";
+}
+
+/* line 281, wiki-core.scss */
+.wiki .wiki-list-6 {
+  counter-increment: wiki-list-6;
+  padding-left: 150px;
+}
+
+/* line 288, wiki-core.scss */
+.wiki .wiki-list-6:before {
+  content: "¤    ";
+}
+
+/* line 291, wiki-core.scss */
+.wiki .wiki-list-6.number:before {
+  content: counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) "." counter(wiki-list-6) ".";
+}
+
+/* line 297, wiki-core.scss */
+.wiki .wiki-code {
+  background-color: #ffffAA;
+  padding: 5pt;
+  font-family: consolas;
+  font-size: 8pt;
+}
+
+/* line 306, wiki-core.scss */
+.wiki .wiki-code .comment {
+  color: green;
+  font-style: italic;
+}
+
+/* line 311, wiki-core.scss */
+.wiki .wiki-code .string {
+  color: brown;
+  font-weight: bold;
+}
+
+/* line 316, wiki-core.scss */
+.wiki .wiki-code .number {
+  color: black;
+  font-weight: bold;
+}
+
+/* line 321, wiki-core.scss */
+.wiki .wiki-code .delimiter {
+  color: darkgreen;
+  font-weight: bold;
+}
+
+/* line 326, wiki-core.scss */
+.wiki .wiki-code .operator {
+  color: darkgreen;
+}
+
+/* line 330, wiki-core.scss */
+.wiki .wiki-code .keyword {
+  color: blue;
+}
+
+/* line 333, wiki-core.scss */
+.wiki .wiki-code .type {
+  color: brown;
+}
+
+/* line 339, wiki-core.scss */
+.wiki-article {
+  position: relative;
+}
+
+/* line 343, wiki-core.scss */
+.wiki-body > form {
+  margin-bottom: 10px;
+}
+
+/* line 347, wiki-core.scss */
+.wiki-controls {
+  position: absolute;
+  right: 0;
+  display: inline;
+  top: 0;
+}
+
+/* line 354, wiki-core.scss */
+.wiki-file-message {
+  position: absolute;
+  font-size: 8pt;
+  color: gray;
+  right: 0;
+}
+
+/* line 365, wiki-core.scss */
+.wiki-controls .progress {
+  display: inline-block;
+  width: 100px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* line 372, wiki-core.scss */
+.wiki-edit {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-size: 90%;
+  line-height: 16px;
+  margin-top: 4px;
+}
+
+/* line 383, wiki-core.scss */
+.wiki-title-edit {
+  width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-size: 90%;
+  line-height: 16px;
+  margin-top: 27px;
+  height: 30px !important;
+}
+
+/* line 393, wiki-core.scss */
+.wiki-info {
+  font-size: 13px;
+  color: grey;
+}
+
+/* line 398, wiki-core.scss */
+.wiki-info .label {
+  margin-left: 4px;
+}
+
+/* line 402, wiki-core.scss */
+.wiki-title {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: bold;
+  margin: 2px 0;
+}
+
+/* line 409, wiki-core.scss */
+.details-article {
+  margin-top: 10px;
+}
+
+/* line 413, wiki-core.scss */
+.details-article table {
+  font-size: 90%;
+}
+
+/* line 417, wiki-core.scss */
+.details-article .btn-link {
+  display: block;
+}
+
+/* line 421, wiki-core.scss */
+.widget:hover > .widget-wiki-help {
+  display: block;
+}
+
+/* line 425, wiki-core.scss */
+.widget-wiki-help {
+  position: absolute;
+  display: none;
+  right: -3px;
+  bottom: -3px;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  margin-left: 3px;
+  background: url("../img/question-small-white.png") no-repeat center;
+  z-index: 3;
+}
+
+/* line 438, wiki-core.scss */
+.wiki .dot-slot, .wiki .xml-slot {
+  border: dashed 1px gray;
+  padding: 10px;
+  margin: 5px;
+  background-color: #F5F5F5;
+}
+
+/* line 446, wiki-core.scss */
+.wiki .wiki-outline {
+  background-color: lightgoldenrodyellow;
+  border: solid 1px gray;
+  padding: 10px;
+  padding-left: 40px;
+  font-style: italic;
+  border-left: solid 10px cornflowerblue;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* line 459, wiki-core.scss */
+.wiki .xml-element, .wiki .xml-attr, .wiki.xml-op {
+  font-weight: bold;
+}
+
+/* line 462, wiki-core.scss */
+.wiki .xml-attr {
+  color: purple;
+  font-style: italic;
+}
+
+/* line 466, wiki-core.scss */
+.wiki .xml-attr-val {
+  color: green;
+  font-style: italic;
+}
+
+/* line 470, wiki-core.scss */
+.wiki .xml-element {
+  color: blue;
+}
+
+/* line 473, wiki-core.scss */
+.wiki .xml-op {
+  color: brown;
+}
+
+/* line 477, wiki-core.scss */
+.wiki .xml-slot {
+  font-size: 8pt;
+}
+
+/* line 488, wiki-core.scss */
+.wk-x {
+  background-color: peachpuff;
+  padding: 5pt;
+  font-family: consolas;
+  font-size: 8pt;
+}
+
+/* line 497, wiki-core.scss */
+.wk-x-error {
+  background-color: coral;
+  padding: 5pt;
+  font-family: consolas;
+  font-size: 8pt;
+}
+
+/* line 507, wiki-core.scss */
+.wk-x-error-Error {
+  background-color: brown;
+  color: white;
+  padding: 5pt;
+  font-family: consolas;
+  font-size: 8pt;
+}
+
+/* line 517, wiki-core.scss */
+.wk-x-error-Warrning {
+  background-color: blue;
+  color: yellow;
+}
+
+/* line 522, wiki-core.scss */
+.wk-x-o, .wk-x-c, .wk-x-ae {
+  color: saddlebrown;
+}
+
+/* line 527, wiki-core.scss */
+.wk-x-en, .wk-x-an {
+  color: #0088cc;
+}
+
+/* line 531, wiki-core.scss */
+.wk-x-en {
+  font-weight: bold;
+}
+
+/* line 535, wiki-core.scss */
+.wk-x-av, .wk-x-t {
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=wiki-core.css.map */
