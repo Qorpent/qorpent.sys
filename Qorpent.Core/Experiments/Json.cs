@@ -1036,6 +1036,10 @@ namespace Qorpent.Experiments {
                 {
                     WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
+                else if (collection is IDictionary<string, decimal>)
+                {
+                    WriteObject(collection as IDictionary<string, decimal>, output, jsonmode, defaultMode, annotator, pretty, level);
+                }
                 else {
                     WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
