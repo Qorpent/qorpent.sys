@@ -32,6 +32,27 @@ namespace Qorpent.Utils.Tests {
 		}
 
 	    [Test]
+	    public void XiXmlTest() {
+            var x = XElement.Parse("<z><a xi-xml='&lt;${l}/&gt;&lt;z/&gt;'/><b xi-xml='![y/][c u=\"a\"/]' ><a/></b><xi-xml>![zzz/]</xi-xml></z>");
+	        x = x.Interpolate(new Scope(new {l="rrr"}));
+	        var res = x.ToString().Simplify(SimplifyOptions.SingleQuotes);
+            Console.WriteLine(res);
+            Assert.AreEqual(@"<z>
+  <a>
+    <rrr />
+    <z />
+  </a>
+  <b>
+    <a />
+    <y />
+    <c u='a' />
+  </b>
+  <zzz />
+</z>", res);
+
+	    }
+
+	    [Test]
 	    public void NestRepeat() {
 	        var x = XElement.Parse("<z><a xi-repeat='i in items'><b xi-repeat='j in i.items'>${j.id}</b></a></z>");
 	        var scope =new Scope( new {

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Dsl.LogicalExpressions;
@@ -50,6 +52,8 @@ namespace Qorpent.Utils {
         /// </summary>
         public bool CodeOnly { get; set; }
 
+        public bool UseXiXml { get; set; } = true;
+
         /// <summary>
         ///     Уровень обхода
         /// </summary>
@@ -72,10 +76,23 @@ namespace Qorpent.Utils {
                 level = int.MaxValue;
             }
             baseconfig = baseconfig ?? new Scope();
+            XElement result;
             if (baseconfig is IScope) {
-                return InternalInterpolate(source, (IScope) baseconfig, level);
+                result = InternalInterpolate(source, (IScope) baseconfig, level);
             }
-            return InternalInterpolate(source, new Scope(baseconfig.ToDict()), level);
+            else {
+                result= InternalInterpolate(source, new Scope(baseconfig.ToDict()), level);
+            }
+            Postprocess(result,Level);
+            return result;
+        }
+
+        private void Postprocess(XElement result,int level) {
+            if (0 == level) {
+                if (UseXiXml) {
+                    ApplyXIXml(result);
+                }
+            }
         }
 
         /// <summary>
@@ -88,7 +105,9 @@ namespace Qorpent.Utils {
             if (level <= 0) {
                 level = int.MaxValue;
             }
-            return InternalInterpolate(source, baseconfig, level);
+            var result = InternalInterpolate(source, baseconfig, level);
+            Postprocess(result,Level);
+            return result;
         }
 
         private XElement InternalInterpolate(XElement source, IScope parentconfig, int level) {
@@ -105,7 +124,42 @@ namespace Qorpent.Utils {
             if (UseExtensions && source.Attr("xi-delete").ToBool()) {
                 return null;
             }
+          
             return source;
+        }
+
+        private void ApplyXIXml(XElement source) {
+            foreach (var element in source.DescendantsAndSelf().Reverse().ToArray()) {
+                if (element.Name.LocalName == "xi-xml") {
+                    var xml = GetXmlFromText(element.Value);
+                    element.Value = "";
+                    element.Add(xml.Elements());
+                }
+                var xixml = element.Attribute("xi-xml");
+                if (null != xixml) {
+                    var text = xixml.Value;
+                    var xml = GetXmlFromText(text);
+                    element.Add(xml.Nodes());
+                    xixml.Remove();
+                }
+                if (element.Name.LocalName == "xi-xml") {
+                    element.ReplaceWith(element.Nodes());
+                }
+            }
+        }
+
+        private static XElement GetXmlFromText(string text) {
+            try {
+                if (text.StartsWith("![")) {
+                    text = text.Substring(1).Replace("[", "<").Replace("]", ">");
+                }
+                text = "<div>" + text + "</div>";
+                var xml = XElement.Parse(text);
+                return xml;
+            }
+            catch (Exception e) {
+                return new XElement("div",new XAttribute("error",e.Message),text);
+            }
         }
 
         /// <summary>
