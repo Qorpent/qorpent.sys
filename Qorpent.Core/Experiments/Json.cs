@@ -776,6 +776,17 @@ namespace Qorpent.Experiments {
             }
             return r;
         }
+        public static string str(this object data, string path,string def)
+        {
+            if (null == data) return null;
+            var result = Get(data, path);
+            string r = null;
+            if (null != result)
+            {
+                return result.ToStr();
+            }
+            return def;
+        }
 
 
         public static IDictionary<string, object> renameKeys(this IDictionary<string, object> dict,
@@ -868,9 +879,17 @@ namespace Qorpent.Experiments {
         {
             return Get(data, path).ToInt();
         }
+
+        public static int num(this object data, string path, int defval) {
+            return Get(data, path)?.ToInt() ?? defval;
+        }
         public static decimal dec(this object data, string path)
         {
             return Get(data, path).ToDecimal();
+        }
+
+        public static decimal dec(this object data, string path, decimal defval) {
+            return Get(data, path)?.ToDecimal() ?? defval;
         }
         public static bool bul(this object data, string path)
         {
