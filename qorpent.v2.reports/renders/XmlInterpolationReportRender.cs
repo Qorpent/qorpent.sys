@@ -31,12 +31,14 @@ namespace qorpent.v2.reports.renders {
                 ws = scope;
             }
             else {
-                ws = new Scope();
+                ws = new Scope(context.Data);
                 ws["data"] = context.Data;
                 ws["context"] = context;
                 ws["scope"] = scope;
                 ws["item"] = item;
-                ws["items"] = context.Data.arr("items");
+                ws["reportcode"] = context.Report.Id;
+                ws["reportname"] = context.Report.Name;
+                
             }
             var result = Xi.Interpolate(Template, ws);
             RemoveDebugInfo(scope, result);

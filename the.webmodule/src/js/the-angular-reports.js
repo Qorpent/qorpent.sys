@@ -134,35 +134,43 @@ define(["the-angular"], function ($the) {
                                 flags : null,
                                 success : null,
                                 parameters : {}},query);
+                            if(options && options.standalone){
+                                query.standalone = true;
+                            }
                             query.parameters = $the.extend(report.params,query.parameters);
                             if(!!report.onquery){
                                 report.onquery(query,report,$scope);
                             }
-                            var result = $http({
-                               url:"/report",
-                                method:"POST",
-                                data :$the.jsonify(query,{nulls:false,defaults:false,functions:false})
-                            }).then(function(data){
-                                var report = data.data;
-                                if(typeof(report)=="string"){
-                                    if(!!options.target){
-                                        var html  = $(report);
-                                        $(options.target).html('');
-                                        html.appendTo($(options.target));
-                                        if(!!options.compile){
-                                            var scope = !!options.scope? options.scope.$new() :  $rootScope.$new();
-                                            if(!!options.onscope){
-                                                options.onscope(scope,query,report);
+                            var data = $the.jsonify(query, {nulls: false, defaults: false, functions: false})
+                            if(options && options.standalone){
+                                var url = "/report?"+encodeURIComponent(JSON.stringify(data));
+                                window.open(url);
+                            }else {
+                                var result = $http({
+                                    url: "/report",
+                                    method: "POST",
+                                    data: data
+                                }).then(function (data) {
+                                    var report = data.data;
+                                    if (typeof(report) == "string") {
+                                        if (!!options.target) {
+                                            var html = $(report);
+                                            $(options.target).html('');
+                                            html.appendTo($(options.target));
+                                            if (!!options.compile) {
+                                                var scope = !!options.scope ? options.scope.$new() : $rootScope.$new();
+                                                if (!!options.onscope) {
+                                                    options.onscope(scope, query, report);
+                                                }
+                                                $compile(html)(scope);
                                             }
-                                            $compile(html)(scope);
                                         }
                                     }
-                                }
-                                if(!!query.success){
-                                    query.success(report);
-                                }
-                            });
-
+                                    if (!!query.success) {
+                                        query.success(report);
+                                    }
+                                });
+                            }
                             return result;
                         },
                         select: function (report) {
