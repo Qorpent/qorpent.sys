@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -41,7 +42,30 @@ namespace Qorpent {
             }
             return def;
         }
+        public static T Ensure<T>(this IScope scope, string key, T logicalZero, T def)
+        {
+            if (scope.ContainsKey(key)) {
+                var result = scope.Get(key, def);
+                if (!Equals(logicalZero, result)) {
+                    return result;
+                }
 
+            }
+            scope.Set(key, def);
+            return def;
+        }
+        public static T Ensure<T>(this IScope scope, string key, T logicalZero, Func<T> def)
+        {
+            if (scope.ContainsKey(key)) {
+                var result = scope.Get<T>(key);
+                if (!Equals(logicalZero, result))
+                {
+                    return result;
+                }
+            }
+            scope.Set(key, def());
+            return scope.Get<T>(key);
+        }
         public static T Ensure<T>(this IScope scope, string key, T def) {
             if (scope.ContainsKey(key)) return scope.Get(key, def);
             scope.Set(key,def);
@@ -63,5 +87,18 @@ namespace Qorpent {
         public static IScope GetParent(this IScope scope) {
             return scope.GetParents().FirstOrDefault();
         }
+
+        public static IEnumerable<T> GetAll<T>(this IScope scope,string name) {
+            if (scope.ContainsOwnKey(name)) {
+                yield return (T)scope[name] ;
+            }
+            foreach (var parent in scope.GetParents()) {
+                foreach (var parented in parent.GetAll<T>(name)) {
+                    yield return parented;
+                }
+            }
+        } 
+
+
     }
 }
