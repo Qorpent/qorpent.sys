@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Principal;
 using qorpent.v2.console;
+using qorpent.v2.reports.model;
 using Qorpent.IO.Http;
 
 namespace qorpent.v2.reports {
@@ -17,6 +19,8 @@ namespace qorpent.v2.reports {
         bool Standalone { get; set; }
         bool NoFinalizeOnError { get; set; }
         IDictionary<string, object> Parameters { get; set; }
+        IReport PreparedReport { get; set; }
+        Stream Stream { get; set; }
         void Initialize();
     }
 }

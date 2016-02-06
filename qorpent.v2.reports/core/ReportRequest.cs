@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using qorpent.v2.console;
+using qorpent.v2.reports.model;
 using Qorpent;
 using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
@@ -20,6 +21,9 @@ namespace qorpent.v2.reports.core {
         public ReportRequest() {
             Parameters = new Dictionary<string, object>();
         }
+
+        public IReport PreparedReport { get; set; }
+        public Stream Stream { get; set; }
 
         public ReportRequest(WebContext context) :this(){
             WebContext = context;

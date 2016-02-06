@@ -102,6 +102,8 @@
     <Compile Include="Utils\XDiff\XDiffTest.cs" />
     <Compile Include="Utils\XmlExtensionsTest.cs" />
     <Compile Include="Utils\XmlInterpolationTests.cs" />
+    <Compile Include="v2\xdom\HtmlElementTest.cs" />
+    <Compile Include="v2\xdom\TableElementTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

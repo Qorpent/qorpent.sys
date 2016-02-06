@@ -9,5 +9,6 @@ namespace qorpent.v2.reports.model {
         object Definition { get; set; }
         int Idx { get; set; }
         bool Parallel { get; set; }
+        IReportAgent Instance { get; set; }
     }
 }

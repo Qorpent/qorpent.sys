@@ -81,7 +81,7 @@ namespace qorpent.v2.reports.core
         public IReportContext InitializeContext(IReportRequest request) {
             var context = ResolveService<IReportContext>("", request);
             context.Log = context.Log ?? this.Logg;
-            var report = Storage.Get(request.Id);
+            var report = request.PreparedReport ?? Storage.Get(request.Id);
             if (null == report) {
                 throw new Exception("cannot find report " + request.Id);
             }
@@ -94,7 +94,7 @@ namespace qorpent.v2.reports.core
             }
             context.Report = report;
             foreach (var agentdef in report.Agents) {
-                var agent = ResolveService<IReportAgent>(agentdef.Name);
+                var agent = agentdef.Instance ?? ResolveService<IReportAgent>(agentdef.Name);
                 if (null == agent) {
                     throw new Exception("cannot find agent "+agentdef.Name);
                 }

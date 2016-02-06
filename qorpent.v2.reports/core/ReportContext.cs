@@ -47,12 +47,18 @@ namespace qorpent.v2.reports.core {
         }
 
         private  Stream GetStream() {
+            if (null != Request.Stream)
+            {
+                return Request.Stream;
+
+            }
             if (null != Response) {
                 return Response.Stream;
             }
             if (null != Console && null!=Console.OutStream) {
                 return Console.OutStream;
             }
+           
             return new MemoryStream();
         }
 

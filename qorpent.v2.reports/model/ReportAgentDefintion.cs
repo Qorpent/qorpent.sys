@@ -14,6 +14,7 @@ namespace qorpent.v2.reports.model {
         public object Definition { get; set; }
         public int Idx { get; set; }
         public bool Parallel { get; set; }
+        public IReportAgent Instance { get; set; }
 
         protected override void ReadFromXml(XElement xml) {
             base.ReadFromXml(xml);
