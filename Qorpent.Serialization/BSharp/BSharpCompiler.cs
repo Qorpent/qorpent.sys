@@ -404,7 +404,10 @@ namespace Qorpent.BSharp{
 			foreach (XElement require in requires){
 				string name = require.GetCode();
 				if (filenames.ContainsKey(name)) continue;
-				IBSharpSourceCodeProvider pkgservice = ResolvePackage(name);
+			    IBSharpSourceCodeProvider pkgservice = null;
+			    if (!(name.StartsWith(".") || name.Contains("/") || name.Contains(":") || name.Contains("\\"))) {
+			        pkgservice = ResolvePackage(name);
+			    }
 				if (null != pkgservice){
 					ProcessRequiresWithSourcePackage(filenames, name, pkgservice);
 				}
