@@ -45,8 +45,9 @@ namespace Qorpent.BSharp{
 		public const string LOG = "log";
 
 		private readonly IUserLog _log = new StubUserLog();
+	    private IDictionary<string, object> _requireMap;
 
-		/// <summary>
+	    /// <summary>
 		/// </summary>
 		public BSharpConfig(){
 			UseInterpolation = true;
@@ -124,5 +125,10 @@ namespace Qorpent.BSharp{
             get { return Get(DEFAULTNAMESPACE, ""); }
             set { Set(DEFAULTNAMESPACE, value); }
         }
+
+	    public IDictionary<string, object> RequireMap {
+	        get { return _requireMap ?? (_requireMap = new Dictionary<string, object>()); }
+	        set { _requireMap = value; }
+	    }
 	}
 }

@@ -84,6 +84,14 @@ namespace qorpent.v2.xdom
         {
             return new DivElement((object[])content);
         }
+        public static LinkElement link(params object[] content)
+        {
+            return new LinkElement((object[])content);
+        }
+        public static LinkElement stylesheet(string hrefOrCode)
+        {
+            return LinkElement.Stylesheet(hrefOrCode);
+        }
         public static ThElement th(params object[] content) {
             return new ThElement((object[])content);
         }

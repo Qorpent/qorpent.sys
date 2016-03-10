@@ -401,19 +401,43 @@ namespace Qorpent.BSharp{
 		private void ProcessRequires(XElement source, string filename, Dictionary<string, XElement> filenames,
 									 IBSharpContext context){
 			XElement[] requires = source.Elements(BSharpSyntax.Require).ToArray();
-			foreach (XElement require in requires){
+		    var rmap = context.Compiler.GetConfig().RequireMap;
+
+            foreach (XElement require in requires) {
+			    var condition = require.Attr(BSharpSyntax.ConditionalAttribute);
+			    if (!string.IsNullOrWhiteSpace(condition)) {
+			        if (!new LogicalExpressionEvaluator().Eval(condition, context.Compiler.Global)) {
+			            continue;
+			        }
+			    }
 				string name = require.GetCode();
 				if (filenames.ContainsKey(name)) continue;
-			    IBSharpSourceCodeProvider pkgservice = null;
-			    if (!(name.StartsWith(".") || name.Contains("/") || name.Contains(":") || name.Contains("\\"))) {
-			        pkgservice = ResolvePackage(name);
+			    if (rmap.ContainsKey(name)) {
+			        var data = rmap[name];
+			        XElement x = null;
+			        if (data is string) {
+			            x = _requireBxl.Parse(data as string, name);
+			        }else if (data is XElement) {
+			            x = data as XElement;
+			        }
+			        if (null == x) {
+			            throw new Exception("cannot setup XElement from "+data.GetType().Name);
+			        }
+			        filenames[name] = x;
+			        ProcessRequires(x, name, filenames, context);
 			    }
-				if (null != pkgservice){
-					ProcessRequiresWithSourcePackage(filenames, name, pkgservice);
-				}
-				else{
-					ProcessRequiresWithFileReference(source, filenames, context, require, filename);
-				}
+			    else {
+			        IBSharpSourceCodeProvider pkgservice = null;
+			        if (!(name.StartsWith(".") || name.Contains("/") || name.Contains(":") || name.Contains("\\"))) {
+			            pkgservice = ResolvePackage(name);
+			        }
+			        if (null != pkgservice) {
+			            ProcessRequiresWithSourcePackage(filenames, name, pkgservice);
+			        }
+			        else {
+			            ProcessRequiresWithFileReference(source, filenames, context, require, filename);
+			        }
+			    }
 			}
 			requires.Remove();
 		}
@@ -1017,6 +1041,7 @@ namespace Qorpent.BSharp{
 				   .OrderBy(_ => _.Priority)
 				   .Select(
 					   _ =>{
+                            
 						   try{
 							   BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
 						   }

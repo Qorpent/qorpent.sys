@@ -920,6 +920,19 @@ namespace Qorpent.Experiments {
             return result.To<T>();
         }
 
+        public static T get<T>(this object data, string path, T def)
+        {
+            var result = Get(data, path);
+            if (null == result) return def;
+            if (typeof(IJsonDeserializable).IsAssignableFrom(typeof(T)))
+            {
+                T _result = Activator.CreateInstance<T>();
+                ((IJsonDeserializable)_result).LoadFromJson(result);
+                return _result;
+            }
+            return result.To(false,def);
+        }
+
         public static T jto<T>(this object data) {
             if (typeof(IJsonDeserializable).IsAssignableFrom(typeof(T))) {
                 var _result = Activator.CreateInstance<T>();

@@ -43,7 +43,7 @@ namespace qorpent.v2.xdom {
             return true;
         }
 
-        private TrElement GetLastRow() {
+        public TrElement GetLastRow() {
             var r = Rows().LastOrDefault();
             if (null == r) {
                 r = new TrElement().appendTo(this);

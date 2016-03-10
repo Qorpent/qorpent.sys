@@ -275,6 +275,15 @@ namespace X
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
 
+	    [Test]
+	    public void ResolveWithNameRegex() {
+	        var result = Compile(@"
+class t1
+class t2
+class t3
+");
+            Assert.AreEqual(2,result.ResolveAll("name~^t[12]").Count());
+	    }
 
 		[Test]
 		public void ResolveNamespaceUp()
@@ -704,6 +713,38 @@ custom Z 'zed' _x _y
 		}
 
 	    [Test]
+	    public void ConditionsWithSetOperator() {
+	        var code = @"
+set if='A'
+    class A
+";
+            Assert.Null(Compile(code).Get("A"));
+            Assert.NotNull(Compile(code,new {A=true}).Get("A"));
+
+        }
+
+
+	    [Test]
+	    public void RequireOverride() {
+	        var code = @"
+require myreq
+A B";
+            Assert.AreEqual("x",Compile(code,_cfg:new BSharpConfig {RequireMap= {["myreq"]="class A y=x"}}).Get("B").Compiled.Attr("y"));
+	    }
+
+        [Test]
+        public void ConditionalRequire()
+        {
+            var code = @"
+require myreq1 if=A
+require myreq2 if=B
+A B";
+            Assert.AreEqual("x", Compile(code, _cfg: new BSharpConfig { Global = new Scope(new {A=true}), RequireMap = { ["myreq1"] = "class A y=x", ["myreq2"] = "class A y=z" }} ).Get("B").Compiled.Attr("y"));
+            Assert.AreEqual("z", Compile(code, _cfg: new BSharpConfig { Global = new Scope(new {B=true}), RequireMap = { ["myreq1"] = "class A y=x", ["myreq2"] = "class A y=z" }} ).Get("B").Compiled.Attr("y"));
+           
+        }
+
+        [Test]
 	    public void SequenceSupport() {
 	        var result = Compile(@"
 class enumerated abstract _seq='${initseq(_sname,_sstart,_sstep)}'

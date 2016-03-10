@@ -48,6 +48,21 @@ namespace Qorpent.Serialization.Tests.BSharp{
 
 		}
 
+
+	    [Test]
+	    public void PatchWithNameMask() {
+            var code = @"
+class t1 a=4
+class t2 a=5
+class t3 a=6
+patch for='name~^t[12]' x='${a}1' before
+";
+            var result = Compile(code);
+            Assert.AreEqual("41",result.Get("t1").Compiled.Attr("x"));
+            Assert.AreEqual("51",result.Get("t2").Compiled.Attr("x"));
+            Assert.AreEqual("",result.Get("t3").Compiled.Attr("x"));
+        }
+
 		[Test]
 		public void SimplePatch(){
 			var code = @"

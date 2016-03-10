@@ -199,9 +199,10 @@ namespace Qorpent.Utils {
                         FileSet = fileset
                     };
                 }
+                
                 return _configurationOptions= new ConfigurationOptions {
                     Name = Arg1,
-                    FileSet = ConfigSet ?? new FileSet(GetBSharpRoot(), "*." + ConfigExtension)
+                    FileSet = ConfigSet ?? new FileSet(new [] { GetBSharpRoot(), EnvironmentInfo.RootDirectory}, "*." + ConfigExtension)
                 };
             }
         }

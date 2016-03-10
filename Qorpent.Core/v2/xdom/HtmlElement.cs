@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -12,6 +14,19 @@ namespace qorpent.v2.xdom {
                 new HeadElement(),
                 new BodyElement(),  
             };
+        }
+
+        public HtmlElement WriteOut(string filename = null) {
+            var data = ToDocument().ToString();
+            if (string.IsNullOrWhiteSpace(filename)) {
+                Console.WriteLine(data);
+            }
+            else {
+                var file = Path.GetFullPath(filename);
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
+                File.WriteAllText(file,data);
+            }
+            return this;
         }
 
         public XDocument ToDocument()

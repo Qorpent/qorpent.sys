@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils;
@@ -194,12 +195,27 @@ namespace Qorpent.BSharp{
 				IList<string> subqueries = query.SmartSplit(false, true, ';');
 				return subqueries.SelectMany(_ => ResolveAll(_, ns)).Distinct();
 			}
+		    if (query.StartsWith("name~")) {
+		        var regex = query.Substring(5);
+		        return Working.Where(_ => Regex.IsMatch(_.Name, regex));
+		    }
 			if (query.StartsWith("attr:")){
 				string attrname = query.Substring(5);
-				return Working.Where(_ => _.Compiled.GetSmartValue(attrname).ToBool());
+			    if (attrname.Contains("~")) {
+			        var name = attrname.Split('~')[0];
+			        var regex = attrname.Split('~')[1];
+                    return Working.Where(_ =>Regex.IsMatch( (_.Compiled ?? _.Source).GetSmartValue(name),regex));
+                }
+			    if (attrname.Contains("=")) {
+			        var name = attrname.Split('=')[0];
+			        var val = attrname.Split('=')[1];
+			        return Working.Where(_ =>val== (_.Compiled ?? _.Source).GetSmartValue(name));
+			    }
+			    return Working.Where(_ =>( _.Compiled?? _.Source).GetSmartValue(attrname).ToBool());
 			}
+           
 
-			if (string.IsNullOrWhiteSpace(query)){
+            if (string.IsNullOrWhiteSpace(query)){
 				return Working;
 			}
             

@@ -27,6 +27,8 @@ namespace qorpent.v2.xdom {
             var result = new LinkElement { Rel = "stylesheet", Type = "text/css" };
             if (hrefOrCode.Contains("{")) {
                 result.Value = hrefOrCode;
+                result.Rel = "";
+                result.Name = "style";
             }
             else {
                 result.Href = hrefOrCode;

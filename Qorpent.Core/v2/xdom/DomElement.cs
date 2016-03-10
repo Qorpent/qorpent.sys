@@ -80,6 +80,11 @@ namespace qorpent.v2.xdom {
             ["meta"] = typeof (MetaElement),
         };
 
+        public void Set(params object[] items) {
+            foreach (var i in items) {
+                this.Set((object)i);
+            }
+        }
         
         public void Set(object item) {
             if (item == null) {

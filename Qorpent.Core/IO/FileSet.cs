@@ -18,6 +18,11 @@ namespace Qorpent.IO {
             
 
         }
+
+        public FileSet(string[] roots, params string[] masks) {
+            this.Directories = roots;
+            this.Masks = masks;
+        }
         public string[] Directories { get; set; }
         public string[] Masks { get; set; }
         public string[] Excludes { get; set; }

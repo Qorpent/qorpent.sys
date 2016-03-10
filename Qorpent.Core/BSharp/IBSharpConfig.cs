@@ -47,5 +47,7 @@ namespace Qorpent.BSharp {
         /// Базовое пространство имен
         /// </summary>
 	    string DefaultNamespace { get; set; }
+
+	    IDictionary<string, object> RequireMap { get; set; } 
 	}
 }

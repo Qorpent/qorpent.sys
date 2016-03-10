@@ -202,6 +202,14 @@ namespace Qorpent.BSharp{
 				_context.RegisterError(BSharpErrors.PatchInvalidBehavior(_cls, _cls.Compiled));
 				return;
 			}
+
+		    var cond = (_cls.Compiled ?? _cls.Source).Attr(BSharpSyntax.ConditionalAttribute);
+		    if (!string.IsNullOrWhiteSpace(cond)) {
+		        if (!new LogicalExpressionEvaluator().Eval(cond, _compiler.Global)) {
+		            return;
+		        }
+		    }
+		    
 			IEnumerable<IBSharpClass> targets = _context.ResolveAll(_cls.PatchTarget, _cls.Namespace);
 
 
@@ -249,16 +257,18 @@ namespace Qorpent.BSharp{
 				opts.IncludeActions &= ~XDiffAction.CreateElement;
 			}
 			var diff = new XDiffGenerator(opts);
-			IEnumerable<XDiffItem> difference;
+			XDiffItem[] difference;
 			if (_cls.PatchPhase == BSharpPatchPhase.Before){
-				difference = diff.GetDiff(target.Source, _cls.Source);
-
-				difference.Apply(target.Source, opts);
+				difference = diff.GetDiff(target.Source, _cls.Source).ToArray();
+			    if (difference.Length > 0) {
+			        difference.Apply(target.Source, opts);
+			    }
 			}
 			else{
-				difference = diff.GetDiff(target.Compiled, _cls.Compiled);
-
-				difference.Apply(target.Compiled, opts);
+				difference = diff.GetDiff(target.Compiled, _cls.Compiled).ToArray();
+			    if (difference.Length > 0) {
+			        difference.Apply(target.Compiled, opts);
+			    }
 			}
 			XElement attrsrc = _cls.Compiled;
 			if (_cls.PatchPhase == BSharpPatchPhase.Before){
@@ -270,6 +280,7 @@ namespace Qorpent.BSharp{
 				if (attribute.Name.LocalName == "code") continue;
 				if (attribute.Name.LocalName == "name") continue;
 				if (attribute.Name.LocalName == "fullcode") continue;
+				if (attribute.Name.LocalName == BSharpSyntax.ConditionalAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchNameBehavior) continue;
