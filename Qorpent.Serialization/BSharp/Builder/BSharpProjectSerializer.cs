@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+#if !EMBEDQPT
 using Qorpent.Uson;
+#endif
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder{
@@ -19,9 +21,9 @@ namespace Qorpent.BSharp.Builder{
             var project = new BSharpProject { IsFullyQualifiedProject = true };
 
             project.Definition = bSharpClass.Compiled;
-
+#if !EMBEDQPT
             MergeJsonFiles(bSharpClass, project);
-
+#endif
 		    ParseIncludes(bSharpClass, project);
 			ParseExcludes(bSharpClass, project);
 
@@ -98,8 +100,8 @@ namespace Qorpent.BSharp.Builder{
 
 			return project;
 		}
-
-	    private static void MergeJsonFiles(IBSharpClass bSharpClass, BSharpProject project) {
+#if !EMBEDQPT
+        private static void MergeJsonFiles(IBSharpClass bSharpClass, BSharpProject project) {
 	        var jsonMerges = bSharpClass.Compiled.Elements("merge-json");
 	        var root = project.GetRootDirectory();
 
@@ -124,6 +126,7 @@ namespace Qorpent.BSharp.Builder{
 	            }
 	        }
 	    }
+#endif
 
 	    /// <summary>
 		/// </summary>

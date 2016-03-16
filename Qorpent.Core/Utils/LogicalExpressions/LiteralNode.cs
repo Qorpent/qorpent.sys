@@ -30,7 +30,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 		/// </summary>
 		public string Literal { get; set; }
 
-	    public bool IsNumber { get; set; }
+	    
 
 	    /// <summary>
 		/// </summary>

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core", "Qorpent.Core\Qorpent.Core.csproj", "{880F65EA-1A22-4672-A137-FFC91290A209}"
 EndProject
@@ -122,6 +122,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "qorpent.v2.security.Tests", "qorpent.v2.security.Tests\qorpent.v2.security.Tests.csproj", "{2A4B5398-1C8C-46F3-994A-4D66AB77C56F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "qorpent.v2.reports", "qorpent.v2.reports\qorpent.v2.reports.csproj", "{45CAF48F-8084-4233-AD08-119D116D431C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "portable", "portable", "{40867719-7EBF-4485-9CAB-7CE3CFBC17A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bxl-portable", "bxl-portable\bxl-portable.csproj", "{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bsc-portable", "bsc-portable\bsc-portable.csproj", "{072615E1-1785-40FB-95FA-61F76CA00C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -334,6 +340,18 @@ Global
 		{45CAF48F-8084-4233-AD08-119D116D431C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45CAF48F-8084-4233-AD08-119D116D431C}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{45CAF48F-8084-4233-AD08-119D116D431C}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}.SQL2008|Any CPU.Build.0 = Release|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{072615E1-1785-40FB-95FA-61F76CA00C39}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -352,5 +370,7 @@ Global
 		{880F65EA-1A22-4672-A137-FFC912902046} = {690AA1DD-503E-47C0-AA58-53529331D847}
 		{F67214B7-DBB5-4C04-BC13-690CFDB92965} = {690AA1DD-503E-47C0-AA58-53529331D847}
 		{2A4B5398-1C8C-46F3-994A-4D66AB77C56F} = {690AA1DD-503E-47C0-AA58-53529331D847}
+		{734B8DD2-0E5A-4157-A174-2DAC3DD572F7} = {40867719-7EBF-4485-9CAB-7CE3CFBC17A8}
+		{072615E1-1785-40FB-95FA-61F76CA00C39} = {40867719-7EBF-4485-9CAB-7CE3CFBC17A8}
 	EndGlobalSection
 EndGlobal

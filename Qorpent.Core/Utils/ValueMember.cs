@@ -147,7 +147,7 @@ namespace Qorpent.Utils {
 		/// <exception cref="ReflectionExtensionsException"></exception>
 		public ValueMember Set(object targetObject, object value, object[] indexers = null) {
 			if (!CanBeAssigned) {
-				throw new ReflectionExtensionsException("U cannot call Set on this member "+this.Member.Name);
+				throw new ReflectionExtensionsException("U cannot call Set on this member "+Member.Name);
 			}
 			if (null != _property) {
 				_property.SetValue(targetObject, value, indexers);

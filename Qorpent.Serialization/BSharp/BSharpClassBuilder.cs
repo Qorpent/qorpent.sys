@@ -16,7 +16,7 @@ using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 using Qorpent.Utils.XDiff;
-using Qorpent.Wiki;
+
 
 namespace Qorpent.BSharp{
 	/// <summary>

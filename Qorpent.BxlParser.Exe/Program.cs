@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Utils;
@@ -13,7 +9,7 @@ namespace bxl
 	class Program{
 		private static string filename = "";
 		private static BxlParserOptions opts   = BxlParserOptions.None;
-		private static bool useoutfile = false;
+		private static bool useoutfile;
 		static int Main(string[] args){
 			var argsdict = new ConsoleArgumentHelper().ParseDictionary(args);
 			if (argsdict.ContainsKey("arg1")){

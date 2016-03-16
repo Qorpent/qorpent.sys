@@ -17,17 +17,21 @@
 // PROJECT ORIGIN: Qorpent.Core/ContainerFactory.cs
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Configuration;
+
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
+using Qorpent.Log;
+
+#if !EMBEDQPT
+using System.Collections.Generic;
+using System.Configuration;
+using Qorpent.Wiki;
 using Qorpent.Applications;
 using Qorpent.Events;
-using Qorpent.Log;
-using Qorpent.Wiki;
-
+#endif
 namespace Qorpent.IoC {
 	///<summary>
 	///	Статическая фабрика создания контейнеров IoC. Поддерживает формирование пустого контенера сконфигурированного класса,
@@ -71,7 +75,8 @@ namespace Qorpent.IoC {
 									new WellKnownService<IContainer>("Qorpent.IoC.Container, Qorpent.IoC", typeof (SimpleContainer),
 									                                 Lifestyle.Singleton),
 									new WellKnownService<ILogManager>(null, typeof (DefaultLogManager), Lifestyle.Singleton),
-									new WellKnownService<IEventManager>(null, typeof (EventManager), Lifestyle.Singleton),
+#if !EMBEDQPT
+                                    new WellKnownService<IEventManager>(null, typeof (EventManager), Lifestyle.Singleton),
 									new WellKnownService<Assembly>("Qorpent.Core"),
 									new WellKnownService<Assembly>("Qorpent.Charts"),
 									new WellKnownService<Assembly>("Qorpent.Data"),
@@ -81,7 +86,10 @@ namespace Qorpent.IoC {
 									new WellKnownService<Assembly>("Qorpent.Mvc"),
 									new WellKnownService<Assembly>("Qorpent.Security"),
 									new WellKnownService<Assembly>("Qorpent.Scaffolding"),
-								};
+#else
+                                    new WellKnownService<Assembly>(Assembly.GetExecutingAssembly().GetName().Name), 
+#endif
+                                };
 					}
 				}
 				return _registry;
@@ -144,9 +152,13 @@ namespace Qorpent.IoC {
 		/// <remarks>
 		/// </remarks>
 		public static Type GetContainerType() {
-			var configuredType = ConfigurationManager.AppSettings.Get(QorpentConst.Config.IocContainerTypeAppSetting);
+#if !EMBEDQPT
+            var configuredType = ConfigurationManager.AppSettings.Get(QorpentConst.Config.IocContainerTypeAppSetting);
+#else
+		    var configuredType = typeof (Qorpent.IoC.Container).AssemblyQualifiedName;
+#endif
 #if !SQL2008
-			if (!String.IsNullOrWhiteSpace(configuredType)) {
+            if (!String.IsNullOrWhiteSpace(configuredType)) {
 #else
 			if (!string.IsNullOrEmpty(configuredType))
 			{
@@ -245,15 +257,15 @@ namespace Qorpent.IoC {
 
 
 		}
-
-		/// <summary>
-		/// 	Resolves this instance.
-		/// </summary>
-		/// <typeparam name="T"> </typeparam>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		public static T ResolveWellKnown<T>(IApplication context = null) where T : class {
+#if !EMBEDQPT
+        /// <summary>
+        /// 	Resolves this instance.
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <returns> </returns>
+        /// <remarks>
+        /// </remarks>
+        public static T ResolveWellKnown<T>(IApplication context = null) where T : class {
 			var record = WellKnownRegistry.FirstOrDefault(x => x.ServiceType == typeof (T));
 			if (null != record) {
 				T result = null;
@@ -278,6 +290,7 @@ namespace Qorpent.IoC {
 			}
 			return null;
 		}
+#endif
 
 		/// <summary>
 		/// 	Setups the well known container services.

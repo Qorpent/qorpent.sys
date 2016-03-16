@@ -17,10 +17,8 @@
 // PROJECT ORIGIN: Qorpent.Dsl/EqualNode.cs
 #endregion
 
-using System;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>

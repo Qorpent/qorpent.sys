@@ -27,6 +27,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
+using static System.String;
 
 namespace Qorpent.Utils.Extensions {
 	///<summary>
@@ -41,7 +42,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="decimalformat"></param>
 		/// <returns> </returns>
 		public static string ToStr(this object x, string dateformat = null, string decimalformat = null){
-			if (x == null) return String.Empty;
+			if (x == null) return Empty;
 			if (null != dateformat && x is DateTime) return ((DateTime) x).ToString(dateformat);
 			if (null != decimalformat && x is decimal) return ((decimal) x).ToString(decimalformat);
 			return x.ToString();
@@ -148,7 +149,7 @@ namespace Qorpent.Utils.Extensions {
 		   
 			var s = x as string;
 			if (s != null) {
-				if (String.IsNullOrWhiteSpace(s)) {
+				if (IsNullOrWhiteSpace(s)) {
 					return false;
 				}
 				if ("0" == s) {
@@ -267,12 +268,15 @@ namespace Qorpent.Utils.Extensions {
 				if (x is int) {
 					converted = true;
 					var name = Enum.GetName(type, x);
+				    if (string.IsNullOrWhiteSpace(name)) {
+				        return Activator.CreateInstance(type);
+				    }
 					return Enum.Parse(type, name, true);
 				}
 				if (x is string) {
 					
 					converted = true;
-					if (String.IsNullOrWhiteSpace(x as string)) {
+					if (IsNullOrWhiteSpace(x as string)) {
 						return Activator.CreateInstance(type);
 					}
                     return ConvertEnum(type, x as string);
@@ -294,7 +298,7 @@ namespace Qorpent.Utils.Extensions {
 				}
 				if (type == typeof (DateTime)) {
 					var ds = x.ToStr();
-					if (String.IsNullOrWhiteSpace(ds)) {
+					if (IsNullOrWhiteSpace(ds)) {
 						converted = false;
 						return new DateTime(1900, 1, 1);
 					}
@@ -369,7 +373,7 @@ namespace Qorpent.Utils.Extensions {
 				return (DateTime) obj;
 			}
 			var s = obj.ToStr();
-			if (String.IsNullOrWhiteSpace(s)) {
+			if (IsNullOrWhiteSpace(s)) {
 				return new DateTime(1900, 1, 1);
 			}
 
@@ -628,10 +632,10 @@ namespace Qorpent.Utils.Extensions {
 				Code = element.ChooseAttr("__code", "code", "__id", "id");
 				Name = element.ChooseAttr("__name", "name");
 				if (!explicitname) {
-					if (String.IsNullOrWhiteSpace(Name)) {
+					if (IsNullOrWhiteSpace(Name)) {
 						Name = element.Value;
 					}
-					if (String.IsNullOrWhiteSpace(Name)) {
+					if (IsNullOrWhiteSpace(Name)) {
 						Name = Code;
 					}
 				}
@@ -651,8 +655,8 @@ namespace Qorpent.Utils.Extensions {
 			/// <returns></returns>
 			public string GetEfficienValue()
 			{
-				if (!String.IsNullOrWhiteSpace(Value)) return Value;
-				if (!String.IsNullOrWhiteSpace(Name)) return Name;
+				if (!IsNullOrWhiteSpace(Value)) return Value;
+				if (!IsNullOrWhiteSpace(Name)) return Name;
 				return Code;
 			}
 
@@ -661,7 +665,7 @@ namespace Qorpent.Utils.Extensions {
 			/// </summary>
 			/// <returns> </returns>
 			public string ToWhereString() {
-				return String.Format(" at {0}({1}:{2})", File, Line, Column);
+				return Format(" at {0}({1}:{2})", File, Line, Column);
 			}
 
 			/// <summary>
@@ -708,7 +712,7 @@ namespace Qorpent.Utils.Extensions {
 					return a.Value;
 				}
 			}
-			return String.Empty;
+			return Empty;
 		}
 
 		/// <summary>
@@ -724,7 +728,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 	    public static string AttrOrElement(this XElement e, string name) {
-	        if (null == e) return String.Empty;
+	        if (null == e) return Empty;
 	        var attr = e.Attribute(name);
 	        if (null != attr) {
 	            return attr.Value;
@@ -733,7 +737,7 @@ namespace Qorpent.Utils.Extensions {
 	        if (null != element) {
 	            return element.AttrOrValue("code");
 	        }
-	        return String.Empty;
+	        return Empty;
 	    }
 
 		/// <summary>
@@ -745,7 +749,7 @@ namespace Qorpent.Utils.Extensions {
 			if (xElement == null) {
 				throw new ArgumentNullException("xElement");
 			}
-			return String.Join(" ",xElement.Nodes().OfType<XText>().Select(x => x.Value));
+			return Join(" ",xElement.Nodes().OfType<XText>().Select(x => x.Value));
 		}
 
 		/// <summary>
@@ -757,7 +761,7 @@ namespace Qorpent.Utils.Extensions {
 		public static XElement SetAttr(this XElement parent, string name, object value) {
 			if (value != null) {
 				if (value is string) {
-					if (String.IsNullOrWhiteSpace(value as string)) {
+					if (IsNullOrWhiteSpace(value as string)) {
 						return parent;
 					}
 				}
@@ -789,7 +793,7 @@ namespace Qorpent.Utils.Extensions {
             if (!returnDefaultIfEmpty) {
                 return value ?? defaultvalue;
             }
-            return String.IsNullOrWhiteSpace(value) ? defaultvalue : value;
+            return IsNullOrWhiteSpace(value) ? defaultvalue : value;
 	    }
 
 
@@ -812,7 +816,7 @@ namespace Qorpent.Utils.Extensions {
 			if (!returnDefaultIfEmpty) {
 				return value ?? defaultvalue;
 			}
-			return String.IsNullOrWhiteSpace(value) ? defaultvalue : value;
+			return IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
 
 	    public static bool ResolveFlag(this XElement e, string flag) {
@@ -841,7 +845,7 @@ namespace Qorpent.Utils.Extensions {
                 var els = e.Elements(name).ToArray();
                 if (els.Length == 1) {
                     var els_ = els[0];
-                    if (!String.IsNullOrWhiteSpace(els_.Value)) {
+                    if (!IsNullOrWhiteSpace(els_.Value)) {
                         return els_.Value;
                     }
                     return els_.Attr("code");
@@ -869,7 +873,7 @@ namespace Qorpent.Utils.Extensions {
 	        if (es.Length == 1)
 	        {
 	            //причем если элемент пустой - возвращаем код
-	            if (String.IsNullOrWhiteSpace(es[0].Value))
+	            if (IsNullOrWhiteSpace(es[0].Value))
 	            {
 	                return es[0].Attr("code");
 	            }
@@ -886,7 +890,7 @@ namespace Qorpent.Utils.Extensions {
 	        if (es.Length == 1)
 	        {
 	            //причем если элемент пустой - возвращаем код
-	            if (String.IsNullOrWhiteSpace(es[0].Value))
+	            if (IsNullOrWhiteSpace(es[0].Value))
 	            {
 	                return es[0].Attr("code");
 	            }
@@ -908,14 +912,13 @@ namespace Qorpent.Utils.Extensions {
 	    public static IDictionary<string, string> ReadAsDictionary(this string source, char itemDelimiter = ';',
 	        char valueDelimiter = '=', bool trim = true, char escape = '\\') {
 	        var result = new Dictionary<string, string>();
-	        if (!string.IsNullOrWhiteSpace(source)) {
+	        if (!IsNullOrWhiteSpace(source)) {
 	            var nameBuffer = new StringBuilder();
 	            var valBuffer = new StringBuilder();
-	            char c = '\0';
 	            bool inName = false;
 	            bool inEscape = false;
 	            for (var i = 0; i < source.Length; i++) {
-	                c = source[i];
+	                var c = source[i];
 	                if (inEscape) {
 	                    if (inName) {
 	                        valBuffer.Append(c);

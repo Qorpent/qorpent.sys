@@ -53,11 +53,6 @@ namespace Qorpent.LogicalExpressions {
 		    return "";
 		}
 
-	    private object json
-	    {
-	        get { return _json ?? (_json = _all.jsonify()); }
-	    }
-
 
 	    /// <summary>
 		/// 

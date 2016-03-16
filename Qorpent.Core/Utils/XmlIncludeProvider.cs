@@ -1,15 +1,19 @@
 using System;
+using System.Xml.Linq;
+#if !EMBEDQPT
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
-using qorpent.v2.reports.storage;
-using Qorpent.Bxl;
-using Qorpent.IoC;
-using Qorpent.Utils.Extensions;
 
+using qorpent.v2.reports.storage;
+using Qorpent.IoC;
+using Qorpent.Bxl;
+
+using Qorpent.Utils.Extensions;
+#endif
 namespace Qorpent.Utils {
     
     public class XmlIncludeProvider : IXmlIncludeProvider {
+#if !EMBEDQPT
         private IDictionary<string, IXmlComponent> _componentCache;
 
         public XmlIncludeProvider() {
@@ -69,5 +73,11 @@ namespace Qorpent.Utils {
         public virtual void Preprocess(XElement result,XElement current,IScope scope) {
           
         }
+#else
+         public XElement GetXml(string path, XElement current, IScope scope) {
+            throw new NotSupportedException("not supported in portable version");
+        }
+#endif
+
     }
 }

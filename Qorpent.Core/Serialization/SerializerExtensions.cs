@@ -5,21 +5,21 @@ using Qorpent.Json;
 
 namespace Qorpent.Serialization {
     /// <summary>
-    /// Расширения для упрощения работы с сериализаторам
+    /// Р Р°СЃС€РёСЂРµРЅРёСЏ РґР»СЏ СѓРїСЂРѕС‰РµРЅРёСЏ СЂР°Р±РѕС‚С‹ СЃ СЃРµСЂРёР°Р»РёР·Р°С‚РѕСЂР°Рј
     /// </summary>
     public static class SerializerExtensions {
         /// <summary>
-        /// Имя по умолчанию для сериализуемых объектов
+        /// РРјСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ СЃРµСЂРёР°Р»РёР·СѓРµРјС‹С… РѕР±СЉРµРєС‚РѕРІ
         /// </summary>
         public const string DefaultObjectName = "root";
 
         /// <summary>
-        /// Выполняет сериализацию в строку
+        /// Р’С‹РїРѕР»РЅСЏРµС‚ СЃРµСЂРёР°Р»РёР·Р°С†РёСЋ РІ СЃС‚СЂРѕРєСѓ
         /// </summary>
-        /// <param name="serializer">целевой сериализатор</param>
-        /// <param name="value">сериализуемый объект</param>
-        /// <param name="name">имя для сериализуемого объекта</param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="serializer">С†РµР»РµРІРѕР№ СЃРµСЂРёР°Р»РёР·Р°С‚РѕСЂ</param>
+        /// <param name="value">СЃРµСЂРёР°Р»РёР·СѓРµРјС‹Р№ РѕР±СЉРµРєС‚</param>
+        /// <param name="name">РёРјСЏ РґР»СЏ СЃРµСЂРёР°Р»РёР·СѓРµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         /// <returns></returns>
         public static string Serialize(this ISerializer serializer, object value, string name = DefaultObjectName, string usermode = "", object options = null)
         {
@@ -32,18 +32,23 @@ namespace Qorpent.Serialization {
         }
 
         /// <summary>
-        /// Сериализаует объект в заданном формате в заданный поток
+        /// РЎРµСЂРёР°Р»РёР·Р°СѓРµС‚ РѕР±СЉРµРєС‚ РІ Р·Р°РґР°РЅРЅРѕРј С„РѕСЂРјР°С‚Рµ РІ Р·Р°РґР°РЅРЅС‹Р№ РїРѕС‚РѕРє
         /// </summary>
-        /// <param name="value">сериализуемый объект</param>
-        /// <param name="format">формат</param>
-        /// <param name="output">целевой поток</param>
-        /// <param name="objectname">имя для сериализуемого объекта</param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="value">СЃРµСЂРёР°Р»РёР·СѓРµРјС‹Р№ РѕР±СЉРµРєС‚</param>
+        /// <param name="format">С„РѕСЂРјР°С‚</param>
+        /// <param name="output">С†РµР»РµРІРѕР№ РїРѕС‚РѕРє</param>
+        /// <param name="objectname">РёРјСЏ РґР»СЏ СЃРµСЂРёР°Р»РёР·СѓРµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToFormat(this object value, SerializationFormat format, TextWriter output,
                                              string objectname = DefaultObjectName,string usermode="", object options = null)
         {
             if (null==output) throw new SerializationException("output not given");
-            var serializer = Applications.Application.Current.Serialization.GetSerializer(format);
+            var serializer =
+#if EMBEDQPT
+                sfactory.GetSerializer(format);
+#else
+                Applications.Application.Current.Serialization.GetSerializer(format);
+#endif
             if (string.IsNullOrWhiteSpace(objectname)) {
                 objectname = DefaultObjectName;
             }
@@ -51,18 +56,23 @@ namespace Qorpent.Serialization {
         }
 
         /// <summary>
-        /// Сериализаует объект в заданном формате с сохранением в заданный файл
+        /// РЎРµСЂРёР°Р»РёР·Р°СѓРµС‚ РѕР±СЉРµРєС‚ РІ Р·Р°РґР°РЅРЅРѕРј С„РѕСЂРјР°С‚Рµ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РІ Р·Р°РґР°РЅРЅС‹Р№ С„Р°Р№Р»
         /// </summary>
-        /// <param name="value">сериализуемый объект</param>
-        /// <param name="format">формат</param>
-        /// <param name="filename">имя целевого</param>
-        /// <param name="objectname">имя для сериализуемого объекта</param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="value">СЃРµСЂРёР°Р»РёР·СѓРµРјС‹Р№ РѕР±СЉРµРєС‚</param>
+        /// <param name="format">С„РѕСЂРјР°С‚</param>
+        /// <param name="filename">РёРјСЏ С†РµР»РµРІРѕРіРѕ</param>
+        /// <param name="objectname">РёРјСЏ РґР»СЏ СЃРµСЂРёР°Р»РёР·СѓРµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToFormat(this object value, SerializationFormat format, string filename,
                                              string objectname = DefaultObjectName, string usermode ="", object options = null)
         {
             if(string.IsNullOrWhiteSpace(filename))throw new SerializationException("filename not given");
-            var serializer = Applications.Application.Current.Serialization.GetSerializer(format);
+            var serializer =
+#if EMBEDQPT
+                sfactory.GetSerializer(format);
+#else
+                Applications.Application.Current.Serialization.GetSerializer(format);
+#endif
             if (string.IsNullOrWhiteSpace(objectname))
             {
                 objectname = DefaultObjectName;
@@ -77,17 +87,23 @@ namespace Qorpent.Serialization {
             }
             
         }
-
+#if EMBEDQPT
+        static ISerializerFactory sfactory = new DefaultSerializerFactory();
+#endif
         /// <summary>
-        /// Возвращает строчное представление объекта в указанном формате
+        /// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕС‡РЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р° РІ СѓРєР°Р·Р°РЅРЅРѕРј С„РѕСЂРјР°С‚Рµ
         /// </summary>
-        /// <param name="value">сериализуемый объект</param>
-        /// <param name="format">формат</param>
-        /// <param name="objectname">имя для сериализуемого объекта</param>
-        /// <param name="options">Опции сериализации</param>
-        public static string SerializeAsFormat(this object value, SerializationFormat format, string objectname = DefaultObjectName, object options = null)
-        {
-            var serializer = Applications.Application.Current.Serialization.GetSerializer(format);
+        /// <param name="value">СЃРµСЂРёР°Р»РёР·СѓРµРјС‹Р№ РѕР±СЉРµРєС‚</param>
+        /// <param name="format">С„РѕСЂРјР°С‚</param>
+        /// <param name="objectname">РёРјСЏ РґР»СЏ СЃРµСЂРёР°Р»РёР·СѓРµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
+        public static string SerializeAsFormat(this object value, SerializationFormat format, string objectname = DefaultObjectName, object options = null) {
+            var serializer =
+#if EMBEDQPT
+                sfactory.GetSerializer(format);
+#else
+                Applications.Application.Current.Serialization.GetSerializer(format);
+#endif
             if (string.IsNullOrWhiteSpace(objectname)) {
                 objectname = DefaultObjectName;
             }
@@ -95,119 +111,124 @@ namespace Qorpent.Serialization {
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой текстовой поток в формате XML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С‚РµРєСЃС‚РѕРІРѕР№ РїРѕС‚РѕРє РІ С„РѕСЂРјР°С‚Рµ XML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="output"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToXml(this object value, TextWriter output, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Xml, output, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой текстовой поток в формате JSON
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С‚РµРєСЃС‚РѕРІРѕР№ РїРѕС‚РѕРє РІ С„РѕСЂРјР°С‚Рµ JSON
         /// </summary>
         /// <param name="value"></param>
         /// <param name="output"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToJson(this object value, TextWriter output, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Json, output, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой текстовой поток в формате HTML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С‚РµРєСЃС‚РѕРІРѕР№ РїРѕС‚РѕРє РІ С„РѕСЂРјР°С‚Рµ HTML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="output"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToHtml(this object value, TextWriter output, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Html, output, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате XML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ XML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="filename"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToXml(this object value, string filename, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Xml, filename, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате JSON
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ JSON
         /// </summary>
         /// <param name="value"></param>
         /// <param name="filename"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToJson(this object value, string filename, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Json, filename, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате HTML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ HTML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="filename"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static void SerializeToHtml(this object value, string filename, string objectname = DefaultObjectName, object options = null)
         {
             value.SerializeToFormat(SerializationFormat.Html, filename, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате XML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ XML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static string SerializeAsXmlString(this object value, string objectname = DefaultObjectName, object options = null)
         {
             return value.SerializeAsFormat(SerializationFormat.Xml, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате XML
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ XML
         /// </summary>
         /// <param name="value"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static XElement SerializeAsXml(this object value, string objectname = DefaultObjectName, object options = null)
         {
             return XElement.Parse(value.SerializeAsXmlString(objectname));
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате JSON
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ JSON
         /// </summary>
         /// <param name="value"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static string SerializeAsJsonString(this object value, string objectname = DefaultObjectName, object options = null)
         {
             return value.SerializeAsFormat(SerializationFormat.Json, objectname);
         }
 
         /// <summary>
-        /// Сериализует указанный объект в целевой файл в формате JSON
+        /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ С†РµР»РµРІРѕР№ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ JSON
         /// </summary>
         /// <param name="value"></param>
         /// <param name="objectname"></param>
-        /// <param name="options">Опции сериализации</param>
+        /// <param name="options">РћРїС†РёРё СЃРµСЂРёР°Р»РёР·Р°С†РёРё</param>
         public static JsonItem SerializeAsJson(this object value, string objectname = DefaultObjectName, object options = null)
         {
-            var parser = Applications.Application.Current.Container.Get<IJsonParser>();
+            var parser =
+#if EMBEDQPT
+                new JsonParser();
+#else
+                Applications.Application.Current.Container.Get<IJsonParser>();
+#endif
             if (null == parser) {
                 throw new SerializationException("json parser not configured in application");
             }

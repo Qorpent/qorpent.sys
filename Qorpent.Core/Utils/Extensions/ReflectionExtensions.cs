@@ -39,7 +39,7 @@ namespace Qorpent.Utils.Extensions {
 
 
 		/// <summary>
-		/// Копирует свойства одного объкта в другой по имени
+		/// РљРѕРїРёСЂСѓРµС‚ СЃРІРѕР№СЃС‚РІР° РѕРґРЅРѕРіРѕ РѕР±СЉРєС‚Р° РІ РґСЂСѓРіРѕР№ РїРѕ РёРјРµРЅРё
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="from"></param>
@@ -51,7 +51,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// Копирует свойства одного объкта в другой по имени
+		/// РљРѕРїРёСЂСѓРµС‚ СЃРІРѕР№СЃС‚РІР° РѕРґРЅРѕРіРѕ РѕР±СЉРєС‚Р° РІ РґСЂСѓРіРѕР№ РїРѕ РёРјРµРЅРё
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="from"></param>
@@ -79,12 +79,12 @@ namespace Qorpent.Utils.Extensions {
 			return target;
 		}
 		///  <summary>
-		/// 		Возвращает все типы из указанной сорки, имеющий типизрованный атрибут
+		/// 		Р’РѕР·РІСЂР°С‰Р°РµС‚ РІСЃРµ С‚РёРїС‹ РёР· СѓРєР°Р·Р°РЅРЅРѕР№ СЃРѕСЂРєРё, РёРјРµСЋС‰РёР№ С‚РёРїРёР·СЂРѕРІР°РЅРЅС‹Р№ Р°С‚СЂРёР±СѓС‚
 		///  </summary>
-		///  <typeparam name="T">Типзиация искомого атрибута</typeparam>
-		///  <param name="assembly">Сборка</param>
-		/// <param name="condition">Условие</param>
-		/// <returns>Массив типов</returns>
+		///  <typeparam name="T">РўРёРїР·РёР°С†РёСЏ РёСЃРєРѕРјРѕРіРѕ Р°С‚СЂРёР±СѓС‚Р°</typeparam>
+		///  <param name="assembly">РЎР±РѕСЂРєР°</param>
+		/// <param name="condition">РЈСЃР»РѕРІРёРµ</param>
+		/// <returns>РњР°СЃСЃРёРІ С‚РёРїРѕРІ</returns>
 		public static Type[] GetTypesWithAttribute<T>(this Assembly assembly, Func<T, bool> condition = null) where T : Attribute {
 			return assembly.GetTypes().Where(_ => {
 				var attribute = _.GetCustomAttribute<T>();
@@ -95,7 +95,7 @@ namespace Qorpent.Utils.Extensions {
 			}).ToArray();
 		}
 		/// <summary>
-		/// Конвертирует общеизвестное имя типа в тип
+		/// РљРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ РѕР±С‰РµРёР·РІРµСЃС‚РЅРѕРµ РёРјСЏ С‚РёРїР° РІ С‚РёРї
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -117,7 +117,7 @@ namespace Qorpent.Utils.Extensions {
 			return null;
 		}
 		/// <summary>
-		/// Конвертирует тип в общеизвестное короткое имя
+		/// РљРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ С‚РёРї РІ РѕР±С‰РµРёР·РІРµСЃС‚РЅРѕРµ РєРѕСЂРѕС‚РєРѕРµ РёРјСЏ
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -164,7 +164,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="map"></param>
 		/// <returns></returns>
 		/// <exception cref="NullReferenceException"></exception>
-		public static Type ToTypeDefinition(this string str, IDictionary<string, Type> map = null)
+		public static Type ToTypeDefinition(this string str, IDictionary<string, Type> map)
 		{
 			if (string.IsNullOrWhiteSpace(str)) return null;
 
@@ -271,15 +271,15 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// 	Ищет в типе все свойства и поля по заданным условиям с возможным указанием фильтрующего атрибута
+		/// 	РС‰РµС‚ РІ С‚РёРїРµ РІСЃРµ СЃРІРѕР№СЃС‚РІР° Рё РїРѕР»СЏ РїРѕ Р·Р°РґР°РЅРЅС‹Рј СѓСЃР»РѕРІРёСЏРј СЃ РІРѕР·РјРѕР¶РЅС‹Рј СѓРєР°Р·Р°РЅРёРµРј С„РёР»СЊС‚СЂСѓСЋС‰РµРіРѕ Р°С‚СЂРёР±СѓС‚Р°
 		/// </summary>
-		/// <param name="type"> тип, в котором требется произвести поиск </param>
-		/// <param name="attributeType"> фильтрующий тип атрибута (отбор только тех членов класса, к которым привязан данный атрибут </param>
-		/// <param name="publicOnly"> только публичные свойства/поля </param>
-		/// <param name="readableOnly"> только свойства с поддержкой чтения (для полей игнорируется) </param>
-		/// <param name="assignableOnly"> только свойства с поддержкой записи (для полей игнорируется) </param>
-		/// <exception cref="ReflectionExtensionsException">не указан тип для поиска</exception>
-		/// <returns> перечисление всех соответствующих полей и свойств </returns>
+		/// <param name="type"> С‚РёРї, РІ РєРѕС‚РѕСЂРѕРј С‚СЂРµР±РµС‚СЃСЏ РїСЂРѕРёР·РІРµСЃС‚Рё РїРѕРёСЃРє </param>
+		/// <param name="attributeType"> С„РёР»СЊС‚СЂСѓСЋС‰РёР№ С‚РёРї Р°С‚СЂРёР±СѓС‚Р° (РѕС‚Р±РѕСЂ С‚РѕР»СЊРєРѕ С‚РµС… С‡Р»РµРЅРѕРІ РєР»Р°СЃСЃР°, Рє РєРѕС‚РѕСЂС‹Рј РїСЂРёРІСЏР·Р°РЅ РґР°РЅРЅС‹Р№ Р°С‚СЂРёР±СѓС‚ </param>
+		/// <param name="publicOnly"> С‚РѕР»СЊРєРѕ РїСѓР±Р»РёС‡РЅС‹Рµ СЃРІРѕР№СЃС‚РІР°/РїРѕР»СЏ </param>
+		/// <param name="readableOnly"> С‚РѕР»СЊРєРѕ СЃРІРѕР№СЃС‚РІР° СЃ РїРѕРґРґРµСЂР¶РєРѕР№ С‡С‚РµРЅРёСЏ (РґР»СЏ РїРѕР»РµР№ РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ) </param>
+		/// <param name="assignableOnly"> С‚РѕР»СЊРєРѕ СЃРІРѕР№СЃС‚РІР° СЃ РїРѕРґРґРµСЂР¶РєРѕР№ Р·Р°РїРёСЃРё (РґР»СЏ РїРѕР»РµР№ РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ) </param>
+		/// <exception cref="ReflectionExtensionsException">РЅРµ СѓРєР°Р·Р°РЅ С‚РёРї РґР»СЏ РїРѕРёСЃРєР°</exception>
+		/// <returns> РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РІСЃРµС… СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РїРѕР»РµР№ Рё СЃРІРѕР№СЃС‚РІ </returns>
 		public static IEnumerable<ValueMember> FindAllValueMembers(this Type type, Type attributeType, bool publicOnly = false,
 		                                                           bool readableOnly = false, bool assignableOnly = false) {
 			return _helper.FindAllValueMembers(type, attributeType, publicOnly, readableOnly, assignableOnly);
@@ -325,7 +325,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="pathpart"></param>
 		/// <returns></returns>
 		public static string ReadManifestResource(this Assembly assembly, string pathpart) {
-			string result = null;
+			string result;
 			using (var sr = new StreamReader(assembly.OpenManifestResource(pathpart), Encoding.UTF8)) {
 				result = sr.ReadToEnd();
 			}

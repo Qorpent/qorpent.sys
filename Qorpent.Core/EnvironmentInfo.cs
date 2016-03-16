@@ -22,9 +22,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+#if !EMBEDQPT
 using System.Web;
 using Qorpent.Applications;
-
+#endif
 namespace Qorpent {
 	/// <summary>
 	/// 	Contains adapted environment information
@@ -143,8 +144,8 @@ namespace Qorpent {
 			get {
 				if (null == _rootDirectory) {
 					lock (Sync) {
-						
-						 if (IsWeb) {
+#if !EMBEDQPT
+                        if (IsWeb) {
 							try {
 #if !SQL2008
 								_rootDirectory = GetHttpWrapper().GetAppDomainAppPath();
@@ -163,8 +164,12 @@ namespace Qorpent {
 						else {
 							_rootDirectory = Environment.CurrentDirectory;
 						}
-					}
-				}
+#else
+                        _rootDirectory = Environment.CurrentDirectory;
+#endif
+                    }
+
+                }
 				return _rootDirectory;
 			}
 			set { _rootDirectory = Path.GetFullPath(value); }
@@ -256,13 +261,13 @@ namespace Qorpent {
 			_isWebUtility = null;
 			_rootDirectory = null;
 		}
-
-		/// <summary>
-		/// Helper method to access httpcontext wrapper without native System.Web access
-		/// must be used by system core services
-		/// </summary>
-		/// <returns></returns>
-		public static IHttpContextWrapper GetHttpWrapper() {
+#if !EMBEDQPT
+        /// <summary>
+        /// Helper method to access httpcontext wrapper without native System.Web access
+        /// must be used by system core services
+        /// </summary>
+        /// <returns></returns>
+        public static IHttpContextWrapper GetHttpWrapper() {
 			IHttpContextWrapper wrapper = null;
 			var mvctype = Type.GetType("Qorpent.Mvc.HttpContextWrapper, Qorpent.Mvc", false);
 			if (null != mvctype) {
@@ -273,7 +278,7 @@ namespace Qorpent {
 			}
 			return wrapper;
 		}
-
+#endif
 
 		private static readonly IDictionary<string, string> ResolvedExeCache = new Dictionary<string, string>();
 		private static string _configDirectory;

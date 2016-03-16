@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace Qorpent.Serialization
 	    /// <summary>
 	    /// Ключевые слова C#
 	    /// </summary>
-	    public static readonly string[] CSharpKeywords = new[]{
+	    public static readonly string[] CSharpKeywords = {
 		    "abstract", "add", "as", "ascending",
 		    "async", "await", "base", "bool",
 		    "break", "by", "byte", "case",
@@ -128,7 +127,7 @@ namespace Qorpent.Serialization
         /// <summary>
         /// Escape russian organization name to transliterated system name
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="s"></param>
         /// <returns></returns>
         public static string OrganizationSysName(string s) {
             if (string.IsNullOrWhiteSpace(s)) {
@@ -245,16 +244,9 @@ namespace Qorpent.Serialization
 					sb.Append('.');
 					sb.Append('"');
 				}else  if (c == '"'){
-					continue;
 				}
 				else{
-					if (lowercase){
-						sb.Append(char.ToLower(c));
-					}
-					else{
-						sb.Append(c);
-					}
-					
+				    sb.Append(lowercase ? char.ToLower(c) : c);
 				}
 			}
 			sb.Append('"');
@@ -295,18 +287,6 @@ namespace Qorpent.Serialization
             return str;
         }
 
-        /// <summary>
-        /// Unescape all symbols (auto type)
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        private static String Unescape(this String str)
-        {
-
-
-
-            return null;
-        }
 
         /// <summary>
         /// 

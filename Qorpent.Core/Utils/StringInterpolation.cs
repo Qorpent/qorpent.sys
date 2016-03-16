@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Qorpent.IO;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
@@ -68,7 +66,7 @@ namespace Qorpent.Utils
 			if (-1 == target.IndexOf(AncorSymbol)) return target;
 			if (-1 == target.IndexOf('{')) return target;
 			if (-1 == target.IndexOf('}')) return target;
-		    this._source2 = source2;
+		    _source2 = source2;
 			if (string.IsNullOrWhiteSpace(target)) {
 				return target;
 			}
@@ -175,7 +173,7 @@ namespace Qorpent.Utils
 		private bool _resolved;
 		private IDictionary<string, object> _source2;
 		private string _controlKey;
-	    private int _infun = 0;
+	    private int _infun;
 
 
 	    private void Interpolate() {
@@ -309,7 +307,7 @@ namespace Qorpent.Utils
 		    var val = GetRawValue(code);
 		    if (null == val) return false;
 
-			string strval = null;
+			string strval;
 			if (null == format)
 			{
                 if (val is DateTime)
@@ -332,14 +330,15 @@ namespace Qorpent.Utils
 			{
 				if (val is DateTime) {
 					strval = ((DateTime) val).ToString(format,CultureInfo.InvariantCulture);
-				}else if (val is Decimal) {
-					strval = ((Decimal)val).ToString(format,CultureInfo.InvariantCulture);
+				}else if (val is decimal) {
+					strval = ((decimal)val).ToString(format,CultureInfo.InvariantCulture);
 				}
 				else if (val is int) {
 					strval = ((int)val).ToString(format, CultureInfo.InvariantCulture);
 				}
-				else{
-					strval = string.Format("{0:" + format + "}", val);
+				else {
+				    var template = "{0:" + format + "}";
+                    strval = string.Format(template, val);
 				}
 			}
 			
@@ -347,10 +346,8 @@ namespace Qorpent.Utils
 				
 				return false;
 			}
-			if (null != val) {
-				_currentSubst.Append(strval);
-			}
-			_currentCode.Clear();
+		    _currentSubst.Append(strval);
+		    _currentCode.Clear();
 			return true;
 		}
 
@@ -435,6 +432,7 @@ namespace Qorpent.Utils
 	                
 	            }
 	            
+	            // ReSharper disable once RedundantCast
 	            val = d.DynamicInvoke((object[]) arguments.ToArray());
 	        }
 	        if (val is XAttribute) {

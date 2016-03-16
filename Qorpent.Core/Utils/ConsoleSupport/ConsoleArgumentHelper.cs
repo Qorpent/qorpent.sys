@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.Utils {
@@ -51,7 +50,7 @@ namespace Qorpent.Utils {
 			var lastname = ""; // last parameter parsed in valid --NAME form
 			var namedparameteropened = false; //flag that parameter Value is awaiting
 			foreach (var str in args) {
-				var argname = ""; // temporal for argname
+				string argname; // temporal for argname
 			    if (str.StartsWith("--") || Regex.IsMatch(str,@"^-\p{L}[\w\d]{0,2}$")) {
 			        if (str.StartsWith("--")) {
 			            // it's named parameter start

@@ -21,8 +21,9 @@ using System.Security.Principal;
 using System.Threading;
 using System.Web;
 using Qorpent.IoC;
+#if !EMBEDQPT
 using Qorpent.Mvc;
-
+#endif
 namespace Qorpent.Security {
 	/// <summary>
 	/// 	Basic principal source implementation, 
@@ -46,7 +47,13 @@ namespace Qorpent.Security {
 		public IPrincipal CurrentUser {
 			get {
 				lock (Sync) {
-					if (null == Current) {
+#if EMBEDQPT
+				    if (null == Current) {
+				      Current = Thread.CurrentPrincipal;
+				    } 
+				    return Current;
+#else
+                    if (null == Current) {
 					    if (null != MvcContextBase.Current) {
 					        if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser) {
 					            Current = MvcContextBase.Current.LogonUser;
@@ -67,8 +74,10 @@ namespace Qorpent.Security {
 					                new GenericPrincipal(new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName),
 					                    null);
 					        }
+
 					    }
-					}
+
+				}
 
 #if PARANOID
 						if(Paranoid.Provider.IsSpecialUser(Current)) {
@@ -77,17 +86,22 @@ namespace Qorpent.Security {
 							}
 						}
 #endif
-					return Current;
+                return Current;
+#endif
 				}
-			}
-		}
+
+            }
+        }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		public IPrincipal BasePrincipal {
 			get {
-				if (null!=MvcContextBase.Current)
+#if EMBEDQPT
+			    return Thread.CurrentPrincipal;
+#else
+                if (null!=MvcContextBase.Current)
 				{
 					if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser)
 					{
@@ -114,6 +128,7 @@ namespace Qorpent.Security {
 													   null);
 					}
 				}
+#endif
 			}
 			set {
 				

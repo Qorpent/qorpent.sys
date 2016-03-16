@@ -545,7 +545,6 @@
     <Compile Include="Dsl\Bxl\BxlException.cs" />
     <Compile Include="Dsl\Bxl\BxlGeneratorOptions.cs" />
     <Compile Include="Dsl\Bxl\BxlParserOptions.cs" />
-    <Compile Include="Dsl\Bxl\IBxlParser.cs" />
     <Compile Include="Dsl\Bxl\IBxlService.cs" />
     <Compile Include="Data\ConnectionDescriptor.cs" />
     <Compile Include=".\Data\IDatabaseConnectionProvider.cs" />

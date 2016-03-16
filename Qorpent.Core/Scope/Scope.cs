@@ -283,7 +283,7 @@ namespace Qorpent {
         }
 
         private object PreparedValue(string key, ScopeOptions options) {
-            object result = null;
+            object result;
             if (key.Contains('.') && !ContainsKey(key)) {
                 var split = key.Split('.');
                 result = NativeGet(split[0], options);
@@ -324,15 +324,15 @@ namespace Qorpent {
             if (null == key) return false;
             var directMatch = GetDirectMatch(key,false);
             if (directMatch) return true;
-            if (this.Options.KeySimplification != SimplifyOptions.None)
+            if (Options.KeySimplification != SimplifyOptions.None)
             {
-                if (SimplifiedContainsKey(key, this.Options,false)) return true;
+                if (SimplifiedContainsKey(key, Options,false)) return true;
             }
             return false;
         }
 
         private bool GetDirectMatch(string key,bool deep = true) {
-            if (this._storage.ContainsKey(key)) return true;
+            if (_storage.ContainsKey(key)) return true;
             if (deep) {
                 foreach (var parent in _parents) {
                     var result = parent.ContainsKey(key, ScopeOptions.DirectMatch);
@@ -461,7 +461,7 @@ namespace Qorpent {
         /// <summary>
         /// Scope - compatible set parent method
         /// </summary>
-        /// <param name="cfgbase"></param>
+        /// <param name="parentScope"></param>
         public void SetParent(IScope parentScope) {
             _parents.Clear();
             AddParent(parentScope);

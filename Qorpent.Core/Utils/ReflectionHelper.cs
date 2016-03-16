@@ -249,7 +249,7 @@ namespace Qorpent.Utils {
 			}
 
 			// try find mostly priorityzed member
-			var classvalue = FindValueMember(type, name, ignorecase, publicOnly, true, false);
+			var classvalue = FindValueMember(type, name, ignorecase, publicOnly, true);
 
 			//check availability of member
 			if (null == classvalue) {
@@ -337,15 +337,15 @@ namespace Qorpent.Utils {
 
 
 		/// <summary>
-		/// 	Ищет в типе все свойства и поля по заданным условиям с возможным указанием фильтрующего атрибута
+		/// 	РС‰РµС‚ РІ С‚РёРїРµ РІСЃРµ СЃРІРѕР№СЃС‚РІР° Рё РїРѕР»СЏ РїРѕ Р·Р°РґР°РЅРЅС‹Рј СѓСЃР»РѕРІРёСЏРј СЃ РІРѕР·РјРѕР¶РЅС‹Рј СѓРєР°Р·Р°РЅРёРµРј С„РёР»СЊС‚СЂСѓСЋС‰РµРіРѕ Р°С‚СЂРёР±СѓС‚Р°
 		/// </summary>
-		/// <param name="type"> тип, в котором требется произвести поиск </param>
-		/// <param name="attributeType"> фильтрующий тип атрибута (отбор только тех членов класса, к которым привязан данный атрибут </param>
-		/// <param name="publicOnly"> только публичные свойства/поля </param>
-		/// <param name="readableOnly"> только свойства с поддержкой чтения (для полей игнорируется) </param>
-		/// <param name="assignableOnly"> только свойства с поддержкой записи (для полей игнорируется) </param>
-		/// <exception cref="ReflectionExtensionsException">не указан тип для поиска</exception>
-		/// <returns> перечисление всех соответствующих полей и свойств </returns>
+		/// <param name="type"> С‚РёРї, РІ РєРѕС‚РѕСЂРѕРј С‚СЂРµР±РµС‚СЃСЏ РїСЂРѕРёР·РІРµСЃС‚Рё РїРѕРёСЃРє </param>
+		/// <param name="attributeType"> С„РёР»СЊС‚СЂСѓСЋС‰РёР№ С‚РёРї Р°С‚СЂРёР±СѓС‚Р° (РѕС‚Р±РѕСЂ С‚РѕР»СЊРєРѕ С‚РµС… С‡Р»РµРЅРѕРІ РєР»Р°СЃСЃР°, Рє РєРѕС‚РѕСЂС‹Рј РїСЂРёРІСЏР·Р°РЅ РґР°РЅРЅС‹Р№ Р°С‚СЂРёР±СѓС‚ </param>
+		/// <param name="publicOnly"> С‚РѕР»СЊРєРѕ РїСѓР±Р»РёС‡РЅС‹Рµ СЃРІРѕР№СЃС‚РІР°/РїРѕР»СЏ </param>
+		/// <param name="readableOnly"> С‚РѕР»СЊРєРѕ СЃРІРѕР№СЃС‚РІР° СЃ РїРѕРґРґРµСЂР¶РєРѕР№ С‡С‚РµРЅРёСЏ (РґР»СЏ РїРѕР»РµР№ РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ) </param>
+		/// <param name="assignableOnly"> С‚РѕР»СЊРєРѕ СЃРІРѕР№СЃС‚РІР° СЃ РїРѕРґРґРµСЂР¶РєРѕР№ Р·Р°РїРёСЃРё (РґР»СЏ РїРѕР»РµР№ РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ) </param>
+		/// <exception cref="ReflectionExtensionsException">РЅРµ СѓРєР°Р·Р°РЅ С‚РёРї РґР»СЏ РїРѕРёСЃРєР°</exception>
+		/// <returns> РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РІСЃРµС… СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РїРѕР»РµР№ Рё СЃРІРѕР№СЃС‚РІ </returns>
 		public IEnumerable<ValueMember> FindAllValueMembers(Type type, Type attributeType = null, bool publicOnly = false,
 		                                                    bool readableOnly = false, bool assignableOnly = false) {
 			if (null == type) {

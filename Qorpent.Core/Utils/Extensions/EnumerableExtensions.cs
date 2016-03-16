@@ -17,7 +17,6 @@
 // PROJECT ORIGIN: Qorpent.Utils/EnumerableExtensions.cs
 #endregion
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,7 @@ namespace Qorpent.Utils.Extensions {
 			return values.All(source.Contains);
 		}
 		/// <summary>
-		/// Упрощенный синтаксис проверки присутствия в массиве
+		/// РЈРїСЂРѕС‰РµРЅРЅС‹Р№ СЃРёРЅС‚Р°РєСЃРёСЃ РїСЂРѕРІРµСЂРєРё РїСЂРёСЃСѓС‚СЃС‚РІРёСЏ РІ РјР°СЃСЃРёРІРµ
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="objs"></param>
@@ -76,7 +75,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 		
 		/// <summary>
-		/// Формирует все комбинации элементов списков
+		/// Р¤РѕСЂРјРёСЂСѓРµС‚ РІСЃРµ РєРѕРјР±РёРЅР°С†РёРё СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєРѕРІ
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="sources"></param>
@@ -87,14 +86,13 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// Формирует все комбинации элементов списков
+		/// Р¤РѕСЂРјРёСЂСѓРµС‚ РІСЃРµ РєРѕРјР±РёРЅР°С†РёРё СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєРѕРІ
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="_sources"></param>
 		/// <returns></returns>
 		public static T[][] Combine<T>(this IEnumerable<IEnumerable<T>> _sources){
 			_sources = _sources.Where(_ => _ != null && _.Count() != 0);
-			if(null==_sources) return new T[][] { };
 			var sources = _sources.ToArray();
 			if ( 0 == sources.Length) return new T[][] { };
 			if (1 == sources.Length)
@@ -133,12 +131,13 @@ namespace Qorpent.Utils.Extensions {
 		/// <typeparam name="T">type of collection </typeparam>
 		/// <param name="set">collection</param>
 		/// <param name="expression">delegate to execute</param>
-		/// <param name="exceptionHandler">действие при исключении</param>
+		/// <param name="exceptionHandler">РґРµР№СЃС‚РІРёРµ РїСЂРё РёСЃРєР»СЋС‡РµРЅРёРё</param>
 		public static IEnumerable<T> DoForEach<T>(this IEnumerable<T> set, Action<T> expression, Action<T, int, Exception> exceptionHandler)
 		{
 			if (null == set || null == expression) return set;
 			var idx = 0;
-			foreach (var t in set)
+		    var doForEach = set as T[] ?? set.ToArray();
+		    foreach (var t in doForEach)
 			{
 				try
 				{
@@ -151,10 +150,10 @@ namespace Qorpent.Utils.Extensions {
 					else throw;
 				}
 			}
-			return set;
+			return doForEach;
 		}
 		/// <summary>
-		/// Защищенный метод получения значения из словаря
+		/// Р—Р°С‰РёС‰РµРЅРЅС‹Р№ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РёР· СЃР»РѕРІР°СЂСЏ
 		/// </summary>
 		/// <typeparam name="K"></typeparam>
 		/// <typeparam name="V"></typeparam>
@@ -184,7 +183,7 @@ namespace Qorpent.Utils.Extensions {
         /// </summary>
         public static R Apply<T,R>(this IDictionary<string,T> dict, R target, bool correctNames = false)
         {
-            if (null == target) return target;
+            if (null == target) return default(R);
             if (null == dict) return target;
             var type = target.GetType();
             foreach (var property in dict)
@@ -195,16 +194,8 @@ namespace Qorpent.Utils.Extensions {
                     var correctedName = property.Key.Replace("_", "");
                     prop = type.FindValueMember(correctedName, true, false, false, true);
                 }
-                if (null != prop)
-                {
-                    try
-                    {
-                        prop.Set(target, property.Value.ToTargetType(prop.Type));
-                    }
-                    catch
-                    {
-                        throw;
-                    }
+                if (null != prop) {
+                    prop.Set(target, property.Value.ToTargetType(prop.Type));
                 }
             }
             return target;
@@ -213,7 +204,7 @@ namespace Qorpent.Utils.Extensions {
 
 
         /// <summary>
-        /// Возврат с дефолтным значением из словаря типа строка-строка
+        /// Р’РѕР·РІСЂР°С‚ СЃ РґРµС„РѕР»С‚РЅС‹Рј Р·РЅР°С‡РµРЅРёРµРј РёР· СЃР»РѕРІР°СЂСЏ С‚РёРїР° СЃС‚СЂРѕРєР°-СЃС‚СЂРѕРєР°
         /// </summary>
         /// <param name="dictionary"></param>
         /// <param name="key"></param>
@@ -228,7 +219,7 @@ namespace Qorpent.Utils.Extensions {
         }
 
 		/// <summary>
-		/// Защищенный метод получения значения из словаря
+		/// Р—Р°С‰РёС‰РµРЅРЅС‹Р№ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РёР· СЃР»РѕРІР°СЂСЏ
 		/// </summary>
 		/// <typeparam name="V"></typeparam>
 		/// <param name="dictionary"></param>
@@ -243,8 +234,8 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// Защищенный метод получения значения из словаря в модели "кэша" - при отсутвии вызывает
-		/// метод генератор и заполняет внутренний кэш
+		/// Р—Р°С‰РёС‰РµРЅРЅС‹Р№ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РёР· СЃР»РѕРІР°СЂСЏ РІ РјРѕРґРµР»Рё "РєСЌС€Р°" - РїСЂРё РѕС‚СЃСѓС‚РІРёРё РІС‹Р·С‹РІР°РµС‚
+		/// РјРµС‚РѕРґ РіРµРЅРµСЂР°С‚РѕСЂ Рё Р·Р°РїРѕР»РЅСЏРµС‚ РІРЅСѓС‚СЂРµРЅРЅРёР№ РєСЌС€
 		/// </summary>
 		/// <typeparam name="K"></typeparam>
 		/// <typeparam name="V"></typeparam>

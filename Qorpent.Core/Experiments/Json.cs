@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Activation;
-using System.Runtime.Remoting.Channels;
-using System.Security;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
-using Qorpent.Json;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Map = System.Collections.Generic.IDictionary<string,object>;  
@@ -73,11 +65,12 @@ namespace Qorpent.Experiments {
                     yield return re;
                 }
             }
-            yield break;
         }
+
         /// <summary>
         /// Находит первый объект, содержащий указанное имя
         /// </summary>
+        /// <param name="root"></param>
         /// <param name="pathstart"></param>
         /// <returns></returns>
         public static object Search(object root,string pathstart) {
@@ -127,13 +120,13 @@ namespace Qorpent.Experiments {
                 var e = xml.Element(pathPart);
                 return e;
             }
-            if (json is Array) {
+            if (json is Arr) {
                 var a = json as object[];
+                if (null == a) throw new Exception("invalid array type");
                 if (pathPart.ToLowerInvariant() == "length") return a.Length;
                 if (pathPart.StartsWith("[") && pathPart.EndsWith("]")) {
                     var pos = Convert.ToInt32(pathPart.Substring(1, pathPart.Length - 2));
-                    if (a.Length <= pos) return null;
-                    return a[pos];
+                    return a.Length <= pos ? null : a[pos];
                 }
                 return null;
             }
@@ -152,7 +145,6 @@ namespace Qorpent.Experiments {
         }
 
         private static object ByReflection(object json, string pathPart) {
-            var type = json.GetType();
             var prop = json.GetType().GetProperty(pathPart);
             if (null != prop) {
                 return prop.GetValue(json);
@@ -691,8 +683,11 @@ namespace Qorpent.Experiments {
         /// Преобразует объект в строку JSON
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="jsonmode"></param>
         /// <param name="defaultMode"></param>
         /// <param name="annotator"></param>
+        /// <param name="pretty"></param>
+        /// <param name="level"></param>
         /// <returns></returns>
         public static string Stringify(object data, string jsonmode="", SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator=null, bool pretty = false, int level=0) {
             var sw = new StringWriter();
@@ -780,12 +775,7 @@ namespace Qorpent.Experiments {
         {
             if (null == data) return null;
             var result = Get(data, path);
-            string r = null;
-            if (null != result)
-            {
-                return result.ToStr();
-            }
-            return def;
+            return null != result ? result.ToStr() : def;
         }
 
 
@@ -1013,7 +1003,7 @@ namespace Qorpent.Experiments {
                 return result;
             }
             if (data is Arr) {
-                var a = data as object[];
+                var a = (object[])data;
                 var result = new object[a.Length];
                 for (var i = 0; i < a.Length; i++) {
                     result[i] = a[i].clone();
@@ -1059,27 +1049,28 @@ namespace Qorpent.Experiments {
             var collection = data as ICollection;
             if (null != collection) {
                 if (collection is IDictionary<string, string>) {
-                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator,pretty,level);
+                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator,pretty);
                 }
                 else if (collection is IDictionary<string, object>) {
-                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator,pretty, level);
+                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator,pretty);
                 }
                 else if (collection is IDictionary<int, object>)
                 {
-                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty, level);
+                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty);
                 }
                 else if (collection is IDictionary<string, decimal>)
                 {
-                    WriteObject(collection as IDictionary<string, decimal>, output, jsonmode, defaultMode, annotator, pretty, level);
+                    WriteObject(collection as IDictionary<string, decimal>, output, jsonmode, defaultMode, annotator, pretty);
                 }
                 else {
-                    WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty, level);
+                    WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty);
                 }
                 return;
                 
             }
             var error = data as Exception;
             if (null != error) {
+                // ReSharper disable once SuspiciousTypeConversion.Global
                 if (error is IJsonSerializable) {
                     WriteObject(data, output, defaultMode, jsonmode, annotator);
                 }
@@ -1145,7 +1136,8 @@ namespace Qorpent.Experiments {
             }
         }
 
-        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level=0)
+        // ReSharper disable once UnusedParameter.Local
+        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false)
         {
            output.Write("[");
             bool first = true;
@@ -1161,7 +1153,8 @@ namespace Qorpent.Experiments {
             output.Write("]");
         }
 
-        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level =0)
+        // ReSharper disable once UnusedParameter.Local
+        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false)
         {
             output.Write("{");
             bool first = true;
@@ -1261,10 +1254,7 @@ namespace Qorpent.Experiments {
         }
 
         public static IEnumerable<NodeRef> collect(this object json, Func<object , string , NodeFilter> filter ) {
-            var context = "/";
-            foreach (var n in internalCollect(json,"/",filter)) {
-                yield return n;
-            }
+            return internalCollect(json,"/",filter);
         }
 
         private static IEnumerable<NodeRef> internalCollect(object json, string context, Func<object, string, NodeFilter> filter) {

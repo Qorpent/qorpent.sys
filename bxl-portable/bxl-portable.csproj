@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{734B8DD2-0E5A-4157-A174-2DAC3DD572F7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>bxl</RootNamespace>
+    <AssemblyName>bxl</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\.build\portable\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;EMBEDQPT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Qorpent.BxlParser.Exe\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\CoreExtensions.cs">
+      <Link>qorpent.core\CoreExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\Bxl\BxlException.cs">
+      <Link>qorpent.core\dsl\bxl\BxlException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\Bxl\BxlParser.cs">
+      <Link>qorpent.core\dsl\bxl\BxlParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\Bxl\BxlParserOptions.cs">
+      <Link>qorpent.core\dsl\bxl\BxlParserOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\Bxl\ReadMode.cs">
+      <Link>qorpent.core\dsl\bxl\ReadMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LexInfo.cs">
+      <Link>qorpent.core\dsl\LexInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LogicalExpressions\DictionaryTermSource.cs">
+      <Link>qorpent.core\dsl\logicalexpressions\DictionaryTermSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LogicalExpressions\ILogicalExpressionEvaluator.cs">
+      <Link>qorpent.core\dsl\logicalexpressions\ILogicalExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LogicalExpressions\ILogicTermSource.cs">
+      <Link>qorpent.core\dsl\logicalexpressions\ILogicTermSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LogicalExpressions\LogicalExpressionNode.cs">
+      <Link>qorpent.core\dsl\logicalexpressions\LogicalExpressionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Dsl\LogicalExpressions\LogicTermSource.cs">
+      <Link>qorpent.core\dsl\logicalexpressions\LogicTermSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\Constants.cs">
+      <Link>qorpent.core\experiments\Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\IJsonSerializable.cs">
+      <Link>qorpent.core\experiments\IJsonSerializable.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\ISerializationAnnotator.cs">
+      <Link>qorpent.core\experiments\ISerializationAnnotator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\Json.cs">
+      <Link>qorpent.core\experiments\Json.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\JsonWriter.cs">
+      <Link>qorpent.core\experiments\JsonWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\ReflectionUtils.cs">
+      <Link>qorpent.core\experiments\ReflectionUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\SerializeMode.cs">
+      <Link>qorpent.core\experiments\SerializeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\TypeConverter.cs">
+      <Link>qorpent.core\experiments\TypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Experiments\WebDateTimeParser.cs">
+      <Link>qorpent.core\experiments\WebDateTimeParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\IExceptionRegistryDataException.cs">
+      <Link>qorpent.core\IExceptionRegistryDataException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\QorpentConst.cs">
+      <Link>qorpent.core\QorpentConst.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\QorpentException.cs">
+      <Link>qorpent.core\QorpentException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\IScope.cs">
+      <Link>qorpent.core\scope\IScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\IScopeBound.cs">
+      <Link>qorpent.core\scope\IScopeBound.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\Scope.cs">
+      <Link>qorpent.core\scope\Scope.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeAppend.cs">
+      <Link>qorpent.core\scope\ScopeAppend.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeExtensions.cs">
+      <Link>qorpent.core\scope\ScopeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeNull.cs">
+      <Link>qorpent.core\scope\ScopeNull.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeOptions.cs">
+      <Link>qorpent.core\scope\ScopeOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\BxlLiteral.cs">
+      <Link>qorpent.core\serialization\escaping\BxlLiteral.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\DotLiteral.cs">
+      <Link>qorpent.core\serialization\escaping\DotLiteral.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\Escaper.cs">
+      <Link>qorpent.core\serialization\escaping\Escaper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\EscapingDataFactory.cs">
+      <Link>qorpent.core\serialization\escaping\EscapingDataFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\EscapingType.cs">
+      <Link>qorpent.core\serialization\escaping\EscapingType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\IEscapeProvider.cs">
+      <Link>qorpent.core\serialization\escaping\IEscapeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\JsonLiteral.cs">
+      <Link>qorpent.core\serialization\escaping\JsonLiteral.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\OptimizedEscapeDictionary.cs">
+      <Link>qorpent.core\serialization\escaping\OptimizedEscapeDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\XmlAttribute.cs">
+      <Link>qorpent.core\serialization\escaping\XmlAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Serialization\Escaping\XmlName.cs">
+      <Link>qorpent.core\serialization\escaping\XmlName.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\ConsoleSupport\ConsoleArgumentHelper.cs">
+      <Link>qorpent.core\utils\console\ConsoleArgumentHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\Extensions\EnumerableExtensions.cs">
+      <Link>qorpent.core\utils\extensions\EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\Extensions\ReflectionExtensions.cs">
+      <Link>qorpent.core\utils\extensions\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\Extensions\SimplifyOptions.cs">
+      <Link>qorpent.core\utils\extensions\SimplifyOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\Extensions\StringExtensions.cs">
+      <Link>qorpent.core\utils\extensions\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\Extensions\XmlExtensions.cs">
+      <Link>qorpent.core\utils\extensions\XmlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\IXmlIncludeProvider.cs">
+      <Link>qorpent.core\utils\IXmlIncludeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\ConjunctionNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\ConjunctionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\DisjunctionNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\DisjunctionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\EqualNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\EqualNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\EqualValueNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\EqualValueNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\LETokenType.cs">
+      <Link>qorpent.core\utils\logicalexpressions\LETokenType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\LiteralNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\LiteralNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\LogicalExpressionEvaluator.cs">
+      <Link>qorpent.core\utils\logicalexpressions\LogicalExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\LogicalExpressionParser.cs">
+      <Link>qorpent.core\utils\logicalexpressions\LogicalExpressionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\LogicalExpressions\RegexTestNode.cs">
+      <Link>qorpent.core\utils\logicalexpressions\RegexTestNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\ReflectionExtensionsException.cs">
+      <Link>qorpent.core\utils\ReflectionExtensionsException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\ReflectionHelper.cs">
+      <Link>qorpent.core\utils\ReflectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\StringHelper.cs">
+      <Link>qorpent.core\utils\StringHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\StringInterpolation.cs">
+      <Link>qorpent.core\utils\StringInterpolation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\ValueMember.cs">
+      <Link>qorpent.core\utils\ValueMember.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\XmlIncludeProvider.cs">
+      <Link>qorpent.core\utils\XmlIncludeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Utils\XmlInterpolation.cs">
+      <Link>qorpent.core\utils\XmlInterpolation.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

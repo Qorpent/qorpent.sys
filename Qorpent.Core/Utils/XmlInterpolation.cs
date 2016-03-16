@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Dsl.LogicalExpressions;
@@ -19,8 +18,7 @@ namespace Qorpent.Utils {
     public class XmlInterpolation {
         private readonly StringInterpolation _stringInterpolation = new StringInterpolation();
         private ILogicalExpressionEvaluator le;
-        private XmlInterpolation repeater = null;
-
+        
         /// <summary>
         /// </summary>
         public XmlInterpolation() {
@@ -205,11 +203,12 @@ namespace Qorpent.Utils {
 
 
                 if (source.Attr("xi-repeat").ToBool()) {
-                    var replace = ProcessRepeat(source, datasource);
+                    XElement[] replace = ProcessRepeat(source, datasource);
                     if (null == replace) {
                         source.Remove();
                     }
                     else {
+                        // ReSharper disable once CoVariantArrayConversion
                         source.ReplaceWith(replace);
                     }
                     return false;

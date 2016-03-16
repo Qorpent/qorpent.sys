@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Qorpent.Dsl.LogicalExpressions;

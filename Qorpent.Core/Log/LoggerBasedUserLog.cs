@@ -144,12 +144,14 @@ namespace Qorpent.Log {
 			}
 			lock (this) {
 				var logmessage = _helper.CreateMessage(level, message, context);
-				if (Application.HasCurrent) {
+#if !EMBEDQPT
+                if (Application.HasCurrent) {
 					if(string.IsNullOrWhiteSpace(logmessage.User)) {
 						logmessage.User = Application.Current.Principal.CurrentUser.Identity.Name;
 					}
 					logmessage.ApplicationName = Application.Current.ApplicationName;
 				}
+#endif
 				logmessage.HostObject = host ?? HostObject;
 				logmessage.Name = _name;
 				//call UserLog write asynchronous - SO WE DON'T WANT WAIT LOGGERS to finish operations, we call synchronization on start of UserLog operation

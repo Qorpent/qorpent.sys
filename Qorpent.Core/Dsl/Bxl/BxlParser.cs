@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,21 +27,21 @@ namespace Qorpent.Bxl {
 		:IBxlParser, ISpecialXmlParser 
 #endif
 	{
-		private const String NAMESPACE = "namespace::";
-		private const String CODE = "code";
-		private const String ID = "id";
-		private const String NAME = "name";
+		private const string NAMESPACE = "namespace::";
+		private const string CODE = "code";
+		private const string ID = "id";
+		private const string NAME = "name";
 
 		private const int TAB_SPACE_COUNT = 4;
 		private readonly XName ROOT_NAME = "root";
 		private readonly XName INFO_FILE = "_file";
 		private readonly XName INFO_LINE = "_line";
-		private const String ANON_PREFIX = "_aa";
-		private const String ANON_VALUE = "1";
-		private String DEFAULT_NS_PREFIX;
-		private String ANON_CODE;
-		private String ANON_ID;
-		private String ANON_NAME;
+		private const string ANON_PREFIX = "_aa";
+		private const string ANON_VALUE = "1";
+		private string DEFAULT_NS_PREFIX;
+		private string ANON_CODE;
+		private string ANON_ID;
+		private string ANON_NAME;
 
 		private BxlParserOptions _options;
 		private XElement _root, _current;
@@ -53,13 +52,12 @@ namespace Qorpent.Bxl {
 		private int _tabIgnore;
 		private int _tabs;
 		private int _defNsCount;
-		private String _value;
-		private String _prefix;
+		private string _value;
+		private string _prefix;
 		private bool _isString;
 		private bool _isExpression;
 	    private char _next = '\0';
-		private char _last;
-		private LexInfo _info;
+	    private LexInfo _info;
 		private readonly CharStack _expStack = new CharStack();
 
 		private int _level;
@@ -114,7 +112,6 @@ namespace Qorpent.Bxl {
 				filename = "code.bxl";
 			}
 			init(filename, options);
-		    int _i = 0;
 		    int l = code.Length;
 			for (var i=0;i<l;i++) {
 			    if (_skip > 0) {
@@ -145,7 +142,6 @@ namespace Qorpent.Bxl {
 					_info.Line++;
 					_info.Column = 0;
 				}
-				_last = c;
 			}
 
 			if ( code.Last() != '\n')
@@ -185,12 +181,12 @@ namespace Qorpent.Bxl {
 			return Parse(srccode, "isxp");
 		}
 #endif
-		private void init(String filename, BxlParserOptions options) {
+		private void init(string filename, BxlParserOptions options) {
 			_options = options;
 			_info = new LexInfo(filename, 1);
             _expStack.Clear();
 			DEFAULT_NS_PREFIX = NAMESPACE + filename + "_";
-			String __ = "";
+			string __ = "";
 			if (_options.HasFlag(BxlParserOptions.SafeAttributeNames)) {
 				__ = "__";
 			}
@@ -208,8 +204,7 @@ namespace Qorpent.Bxl {
 			_prefix = "";
 			_isString = false;
 			_isExpression = false;
-			_last = (char)0;
-			_buf.Clear();
+		    _buf.Clear();
 			_stack.Clear();
 		    _next = '\0';
 
@@ -694,7 +689,7 @@ namespace Qorpent.Bxl {
 
 		private void processExpression(char c) {
 			_isExpression = true;
-			char last = '\0';
+			char last;
 			switch (c) {
 				case '\\':
 					_stack.Push((char)_mode);
@@ -706,8 +701,8 @@ namespace Qorpent.Bxl {
 					_stack.Push('(');
 					return;
 				case ')':
-					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
-					last = _expStack.Pop();
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone());
+			        last = _expStack.Pop();
 					if (last != '(') throw new BxlException("non matched expression ", _info.Clone());
 					_buf.Append(c);
 					_stack.Pop();
@@ -725,8 +720,8 @@ namespace Qorpent.Bxl {
 					_stack.Push('(');
 					return;
 				case ']':
-					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
-					last = _expStack.Pop();
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone());
+			        last = _expStack.Pop();
 					if (last != '[') throw new BxlException("non matched expression ", _info.Clone());
 					if (_expStack.Count == 0)
 					{
@@ -741,8 +736,8 @@ namespace Qorpent.Bxl {
 					_stack.Push('(');
 					return;
 				case '}':
-					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
-					last = _expStack.Pop();
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone());
+			        last = _expStack.Pop();
 					if (last != '{') throw new BxlException("non matched expression ", _info.Clone());
 					if (_expStack.Count == 0)
 					{
@@ -1077,7 +1072,7 @@ namespace Qorpent.Bxl {
 			if (c == '\n' || c == '\r')
 				_mode = (ReadMode)_stack.Pop();
 		}
-	    private int mlcdepth = 0;
+	    private int mlcdepth;
 	    private int _skip;
 
 	    private void processMultilineCommentary(char c)
@@ -1101,9 +1096,9 @@ namespace Qorpent.Bxl {
         //		modifying tree
 
         private void addNode() {
-			String s = _value.Escape(EscapingType.XmlName);
+			string s = _value.Escape(EscapingType.XmlName);
 
-			String ns = resolveNamespace();
+			string ns = resolveNamespace();
 			XElement node = new XElement(XName.Get(s, ns));
 			if (!_options.HasFlag(BxlParserOptions.NoLexData)) {
 				node.Add(new XAttribute(INFO_FILE, _info.File));
@@ -1154,7 +1149,7 @@ namespace Qorpent.Bxl {
 				if (_isString || _isExpression) {
 					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					_anon[_level].count++;
-					String name = ANON_PREFIX + (_anon[_level].count);
+					string name = ANON_PREFIX + (_anon[_level].count);
 
 					// namespace not needed because this anonymous string attribute can not be declared with namespace prefix
 					_current.SetAttributeValue(XName.Get(name), _value);
@@ -1186,8 +1181,8 @@ namespace Qorpent.Bxl {
 			}
 				
 
-			String ns = resolveNamespace();
-			String s = _buf.ToString();
+			string ns = resolveNamespace();
+			string s = _buf.ToString();
 			_buf.Clear();
 			var name = XName.Get(_value.Escape(EscapingType.XmlName), ns);
 			if (_options.HasFlag(BxlParserOptions.PreventDoubleAttributes)){
@@ -1212,7 +1207,7 @@ namespace Qorpent.Bxl {
 		private void addTextContent() {
 			if (_buf.Length == 0 && !_isString)
 				return;
-			String s = _buf.ToString();
+			string s = _buf.ToString();
 			_buf.Clear();
 			_isExpression = false;
 			_isString = false;
@@ -1221,8 +1216,8 @@ namespace Qorpent.Bxl {
 			_mode = ReadMode.WaitingForNL;
 		}
 
-		private String resolveNamespace() {
-			String ns = "";
+		private string resolveNamespace() {
+			string ns = "";
 			if (_prefix.Length != 0) {
 				XNamespace xns = _root.GetNamespaceOfPrefix(_prefix);
 				if (xns == null) {
@@ -1244,7 +1239,7 @@ namespace Qorpent.Bxl {
 			// checking for empty _buf must be implemented in invoker !
 			if (_value.Length == 0)
 				throw new BxlException("empty namespace name", _info.Clone());
-			String s = _value.Escape(EscapingType.XmlName);
+			string s = _value.Escape(EscapingType.XmlName);
 			_root.SetAttributeValue(XNamespace.Xmlns + s, _buf.ToString());
 			_isExpression = false;
 			_isString = false;
@@ -1252,9 +1247,9 @@ namespace Qorpent.Bxl {
 			_buf.Clear();
 		}
 
-		private String addDefaultNamespace(String prefix) {
-			String s = prefix.Escape(EscapingType.XmlName);
-			String ns = DEFAULT_NS_PREFIX + new string('X', ++_defNsCount);
+		private string addDefaultNamespace(string prefix) {
+			string s = prefix.Escape(EscapingType.XmlName);
+			string ns = DEFAULT_NS_PREFIX + new string('X', ++_defNsCount);
 			_root.SetAttributeValue(XNamespace.Xmlns + s, ns);
 			return ns;
 		}

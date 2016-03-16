@@ -21,17 +21,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.SqlServer.Server;
 using Qorpent.Bxl;
-using Qorpent.Json;
-using Qorpent.Serialization;
-using Qorpent.Wiki;
 
+using Qorpent.Serialization;
+#if !EMBEDQPT
+using Qorpent.Json;
+#endif
 namespace Qorpent.Utils.Extensions {
 
    
@@ -75,9 +74,11 @@ namespace Qorpent.Utils.Extensions {
 	            return null;
 	        }
 	        var ext = Path.GetExtension(f);
-	        if (ext.StartsWith(".bxl")) {
-	            return new BxlParser().Parse(File.ReadAllText(f),f,options);
-	        }
+            if (null != ext) {
+                if (ext.StartsWith(".bxl")) {
+                    return new BxlParser().Parse(File.ReadAllText(f), f, options);
+                }
+            }
             return XElement.Load(f);
 	    }
 
@@ -187,8 +188,8 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return result.Distinct().ToArray();
 		}
-
-		/// <summary>
+#if !EMBEDQPT
+        /// <summary>
         /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
         /// </summary>
         /// <param name="items"></param>
@@ -197,16 +198,17 @@ namespace Qorpent.Utils.Extensions {
         public static XElement ToMvcXmlArray(this IEnumerable<XElement> items, string itemname ) {
             return new XElement("result", new XElement(itemname, new XAttribute(JsonItem.JsonTypeAttributeName, "array"), items));
         }
-		/// <summary>
-		/// Производит поиск атрибутов по имени и/или вхождению строки
-		/// </summary>
-		/// <param name="e"></param>
-		/// <param name="attributename"></param>
-		/// <param name="contains"></param>
-		/// <param name="skipself"></param>
-		/// <param name="selfonly"></param>
-		/// <returns></returns>
-		public static bool HasAttributes(this XElement e, string attributename = null, string contains = null,
+#endif
+        /// <summary>
+        /// Производит поиск атрибутов по имени и/или вхождению строки
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="attributename"></param>
+        /// <param name="contains"></param>
+        /// <param name="skipself"></param>
+        /// <param name="selfonly"></param>
+        /// <returns></returns>
+        public static bool HasAttributes(this XElement e, string attributename = null, string contains = null,
 		                                 bool skipself = false, bool selfonly = false) {
 			if (!skipself) {
 				foreach (var a in e.Attributes()) {
@@ -626,6 +628,7 @@ namespace Qorpent.Utils.Extensions {
 
             return xElement.Element(xName).IsNotNull();
         }
+#if !EMBEDQPT
         /// <summary>
         ///     Попробовать проверить тип JSON-элемента в XML-представлении, если таковой присутствует
         /// </summary>
@@ -635,6 +638,7 @@ namespace Qorpent.Utils.Extensions {
             return xElement.Attribute(JsonItem.JsonTypeAttributeName).TryGetValue();
         }
 
+#endif
 	    /// <summary>
 	    ///     Вытаскивает значение атрибута элемента с переданным именем
 	    /// </summary>

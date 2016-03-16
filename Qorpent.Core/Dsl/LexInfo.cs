@@ -46,8 +46,11 @@ namespace Qorpent.Dsl {
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode(){
 			unchecked{
+			    // ReSharper disable once NonReadonlyMemberInGetHashCode
 				int hashCode = Column;
-				hashCode = (hashCode*397) ^ (File != null ? File.GetHashCode() : 0);
+			    // ReSharper disable once NonReadonlyMemberInGetHashCode
+				hashCode = (hashCode*397) ^ (File?.GetHashCode() ?? 0);
+			    // ReSharper disable once NonReadonlyMemberInGetHashCode
 				hashCode = (hashCode*397) ^ Line;
 				return hashCode;
 			}
@@ -64,7 +67,7 @@ namespace Qorpent.Dsl {
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((LexInfo) obj);
 		}
 

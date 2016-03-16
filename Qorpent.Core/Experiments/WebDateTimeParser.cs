@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils {
@@ -63,7 +62,7 @@ namespace Qorpent.Utils {
             "D MMM yyyy,? [\\s\\S]*",
         };
 
-	    private static readonly Regex[] FormatRegexes = null;
+	    private static readonly Regex[] FormatRegexes;
 		static WebDateTimeParser(){
 			var regexes = new List<Regex>();
 			foreach (var format in Formats){

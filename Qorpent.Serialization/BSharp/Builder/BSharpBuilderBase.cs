@@ -8,7 +8,9 @@ using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
 using Qorpent.Serialization;
-
+#if EMBEDQPT
+using IBxlParser = Qorpent.Bxl.BxlParser;
+#endif
 namespace Qorpent.BSharp.Builder{
 	/// <summary>
 	///     Базовый билдер BSharp

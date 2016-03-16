@@ -19,14 +19,19 @@
 
 using System.Collections.Generic;
 using Qorpent.Dsl.LogicalExpressions;
-using Qorpent.IoC;
-using Qorpent.LogicalExpressions;
 
+using Qorpent.LogicalExpressions;
+#if !EMBEDQPT
+using Qorpent.IoC;
+#endif
 namespace Qorpent.Utils.LogicalExpressions {
-	/// <summary>
-	/// 	simple realization of logical expression evaluator
-	/// </summary>
-	[ContainerComponent(Lifestyle.Transient)]
+    /// <summary>
+    /// 	simple realization of logical expression evaluator
+    /// </summary>
+
+#if !EMBEDQPT
+    [ContainerComponent(Lifestyle.Transient)]
+#endif
 	public class LogicalExpressionEvaluator : ILogicalExpressionEvaluator {
 		/// <summary>
 		/// 	creates new instance

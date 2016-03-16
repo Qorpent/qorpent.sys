@@ -96,7 +96,8 @@ namespace Qorpent.IO {
 		/// </remarks>
 		public string Root {
 			get {
-				if (null != _root) {
+#if !EMBEDQPT
+                if (null != _root) {
 					return _root;
 				}
 				if (null != _fileservice) {
@@ -105,6 +106,7 @@ namespace Qorpent.IO {
 				if (null != Application) {
 					return Application.RootDirectory;
 				}
+#endif
 				return EnvironmentInfo.RootDirectory;
 			}
 			set { _root = value; }

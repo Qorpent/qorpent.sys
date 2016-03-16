@@ -5,7 +5,7 @@ namespace Qorpent.Utils.LogicalExpressions {
     /// 	tokens, available in logical expression
     /// </summary>
     [Flags]
-    public enum LETokenType :int {
+    public enum LETokenType {
         /// <summary>
         /// 	undefined
         /// </summary>

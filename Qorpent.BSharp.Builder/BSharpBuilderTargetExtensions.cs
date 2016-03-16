@@ -65,8 +65,7 @@ namespace Qorpent.Integration.BSharp.Builder {
 
             return (enumerator[target] == type);
         }
-<<<<<<< HEAD
-=======
+
         /// <summary>
         ///     Удаление цели из перечисления
         /// </summary>
@@ -77,6 +76,6 @@ namespace Qorpent.Integration.BSharp.Builder {
                 enumerator.Remove(target);
             }
         }
->>>>>>> b3303b9... Incorrect including all fixed
+
     }
 }
