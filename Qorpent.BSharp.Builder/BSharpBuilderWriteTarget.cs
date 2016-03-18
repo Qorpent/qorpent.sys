@@ -40,6 +40,7 @@ namespace Qorpent.Integration.BSharp.Builder {
         ///     уже такая существует
         /// </summary>
         public bool MergeIfExists { get; set; }
+        
         /// <summary>
         ///     Акцессор генерации полного пути файла
         /// </summary>

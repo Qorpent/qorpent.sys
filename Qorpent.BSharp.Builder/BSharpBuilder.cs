@@ -40,12 +40,12 @@ namespace Qorpent.Integration.BSharp.Builder {
 		        if (project.GenerateLibPkg) {
 		            Tasks.Add(new GenerateLibPackageTask());
 		        }
-
-		        if (project.GenerateGraph) {
+#if !EMBEDQPT
+                if (project.GenerateGraph) {
 		            Tasks.Add(new GenerateClassGraphTask());
 		        }
-
-		        if (project.GenerateJsonModule) {
+#endif
+                if (project.GenerateJsonModule) {
 		            Tasks.Add(new GenerateJsonModuleTask());
 		        }
 

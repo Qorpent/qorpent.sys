@@ -108,8 +108,8 @@ namespace Qorpent.Applications {
 			get { return _threadCurrentMvcContext; }
 			set { _threadCurrentMvcContext = value; }
 		}
-
-		private IHttpContextWrapper _httpContextWrapper;
+#if !EMBEDQPT
+        private IHttpContextWrapper _httpContextWrapper;
 		/// <summary>
 		/// Access to HTTP context wrapper
 		/// </summary>
@@ -125,13 +125,16 @@ namespace Qorpent.Applications {
 
 			}
 		}
+#else
 
-		/// <summary>
-		/// 	Access to Bxl service
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		public IBxlService Bxl {
+	    public IHttpContextWrapper HttpWrapper { get; }
+#endif
+        /// <summary>
+        /// 	Access to Bxl service
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public IBxlService Bxl {
 			get {
 				if (null == _bxl) {
 					lock (this) {
@@ -207,7 +210,11 @@ namespace Qorpent.Applications {
 			get {
 				if (null == _container) {
 					lock (this) {
-						return _container = ContainerFactory.ResolveWellKnown<IContainer>();
+#if EMBEDQPT
+					    return _container = new Container();
+#else
+                        return _container = ContainerFactory.ResolveWellKnown<IContainer>();
+#endif
 					}
 				}
 				return _container;
@@ -511,7 +518,9 @@ namespace Qorpent.Applications {
 		/// <typeparam name="T"> </typeparam>
 		/// <returns> </returns>
 		protected T ResolveService<T>() where T : class {
-			return Container.Get<T>() ?? ContainerFactory.ResolveWellKnown<T>(this);
+
+            return Container.Get<T>() ?? ContainerFactory.ResolveWellKnown<T>(this);
+
 		}
 
 		/// <summary>

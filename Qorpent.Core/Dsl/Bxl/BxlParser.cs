@@ -22,11 +22,9 @@ namespace Qorpent.Bxl {
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(IBxlParser))]
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(ISpecialXmlParser), Name = "bxl.xml.parser")]
 #endif
-	public class BxlParser  
-#if !EMBEDQPT
-		:IBxlParser, ISpecialXmlParser 
-#endif
-	{
+	public class BxlParser : IBxlParser, ISpecialXmlParser
+
+    {
 		private const string NAMESPACE = "namespace::";
 		private const string CODE = "code";
 		private const string ID = "id";
@@ -166,7 +164,7 @@ namespace Qorpent.Bxl {
 
 			return _root;
 		}
-#if !EMBEDQPT
+
 		/// <summary>
 		///		Generates BXL code from XML with given settings
 		/// </summary>
@@ -180,7 +178,7 @@ namespace Qorpent.Bxl {
 		XElement ISpecialXmlParser.ParseXml(string srccode) {
 			return Parse(srccode, "isxp");
 		}
-#endif
+
 		private void init(string filename, BxlParserOptions options) {
 			_options = options;
 			_info = new LexInfo(filename, 1);

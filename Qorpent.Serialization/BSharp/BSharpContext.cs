@@ -706,7 +706,22 @@ namespace Qorpent.BSharp{
 			clselement.SetAttributeValue("name", className);
 			foreach (XElement xElement in elementSet){
 				foreach (XAttribute a in xElement.Attributes()){
-					clselement.SetAttributeValue(a.Name, a.Value);
+                    if (a.Name == "code")
+                    {
+                        clselement.SetAttributeValue("_gcode", a.Value);
+                    }
+                    else if (a.Name == "id")
+                    {
+                        clselement.SetAttributeValue("_gid", a.Value);
+                    }
+                    else if (a.Name == "name")
+                    {
+                        clselement.SetAttributeValue("_gname", a.Value);
+                    }
+                    
+				    else {
+				        clselement.SetAttributeValue(a.Name, a.Value);
+				    }
 				}
 			}
 			genInt.Interpolate(clselement);
@@ -760,26 +775,54 @@ namespace Qorpent.BSharp{
 					throw new Exception("not defined mode " + mode);
 				}
 			}
+		    var prototype = source.Attr("prototype");
+		    if (!string.IsNullOrWhiteSpace(prototype)) {
+		        var useabstracts = source.Attr("useabstracts").ToBool();
+		        var filterattr = source.Attr("filterattr");
 
+		        foreach (var cls in this.RawClasses.Values) {
+                    if(!useabstracts  && cls.Is(BSharpClassAttributes.Abstract))continue;
+		            if(!string.IsNullOrWhiteSpace(filterattr) && !cls.Source.Attr(filterattr).ToBool())continue;    
+		            if (cls.Source.Attr("prototype") == prototype || cls.Source.Name.LocalName == prototype) {
+		                var includeattrs = source.Elements("includeattr").ToArray();
+		                if (0 != includeattrs.Length) {
+                            var x = new XElement(cls.Source.Name);
+		                    foreach (var includeattr in includeattrs) {
+		                        var name = includeattr.GetCode();
+                                x.SetAttributeValue(name,cls.Source.Attr(name));
+		                    }
+                            yield return x;
+		                }
+		                else {
+		                    yield return cls.Source;
+		                }
+		            }
+		        }
 
-			foreach (XAttribute attr in source.Attributes()){
-				if (attr.Name == BSharpSyntax.DatasetImport){
-					foreach (XElement e in GetDataSet(attr.Value, ns, false)){
-						yield return e;
-					}
-				}
+		    }
+		    else {
 
-				if (attr.Name == "code" && string.IsNullOrWhiteSpace(source.Attr(BSharpSyntax.DatasetImport)) &&
-				    source.Parent.Name.LocalName == BSharpSyntax.Generator){
-					foreach (
-						XElement e in GetDataSet(attr.Value, ns, source.Describe().Name == "optional" || source.Attr("optional").ToBool())
-						){
-						yield return e;
-					}
-				}
-			}
+		        foreach (XAttribute attr in source.Attributes()) {
+		            if (attr.Name == BSharpSyntax.DatasetImport) {
+		                foreach (XElement e in GetDataSet(attr.Value, ns, false)) {
+		                    yield return e;
+		                }
+		            }
 
-			foreach (XElement element in source.Elements()){
+		            if (attr.Name == "code" && string.IsNullOrWhiteSpace(source.Attr(BSharpSyntax.DatasetImport)) &&
+		                source.Parent.Name.LocalName == BSharpSyntax.Generator) {
+		                foreach (
+		                    XElement e in
+		                        GetDataSet(attr.Value, ns,
+		                            source.Describe().Name == "optional" || source.Attr("optional").ToBool())
+		                    ) {
+		                    yield return e;
+		                }
+		            }
+		        }
+		    }
+
+		    foreach (XElement element in source.Elements()){
 				if (element.Name == BSharpSyntax.DatasetImport){
 					foreach (
 						XElement e in

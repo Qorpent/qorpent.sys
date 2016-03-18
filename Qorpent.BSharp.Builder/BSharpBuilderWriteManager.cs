@@ -67,6 +67,7 @@ namespace Qorpent.Integration.BSharp.Builder {
             if (!Directory.Exists(target.Directory)) {
                 Directory.CreateDirectory(target.Directory);
             }
+
 			using (var sw = new StreamWriter(target.Path)){
 				await sw.WriteAsync(target.Entity.ToString());	
 			}

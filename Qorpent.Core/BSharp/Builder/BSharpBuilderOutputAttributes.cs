@@ -64,10 +64,12 @@ namespace Qorpent.BSharp.Builder {
 		/// Имя прототипа в имени файла
 		/// </summary>
 		PrototypeInName = 1<<9,
+        PrototypeAsExtension =1<<10,
 
-		/// <summary>
-		/// По умолчанию просто выводится директория с плоскими нэймспэйсами
-		/// </summary>
+        /// <summary>
+        /// По умолчанию просто выводится директория с плоскими нэймспэйсами
+        /// </summary>
         Default = IncludeWork | PlainNamespace,
+	   
 	}
 }

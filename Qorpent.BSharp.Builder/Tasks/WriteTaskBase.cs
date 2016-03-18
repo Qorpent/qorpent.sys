@@ -95,6 +95,10 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 				target.Filename = bSharpClass.Prototype + "." + target.Filename;
 			}
 
+            if (outputAttributes.HasFlag(BSharpBuilderOutputAttributes.PrototypeAsExtension)) {
+                target.Extension = bSharpClass.Prototype + ".xml";
+            }
+
             if (outputAttributes.HasFlag(BSharpBuilderOutputAttributes.SingleFile)) {
                 target.Filename = BSharpBuilderDefaults.SingleModeFilename;
                 target.MergeIfExists = true;
@@ -144,7 +148,8 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
         /// </summary>
         /// <param name="context">Контекст компилятора</param>
         protected virtual void PrepareTargets(IBSharpContext context) {
-			context.Get(DataType).ToArray().AsParallel().ForAll(_ =>{
+            var targets = context.Get(DataType).ToArray();
+            targets.ToArray().AsParallel().ForAll(_ =>{
 				var target = GenerateTarget(_);
 				WriteManager.Add(target);
 			});

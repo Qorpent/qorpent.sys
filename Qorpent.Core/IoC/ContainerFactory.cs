@@ -24,14 +24,11 @@ using System.Linq;
 using System.Reflection;
 
 using Qorpent.Log;
-
-#if !EMBEDQPT
 using System.Collections.Generic;
 using System.Configuration;
 using Qorpent.Wiki;
 using Qorpent.Applications;
 using Qorpent.Events;
-#endif
 namespace Qorpent.IoC {
 	///<summary>
 	///	Статическая фабрика создания контейнеров IoC. Поддерживает формирование пустого контенера сконфигурированного класса,
@@ -257,7 +254,7 @@ namespace Qorpent.IoC {
 
 
 		}
-#if !EMBEDQPT
+
         /// <summary>
         /// 	Resolves this instance.
         /// </summary>
@@ -283,14 +280,16 @@ namespace Qorpent.IoC {
 						result = Activator.CreateInstance(record.DefaultType) as T;
 					}
 				}
-				if (result is IApplicationBound && null != context) {
+#if !EMBEDQPT
+                if (result is IApplicationBound && null != context) {
 					((IApplicationBound) result).SetApplication(context);
 				}
-				return result;
+#endif
+                return result;
 			}
 			return null;
 		}
-#endif
+
 
 		/// <summary>
 		/// 	Setups the well known container services.

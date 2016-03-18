@@ -73,6 +73,7 @@
     <Compile Include="CacheService.cs" />
     <Compile Include="Config\ConfigurationLoader.cs" />
     <Compile Include="Config\ConfigurationOptions.cs" />
+    <Compile Include="Dsl\Bxl\IBxlParser.cs" />
     <Compile Include="Host\IRedirectService.cs" />
     <Compile Include="Host\IRedirectSource.cs" />
     <Compile Include="IO\Net\HttpMethod.cs" />

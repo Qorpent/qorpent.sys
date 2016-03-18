@@ -49,7 +49,29 @@ generator ${_cls}X
 			Assert.AreEqual("1",cls.Compiled.Attr("x"));
 		}
 
-		[Test]
+        [Test]
+        public void GeneratesFromClasses()
+        {
+            var result = Compile(@"
+namespace zzz
+class a prototype=a abstract
+a A
+a B
+a C
+class ext abstract
+namespace xxx
+generator ${_gcode}_ext
+	dataset prototype=a
+	import ext
+    refto='^${_gcode}'
+");
+            var cls = result.Get("A_ext");
+            var str = cls.Compiled.ToString().Simplify(SimplifyOptions.Full);
+            Console.WriteLine(str);
+            Assert.AreEqual("<classcode='aext'refto='zzz.a'fullcode='xxx.aext'id='ext'/>", str);
+        }
+
+        [Test]
 		public void CanGenerateWithOneDataSetSimple()
 		{
 			var code = @"

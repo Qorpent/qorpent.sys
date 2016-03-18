@@ -89,8 +89,10 @@ namespace Qorpent.BSharp.Builder{
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<string> GetSourceDirectories(){
-			yield return GetRootDirectory();
-			if (null != SourceDirectories){
+		    if (null == Definition && !Definition.Attr("ExplicitSources").ToBool()) {
+		        yield return GetRootDirectory();
+		    }
+		    if (null != SourceDirectories){
 				foreach (var dir in SourceDirectories){
 					if (Path.IsPathRooted(dir)){
 						yield return dir;
