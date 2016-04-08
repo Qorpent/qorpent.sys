@@ -1,13 +1,18 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CSharp;
+using Qorpent.BSharp.Preprocessor;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 #if EMBEDQPT
 using IBxlParser = Qorpent.Bxl.BxlParser;
 #endif
@@ -177,20 +182,93 @@ namespace Qorpent.BSharp.Builder{
 		///     Загрузка расширений
 		/// </summary>
 		protected virtual void PrepareExtensions(){
+		    if (Project.DoCompileExtensions) {
+		        foreach (Type ext in DoCompileExtensions(Project.GetCompileDirectory()).GetTypes()) {
+		            if (typeof (IBSharpBuilderExtension).IsAssignableFrom(ext)) {
+                        var extension = (IBSharpBuilderExtension)Activator.CreateInstance(ext);
+                        Log.Info("Register extension: "+ext.FullName);
+                        extension.SetUp(this);
+                    }
+		        }
+		    }
 			foreach (string ext in Project.Extensions){
 				foreach (Type type in GetExtensionTypes(ext)){
 					var extension = (IBSharpBuilderExtension) Activator.CreateInstance(type);
-					extension.SetUp(this);
+                    Log.Info("Register extension: " + type.FullName);
+                    extension.SetUp(this);
 				}
 			}
 		}
 
-		/// <summary>
-		///     Конвертирует строку с описанием сборки или типа в перечисление типов расширений
-		/// </summary>
-		/// <param name="extensionDescriptor"></param>
-		/// <returns></returns>
-		private IEnumerable<Type> GetExtensionTypes(string extensionDescriptor){
+	    private Assembly DoCompileExtensions(string compiledirectory) {
+	        Log.Info("Приступаю к компиляции расширений");
+            var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v4.0" } });
+	        var assemblies = new[] {Assembly.GetEntryAssembly().GetName()};
+            var assemblyReferences = new[]
+           {
+                "System.dll",
+                "System.Core.dll",
+                "mscorlib.dll"
+            }
+           .Union(from ass in assemblies
+                  select new Uri(ass.CodeBase).LocalPath)
+           .Union(from ass in Assembly.GetEntryAssembly().GetReferencedAssemblies()
+                  where ass.Name!="WindowsBase"
+                  select ass.Name+".dll")
+                
+           .Distinct(StringComparer.OrdinalIgnoreCase)
+           .ToArray();
+
+	        foreach (var assemblyReference in assemblyReferences) {
+	            Console.WriteLine("ass: "+assemblyReference);
+	        }
+
+            var tmp = Path.Combine(Project.RootDirectory, "tools/.tmp");
+            Directory.CreateDirectory(tmp);
+            var file = Path.Combine(tmp, "bsc_dyn.dll");
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+
+	        CompilerParameters cp = new CompilerParameters {
+	            GenerateInMemory = true,
+	            OutputAssembly = file,
+	            IncludeDebugInformation = true,
+	            TempFiles = new TempFileCollection(tmp)
+	        };
+
+	        cp.ReferencedAssemblies.AddRange(assemblyReferences);
+	        var fp = Path.GetFullPath(compiledirectory).NormalizePath();
+	        var files = Directory.GetFiles(fp, "*.cs", SearchOption.AllDirectories)
+	            .Where(_ =>
+	                !_.NormalizePath().Replace(fp,"").Contains("/tests/")
+	                &&
+	                (Project.Conditions.ContainsKey("dev") || !_.NormalizePath().Replace(fp, "").Contains("/dev/"))
+	            ).ToArray();
+            Project.Log.Debug("Compiled directory: "+fp);
+            Project.Log.Debug("Files: "+string.Join(", ",files.Select(Path.GetFileName)) );
+            var compilerResults = codeProvider.CompileAssemblyFromFile(cp, 
+                files
+                );
+            if (compilerResults.Errors.HasErrors)
+            {
+                Log.Error("Errors in compilation!");
+                foreach (var error in compilerResults.Errors) {
+                    Log.Error(error.ToString());
+                }
+               
+                throw new ApplicationException("Exit without plugins");
+            }
+            return compilerResults.CompiledAssembly;
+        }
+
+        /// <summary>
+        ///     Конвертирует строку с описанием сборки или типа в перечисление типов расширений
+        /// </summary>
+        /// <param name="extensionDescriptor"></param>
+        /// <returns></returns>
+        private IEnumerable<Type> GetExtensionTypes(string extensionDescriptor){
 			if (extensionDescriptor.IsLiteral(EscapingType.JsonLiteral)){
 				IComponentDefinition pkg = Container.FindComponent(typeof (IBSharpBuilderExtension), extensionDescriptor + ".bsbext");
 				if (null != pkg){

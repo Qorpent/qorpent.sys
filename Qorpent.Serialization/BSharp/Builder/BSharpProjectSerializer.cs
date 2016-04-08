@@ -35,6 +35,8 @@ namespace Qorpent.BSharp.Builder{
 			project.JsonModuleName = bSharpClass["JsonModuleName"];
 		    project.DefaultNamespace = bSharpClass["DefaultNamespce"];
 		    project.ModuleName = bSharpClass["ModuleName"];
+		    project.DoCompileExtensions = bSharpClass["DoCompileExtensions"].ToBool();
+		    project.CompileFolder = bSharpClass["CompileFolder"];
 
 			XElement outLayout = bSharpClass.Compiled.Element("Layout");
 			if (outLayout != null){

@@ -12,10 +12,15 @@
 		/// </summary>
 		public const string DefaultOutputDirectory = ".output";
 
-		/// <summary>
-		///     Директория для логов по умолчанию
-		/// </summary>
-		public const string DefaultDebugDirectory = ".debug";
+        /// <summary>
+        ///     Директория для логов по умолчанию
+        /// </summary>
+        public const string DefaultCompileDirectory = ".compile";
+
+        /// <summary>
+        ///     Директория для логов по умолчанию
+        /// </summary>
+        public const string DefaultDebugDirectory = ".debug";
 
 		/// <summary>
 		/// </summary>

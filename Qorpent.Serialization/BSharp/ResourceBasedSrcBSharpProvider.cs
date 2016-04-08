@@ -30,8 +30,8 @@ namespace Qorpent.BSharp{
 		/// <returns></returns>
 		public IEnumerable<XElement> GetSources(IBSharpCompiler compiler, IBSharpContext context){
 			if (string.IsNullOrWhiteSpace(ResourceMarker)) throw new Exception("marker not set");
-			foreach (string rname in GetType().Assembly.FindAllResourceNames(ResourceMarker)){
-				string resource = GetType().Assembly.ReadManifestResource(rname);
+            foreach (string rname in GetType().Assembly.FindAllResourceNames(ResourceMarker)){
+               string resource = GetType().Assembly.ReadManifestResource(rname);
 				yield return Parser.Parse(resource, rname);
 			}
 		}

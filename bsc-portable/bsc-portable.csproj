@@ -2769,6 +2769,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\Qorpent.Serialization\BSharp\Preprocessor\preprocessor.bxls">
+      <Link>core\preprocessor.bxls</Link>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="core\App.config" />
   </ItemGroup>
@@ -2778,6 +2781,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "d:\testrepo\.build\portable\bsc.exe" "d:\sitesoft\rddemo\tools\bsc.exe" /s /d /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

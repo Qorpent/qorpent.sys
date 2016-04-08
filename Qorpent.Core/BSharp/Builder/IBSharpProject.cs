@@ -151,16 +151,24 @@ namespace Qorpent.BSharp.Builder {
         /// </summary>
 	    bool NoOutput { get; set; }
 
+	    bool DoCompileExtensions { get; set; }
+	    string CompileFolder { get; set; }
+
 	    /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
 		string GetOutputDirectory();
-		/// <summary>
-		/// Возвращает нормализованный полный путь корневой папки репозитория или решения
-		/// </summary>
-		/// <returns></returns>
-		string GetRootDirectory();
+        // <summary>
+        /// Возвращает путь к целевой директории
+        /// </summary>
+        /// <returns></returns>
+        string GetCompileDirectory();
+        /// <summary>
+        /// Возвращает нормализованный полный путь корневой папки репозитория или решения
+        /// </summary>
+        /// <returns></returns>
+        string GetRootDirectory();
 		/// <summary>
 		/// Возвращает исходящее расширение
 		/// </summary>

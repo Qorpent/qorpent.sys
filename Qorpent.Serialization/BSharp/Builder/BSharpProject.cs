@@ -36,6 +36,8 @@ namespace Qorpent.BSharp.Builder{
         private const string DEFAULTNAMESPCE = "defaultnamespace";
         private const string MODULENAME = "modulename";
         private const string NOOUTPUT = "nooutput";
+        private const string DOCOMPILEEXTENSIONS = "docompileextensions";
+        private const string COMPILEFOLDER = "compileextensionsdir";
 
 		private static readonly string[] overrideAttributes = new[]{
 			OUTPUT_ATTRIBUTES,
@@ -360,11 +362,22 @@ namespace Qorpent.BSharp.Builder{
             set { Set(NOOUTPUT, value); }
 	    }
 
-	    /// <summary>
-		///     Возвращает путь к целевой директории
-		/// </summary>
-		/// <returns></returns>
-		public string GetOutputDirectory(){
+	    public bool DoCompileExtensions
+        {
+            get { return Get<bool>(DOCOMPILEEXTENSIONS); }
+            set { Set(DOCOMPILEEXTENSIONS, value); }
+        }
+        public string CompileFolder
+        {
+            get { return Get<string>(COMPILEFOLDER); }
+            set { Set(COMPILEFOLDER, value); }
+        }
+
+        /// <summary>
+        ///     Возвращает путь к целевой директории
+        /// </summary>
+        /// <returns></returns>
+        public string GetOutputDirectory(){
 			if (!string.IsNullOrWhiteSpace(MainOutputDirectory)){
 				if (Path.IsPathRooted(MainOutputDirectory)){
 					return MainOutputDirectory;
@@ -374,7 +387,19 @@ namespace Qorpent.BSharp.Builder{
 			return Path.Combine(GetRootDirectory(), BSharpBuilderDefaults.DefaultOutputDirectory);
 		}
 
-		/// <summary>
+	    public string GetCompileDirectory() {
+            if (!string.IsNullOrWhiteSpace(CompileFolder))
+            {
+                if (Path.IsPathRooted(CompileFolder))
+                {
+                    return CompileFolder;
+                }
+                return Path.Combine(GetRootDirectory(), CompileFolder);
+            }
+            return Path.Combine(GetRootDirectory(), BSharpBuilderDefaults.DefaultCompileDirectory);
+        }
+
+	    /// <summary>
 		///     Возвращает нормализованный полный путь корневой папки репозитория или решения
 		/// </summary>
 		/// <returns></returns>

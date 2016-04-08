@@ -10,7 +10,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// <summary>
 		/// </summary>
 		public PreprocessorSourcePackageForBSharp(){
-			ResourceMarker = "Preprocessor";
+			ResourceMarker = "(?i)preprocessor";
 		}
 	}
 }

@@ -533,22 +533,35 @@ namespace Qorpent.BSharp{
 
 		private IBSharpSourceCodeProvider ResolvePackage(string name){
 			IBSharpSourceCodeProvider pkgservice = null;
-			//some well knowns
-			if (name == "data"){
+            //some well knowns
+
+            if (name == "data"){
+#if EMBEDQPT
+                throw new NotSupportedException("data module not supported in portable bsc");
+#else
 				pkgservice =
 					Type.GetType("Qorpent.Scaffolding.Model.Compiler.DataObjectsSourcePackageForBShart, Qorpent.Scaffolding", false)
 						.Create<IBSharpSourceCodeProvider>();
-			}
-			else if (name == "app"){
-				pkgservice =
+#endif
+            }
+            else if (name == "app"){
+#if EMBEDQPT
+                throw new NotSupportedException("app module not supported in portable bsc");
+#else
+                pkgservice =
 					Type.GetType("Qorpent.Scaffolding.Application.AppSpecificationBSharpSource, Qorpent.Scaffolding", false)
 						.Create<IBSharpSourceCodeProvider>();
-			}
+#endif
+            }
 
 			else if (name == "preprocessor"){
-				pkgservice =
+#if EMBEDQPT
+			    pkgservice = new Preprocessor.PreprocessorSourcePackageForBSharp();
+#else
+                pkgservice =
 					Type.GetType("Qorpent.BSharp.Preprocessor.PreprocessorSourcePackageForBSharp, Qorpent.Serialization", false)
 						.Create<IBSharpSourceCodeProvider>();
+#endif
 			}
 			if (null == pkgservice){
 				//fallback to IoC resolution of pkg

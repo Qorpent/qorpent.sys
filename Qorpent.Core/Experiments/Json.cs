@@ -1049,21 +1049,21 @@ namespace Qorpent.Experiments {
             var collection = data as ICollection;
             if (null != collection) {
                 if (collection is IDictionary<string, string>) {
-                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator,pretty);
+                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator,pretty,level);
                 }
                 else if (collection is IDictionary<string, object>) {
-                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator,pretty);
+                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 else if (collection is IDictionary<int, object>)
                 {
-                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty);
+                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 else if (collection is IDictionary<string, decimal>)
                 {
-                    WriteObject(collection as IDictionary<string, decimal>, output, jsonmode, defaultMode, annotator, pretty);
+                    WriteObject(collection as IDictionary<string, decimal>, output, jsonmode, defaultMode, annotator, pretty, level);
                 }
                 else {
-                    WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty);
+                    WriteArray(collection, output,jsonmode,defaultMode, annotator,pretty, level);
                 }
                 return;
                 
@@ -1087,16 +1087,17 @@ namespace Qorpent.Experiments {
                 return;
             }
 
-            WriteObject(data, output,defaultMode, jsonmode,annotator);
+            WriteObject(data, output,defaultMode, jsonmode,annotator,pretty,level);
         }
 
-        private static void WriteObject(object data, TextWriter output, SerializeMode defaultMode, string jsonmode, ISerializationAnnotator annotator)
+        private static void WriteObject(object data, TextWriter output, SerializeMode defaultMode, string jsonmode, ISerializationAnnotator annotator, bool pretty = false, int level = 0)
         {
             
             if (data is IJsonSerializable) {
                 (data as IJsonSerializable).WriteAsJson(output,jsonmode, annotator);
             }
             else {
+   
                 output.Write("{");
                 bool first = true;
                 var properties = data.GetType().GetProperties().OrderBy(_=>_.Name);
@@ -1124,41 +1125,79 @@ namespace Qorpent.Experiments {
                     else {
                         first =false;
                     }
+                    if (pretty)
+                    {
+                        output.WriteLine();
+                    }
+                    if (pretty)
+                    {
+                        for (var j = 0; j <= level; j++)
+                        {
+                            output.Write(LEVEL);
+                        }
+                    }
                     var name = property.Name;
                     if (mode.HasFlag(SerializeMode.LowerCase)) {
                         name = name.ToLowerInvariant();
                     }
                     WriteString(name,output);
                     output.Write(":");
-                    Write(val,output,jsonmode,defaultMode,annotator);
+                    Write(val,output,jsonmode,defaultMode,annotator,pretty,level+1);
+                }
+                if (pretty)
+                {
+                    output.WriteLine();
+                    for (var i = 0; i < level; i++)
+                    {
+                        output.Write(LEVEL);
+                    }
                 }
                 output.Write("}");
             }
         }
 
+        public const string LEVEL = "  ";
         // ReSharper disable once UnusedParameter.Local
-        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false)
+        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level = 0)
         {
            output.Write("[");
+            if (pretty) {
+                output.WriteLine();
+                for (var j = 0; j < level + 1; j++)
+                {
+                    output.Write(LEVEL);
+                }
+            }
             bool first = true;
             foreach (var i in collection) {
                 if (!first) {
                     output.Write(",");
+                    if (pretty) {
+                        output.WriteLine();
+                        for (var j = 0; j < level + 1; j++) {
+                            output.Write(LEVEL);
+                        }
+                    }
                 }
                 else {
                     first = false;
                 }
-                Write(i,output,jsonmode,defaultMode,annotator);
+                Write(i,output,jsonmode,defaultMode,annotator,pretty,level+1);
             }
             output.Write("]");
         }
 
         // ReSharper disable once UnusedParameter.Local
-        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false)
+        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator, bool pretty = false, int level = 0)
         {
+          
             output.Write("{");
             bool first = true;
-            foreach (var i in dict)
+            var data = dict as IEnumerable<KeyValuePair<T,TV>>;
+            if (pretty) {
+                data = SortedProperties(dict);
+            }
+            foreach (var i in data)
             {
                 if (!first)
                 {
@@ -1168,11 +1207,60 @@ namespace Qorpent.Experiments {
                 {
                     first = false;
                 }
+                if (pretty) {
+                    output.WriteLine();
+                }
+                if (pretty)
+                {
+                    for (var j = 0; j <= level; j++)
+                    {
+                        output.Write(LEVEL);
+                    }
+                }
                 WriteString(i.Key.ToString(),output);
                 output.Write(":");
-                Write(i.Value,output,jsonmode,defaultMode,annotator);
+                Write(i.Value,output,jsonmode,defaultMode,annotator,pretty,level+1);
+            }
+            if (pretty)
+            {
+                output.WriteLine();
+                for (var i = 0; i < level; i++)
+                {
+                    output.Write(LEVEL);
+                }
             }
             output.Write("}");
+        }
+
+        private static IEnumerable<KeyValuePair<K,V>> SortedProperties<K,V>(IDictionary<K,V> data) {
+            var keys = data.ToDictionary(_ => _.Key.ToString(), _ => _);
+            if (keys.ContainsKey("id")) {
+                yield return keys["id"];
+                keys.Remove("id");
+            }
+            if (keys.ContainsKey("code")) {
+                yield return keys["code"];
+                keys.Remove("code");
+            }
+            if (keys.ContainsKey("name"))
+            {
+                yield return keys["name"];
+                keys.Remove("name");
+            }
+            if (keys.ContainsKey("options"))
+            {
+                yield return keys["options"];
+                keys.Remove("options");
+            }
+            foreach (var p in keys.OrderBy(_=>_.Key).ToArray()) {
+                if (p.Value.Value == null || p.Value.Value.GetType().IsValueType) {
+                    yield return p.Value;
+                    keys.Remove(p.Key);
+                }
+            }
+            foreach (var p in keys.OrderBy(_=>_.Key)) {
+                yield return p.Value;
+            }
         }
 
 
