@@ -32,6 +32,21 @@ namespace Qorpent.Host.Server
 				Set("port", value);
 			}
 	    }
+
+        /// <summary>
+		///		Порт
+		/// </summary>
+	    public string Root
+        {
+            get
+            {
+                return Get<string>("root");
+            }
+            set
+            {
+                Set("root", value);
+            }
+        }
         /// <summary>
         /// Корень настройки веб-фермы
         /// </summary>
@@ -59,7 +74,7 @@ namespace Qorpent.Host.Server
         /// </summary>
         /// <returns></returns>
         public HostConfig BuildServerConfig() {
-	        return new HostConfig(Definition, BSharpContext, log: Log){LogLevel = this.LogLevel, Port = Port};
+	        return new HostConfig(Definition, BSharpContext, log: Log){LogLevel = this.LogLevel, Port = Port, RootFolder = Root};
         }
 
         /// <summary>

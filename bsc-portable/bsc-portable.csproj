@@ -121,6 +121,9 @@
     <Compile Include="..\Qorpent.BSharp.Builder\WritePrettyErrorDigest.cs">
       <Link>builder\WritePrettyErrorDigest.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Host\StaticFolderDescriptor.cs">
+      <Link>core\StaticFolderDescriptor.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\qorpent.core\Applications\Application.cs">
       <Link>core\Application.cs</Link>

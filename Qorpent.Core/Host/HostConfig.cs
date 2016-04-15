@@ -12,18 +12,7 @@ using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
-
-    public class StaticFolderDescriptor {
-        public string Key {
-            get; set; 
-            
-        }
-
-        public string Path { get; set; }
-        public string Role { get; set; }
-    }
-
-	/// <summary>
+    /// <summary>
 	///     Конфигурация хоста
 	/// </summary>
 	[Serialize]
@@ -207,6 +196,7 @@ namespace Qorpent.Host{
 		public string RootFolder{
 			get { return _rootFolder; }
 		    set {
+		        if (string.IsNullOrWhiteSpace(value)) return;
 		        if (value.Contains("@")) {
 		            _rootFolder = EnvironmentInfo.ResolvePath(value);
 		        }
