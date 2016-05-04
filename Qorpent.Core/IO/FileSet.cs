@@ -44,6 +44,7 @@ namespace Qorpent.IO {
             return 
                 from directory in Directories
                 let ndir = EnvironmentInfo.ResolvePath(directory)
+                where Directory.Exists(ndir)
                 from mask in Masks
                 let opts = Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
                 from file in Directory.GetFiles(ndir, mask,opts)

@@ -25,7 +25,9 @@
 		/// </summary>
 		public BSharpElementType Type { get; set; }
 
-		/// <summary>
+	    public bool LeveledCodes { get; set; }
+
+	    /// <summary>
 		/// </summary>
 		public bool Implicit { get; set; }
 

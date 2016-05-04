@@ -16,6 +16,8 @@
 		///     Тип импорта
 		/// </summary>
 		BSharpElementType Type { get; set; }
+        
+        bool LeveledCodes { get; set; }
 		/// <summary>
 		/// implicit element type mark
 		/// </summary>

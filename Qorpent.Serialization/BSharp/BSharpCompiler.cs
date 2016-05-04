@@ -1027,6 +1027,7 @@ namespace Qorpent.BSharp{
 				var merge = new BSharpElement();
 				merge.Name = i.Attr("code");
 				merge.TargetName = i.Attr("code");
+			    merge.LeveledCodes = i.Attr("leveledcodes").ToBool();
 				merge.Type = BSharpElementType.Define;
 				if (i.Attribute("override") != null){
 					merge.Type = BSharpElementType.Override;

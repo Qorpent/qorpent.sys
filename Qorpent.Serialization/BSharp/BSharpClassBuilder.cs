@@ -955,8 +955,20 @@ namespace Qorpent.BSharp{
 		private void PerformMergingWithElements(){
 			foreach (IBSharpElement root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()){
 				try{
-					XElement[] allroots = _cls.Compiled.Descendants(root.Name).ToArray();
-					IEnumerable<IGrouping<string, XElement>> groupedroots = allroots.GroupBy(_ => _.GetCode());
+                    //bool freenest = root.
+					XElement[] allroots =  _cls.Compiled.Descendants(root.Name).ToArray();
+					IEnumerable<IGrouping<string, XElement>> groupedroots = allroots.GroupBy(_ =>
+					{
+					    if (!root.LeveledCodes) return _.GetCode();
+					    var key = _.GetCode();
+					    var current = _;
+					    while (current.Parent != _cls.Compiled && null!=current.Parent)
+					    {
+					        current = current.Parent;
+					        key = current.GetCode() + "/" + key;
+					    }
+                        return key;
+					}).ToArray();
 					foreach (var doublers in groupedroots.Where(_ => _.Count() > 1)){
 					    if (!string.IsNullOrWhiteSpace(doublers.First().Attr("code"))) {
 					        doublers.Skip(1).Remove();

@@ -9,6 +9,31 @@ namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
 	public class MergeContentTests : CompileTestBase {
 
+	    [Test]
+	    public void LevelCodeElementMerging()
+	    {
+            var code = @"
+class X
+    element item leveledcodes=true
+    item 1
+        item 3
+    item 2
+        item 3
+    item 3 y=2
+class A
+    import X
+    +item 3 x=1
+    +item '2/3' y=5
+    ";
+            var result = Compile(code).Get("A");
+            Console.WriteLine(result.Compiled.ToString());
+            Assert.NotNull(result.Compiled.Elements("item").ElementAt(1));
+            Assert.NotNull(result.Compiled.Elements("item").ElementAt(1).Elements("item").First());
+            Assert.AreEqual("5",result.Compiled.Elements("item").ElementAt(1).Elements("item").First().Attr("y"));
+
+            Assert.AreEqual("2",result.Compiled.Elements("item").ElementAt(2).Attr("y"));
+        }
+
 		[Test]
 		public void CanMergeWithLocalAttributes(){
 			var code = @"
