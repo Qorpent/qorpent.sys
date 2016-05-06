@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Qorpent.Log;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Qorpent.Integration.BSharp.Builder {
     /// <summary>
@@ -48,6 +50,7 @@ namespace Qorpent.Integration.BSharp.Builder {
         ///     Прокатывает запись на диск всех целей
         /// </summary>
         public void Roll() {
+            
             foreach (var target in _targets) {
                 Pending.Add(RollTarget(target));
             }
@@ -105,6 +108,34 @@ namespace Qorpent.Integration.BSharp.Builder {
             if (Log != null) {
                 Log.Trace(message);
             }
+        }
+
+        public void SingleFile()
+        {
+            var etalong = Targets.FirstOrDefault();
+            if (null == etalong) return;
+            if (!Directory.Exists(etalong.Directory))
+            {
+                Directory.CreateDirectory(etalong.Directory);
+            }
+            XElement x = null;
+            foreach (var target in Targets)
+            {
+                var ent = target.Entity;
+                if (null == x)
+                {
+                    x = ent;
+                }
+                else
+                {
+                    x.Add(ent.Elements());
+                }
+            }
+            using (var sw = new StreamWriter(etalong.Path))
+            {
+                sw.Write(x.ToString());
+            }
+            WriteLog("Wrote: " + etalong.Path);
         }
     }
 }

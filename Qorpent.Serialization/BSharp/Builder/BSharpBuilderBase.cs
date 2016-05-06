@@ -182,13 +182,21 @@ namespace Qorpent.BSharp.Builder{
 		///     Загрузка расширений
 		/// </summary>
 		protected virtual void PrepareExtensions(){
-		    if (Project.DoCompileExtensions) {
-		        foreach (Type ext in DoCompileExtensions(Project.GetCompileDirectory()).GetTypes()) {
-		            if (typeof (IBSharpBuilderExtension).IsAssignableFrom(ext)) {
-                        var extension = (IBSharpBuilderExtension)Activator.CreateInstance(ext);
-                        Log.Info("Register extension: "+ext.FullName);
-                        extension.SetUp(this);
-                    }
+		    if (Project.DoCompileExtensions)
+		    {
+		        var assembly = DoCompileExtensions(Project.GetCompileDirectory());
+		        if (null != assembly)
+		        {
+
+		            foreach (Type ext in assembly.GetTypes())
+		            {
+		                if (typeof (IBSharpBuilderExtension).IsAssignableFrom(ext))
+		                {
+		                    var extension = (IBSharpBuilderExtension) Activator.CreateInstance(ext);
+		                    Log.Info("Register extension: " + ext.FullName);
+		                    extension.SetUp(this);
+		                }
+		            }
 		        }
 		    }
 			foreach (string ext in Project.Extensions){
@@ -204,17 +212,20 @@ namespace Qorpent.BSharp.Builder{
 	        Log.Info("Приступаю к компиляции расширений");
             var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v4.0" } });
 	        var assemblies = new[] {Assembly.GetEntryAssembly().GetName()};
+
             var assemblyReferences = new[]
            {
                 "System.dll",
                 "System.Core.dll",
+                "System.Xml.dll",
                 "mscorlib.dll"
             }
            .Union(from ass in assemblies
                   select new Uri(ass.CodeBase).LocalPath)
            .Union(from ass in Assembly.GetEntryAssembly().GetReferencedAssemblies()
                   where ass.Name!="WindowsBase"
-                  select ass.Name+".dll")
+                  select ass.Name.StartsWith("System")||ass.Name.StartsWith("ms") || ass.Name.StartsWith("Microsoft")? ass.Name+".dll" :
+                  Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath),ass.Name+".dll"))
                 
            .Distinct(StringComparer.OrdinalIgnoreCase)
            .ToArray();
@@ -240,6 +251,7 @@ namespace Qorpent.BSharp.Builder{
 
 	        cp.ReferencedAssemblies.AddRange(assemblyReferences);
 	        var fp = Path.GetFullPath(compiledirectory).NormalizePath();
+	        if (!Directory.Exists(fp)) return null;
 	        var files = Directory.GetFiles(fp, "*.cs", SearchOption.AllDirectories)
 	            .Where(_ =>
 	                !_.NormalizePath().Replace(fp,"").Contains("/tests/")

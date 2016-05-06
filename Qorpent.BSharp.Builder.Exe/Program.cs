@@ -132,7 +132,14 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
                 project.OutputAttributes = adict["out-layout"].To<BSharpBuilderOutputAttributes>();
             }
 
-		    if (adict.ContainsKey("out")) {
+            
+
+            if (adict.ContainsKey("compile-extensions"))
+            {
+                project.DoCompileExtensions = adict["compile-extensions"].ToBool();
+            }
+
+            if (adict.ContainsKey("out")) {
 			    project.MainOutputDirectory = adict["out"];
 		    }
             

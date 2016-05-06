@@ -140,7 +140,14 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
         /// <param name="context"></param>
         protected virtual void RollRealWriting(IBSharpContext context) {
             PrepareTargets(context);
-            WriteManager.Roll();
+            if (Project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.SingleFile))
+            {
+                WriteManager.SingleFile();
+            }
+            else
+            {
+                WriteManager.Roll();
+            }
         }
         /// <summary>
         ///     Подготавливает список целевых файлов с содержимым
@@ -149,10 +156,23 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
         /// <param name="context">Контекст компилятора</param>
         protected virtual void PrepareTargets(IBSharpContext context) {
             var targets = context.Get(DataType).ToArray();
-            targets.ToArray().AsParallel().ForAll(_ =>{
-				var target = GenerateTarget(_);
-				WriteManager.Add(target);
-			});
+            if (Project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.SingleFile))
+            {
+                foreach (var t in targets.ToArray())
+                {
+                    var target = GenerateTarget(t);
+                    WriteManager.Add(target);
+                }
+                
+            }
+            else
+            {
+                targets.ToArray().AsParallel().ForAll(_ =>
+                {
+                    var target = GenerateTarget(_);
+                    WriteManager.Add(target);
+                });
+            }
         }
         /// <summary>
         ///     Обёртывает класс с классет

@@ -35,7 +35,9 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
             PrepareWorkEnviroment();
 			
             PrepareIndexesForWriting();
-            WriteManager.Roll();
+          
+                WriteManager.Roll();
+          
         }
         /// <summary>
         /// 
