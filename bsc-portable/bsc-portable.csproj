@@ -2767,7 +2767,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>REM xcopy "d:\testrepo\.build\portable\bsc.exe" "d:\sitesoft\rddemo\tools\bsc.exe" /s /d /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "c:\code\qorpent\.build\portable\bsc.exe" "c:\code\pi\agency-demo\tools\bsc.exe" /s /d /y
+ xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\pksp_main\testresult\tools\bsc.exe" /s /d /y
+ xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\testresult\tools\bsc.exe" /s /d /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

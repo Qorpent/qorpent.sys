@@ -32,17 +32,25 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 			        Debugger.Launch();
 		        }
 		        var log = SetupLog(adict);
-		        var project = SetupProject(adict, log, builder);
-	            project.NoOutput = ConsoleMode;
-		        builder.Log = log;
-		        builder.Initialize(project);
-		        var resultContext = builder.Build();
-	            if (ConsoleMode) {
-	                WriteOutConsoleMode(resultContext);
+	            bool watch = args.Contains("--watch");
 
-	            }
-	            else {
-	                WriteOutErrors(resultContext, log);
+                var project = DoBuild(adict, log, builder,watch);
+	            if (watch)
+	            {
+                    
+	                var laststamp = GetStamp(project);
+                    Console.WriteLine("----------------------------------------------");
+                    while (true)
+	                {
+                        Thread.Sleep(2000);
+	                    var newstamp = GetStamp(project);
+	                    if (newstamp > laststamp)
+	                    {
+	                        project = DoBuild(adict, log, new BSharpBuilder(),true);
+	                        laststamp = newstamp;
+                            Console.WriteLine("----------------------------------------------");
+	                    }
+	                }
 	            }
 	            return 0;
 	        }
@@ -55,6 +63,56 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 	            }
 	            return -1;
 	        }
+        }
+
+        private static DateTime GetStamp(IBSharpProject project)
+        {
+            project = project.Get<IBSharpProject>("_real_project") ?? project;
+            var dirs = project.GetSourceDirectories().ToArray();
+            var stamp = dirs.SelectMany(_ => Directory.GetFiles(_, "*.bxls",SearchOption.AllDirectories)).Max(_ => File.GetLastWriteTime(_));
+            var stamp2 =
+                Directory.GetFiles(project.GetCompileDirectory(), "*.cs", SearchOption.AllDirectories)
+                    .Where(_ => !_.Contains("\\obj\\"))
+                    .Max(_=>File.GetLastWriteTime(_));
+            var stamp3 =
+                Directory.GetFiles(project.GetCompileDirectory(), "*.xslt", SearchOption.AllDirectories)
+                    .Where(_ => !_.Contains("\\obj\\"))
+                    .Max(_ => File.GetLastWriteTime(_));
+            
+            return new[] {stamp,stamp2,stamp3}.Max();
+        }
+
+        private static IBSharpProject DoBuild(IDictionary<string, string> adict, IUserLog log, BSharpBuilder builder, bool errorsafe = false)
+        {
+            
+            var project = SetupProject(adict, log, builder);
+            project.NoOutput = ConsoleMode;
+            try
+            {
+                builder.Log = log;
+                builder.Initialize(project);
+                var resultContext = builder.Build();
+
+                if (ConsoleMode)
+                {
+                    WriteOutConsoleMode(resultContext);
+                }
+                else
+                {
+                    WriteOutErrors(resultContext, log);
+                }
+            }
+            catch (Exception e )
+            {
+                if (errorsafe)
+                {
+                    project.Log.Error("Error in cycle",e);
+                    return project;
+                }
+                throw;
+            }
+            
+            return project;
         }
 
         private static void WriteOutConsoleMode(IBSharpContext ctx) {

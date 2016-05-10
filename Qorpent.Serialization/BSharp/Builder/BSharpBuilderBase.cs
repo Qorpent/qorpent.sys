@@ -141,6 +141,7 @@ namespace Qorpent.BSharp.Builder{
 				Log.Trace("start compile projects");
 				_realproject = Project.SafeOverrideProject(CompileRealProject());
 				_realproject.SetParent(Project);
+			    Project.Set("_real_project", _realproject);
 				Project = _realproject;
 				PrepareTasksFromProject(_realproject);
 				Log.Trace("internal project loaded");
