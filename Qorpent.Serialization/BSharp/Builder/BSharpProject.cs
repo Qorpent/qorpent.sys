@@ -38,6 +38,7 @@ namespace Qorpent.BSharp.Builder{
         private const string NOOUTPUT = "nooutput";
         private const string DOCOMPILEEXTENSIONS = "docompileextensions";
         private const string COMPILEFOLDER = "compileextensionsdir";
+        private const string GENERATEJSON = "generatejson";
 
 		private static readonly string[] overrideAttributes = new[]{
 			OUTPUT_ATTRIBUTES,
@@ -371,6 +372,12 @@ namespace Qorpent.BSharp.Builder{
         {
             get { return Get<string>(COMPILEFOLDER); }
             set { Set(COMPILEFOLDER, value); }
+        }
+
+	    public bool GenerateJson
+        {
+            get { return Get<bool>(GENERATEJSON); }
+            set { Set(GENERATEJSON, value); }
         }
 
         /// <summary>

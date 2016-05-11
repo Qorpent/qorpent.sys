@@ -100,6 +100,12 @@
     <Compile Include="..\Qorpent.BSharp.Builder\Tasks\GenerateSrcPackageTask.cs">
       <Link>builder\GenerateSrcPackageTask.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\json\JsonGeneratorTaskBase.cs">
+      <Link>builder\JsonGeneratorTaskBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\json\UniversalJsonBuilder.cs">
+      <Link>builder\UniversalJsonBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.BSharp.Builder\Tasks\LoadAllSourcesTask.cs">
       <Link>builder\LoadAllSourcesTask.cs</Link>
     </Compile>

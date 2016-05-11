@@ -30,6 +30,7 @@ namespace Qorpent.BSharp.Builder{
 			project.GenerateSrcPkg = bSharpClass["GenerateSrcPkg"].ToBool();
 			project.GenerateLibPkg = bSharpClass["GenerateLibPkg"].ToBool();
 			project.GenerateJsonModule = bSharpClass["GenerateJsonModule"].ToBool();
+			project.GenerateJson = bSharpClass["GenerateJson"].ToBool();
 			project.SrcPkgName = bSharpClass["SrcPkgName"];
 			project.LibPkgName = bSharpClass["LibPkgName"];
 			project.JsonModuleName = bSharpClass["JsonModuleName"];

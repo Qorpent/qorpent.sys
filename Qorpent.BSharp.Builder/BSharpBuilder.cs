@@ -1,6 +1,7 @@
 ﻿using System;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
+using Qorpent.BSharp.Builder.Tasks.json;
 using Qorpent.Integration.BSharp.Builder.Tasks;
 using Qorpent.Integration.BSharp.Builder.Tasks.WriteTasks;
 using Qorpent.Log;
@@ -47,6 +48,11 @@ namespace Qorpent.Integration.BSharp.Builder {
 #endif
                 if (project.GenerateJsonModule) {
 		            Tasks.Add(new GenerateJsonModuleTask());
+		        }
+
+		        if (project.GenerateJson)
+		        {
+		            Tasks.Add(new UniversalJsonBuilder());
 		        }
 
 		        Tasks.Add(new WriteErrorInfoTask());

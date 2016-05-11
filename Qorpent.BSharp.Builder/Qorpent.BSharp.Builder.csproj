@@ -28,6 +28,8 @@
     <Compile Include="Tasks\GenerateLibPackageTask.cs" />
     <Compile Include="Tasks\GeneratePackageTaskBase.cs" />
     <Compile Include="Tasks\GenerateSrcPackageTask.cs" />
+    <Compile Include="Tasks\json\UniversalJsonBuilder.cs" />
+    <Compile Include="Tasks\json\JsonGeneratorTaskBase.cs" />
     <Compile Include="Tasks\LoadAllSourcesTask.cs" />
     <Compile Include="Tasks\CompileBSharpTask.cs" />
     <Compile Include="Tasks\ResolveClassesAndNamespacesTask.cs" />

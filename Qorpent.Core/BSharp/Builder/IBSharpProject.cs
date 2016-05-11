@@ -88,6 +88,10 @@ namespace Qorpent.BSharp.Builder {
 		///Формирует Json файл с массивом рабочих классов
 		/// </summary>
 		bool GenerateJsonModule { get; set; }
+        /// <summary>
+        /// Формирует кастомный JSON
+        /// </summary>
+		bool GenerateJson { get; set; }
 
 	    /// <summary>
 	    /// Флаг необходимости генерации графической карты классов
