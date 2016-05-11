@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Microsoft.Win32;
 using Qorpent.BSharp.Matcher;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
@@ -339,7 +340,11 @@ namespace Qorpent.BSharp{
 			               _i.GetName() == BSharpSyntax.IncludeBodyModifier;
 			var stub = new XElement("_");
 			XElement stubi = null;
-			if (usebody && null != _i.Element(BSharpSyntax.IncludeGroupByClause) ||
+            if (!usebody && null != _i.Element(BSharpSyntax.IncludeOrderByClause))
+            {
+                sources = OrderSources(sources, _i);
+            }
+            if (usebody && null != _i.Element(BSharpSyntax.IncludeGroupByClause) ||
 			    null != _i.Element(BSharpSyntax.IncludeOrderByClause)){
 				stubi = new XElement(_i);
 				_i = new XElement(_i);
@@ -352,6 +357,7 @@ namespace Qorpent.BSharp{
 					}
 				}
 			}
+		    
 			foreach (IBSharpClass s in sources){
 				var __cls = _cls as BSharpClass;
 				if (null != __cls && !__cls.LateIncludedClasses.Contains(s)){
@@ -379,7 +385,57 @@ namespace Qorpent.BSharp{
 			i.ReplaceWith(stub.Elements());
 		}
 
-		private void ResolveDictionaries(){
+	    private static object sync = new object();
+        
+	    private static IBSharpClass[] OrderSources(IBSharpClass[] sources, XElement _i)
+	    {
+	        lock (sync)
+	        {
+	            var orders = _i.Elements(BSharpSyntax.IncludeOrderByClause);
+	            var ordered = sources.OrderBy(_ => _.Source.Attr("_file")).ThenBy(_ => _.Source.Attr("_line").ToInt());
+	            foreach (var e in orders)
+	            {
+	                var num = e.GetSmartValue("number").ToBool();
+	                var desc = e.GetSmartValue("desc").ToBool();
+	                var date = e.GetSmartValue("date").ToBool();
+	                var attr = e.Attr("code");
+	                Func<IBSharpClass, object> getval = _ =>
+	                {
+	                    object val = null;
+	                    if (attr == string.Empty || attr == "docorder")
+	                    {
+	                        val = _.Source.Attr("_file") + (100000000000 + _.Source.Attr("_line").ToInt());
+	                    }
+	                    else
+	                    {
+                            val = _.Compiled.Attr(attr);
+                        }
+	                    
+	                    if (num)
+	                    {
+	                        val = val.ToLong();
+	                    }
+	                    else if (date)
+	                    {
+	                        val = val.ToDate();
+	                    }
+	                    return val;
+	                };
+	                if (desc)
+	                {
+	                    ordered = ordered.ThenByDescending(getval);
+	                }
+	                else
+	                {
+	                    ordered = ordered.ThenBy(getval);
+	                }
+	            }
+	            sources = ordered.ToArray();
+	            return sources;
+	        }
+	    }
+
+	    private void ResolveDictionaries(){
 			if (!_cls.Is(BSharpClassAttributes.RequireDictionaryResolution)) return;
 			foreach (XAttribute a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())){
 				string val = a.Value;

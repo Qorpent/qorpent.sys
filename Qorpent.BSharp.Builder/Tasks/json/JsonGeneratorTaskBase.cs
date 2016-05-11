@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Experiments;
 using Qorpent.Integration.BSharp.Builder.Tasks;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder.Tasks.json {
@@ -43,8 +44,13 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             return result;
         }
         
-        protected IDictionary<string, object> Refine(object target, XElement src, bool removezeroes = true) {
-            var options = GetOptions(src,"id","code","name","fullcode","prototype");
+        protected IDictionary<string, object> Refine(object target, XElement src, bool removezeroes = true, string[] remove = null  ,string[] noopt = null  )
+        {
+            remove = remove ?? new string[] {};
+            noopt = noopt ?? new string[] {};
+            var opts =
+                new[] {"id", "code", "name", "fullcode", "prototype"}.Union(noopt).Union(remove).ToArray();
+            var options = GetOptions(src,opts);
             var j = target is IDictionary<string, object> ? target as IDictionary<string, object> : target.jsonifymap();
             if (string.IsNullOrWhiteSpace(j.str("id"))) {
                 j["id"] = src.GetCode();
@@ -62,11 +68,19 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
                     options.Remove(option.Key);
                 }
             }
-            if (options.Count != 0) {
-                j["options"] = options;
+            foreach (var rootattribute in noopt)
+            {
+                object val = src.Attr(rootattribute);
+                j[rootattribute] = val.Guess();
             }
+           
             if (removezeroes) {
+                RemoveZeroes(options);
                 RemoveZeroes(j);
+            }
+            if (options.Count != 0)
+            {
+                j["options"] = options;
             }
             return j;
         }

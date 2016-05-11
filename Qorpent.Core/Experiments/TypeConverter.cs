@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Qorpent.Experiments;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
 {
@@ -451,6 +452,38 @@ namespace Qorpent.Utils
 			return result;
 		}
 
+	    public static object Guess(this object obj)
+	    {
+	        if (obj == null) return null;
+	        if (obj is string)
+	        {
+	            var s = (string) obj;
+                if (s.ToLower() == "true" || s.ToLower() == "false")
+                {
+                    return obj.ToBool();
+                }
+                if (s.Contains(".") && obj.ToDecimal(true) != 0)
+                {
+                    return obj.ToDecimal();
+                }
+                if (s == "0" || obj.ToLong() != 0)
+	            {
+	                var lng = obj.ToLong();
+	                if (lng > int.MaxValue)
+	                {
+	                    return lng;
+	                }
+	                return (int) lng;
+	            }
+              
+                if (s.ToDate(true).Year > 1900)
+	            {
+	                return obj.ToDate(true);
+	            }
+               
+	        }
+	        return obj;
+	    }
 
 		/// <summary>
 		/// Effective boolean value for given object
