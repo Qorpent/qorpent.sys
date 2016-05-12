@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -806,7 +807,8 @@ namespace Qorpent.IoC {
                             cb.OnContainerCreateInstanceFinished();
                     }
                     
-                    if (null == val && i.required) {
+                    if (null == val && i.required)
+                    {
                         throw new ContainerException("cannot inject required member "+i.name+" of type "+i.type);
                     }
                 }
