@@ -360,7 +360,7 @@ namespace Qorpent.IoC {
 				yield break;
 			}
 
-			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false,object context = null) {
+			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false,object context = null, bool autoonly=false) {
 				yield break;
 			}
 
