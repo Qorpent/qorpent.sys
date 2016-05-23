@@ -19,6 +19,7 @@
     <Compile Include="BSharpBuilderWriteManager.cs" />
     <Compile Include="BSharpBuilderWriteTarget.cs" />
     <Compile Include="BSharpBuilderExtensions.cs" />
+    <Compile Include="Tasks\xslt\ApplyXsltTask.cs" />
     <Compile Include="Tasks\GenerateJsonModuleTask.cs" />
     <Compile Include="Helpers\DirectoryFileFilter.cs" />
     <Compile Include="Helpers\ClassFilter.cs" />
@@ -37,6 +38,9 @@
     <Compile Include="Tasks\WriteTasks\WriteOrphansOutputTask.cs" />
     <Compile Include="Tasks\WriteTaskBase.cs" />
     <Compile Include="Tasks\WriteTasks\WriteWorkingOutputTask.cs" />
+    <Compile Include="Tasks\xslt\BSharpXmlResolver.cs" />
+    <Compile Include="Tasks\xslt\ProjectUriResolver.cs" />
+    <Compile Include="Tasks\xslt\XsltTask.cs" />
     <Compile Include="WritePrettyErrorDigest.cs" />
   </ItemGroup>
   <ItemGroup>

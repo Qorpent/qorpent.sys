@@ -46,7 +46,10 @@ namespace Qorpent.BSharp{
 		private string _patchTarget;
 		private IList<IBSharpClass> _referencedClasses;
 		private IList<string> _referencedDictionaries;
-		private IList<BSharpEvaluation> _selfdefs;
+
+        private IList<BSharpEvaluation> _selfdefs;
+
+
 
 		/// <summary>
 		/// </summary>

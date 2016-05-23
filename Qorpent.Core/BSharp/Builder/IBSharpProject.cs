@@ -157,6 +157,7 @@ namespace Qorpent.BSharp.Builder {
 
 	    bool DoCompileExtensions { get; set; }
 	    string CompileFolder { get; set; }
+	    bool ExecuteXsltTasks { get; set; }
 
 	    /// <summary>
 		/// Возвращает путь к целевой директории

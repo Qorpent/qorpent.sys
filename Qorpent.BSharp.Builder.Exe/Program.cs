@@ -106,7 +106,7 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
             {
                 if (errorsafe)
                 {
-                    project.Log.Error("Error in cycle",e);
+                    project.Log.Error("Error in cycle "+e,e);
                     return project;
                 }
                 throw;

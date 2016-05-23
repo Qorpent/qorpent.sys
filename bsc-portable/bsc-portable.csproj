@@ -124,6 +124,18 @@
     <Compile Include="..\Qorpent.BSharp.Builder\Tasks\WriteTasks\WriteWorkingOutputTask.cs">
       <Link>builder\WriteWorkingOutputTask.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\xslt\ApplyXsltTask.cs">
+      <Link>builder\ApplyXsltTask.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\xslt\BSharpXmlResolver.cs">
+      <Link>builder\BSharpXmlResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\xslt\ProjectUriResolver.cs">
+      <Link>builder\ProjectUriResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.BSharp.Builder\Tasks\xslt\XsltTask.cs">
+      <Link>builder\XsltTask.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.BSharp.Builder\WritePrettyErrorDigest.cs">
       <Link>builder\WritePrettyErrorDigest.cs</Link>
     </Compile>
@@ -2775,7 +2787,8 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "c:\code\qorpent\.build\portable\bsc.exe" "c:\code\pi\agency-demo\tools\bsc.exe" /s /d /y
  xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\pksp_main\testresult\tools\bsc.exe" /s /d /y
- xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\testresult\tools\bsc.exe" /s /d /y</PostBuildEvent>
+ xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\testresult\tools\bsc.exe" /s /d /y
+ xcopy "c:\code\qorpent\.build\portable\bsc.exe" "C:\code\pksp\pksp-all\tools" /s /d /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
