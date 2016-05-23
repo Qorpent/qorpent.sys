@@ -46,7 +46,7 @@ namespace Qorpent.IoC {
 		/// <param name="requreManifest"> </param>
 		/// <param name="context"></param>
 		/// <returns> </returns>
-		IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false,object context = null);
+		IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false,object context = null, bool autoonly=false);
 
 		/// <summary>
 		/// 	Читает манифетсы приложения и конструирует единый
