@@ -41,6 +41,7 @@ namespace Qorpent.BSharp{
 		public BSharpContext(IBSharpCompiler compiler = null){
 			Compiler = compiler;
 			ExtendedData = new Dictionary<string, object>();
+            Working = new List<IBSharpClass>();
 		}
 
 

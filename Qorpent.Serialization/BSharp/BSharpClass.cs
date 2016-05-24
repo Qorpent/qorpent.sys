@@ -50,12 +50,15 @@ namespace Qorpent.BSharp{
         private IList<BSharpEvaluation> _selfdefs;
 
 
-
+	    public BSharpClass()
+	    {
+            SelfElements = new List<IBSharpElement>();
+            SelfImports = new List<IBSharpImport>();
+        }
 		/// <summary>
 		/// </summary>
-		public BSharpClass(IBSharpContext context){
-			SelfElements = new List<IBSharpElement>();
-			SelfImports = new List<IBSharpImport>();
+		public BSharpClass(IBSharpContext context):this(){
+			
 			_context = context;
 		}
 
@@ -280,12 +283,14 @@ namespace Qorpent.BSharp{
 			}
 		}
 
+	    private string _prototype;
 		/// <summary>
 		///     Прототип класса
 		/// </summary>
 		[Serialize]
 		public string Prototype{
-			get { return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute); }
+			get { return _prototype?? (_prototype = Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute)); }
+			set { _prototype = value; }
 		}
 
 		/// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder.Tasks.xslt
 {
@@ -50,34 +51,41 @@ namespace Qorpent.BSharp.Builder.Tasks.xslt
             {
 
                 case "project":
-                    return Path.Combine(_project.GetRootDirectory(),uri.Host,uri.AbsolutePath);
+                    return Path.Combine(_project.GetRootDirectory(),uri.Host+"/"+uri.AbsolutePath).NormalizePath();
                 case "output":
-                    return Path.Combine(_project.GetOutputDirectory(), uri.Host, uri.AbsolutePath);
+                    return Path.Combine(_project.GetOutputDirectory(), uri.Host+"/"+uri.AbsolutePath).NormalizePath();
                 case "compile":
-                    return Path.Combine(_project.GetCompileDirectory(), uri.Host, uri.AbsolutePath);
+                    return Path.Combine(_project.GetCompileDirectory(), uri.Host+"/"+uri.AbsolutePath).NormalizePath();
                 default:
                     throw new Exception("not supported uri");
             }
         }
 
-        public IEnumerable<IBSharpClass> GetClasses(Uri uri)
-        {
-
+        public IEnumerable<IBSharpClass> GetClasses(Uri uri) {
+            string query = "";
             switch (uri.Scheme)
             {
 
                 case "class":
-                    var cls = _project.Context.Get(uri.Host);
+                    query = uri.Query;
+                    IBSharpClass cls;
+                    if (query.StartsWith("?")) {
+                        query = query.Substring(1);
+                        cls = _project.Context.ResolveAll(query).FirstOrDefault();
+                    }
+                    else {
+                        cls = _project.Context.Get(uri.Host);
+                    }
                     return null == cls ? new IBSharpClass[] {} : new []{cls};
                 case "classes":
                     var path = uri.Host;
-                    var query = uri.Query;
+                    query = uri.Query;
                     if (query.StartsWith("?"))
                     {
                         query = query.Substring(1);
                     }
                     path += query;
-                    return _project.Context.ResolveAll(query).ToArray();
+                    return _project.Context.ResolveAll(path).ToArray();
               
                 default:
                     throw new Exception("not supported uri");

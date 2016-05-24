@@ -11,8 +11,9 @@ namespace Qorpent.BSharp.Builder.Tasks.xslt
     {
         public ApplyXsltTask()
         {
-            this.Phase = BSharpBuilderPhase.PostBuild;
-            this.Index = Index = TaskConstants.CompileBSharpTaskIndex + 10;
+            this.Phase = BSharpBuilderPhase.PostProcess;
+            this.Index = Index = TaskConstants.WriteWorkingOutputTaskIndex + 10;
+            this.Async = false;
         }
         public override void Execute(IBSharpContext context)
         {
@@ -33,7 +34,7 @@ namespace Qorpent.BSharp.Builder.Tasks.xslt
                     {
                         Class = xslttask,
                         Error = e,
-                        Message = "Error in xslt task"
+                        Message = "Error in xslt task:\r\n"+e.ToString()
                     });
                     Project.Log.Error("Error in xslt "+xslttask.FullName,e);
                 }

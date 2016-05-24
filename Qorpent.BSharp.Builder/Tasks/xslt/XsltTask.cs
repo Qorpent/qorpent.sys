@@ -55,16 +55,17 @@ namespace Qorpent.BSharp.Builder.Tasks.xslt
                     var args = BuildArgs(classes, cls);
                     var path =
                         _resolver.GetPath(OutputPath)
-                            .Replace("_NS_", cls.Namespace)
-                            .Replace("_NAME_", cls.Name)
-                            .Replace("_PROTO_", cls.Prototype);
+                            .Replace("_ns_", cls.Namespace)
+                            .Replace("_name_", cls.Name)
+                            .Replace("_proto_", cls.Prototype);
                     Execute(xslt,xml,args,path);
                 }
             }
+            
         }
 
-        private void Execute(XslCompiledTransform xslt, XElement xml, XsltArgumentList args, string path)
-        {
+        private void Execute(XslCompiledTransform xslt, XElement xml, XsltArgumentList args, string path) {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             if (NoXml)
             {
                 using (var tw = new StreamWriter(path))
