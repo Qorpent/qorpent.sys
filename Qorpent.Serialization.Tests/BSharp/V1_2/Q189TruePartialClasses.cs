@@ -62,8 +62,11 @@ class A partial y=2
 ");
 			var cls = ctx["A"];
 			Console.WriteLine(cls.Compiled.ToString().Replace("\"","\"\""));
+		    Assert.AreEqual("1",cls.Compiled.Attr("x"));
+		    Assert.AreEqual("1",cls.Compiled.Attr("a"));
+		    Assert.AreEqual("2",cls.Compiled.Attr("b"));
+		    Assert.AreEqual("2",cls.Compiled.Attr("y"));
 
-            Assert.AreEqual(@"<class code=""A"" name=""partial"" y=""2"" x=""1"" fullcode=""A"" b=""2"" a=""1"" />".Trim().LfOnly(), cls.Compiled.ToString().Trim().LfOnly());
 
 		}
 

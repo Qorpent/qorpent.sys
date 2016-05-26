@@ -344,8 +344,8 @@ namespace Qorpent.BSharp{
             {
                 sources = OrderSources(sources, _i);
             }
-            if (usebody && null != _i.Element(BSharpSyntax.IncludeGroupByClause) ||
-			    null != _i.Element(BSharpSyntax.IncludeOrderByClause)){
+            if (usebody && (null != _i.Element(BSharpSyntax.IncludeGroupByClause) ||
+			    null != _i.Element(BSharpSyntax.IncludeOrderByClause))){
 				stubi = new XElement(_i);
 				_i = new XElement(_i);
 				foreach (XElement e in _i.Elements().ToArray()){

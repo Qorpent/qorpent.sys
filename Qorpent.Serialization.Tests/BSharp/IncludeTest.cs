@@ -75,7 +75,43 @@ class B
 </class>".Trim().LfOnly().Length, result.Trim().LfOnly().Length);
 		}
 
-		[Test]
+        [Test]
+        public void IncludeAllWithElementNameAndInterpolation()
+        {
+            var code = @"
+class Z.A prototype=X x=1 text='d:%{u}:d' embed
+class B u=2
+	include all X element=z keepcode
+       
+";
+            var result = Compile(code).Get("B").Compiled.ToString().Replace("\"", "'");
+            Console.WriteLine(result);
+            Assert.AreEqual(@"<class code='B' u='2' fullcode='B'>
+  <z code='A' prototype='X' x='1' text='d:2:d' fullcode='Z.A' />
+</class>".Trim().LfOnly().Length, result.Trim().LfOnly().Length);
+
+        }
+
+
+        [Test]
+        public void Bug_IncludeAllWithElementNameAndInterpolation_WithOrderBy()
+        {
+            var code = @"
+class Z.A prototype=X x=1 text='d:%{u}:d' embed
+class B u=2
+	include all X element=z keepcode
+        orderby idx
+		orderby docorder
+";
+            var result = Compile(code).Get("B").Compiled.ToString().Replace("\"", "'");
+            Console.WriteLine(result);
+            Assert.AreEqual(@"<class code='B' u='2' fullcode='B'>
+  <z code='A' prototype='X' x='1' text='d:2:d' fullcode='Z.A' />
+</class>".Trim().LfOnly().Length, result.Trim().LfOnly().Length);
+
+        }
+
+        [Test]
 		public void IncludeAllWithWhereAndCrossList(){
 			var @code = @"
 class a

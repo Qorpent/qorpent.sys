@@ -11,6 +11,7 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Serialization.Tests.BSharp
 {
     [TestFixture]
+    [Explicit]
     public class BscHelperTest
     {
         private string dir;
