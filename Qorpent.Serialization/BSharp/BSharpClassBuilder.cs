@@ -528,7 +528,8 @@ namespace Qorpent.BSharp{
 			MergeInternals();
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
-			PerformMergingWithElements();
+            ApplyElementAliases();
+            PerformMergingWithElements();
 		    ProcessInElementUpSets();
 			InterpolateElements();
 			CleanupElementsWithConditions();
@@ -537,6 +538,30 @@ namespace Qorpent.BSharp{
 			CleanupPrivateMembers();
 			CheckoutRequireLinkingRequirements();
 		}
+
+	    private void ApplyElementAliases() {
+	        var aliases = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Alias).ToArray();
+	        Action<IBSharpElement,XElement, string> apply = (e,_, n) => {
+	            _.Name = n;
+	            if (!string.IsNullOrWhiteSpace(e.TargetAttr)) {
+	                _.SetAttributeValue(e.TargetAttr,e.TargetValue);
+	            }
+	        };
+	        foreach (var alias in aliases) {
+                foreach (var descendant in _cls.Compiled.Descendants(alias.Name)) {
+                    apply(alias,descendant, alias.Alias);
+                }
+                foreach (var descendant in _cls.Compiled.Descendants("__TILD__"+alias.Name))
+                {
+                    apply(alias, descendant, "__TILD__"+alias.Alias);
+                }
+                foreach (var descendant in _cls.Compiled.Descendants("__PLUS__"+alias.Name))
+                {
+                    apply(alias, descendant, "__PLUS__" + alias.Alias);
+                }
+            }
+	        
+        }
 
 	    private void ProcessInElementUpSets() {
 	        var elements = _cls.Compiled.Descendants(BSharpSyntax.UpSetBlock).ToArray();

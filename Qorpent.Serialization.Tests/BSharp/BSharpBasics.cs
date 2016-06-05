@@ -22,6 +22,9 @@ namespace Qorpent.Serialization.Tests.BSharp
 			Assert.AreEqual(1, result.Working.Count);
 		}
 
+
+
+
 	    [TestCase("ab",1)]
 	    [TestCase("Ab",8)]
 	    [TestCase("BA",3)]
@@ -157,6 +160,19 @@ class cs_basis
             Console.WriteLine(result["cs_basis"].Compiled);
             Assert.False(result["cs_basis"].Compiled.ToString().Contains("${.condition}"));
         }
+
+	    [Test]
+	    public void ElementAliasParsed() {
+	        var result = Compile(@"
+class A
+    element i alias=z targetattr=a targetvalue=b
+").Get("A");
+	        var e = result.SelfElements.First(_ => _.Name == "i");
+            Assert.AreEqual("z",e.Alias);
+            Assert.AreEqual("a",e.TargetAttr);
+            Assert.AreEqual("b",e.TargetValue);
+            Assert.AreEqual(BSharpElementType.Alias,e.Type);
+	    }
 
 		[Test]
 		public void CanCompileSingleClass() {

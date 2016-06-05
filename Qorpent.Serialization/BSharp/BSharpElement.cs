@@ -12,6 +12,10 @@
 			set { _name = value; }
 		}
 
+        public string Alias { get; set; }
+        public string TargetAttr { get; set; }
+        public string TargetValue { get; set; }
+
 		/// <summary>
 		///     Имя цели мержинга (рут)
 		/// </summary>

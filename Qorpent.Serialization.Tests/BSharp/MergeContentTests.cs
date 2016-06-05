@@ -187,6 +187,28 @@ base B
 			}
 		}
 
+	    [Test]
+	    public void AliasedElementsSupprt() {
+            var result = Compile(@"
+class base abstract
+    element item
+    element itema alias=item targetattr=x targetvalue=a
+    element itemb alias=item targetattr=y targetvalue=b
+class A
+    import base
+    item x
+    itema y
+    itemb z
+").Get("A");
+	        var str = result.Compiled.ToString().Simplify(SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+            Assert.AreEqual(@"<class code='A' fullcode='A'>
+  <item code='x' />
+  <item code='y' x='a' />
+  <item code='z' y='b' />
+</class>", str);
+	    }
+
 		[Test]
 		public void CanOverrideElementBody()
 		{

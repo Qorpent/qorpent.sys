@@ -1028,6 +1028,9 @@ namespace Qorpent.BSharp{
 				merge.Name = i.Attr("code");
 				merge.TargetName = i.Attr("code");
 			    merge.LeveledCodes = i.Attr("leveledcodes").ToBool();
+			    merge.Alias = i.Attr("alias");
+			    merge.TargetAttr = i.Attr("targetattr");
+			    merge.TargetValue = i.Attr("targetvalue");
 				merge.Type = BSharpElementType.Define;
 				if (i.Attribute("override") != null){
 					merge.Type = BSharpElementType.Override;
@@ -1037,6 +1040,10 @@ namespace Qorpent.BSharp{
 					merge.Type = BSharpElementType.Extension;
 					merge.TargetName = i.Attr("extend");
 				}
+			    if (!string.IsNullOrEmpty(merge.Alias)) {
+			        merge.Type= BSharpElementType.Alias;
+			        
+			    }
 				def.SelfElements.Add(merge);
 			}
 		}

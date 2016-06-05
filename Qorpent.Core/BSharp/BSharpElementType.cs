@@ -17,5 +17,6 @@
 		///     Расширение
 		/// </summary>
 		Extension,
+	    Alias
 	}
 }

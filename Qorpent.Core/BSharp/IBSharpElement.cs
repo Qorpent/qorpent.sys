@@ -23,5 +23,9 @@
 		/// </summary>
 		/// <remarks>Added to v1.2 due to Q-188</remarks>
 		bool Implicit { get; set; }
+
+	    string Alias { get; set; }
+	    string TargetAttr { get; set; }
+	    string TargetValue { get; set; }
 	}
 }
