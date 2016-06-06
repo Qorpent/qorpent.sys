@@ -1,4 +1,6 @@
-﻿namespace Qorpent.BSharp{
+﻿using System.Xml.Linq;
+
+namespace Qorpent.BSharp{
 	/// <summary>
 	/// </summary>
 	public class BSharpElement : IBSharpElement{
@@ -15,8 +17,10 @@
         public string Alias { get; set; }
         public string TargetAttr { get; set; }
         public string TargetValue { get; set; }
+	    public bool Copy { get; set; }
+	    public XElement Definition { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		///     Имя цели мержинга (рут)
 		/// </summary>
 		public string TargetName{

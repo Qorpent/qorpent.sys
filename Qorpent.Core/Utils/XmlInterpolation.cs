@@ -255,7 +255,7 @@ namespace Qorpent.Utils {
                 while (changed) {
                     changed = false;
                     foreach (var a in source.Attributes().OrderBy(_ => {
-                        if (_.Value.Contains("${") && _.Value.Contains("(")) {
+                        if (_.Value.Contains(AncorSymbol+"{") && _.Value.Contains("(")) {
                             return 1000;
                         }
                         return 0;

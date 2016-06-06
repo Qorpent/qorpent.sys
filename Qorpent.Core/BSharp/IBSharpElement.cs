@@ -1,4 +1,8 @@
-﻿namespace Qorpent.BSharp {
+﻿using System.Security.Permissions;
+using System.Xml.Linq;
+using Qorpent.IO.Resources;
+
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// Интерфейс определения элемента класса
 	/// </summary>
@@ -27,5 +31,9 @@
 	    string Alias { get; set; }
 	    string TargetAttr { get; set; }
 	    string TargetValue { get; set; }
+
+        bool Copy { get; set; }
+
+        XElement Definition { get; set; }
 	}
 }

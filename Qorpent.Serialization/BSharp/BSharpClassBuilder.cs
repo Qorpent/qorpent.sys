@@ -80,9 +80,11 @@ namespace Qorpent.BSharp{
 
 			else if (BuildPhase.CrossClassLink == phase){
 				PerformCrossClassLinking();
-			}
+                PerformLateInterpolations();
+            }
 
 			else if (BuildPhase.Evaluate == phase){
+				
 				PerformEvaluation();
 			}
 			else if (BuildPhase.ApplyPatch == phase){
@@ -93,7 +95,15 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-		private void DoPostProcess() {
+	    private void PerformLateInterpolations() {
+            if (_cls.Is(BSharpClassAttributes.RequireLateInterpolationExt)) {
+	            var xi = new XmlInterpolation {AncorSymbol = '#'};
+	            xi.Interpolate(_cls.Compiled,GetInterpolationContext());
+	        }
+            
+        }
+
+	    private void DoPostProcess() {
 		    ApplyMacroses();
 		    PostProcessSelection();
 		    PostProcessRemoveBefores();
@@ -529,6 +539,7 @@ namespace Qorpent.BSharp{
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
             ApplyElementAliases();
+            ApplyElementRewrites();
             PerformMergingWithElements();
 		    ProcessInElementUpSets();
 			InterpolateElements();
@@ -538,6 +549,39 @@ namespace Qorpent.BSharp{
 			CleanupPrivateMembers();
 			CheckoutRequireLinkingRequirements();
 		}
+
+	    private void ApplyElementRewrites() {
+            var rewrites = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Rewrite).ToArray();
+	        foreach (var rw in rewrites) {
+	            var newcontent = rw.Definition.Elements();
+	            var targets = _cls.Compiled.Elements(rw.Name).ToArray();
+	            foreach (var element in targets) {
+	                element.ReplaceWith(newcontent.Select(_=>ApplyRewrite(rw,_,element)).ToArray());
+	            }
+	        }
+        }
+
+	    private XElement ApplyRewrite(IBSharpElement rw, XElement src, XElement element) {
+            var global = GetInterpolationContext();
+	        var xi = new XmlInterpolation {AncorSymbol = '%'};
+	        var scope = new Scope(global) {
+	            ["element"] = element,
+	            ["self"] = _cls.Compiled,
+	            ["this"] = src
+	        };
+	        var result = xi.Interpolate(new XElement(src), scope);
+	        if (rw.Copy) {
+	            foreach (var a in element.Attributes()) {
+	                if (null == result.Attribute(a.Name)) {
+	                    result.Add(a);
+	                }
+	            }
+	            foreach (var e in element.Elements()) {
+	                result.Add(e);
+	            }
+	        }
+	        return result;
+	    }
 
 	    private void ApplyElementAliases() {
 	        var aliases = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Alias).ToArray();
@@ -679,10 +723,19 @@ namespace Qorpent.BSharp{
 		private void CheckoutRequireLinkingRequirements(){
 			if (
 				_cls.Compiled.DescendantsAndSelf()
-				    .Any(_ => _.Value.Contains("%{") || _.Attributes().Any(__ => __.Value.Contains("%{")))){
+				    .Any(_ => _.Value.Contains("%{")  || 
+                    _.Attributes().Any(__ => __.Value.Contains("%{") ))){
 				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
 			}
-			bool ispureEmbed = _cls.Is(BSharpClassAttributes.Embed) && !_cls.Is(BSharpClassAttributes.Patch);
+        
+            if (
+                _cls.Compiled.DescendantsAndSelf()
+                    .Any(_ => _.Value.Contains("#{") ||
+                    _.Attributes().Any(__ => __.Value.Contains("#{"))))
+                {
+                    _cls.Set(BSharpClassAttributes.RequireLateInterpolationExt);
+                }
+            bool ispureEmbed = _cls.Is(BSharpClassAttributes.Embed) && !_cls.Is(BSharpClassAttributes.Patch);
 			if (ispureEmbed) return;
 			IEnumerable<XAttribute> attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
 
@@ -915,10 +968,11 @@ namespace Qorpent.BSharp{
 					includeelement.Name = i.Attribute("element").Value;
 				}
 			}
-
+            
 			if (cls.Is(BSharpClassAttributes.RequireLateInterpolation)){
 				_lateincluder.Interpolate(includeelement, i);
 			}
+            
 		}
 
 		private XElement[] ExtractIncludeBody(XElement i, XElement includeelement, bool nochild){
@@ -1337,6 +1391,16 @@ namespace Qorpent.BSharp{
 	        if (_cls.InterpolationContext != null) {
 	            return _cls.InterpolationContext;
 	        }
+	        var advctx = BuildScopeFunctions();
+	        var result = new Scope(advctx);
+	        result.SetParent(_compiler.Global);
+
+	        _cls.InterpolationContext = result;
+
+	        return _cls.InterpolationContext;
+	    }
+
+	    private object BuildScopeFunctions() {
 	        IDictionary<string, seq> _sequences = new ConcurrentDictionary<string, seq>();
 	        var initseq = (Func<string, int, int, string>) ((n, start, step) => {
 	            if (0 == step) {
@@ -1348,6 +1412,9 @@ namespace Qorpent.BSharp{
 	        var advctx = new {
 	            mycls = _cls,
 	            initseq = initseq,
+                xpathvalue = (Func<string, object>)(xpath => {
+                    return _cls.Compiled.XPathEvaluate(xpath);
+                }),
 	            nextseq = (Func<string, int>) (n => {
 	                if (string.IsNullOrWhiteSpace(n)) {
 	                    n = "default";
@@ -1358,12 +1425,7 @@ namespace Qorpent.BSharp{
 	                return _sequences[n].Next();
 	            })
 	        };
-	        var result = new Scope(advctx);
-	        result.SetParent(_compiler.Global);
-
-	        _cls.InterpolationContext = result;
-
-	        return _cls.InterpolationContext;
+	        return advctx;
 	    }
 
 

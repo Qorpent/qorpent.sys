@@ -65,6 +65,7 @@
     <Compile Include="BSharp\MergeContentTests.cs" />
     <Compile Include="BSharp\BSharpBasics.cs" />
     <Compile Include="BSharp\TbxlSamples.cs" />
+    <Compile Include="LateInterpolationSupport.cs" />
     <Compile Include="MigrationUtility\SpecialPathsInScopeToolkit.cs" />
     <Compile Include="PortableHtml\PortableHtmlConverterTest.cs" />
     <Compile Include="PortableHtml\PortableHtmlContextTests.cs" />

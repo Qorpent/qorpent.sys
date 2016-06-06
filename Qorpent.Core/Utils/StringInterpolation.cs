@@ -357,8 +357,13 @@ namespace Qorpent.Utils
 	        if (code.Contains("(") && code.EndsWith(")")) {
 	            resolvedCode = code.Substring(0, code.IndexOf('('));
 	            var _args = code.Substring(code.IndexOf('(') + 1);
-	            _args = _args.Substring(0, _args.Length - 1);
-	            args = _args.SmartSplit().ToArray();
+	            _args = _args.Substring(0, _args.Length - 1).Trim();
+	            if (_args.StartsWith("\"") && _args.EndsWith("\"") && _args.Count(_ => _=='"')==2) { //hot hack fix for long xpaths
+	                args = new[] {_args};
+	            }
+	            else {
+	                args = _args.SmartSplit().ToArray();
+	            }
 	        }
 	        object val = null;
 	        if (!_source.ContainsKey(resolvedCode)) {

@@ -17,7 +17,9 @@ namespace Qorpent.Utils.Extensions {
         NoUndescores = 64,
         NoDashes = 128,
 
-        Full = Trim | NoWs | SingleQuotes | LowerCase | NoUndescores | NoDashes 
+        Full = Trim | NoWs | SingleQuotes | LowerCase | NoUndescores | NoDashes ,
+        Test = LfOnly | SingleQuotes,
+       
         
     }
 }

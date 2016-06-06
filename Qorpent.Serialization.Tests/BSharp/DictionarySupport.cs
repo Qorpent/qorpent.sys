@@ -28,6 +28,9 @@ class B y=??x.a
             var compiled = Compile(code).Get("B").Compiled;
             Assert.AreEqual("test",compiled.Attr("y"));
         }
+
+
+
         [Test]
         public void CanSupplyNotResolvedValue()
         {

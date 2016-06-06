@@ -1025,6 +1025,8 @@ namespace Qorpent.BSharp{
 		private static void ParseCompoundElements(XElement e, IBSharpClass def){
 			foreach (XElement i in e.Elements(BSharpSyntax.ClassElementDefinition)){
 				var merge = new BSharpElement();
+			    merge.Definition =new XElement( i);
+                i.Elements().Remove();
 				merge.Name = i.Attr("code");
 				merge.TargetName = i.Attr("code");
 			    merge.LeveledCodes = i.Attr("leveledcodes").ToBool();
@@ -1032,6 +1034,7 @@ namespace Qorpent.BSharp{
 			    merge.TargetAttr = i.Attr("targetattr");
 			    merge.TargetValue = i.Attr("targetvalue");
 				merge.Type = BSharpElementType.Define;
+                
 				if (i.Attribute("override") != null){
 					merge.Type = BSharpElementType.Override;
 					merge.TargetName = i.Attr("override");
@@ -1044,6 +1047,11 @@ namespace Qorpent.BSharp{
 			        merge.Type= BSharpElementType.Alias;
 			        
 			    }
+			    if (i.GetSmartValue("rewrite").ToBool()) {
+			        merge.Type = BSharpElementType.Rewrite;
+			        merge.Copy = i.Attr("copy").ToBool();
+			    }
+			    
 				def.SelfElements.Add(merge);
 			}
 		}
@@ -1133,7 +1141,7 @@ namespace Qorpent.BSharp{
 						   })
 					;
 				context.Get(BSharpContextDataType.Working)
-					   .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+					   .Where(_ => _.Is(BSharpClassAttributes.RequireLinking|BSharpClassAttributes.RequireLateInterpolationExt))
 					   .AsParallel()
 					   .ForAll(
 						   _ =>{

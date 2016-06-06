@@ -150,5 +150,6 @@ namespace Qorpent.BSharp {
 		/// Набор мета-классов, не участвуют в компиляции, а являются расширением компилятора
 		/// </summary>
 		MetaClass = Patch | Generator | Dataset | Direct | Connection | Template,
+	    RequireLateInterpolationExt = (ulong)1<<33
 	}
 }

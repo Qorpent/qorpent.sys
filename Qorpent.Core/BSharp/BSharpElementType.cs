@@ -17,6 +17,13 @@
 		///     Расширение
 		/// </summary>
 		Extension,
-	    Alias
+        /// <summary>
+        /// Псевдоним
+        /// </summary>
+	    Alias,
+        /// <summary>
+        /// Полная замена 
+        /// </summary>
+        Rewrite
 	}
 }
