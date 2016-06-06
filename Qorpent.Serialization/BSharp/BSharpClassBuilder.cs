@@ -1287,8 +1287,7 @@ namespace Qorpent.BSharp{
 					}
 				}
 				e.Attributes().Where(_ =>
-				                     (_.Name.LocalName[0] == BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value)) &&
-				                     !(_.Name.LocalName.StartsWith("__AT__"))
+				                     (_.Name.LocalName.Unescape(EscapingType.XmlName)[0] == BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value)) 
 				                     &&
 				                     (!(_compiler.GetConfig().KeepLexInfo &&
 				                        (_.Name.LocalName == "_file" || _.Name.LocalName == "_line" || _.Name.LocalName == "_dir")))

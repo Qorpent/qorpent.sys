@@ -30,6 +30,8 @@ test2
 			Assert.AreEqual(res.Elements().Last().Attribute("_line").Value, "7");
 		}
 
+     
+
 		[Test]
 		public void MI_344_InvalidRegexParsing(){
 			var x = new BxlParser().Parse(@"x 'http://mstrok.ru/\\?id=\\d{4}\\d*$'");
