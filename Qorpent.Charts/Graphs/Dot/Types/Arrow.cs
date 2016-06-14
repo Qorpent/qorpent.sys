@@ -114,6 +114,10 @@ namespace Qorpent.Graphs.Dot.Types {
 			{
 				sb.Append("normal");
 			}
+            else if (arrow.HasFlag(ArrowType.Empty))
+            {
+                sb.Append("empty");
+            }
             return sb.ToString();
         }
     }

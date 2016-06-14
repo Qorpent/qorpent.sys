@@ -109,7 +109,7 @@ namespace Qorpent.IO.Http
             result.extend(QueryJson);
             foreach (var p in Query)
             {
-                result[p.Key] = p.Value;
+                result[p.Key] = Uri.UnescapeDataString(p.Value);
             }
             foreach (var p in Form)
             {
