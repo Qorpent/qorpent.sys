@@ -809,6 +809,7 @@ namespace Qorpent.Utils.Extensions {
 
         public static string Fit(string src, int size, string splitter ="\r\n")
         {
+            if(null==src)return "";
             if (src.Length <= size) return src;
             var buff = new StringBuilder();
             var split = src.Split(' ');

@@ -117,6 +117,7 @@
     <Compile Include="Graphs.Dot\Builder\DotNodeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotSubgraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotSubgraphBuilderBase.cs" />
+    <Compile Include="Graphs.Dot\Builder\DTable.cs" />
     <Compile Include="Graphs.Dot\Cluster.cs" />
     <Compile Include="Graphs.Dot\DotGenerator.cs" />
     <Compile Include="Graphs.Dot\DotGraphProvider.cs" />

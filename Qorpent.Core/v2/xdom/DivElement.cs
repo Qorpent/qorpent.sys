@@ -5,6 +5,26 @@ namespace qorpent.v2.xdom {
         public DivElement(params object[] content) : base(content) { }
     }
 
+    public class AElement : ContentElement
+    {
+        public AElement(params object[] content) : base(content) { }
+
+        public AElement href(string href)
+        {
+            this.SetAttributeValue("href",href);
+            return this;
+        }
+        public AElement target(string target)
+        {
+            this.SetAttributeValue("target", target);
+            return this;
+        }
+        public AElement blank()
+        {
+            this.SetAttributeValue("target","_blank");
+            return this;
+        }
+    }
     public abstract class H_Element : ContentElement {
         protected H_Element(params object[] content) : base(content) { }
     }

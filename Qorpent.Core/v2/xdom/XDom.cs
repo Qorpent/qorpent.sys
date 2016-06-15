@@ -104,6 +104,11 @@ namespace qorpent.v2.xdom
             return new TableElement((object[])content);
         }
 
+        public static AElement anchor(params object[] content)
+        {
+            return new AElement((object[]) content);
+        }
+
         public static X colspan<X>(this X e, int cols) where X : TableCellElement
         {
             e.ColSpan = cols;

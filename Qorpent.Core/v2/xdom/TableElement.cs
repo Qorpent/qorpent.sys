@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -16,6 +17,15 @@ namespace qorpent.v2.xdom {
         public TableElement row(params object[] items)
         {
             Body.AddRow((object[])items);
+            return this;
+        }
+
+        public TableElement rows(IEnumerable<IEnumerable> _rows)
+        {
+            foreach (var r in _rows)
+            {
+                row((object[]) r.OfType<object>().ToArray());
+            }
             return this;
         }
 
