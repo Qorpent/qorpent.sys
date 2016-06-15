@@ -133,8 +133,8 @@ namespace Qorpent.Graphs.Dot {
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string XLabe {
-	        get { return Get<string>(DotConstants.XLabeAttribute); }
-	        set { Set(DotConstants.XLabeAttribute, value); }
+	        get { return Get<string>(DotConstants.XLabelAttribute); }
+	        set { Set(DotConstants.XLabelAttribute, value); }
 	    }
 
 	    /// <summary>

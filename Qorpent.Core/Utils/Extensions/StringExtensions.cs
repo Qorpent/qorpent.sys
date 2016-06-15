@@ -806,5 +806,29 @@ namespace Qorpent.Utils.Extensions {
             // Step 7
             return d[n, m];
         }
-    }
+
+        public static string Fit(string src, int size, string splitter ="\r\n")
+        {
+            if (src.Length <= size) return src;
+            var buff = new StringBuilder();
+            var split = src.Split(' ');
+            var current = 0;
+            for (var i = 0; i < split.Length; i++)
+            {
+                var newsize = current + split[i].Length;
+                if (newsize > size && current > size/2)
+                {
+                    buff.Append(splitter);
+                    current = 0;
+                }
+                else
+                {
+                    if(0!=i)buff.Append(' ');
+                    current = newsize;
+                }
+                buff.Append(split[i]);
+            }
+            return buff.ToString();
+        }
+	}
 }

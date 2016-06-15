@@ -186,7 +186,7 @@
         /// <summary>
         ///     Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
         /// </summary>
-        public const string XLabeAttribute = "xlabe";
+        public const string XLabelAttribute = "xlabel";
 
         /// <summary>
         ///     Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
@@ -248,5 +248,7 @@
         /// Флаг, указывающий на то, что требуется просчёт сложности графа
         /// </summary>
         public const string CalculateEdgeInWeight = "CalculateEdgeInWeight";
+
+        public const string WeightAttribute = "weight";
     }
 }

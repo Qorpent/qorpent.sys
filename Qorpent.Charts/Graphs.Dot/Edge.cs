@@ -123,15 +123,22 @@ namespace Qorpent.Graphs.Dot {
         /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
 	    /// </summary>
 	    [IgnoreSerialize]
-	    public string XLabe {
-	        get { return Get<string>(DotConstants.XLabeAttribute); }
-	        set { Set(DotConstants.XLabeAttribute, value); }
+	    public string XLabel {
+	        get { return Get<string>(DotConstants.XLabelAttribute); }
+	        set { Set(DotConstants.XLabelAttribute, value); }
 	    }
 
-	    /// <summary>
+        [IgnoreSerialize]
+        public double Weight
+        {
+            get { return Get<double>(DotConstants.WeightAttribute); }
+            set { Set(DotConstants.WeightAttribute, value); }
+        }
+
+        /// <summary>
         /// Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
-	    /// </summary>
-	    [IgnoreSerialize]
+        /// </summary>
+        [IgnoreSerialize]
 	    public int Minlen {
 	        get { return Get<int>(DotConstants.MinlenAttribute); }
 	        set { Set(DotConstants.MinlenAttribute, value); }
