@@ -461,39 +461,49 @@ namespace Qorpent.Utils
                     BindingFlags.GetProperty | BindingFlags.IgnoreCase
                     | BindingFlags.Instance | BindingFlags.Public
                     );
+
 	            if (null == propInfo) {
 	                var scope = result as Scope;
 	                if (null != scope) {
 	                    result = scope[paths[i]];
 	                    if (null == result) return null;
-                        continue;
+	                    continue;
 	                }
 	                var dict = result as IDictionary<string, object>;
 	                if (null != dict) {
 	                    if (dict.ContainsKey(paths[i])) {
 	                        result = dict[paths[i]];
 	                        if (null == result) return null;
-                            continue;
-	                        
+	                        continue;
+
 	                    }
 	                }
 	                var xelement = result as XElement;
 	                if (null != xelement) {
-	                    if ("value()" == paths[i]) {
+	                    var key = paths[i];
+
+                        if ("value()" == key) {
 	                        return xelement.Value;
 	                    }
-	                    if ("name()" == paths[i]) {
+	                    if ("name()" == key) {
 	                        return xelement.Name.LocalName;
 	                    }
-
-	                    var attr = xelement.Attribute(paths[i]);
-	                    var el = xelement.Element(paths[i]);
-	                    result = i == paths.Length - 1 ? ((object)attr ?? el) : ((object)el ?? attr);
+                        if (key.StartsWith("@")) {
+                            key = key.Substring(1);
+                        }
+                        var attr = xelement.Attribute(key);
+                        
+	                    var el = xelement.Element(key);
+	                
+                            result = i == paths.Length - 1 ? ((object) attr ?? el) : ((object) el ?? attr);
 	                    if (null == result) return null;
-                        continue;
+	                    continue;
 	                }
 	                return null;
 	            }
+	          
+                
+                
 	            result = propInfo.GetValue(result);
 	        }
 	        return result;
