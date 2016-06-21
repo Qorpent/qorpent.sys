@@ -311,7 +311,8 @@ namespace Qorpent.Utils.LogicalExpressions {
 						}
 						if (State.InString == _state) {
 							_currentvalue += c;
-						}
+                            break;
+                        }
 						if (State.InNeq == _state) {
 							throw new Exception("WS is at wrong place " + idx);
 						}
@@ -333,7 +334,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.InLiteral == _state) {
 							Closeliteral();
 						}
-						if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
+                        }
+                        if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("& is at wrong place " + idx);
 						}
                         if (next == '&')
@@ -347,6 +353,10 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.InLiteral == _state) {
 							Closeliteral();
 						}
+				        if (State.InString == _state) {
+				            _currentvalue += c;
+                            break;
+				        }
                        
                         if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("| is at wrong place " + idx);
@@ -362,6 +372,11 @@ namespace Qorpent.Utils.LogicalExpressions {
                         if (State.InLiteral == _state)
                         {
                             Closeliteral();
+                        }
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
                         }
 
                         if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state && State.InNeq!=_state)
@@ -382,7 +397,11 @@ namespace Qorpent.Utils.LogicalExpressions {
                         {
                             Closeliteral();
                         }
-				        
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
+                        }
                         if (State.AfterLiteral == _state || State.AfterString==_state) {
 							_tokenlist.Add(new Token {Type = LETokenType.Eq});
 							_state = State.AfterBinaryOperator;
@@ -403,6 +422,11 @@ namespace Qorpent.Utils.LogicalExpressions {
                         {
                             Closeliteral();
                         }
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
+                        }
                         if (State.AfterLiteral == _state) {
                             next = expression[_idx + 1];
                             if (next == '=') {
@@ -421,6 +445,12 @@ namespace Qorpent.Utils.LogicalExpressions {
                         if (State.InLiteral == _state)
                         {
                             Closeliteral();
+                        }
+
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
                         }
                         if (State.AfterLiteral == _state)
                         {
@@ -443,7 +473,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.InLiteral == _state) {
 							Closeliteral();
 						}
-						if (State.AfterLiteral == _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            break;
+                        }
+                        if (State.AfterLiteral == _state) {
 							_state = State.InNeq;
 							break;
 						}
