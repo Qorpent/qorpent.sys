@@ -70,16 +70,24 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
             project = project.Get<IBSharpProject>("_real_project") ?? project;
             var dirs = project.GetSourceDirectories().ToArray();
             var stamp = dirs.SelectMany(_ => Directory.GetFiles(_, "*.bxls",SearchOption.AllDirectories)).Max(_ => File.GetLastWriteTime(_));
-            var stamp2 =
+            var csharp =
                 Directory.GetFiles(project.GetCompileDirectory(), "*.cs", SearchOption.AllDirectories)
-                    .Where(_ => !_.Contains("\\obj\\"))
-                    .Max(_=>File.GetLastWriteTime(_));
-            var stamp3 =
+                    .Where(_ => !_.Contains("\\obj\\")).ToArray();
+            if (0 != csharp.Length) {
+               var _s = csharp.Max(_ => File.GetLastWriteTime(_));
+                if (_s > stamp) stamp = _s;
+            }
+            var xslt =
                 Directory.GetFiles(project.GetCompileDirectory(), "*.xslt", SearchOption.AllDirectories)
-                    .Where(_ => !_.Contains("\\obj\\"))
-                    .Max(_ => File.GetLastWriteTime(_));
-            
-            return new[] {stamp,stamp2,stamp3}.Max();
+                    .Where(_ => !_.Contains("\\obj\\")).ToArray();
+            if (0 != xslt.Length)
+            {
+                var _s = xslt.Max(_ => File.GetLastWriteTime(_));
+                if (_s > stamp) stamp = _s;
+            }
+                    
+
+            return stamp;
         }
 
         private static IBSharpProject DoBuild(IDictionary<string, string> adict, IUserLog log, BSharpBuilder builder, bool errorsafe = false)
