@@ -554,12 +554,19 @@ namespace Qorpent.BSharp{
             var rewrites = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Rewrite).ToArray();
 	        foreach (var rw in rewrites) {
 	            var newcontent = rw.Definition.Elements();
-	            var targets = _cls.Compiled.Elements(rw.Name).ToArray();
+	            var targets = GetElementTargets(rw).ToArray();
 	            foreach (var element in targets) {
 	                element.ReplaceWith(newcontent.Select(_=>ApplyRewrite(rw,_,element)).ToArray());
 	            }
 	        }
         }
+
+	    private IEnumerable<XElement> GetElementTargets(IBSharpElement e) {
+	        if (!string.IsNullOrWhiteSpace(e.Xpath)) {
+	            return _cls.Compiled.XPathSelectElements(e.Xpath).Where(_=>_.Name.LocalName!=BSharpSyntax.ClassElementDefinition);
+	        }
+	        return _cls.Compiled.Elements(e.Name);
+	    }
 
 	    private XElement ApplyRewrite(IBSharpElement rw, XElement src, XElement element) {
             var global = GetInterpolationContext();

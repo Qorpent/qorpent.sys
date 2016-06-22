@@ -201,6 +201,17 @@ namespace Qorpent.Bridge.Tests.Utils {
             Console.WriteLine(merged);
             Assert.AreEqual(@"{'a':{'b':[2,3,4,5,{'_id':1,'a':2,'b':3}],'c':2},'b':1}", merged);
         }
+
+
+        [Test]
+        public void SetOperationWorks() {
+            var x = new {}.jsonifymap();
+            x.set("a.b", 2);
+            x.set("a.c", 3);
+            x.set("i", 12);
+            var j = x.stringify().Simplify(SimplifyOptions.Full);
+            Assert.AreEqual(@"{'a':{'b':2,'c':3},'i':12}", j);
+        }
         
     }
 }
