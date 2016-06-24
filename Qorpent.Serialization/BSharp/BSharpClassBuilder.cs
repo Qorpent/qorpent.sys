@@ -565,8 +565,9 @@ namespace Qorpent.BSharp{
 	        if (!string.IsNullOrWhiteSpace(e.Xpath)) {
 	            return _cls.Compiled.XPathSelectElements(e.Xpath).Where(_=>_.Name.LocalName!=BSharpSyntax.ClassElementDefinition);
 	        }
-	        if (e.Name.StartsWith("(")) {
-	            var names = e.Name.Substring(1, e.Name.Length - 2).SmartSplit();
+	        var name = e.Name.Unescape(EscapingType.XmlName);
+	        if (name.StartsWith("(")) {
+	            var names = name.Substring(1,name.Length - 2).SmartSplit();
 	            return _cls.Compiled.Elements().Where(_ => names.Contains(_.Name.LocalName));
 	        }
 	        return _cls.Compiled.Elements(e.Name);

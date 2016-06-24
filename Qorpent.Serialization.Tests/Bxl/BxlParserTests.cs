@@ -30,7 +30,12 @@ test2
 			Assert.AreEqual(res.Elements().Last().Attribute("_line").Value, "7");
 		}
 
-     
+        [Test]
+        public void ValidExprTermination() {
+            IBxlParser p = new BxlParser();
+            XElement res = p.Parse("x (a,b) s");
+            Console.WriteLine(res);
+        }
 
 		[Test]
 		public void MI_344_InvalidRegexParsing(){

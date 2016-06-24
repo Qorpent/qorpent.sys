@@ -424,7 +424,9 @@ namespace Qorpent.Bxl {
 		private void processAttributeName(char c) {
 			if (!char.IsWhiteSpace(c) && c!='=' && c!=',' && c!=' ' && c!='\t' && c!='#'){
 				if (_expStack.Count != 0){
-					throw new BxlException("not terminated expression",lexinfo:_info.Clone());
+				    if (!(_expStack.Count == 1 && _expStack.Peek() == '\0')) {
+				        throw new BxlException("not terminated expression", lexinfo: _info.Clone());
+				    }
 				}
 			}
 			
