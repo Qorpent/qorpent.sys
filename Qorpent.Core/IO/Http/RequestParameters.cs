@@ -315,5 +315,16 @@ namespace Qorpent.IO.Http
             }
             return _result ?? new object[]{};
         }
+
+	    public static IDictionary<string,string> ParseQuery(string newquery)
+	    {
+          
+            var result = new Dictionary<string,string>();
+	        if (!string.IsNullOrWhiteSpace(newquery))
+	        {
+	            PrepareDictionaryData(result, newquery, true);
+	        }
+	        return result;
+	    }
 	}
 }

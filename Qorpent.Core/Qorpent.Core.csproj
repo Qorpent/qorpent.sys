@@ -76,6 +76,10 @@
     <Compile Include="Dsl\Bxl\IBxlParser.cs" />
     <Compile Include="Host\IRedirectService.cs" />
     <Compile Include="Host\IRedirectSource.cs" />
+    <Compile Include="Host\IRequestRouter.cs" />
+    <Compile Include="Host\RewriteUriRouteRule.cs" />
+    <Compile Include="Host\RouteRule.cs" />
+    <Compile Include="Host\RouteRuleFactory.cs" />
     <Compile Include="Host\StaticFolderDescriptor.cs" />
     <Compile Include="IO\Net\HttpMethod.cs" />
     <Compile Include="IO\PidFile.cs" />

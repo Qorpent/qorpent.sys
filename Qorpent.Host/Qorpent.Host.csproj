@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="console\ResetCommand.cs" />
     <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="DefaultRequestRouter.cs" />
     <Compile Include="Handlers\DropStaticCache.cs" />
     <Compile Include="Handlers\LoadHandler.cs" />
     <Compile Include="Handlers\ServerPrint.cs" />

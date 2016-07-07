@@ -42,8 +42,13 @@ namespace Qorpent.Host{
 		/// </summary>
 		IEncryptProvider Encryptor { get; }
 
+	    /// <summary>
+	    ///     Фабрика хэндлеров
+	    /// </summary>
+	    IRequestRouter Router { get; }
 
-		/// <summary>
+
+	    /// <summary>
 		///     Запускает сервер
 		/// </summary>
 		void Start();

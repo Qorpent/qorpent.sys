@@ -42,6 +42,7 @@ namespace Qorpent.Host {
         private IHttpAuthenticator _auth;
         private INotAuthProcessProvider _notAuth;
         private IHttpAuthorizer _httpAuthorizer;
+        private IRequestRouter _router;
 
         /// <summary>
         ///     Создает новый экземпляр сервера
@@ -189,6 +190,22 @@ namespace Qorpent.Host {
                 return _factory;
             }
             private set { _factory = value; }
+        }
+
+        /// <summary>
+        ///     Фабрика хэндлеров
+        /// </summary>
+        public IRequestRouter Router
+        {
+            get
+            {
+                if (null == _router)
+                {
+                    Initialize();
+                }
+                return _router;
+            }
+            private set { _router = value; }
         }
 
         /// <summary>
@@ -564,6 +581,11 @@ namespace Qorpent.Host {
                 Container.Register(
                     Container.NewComponent<IHostServerStaticResolver, HostServerStaticResolver>(Lifestyle.Transient));
             }
+            if (null == Container.FindComponent(typeof(IRequestRouter), null))
+            {
+                Container.Register(
+                    Container.NewComponent<IRequestRouter, DefaultRequestRouter>(Lifestyle.Transient));
+            }
 
 
             if (null == Container.FindComponent(typeof (IEncryptProvider), null)) {
@@ -573,6 +595,7 @@ namespace Qorpent.Host {
             {
                 Container.Register(Container.NewComponent<IRedirectService, RedirectService>(Lifestyle.Singleton));
             }
+            Router = Container.Get<IRequestRouter>();
             Factory = Container.Get<IRequestHandlerFactory>();
             Static = Container.Get<IHostServerStaticResolver>();
             Encryptor = Container.Get<IEncryptProvider>();
@@ -583,10 +606,7 @@ namespace Qorpent.Host {
                 Static.SetCachedRoot(map.Key, map.Value);
             }
             Container.Register(Container.NewExtension(Config.Log, "mainlog"));
-            if (null != OnAfterInitializeSerives)
-            {
-                OnAfterInitializeSerives(Container);
-            }
+            OnAfterInitializeSerives?.Invoke(Container);
         }
 
         private void LoadContainer() {
@@ -654,10 +674,6 @@ namespace Qorpent.Host {
             }
         }
 
-        private Assembly CurrentDomain_AssemblyResolve1(object sender, ResolveEventArgs args)
-        {
-            throw new NotImplementedException();
-        }
 
         private void InitializeHttpServer() {
             _listener = new HttpListener {

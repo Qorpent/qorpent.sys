@@ -10,7 +10,7 @@ using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
-	/// <summary>
+    /// <summary>
 	/// </summary>
 	public class DefaultRequestHandlerFactory : ServiceBase, IRequestHandlerFactory{
 		private readonly IDictionary<string, IRequestHandler> _cache = new Dictionary<string, IRequestHandler>();
