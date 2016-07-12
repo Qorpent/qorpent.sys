@@ -22,7 +22,14 @@ namespace Qorpent.Serialization.Tests.BSharp
 			Assert.AreEqual(1, result.Working.Count);
 		}
 
-
+	    [Test]
+	    public void ClassWithBraceCode() {
+	        var result = Compile(@"
+class x
+    x (a,b) s
+").Get("x");
+            Assert.NotNull(result);
+	    }
 
 
 	    [TestCase("ab",1)]

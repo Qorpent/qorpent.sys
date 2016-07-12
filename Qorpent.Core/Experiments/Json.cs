@@ -899,6 +899,32 @@ namespace Qorpent.Experiments {
         {
             return Get(data, path).ToDate(true);
         }
+
+        public static T set<T>(this T trg, string path, object val) where T : IDictionary<string, object> {
+            if (null == trg) return default(T);
+            if (string.IsNullOrWhiteSpace(path)) return trg;
+            IDictionary<string, object> current = trg;
+            var name = path;
+            if (path.Contains(".")) {
+                var parts = path.SmartSplit(false, true, '.');
+                name = parts.Last();
+                for (var i = 0; i < parts.Count - 1; i++) {
+                    var part = parts[i];
+                    if (!current.ContainsKey(part) || null==current[part]) {
+                        current[part] = new Dictionary<string,object>();
+                    }
+                    var _trg = current[part];
+                    if (!(_trg is IDictionary<string, object>)) {
+                        throw new Exception("type mismatch "+_trg.GetType().FullName);
+                    }
+                    current = (IDictionary<string, object>) _trg;
+                }
+                
+            }
+            current[name] = val;
+            return trg;
+        }
+
         public static object get(this object data, string path)
         {
             return Get(data, path);

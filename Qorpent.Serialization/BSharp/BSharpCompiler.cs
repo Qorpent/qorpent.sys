@@ -1028,6 +1028,7 @@ namespace Qorpent.BSharp{
 			    merge.Definition =new XElement( i);
                 i.Elements().Remove();
 				merge.Name = i.Attr("code");
+			    merge.Xpath = i.Attr("xpath");
 				merge.TargetName = i.Attr("code");
 			    merge.LeveledCodes = i.Attr("leveledcodes").ToBool();
 			    merge.Alias = i.Attr("alias");

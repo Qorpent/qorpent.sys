@@ -44,8 +44,18 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             return result;
         }
         
-        protected IDictionary<string, object> Refine(object target, XElement src, bool removezeroes = true, string[] remove = null  ,string[] noopt = null  )
+        protected IDictionary<string, object> Refine(
+            object target, 
+            XElement src, 
+            bool removezeroes = true, 
+            string[] remove = null,
+            string[] noopt = null ,
+            bool allnooptions = false
+            )
         {
+            if (null == src) {
+                return target.jsonifymap();
+            }
             remove = remove ?? new string[] {};
             noopt = noopt ?? new string[] {};
             var opts =
@@ -80,7 +90,15 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             }
             if (options.Count != 0)
             {
-                j["options"] = options;
+                if (allnooptions) {
+                    foreach (var option in options) {
+                        j[option.Key] = option.Value;
+                    }
+
+                }
+                else {
+                    j["options"] = options;
+                }
             }
             return j;
         }
@@ -130,9 +148,12 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
         protected IDictionary<string,object> ConvertElement(XElement e)
         {
             var result = new Dictionary<string, object>();
-            foreach(var a in e.Attributes())
-            {
-                result[a.Name.LocalName] = a.Value;
+            foreach(var a in e.Attributes()) {
+                var name = a.Name.LocalName;
+                if (name == "code" && null == e.Attribute("id")) {
+                    name = "id";
+                }
+                result[name] = a.Value;
             }
             WriteElements(e, result);
             return result;

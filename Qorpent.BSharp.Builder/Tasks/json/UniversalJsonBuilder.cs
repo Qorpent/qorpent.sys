@@ -21,16 +21,13 @@ namespace Qorpent.BSharp.Builder.Tasks.json
             {
                 var xml = RefineForJson(new XElement(cls.Compiled));
                 var opts = xml.Attr("generate-json").SmartSplit();
-                
                 IDictionary<string,object> j = new Dictionary<string, object>();
-                j = Refine(j, xml);
 
                 if (opts.Contains("nooptions") && j.ContainsKey("options"))
                 {
                     IDictionary<string, object> _opts = j["options"].jsonifymap();
                     j.Remove("options");
-                    foreach(var o in _opts)
-                    {
+                    foreach(var o in _opts) {
                         j[o.Key] = o.Value;
                     }
                 }

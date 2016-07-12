@@ -32,8 +32,8 @@ namespace Qorpent.BSharp {
 	    string TargetAttr { get; set; }
 	    string TargetValue { get; set; }
 
-        bool Copy { get; set; }
-
-        XElement Definition { get; set; }
+	    XElement Definition { get; set; }
+	    bool Copy { get; set; }
+	    string Xpath { get; set; }
 	}
 }

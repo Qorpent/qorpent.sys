@@ -48,6 +48,24 @@ class A
         }
 
         [Test]
+        public void RewriteElementSupportSimple_WithName()
+        {
+            var context = Compile(@"
+class A
+    element test rewrite 
+        test2 %{element.@name} t=%{element.name}
+    test u a
+");
+            var cls = context.Get("A").Compiled;
+            var str = cls.ToString().Simplify(SimplifyOptions.Test);
+            Console.WriteLine(str);
+            Assert.AreEqual(@"<class code='A' fullcode='A'>
+  <test2 code='a' t='test' />
+</class>".Simplify(SimplifyOptions.Test), str);
+
+        }
+
+        [Test]
         public void RewriteElementSupportCopyAttributes()
         {
             var context = Compile(@"
