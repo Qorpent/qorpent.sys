@@ -696,7 +696,12 @@ namespace Qorpent.Experiments {
         }
 
         public static string stringify(this object data, string jsonmode="", bool pretty = false, int level = 0) {
-            return Stringify(data,jsonmode,pretty:pretty,level:level);
+            return Stringify(data,jsonmode,SerializeMode.Serialize,pretty:pretty,level:level);
+        }
+
+        public static string stringify(this object data, SerializeMode mode, string jsonmode = "", bool pretty = false, int level = 0)
+        {
+            return Stringify(data, jsonmode, mode, pretty: pretty, level: level);
         }
 
         public static IDictionary<string, object> jsonifymap(this object data) {
