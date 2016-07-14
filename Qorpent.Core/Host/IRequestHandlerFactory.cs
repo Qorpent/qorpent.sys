@@ -3,6 +3,16 @@ using System.Net;
 using Qorpent.IO.Http;
 
 namespace Qorpent.Host{
+
+    public static class RequestHandlerFactoryExtensions
+    {
+        public static IHostServer Handle(this IHostServer server, string url, IRequestHandler handler)
+        {
+            server.Factory.Register(url,handler);
+            return server;
+        }
+    }
+
     /// <summary>
 	/// </summary>
 	public interface IRequestHandlerFactory{

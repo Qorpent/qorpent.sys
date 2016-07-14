@@ -22,11 +22,15 @@ namespace Qorpent.Host
 
         private string ConstructReplace(string pattern)
         {
-            return Regex.Replace(pattern, @"/?:([\d\w_]+)", "");
+            pattern = pattern.Replace("[", "(");
+            pattern = pattern.Replace("]", ")?");
+            return Regex.Replace(pattern, @"\(?/?:([\d\w_]+)(\)\?)?", "");
         }
 
         private string ConstructRegex(string pattern)
         {
+            pattern = pattern.Replace("[", "(");
+            pattern = pattern.Replace("]", ")?");
             return Regex.Replace(pattern, @":([\d\w_]+)", @"(?<$1>[^/&]+?)")+@"(\?[\s\S]*)?$";
         }
 
@@ -67,11 +71,15 @@ namespace Qorpent.Host
                     trgdict[pair.Key] = pair.Value;
                 }
             }
-            var asterindex = url.IndexOf("?");
+            var asterindex = newurl.IndexOf("?");
             var path = newurl;
             if (asterindex!=-1)
             {
                 path = newurl.Substring(0, asterindex);
+            }
+            if (path.EndsWith("/"))
+            {
+                path = path.Substring(0, path.Length - 1);
             }
             var query = "?" +
                         string.Join("&",

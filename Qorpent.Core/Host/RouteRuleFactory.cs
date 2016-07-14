@@ -6,5 +6,13 @@ namespace Qorpent.Host
         {
             return new RewriteUriRouteRule(pattern, replace);
         }
+
+        public static IHostServer Route(this IHostServer server, string pattern, string replace = null)
+        {
+            server.Router.Register(RewriteUri(pattern,replace));
+            return server;
+        }
     }
+
+    
 }

@@ -74,6 +74,8 @@
     <Compile Include="Config\ConfigurationLoader.cs" />
     <Compile Include="Config\ConfigurationOptions.cs" />
     <Compile Include="Dsl\Bxl\IBxlParser.cs" />
+    <Compile Include="Host\ActionContext.cs" />
+    <Compile Include="Host\ActionHandler.cs" />
     <Compile Include="Host\IRedirectService.cs" />
     <Compile Include="Host\IRedirectSource.cs" />
     <Compile Include="Host\IRequestRouter.cs" />
