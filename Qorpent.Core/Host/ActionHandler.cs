@@ -8,25 +8,26 @@ using Qorpent.Serialization;
 
 namespace pksp.kb.web
 {
-    public abstract class ActionHandler : RequestHandlerBase
+    public abstract class ActionHandler<TContext> : RequestHandlerBase where TContext: ActionContext,new()
     {
         [Inject] protected ISerializerFactory SerializerFactory { get; set; }
 
         public override void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel)
         {
-            var ctx = new ActionContext
+            var ctx = new TContext
             {
                 Server = server,
                 WebContext = context,
                 Cancel = cancel,
                 Parameters = RequestParameters.Create(context)
             };
+            ctx.Setup();
             try
             {
                 var result = RunAction(ctx);
-                if (result is ActionContext)
+                if (result is TContext)
                 {
-                    ctx = (ActionContext) result;
+                    ctx = (TContext) result;
                 }
                 else
                 {
@@ -62,6 +63,8 @@ namespace pksp.kb.web
             ctx.WebContext.Finish(obj,ctx.MimeType,ctx.State);
         }
 
-        protected abstract object RunAction(ActionContext ctx);
+        protected abstract object RunAction(TContext ctx);
     }
+
+    public abstract class ActionHandler : ActionHandler<ActionContext> { }
 }

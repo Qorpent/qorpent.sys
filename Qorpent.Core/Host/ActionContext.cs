@@ -16,5 +16,10 @@ namespace pksp.kb.web
         public int State = 200;
         public RequestParameters Parameters;
         public string RenderMode;
+
+        public virtual void Setup()
+        {
+            
+        }
     }
 }

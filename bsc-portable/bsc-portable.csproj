@@ -139,6 +139,12 @@
     <Compile Include="..\Qorpent.BSharp.Builder\WritePrettyErrorDigest.cs">
       <Link>builder\WritePrettyErrorDigest.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Host\IRequestRouter.cs">
+      <Link>core\IRequestRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Host\RouteRule.cs">
+      <Link>core\RouteRule.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\Host\StaticFolderDescriptor.cs">
       <Link>core\StaticFolderDescriptor.cs</Link>
     </Compile>

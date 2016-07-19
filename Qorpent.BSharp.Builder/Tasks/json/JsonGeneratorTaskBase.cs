@@ -39,7 +39,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
                 
                 if (-1!=Array.IndexOf(excludeAttrs,attribute.Name.LocalName))continue;
                 if (null!=ExcludeAttributes && -1!=Array.IndexOf(ExcludeAttributes, attribute.Name.LocalName))continue;
-                result[attribute.Name.LocalName] = attribute.Value;
+                result[attribute.Name.LocalName] = attribute.Value.Guess(useDates:false);
             }
             return result;
         }
@@ -81,7 +81,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             foreach (var rootattribute in noopt)
             {
                 object val = src.Attr(rootattribute);
-                j[rootattribute] = val.Guess();
+                j[rootattribute] = val.Guess(useDates:false);
             }
            
             if (removezeroes) {

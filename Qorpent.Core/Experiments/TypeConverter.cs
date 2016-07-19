@@ -452,8 +452,9 @@ namespace Qorpent.Utils
 			return result;
 		}
 
-	    public static object Guess(this object obj)
+	    public static object Guess(this object obj, bool useDates = true)
 	    {
+       
 	        if (obj == null) return null;
 	        if (obj is string)
 	        {
@@ -476,12 +477,13 @@ namespace Qorpent.Utils
 	                return (int) lng;
 	            }
               
-                if (s.ToDate(true).Year > 1900)
+                if (useDates && s.ToDate(true).Year > 1900)
 	            {
 	                return obj.ToDate(true);
 	            }
                
 	        }
+	       
 	        return obj;
 	    }
 

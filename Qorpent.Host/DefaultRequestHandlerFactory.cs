@@ -53,6 +53,10 @@ namespace Qorpent.Host{
 			{
 				return _cache[path];
 			}
+		    if (path.EndsWith("/") && _cache.ContainsKey(path.Substring(0,path.Length-1)))
+		    {
+		        return _cache[path.Substring(0, path.Length - 1)];
+		    }
 			if (path.Split('/').Last().Contains(".") && !path.EndsWith(".qweb"))
 			{
 				return new StaticFileHandler();
