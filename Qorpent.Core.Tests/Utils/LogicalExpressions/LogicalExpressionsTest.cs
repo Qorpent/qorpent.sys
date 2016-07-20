@@ -23,6 +23,17 @@ namespace Qorpent.Core.Tests.Utils.LogicalExpressions
         }
 
         [Test]
+        public void CanParseBracesInSQuotes()
+        {
+            Assert.True(le.Eval("x ~ 'a(1|2)'", new { x = "a13" }));
+        }
+        [Test]
+        public void CanParseBracesInQuotes()
+        {
+            Assert.True(le.Eval("x ~ \"a(1|2)\"", new { x = "a13" }));
+        }
+
+        [Test]
         public void LiteralsWithUnderscore_Q515() {
             
             Assert.True(le.Eval("my_1",new {my_1=true}));

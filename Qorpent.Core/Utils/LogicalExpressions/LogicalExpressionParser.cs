@@ -282,10 +282,15 @@ namespace Qorpent.Utils.LogicalExpressions {
 			    var next = idx<expression.Length-1 ? expression[idx+1]:'\0';
 				switch (c) {
 					case '(':
-						if (State.InLiteral == _state) {
-							Closeliteral();
-						}
-						if (State.AfterLiteral == _state || State.AfterString == _state || State.None == _state ||
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+				        if (State.InLiteral == _state) {
+				            Closeliteral();
+				        }
+				        if (State.AfterLiteral == _state || State.AfterString == _state || State.None == _state ||
 						    State.AfterNot == _state ||
 						    State.AfterAndOrOr == _state) {
 							Openblock();
@@ -295,7 +300,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						}
 						break;
 					case ')':
-						if (State.InLiteral == _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state) {
 							Closeliteral();
 						}
 						if (State.AfterLiteral == _state || State.AfterString == _state || State.None == _state) {
@@ -331,7 +341,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						_state = State.InString;
 						break;
 					case '&':
-						if (State.InLiteral == _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state) {
 							Closeliteral();
 						}
                         if (State.InString == _state)
@@ -350,7 +365,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						_state = State.AfterAndOrOr;
 						break;
 					case '|':
-						if (State.InLiteral == _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state) {
 							Closeliteral();
 						}
 				        if (State.InString == _state) {
@@ -369,7 +389,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						_state = State.AfterAndOrOr;
 						break;
                     case '~':
-                        if (State.InLiteral == _state)
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state)
                         {
                             Closeliteral();
                         }
@@ -393,7 +418,12 @@ namespace Qorpent.Utils.LogicalExpressions {
                         break;
 
                     case '=':
-                        if (State.InLiteral == _state)
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state)
                         {
                             Closeliteral();
                         }
@@ -418,7 +448,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 						}
 						throw new Exception("= is at wrong place " + idx);
                     case '>':
-                        if (State.InLiteral == _state)
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state)
                         {
                             Closeliteral();
                         }
@@ -442,7 +477,12 @@ namespace Qorpent.Utils.LogicalExpressions {
                         
                         throw new Exception("> is at wrong place " + idx);
                     case '<':
-                        if (State.InLiteral == _state)
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state)
                         {
                             Closeliteral();
                         }
@@ -470,7 +510,12 @@ namespace Qorpent.Utils.LogicalExpressions {
 
                         throw new Exception("> is at wrong place " + idx);
 					case '!':
-						if (State.InLiteral == _state) {
+                        if (State.InString == _state)
+                        {
+                            _currentvalue += c;
+                            continue;
+                        }
+                        else if (State.InLiteral == _state) {
 							Closeliteral();
 						}
                         if (State.InString == _state)
