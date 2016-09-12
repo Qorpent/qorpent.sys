@@ -35,5 +35,7 @@ namespace Qorpent.BSharp {
 	    XElement Definition { get; set; }
 	    bool Copy { get; set; }
 	    string Xpath { get; set; }
+	    bool AutoInclude { get; set; }
+	    bool Template { get; set; }
 	}
 }

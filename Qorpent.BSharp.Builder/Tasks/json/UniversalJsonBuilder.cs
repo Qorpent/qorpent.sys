@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Experiments;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder.Tasks.json
@@ -13,7 +14,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json
     {
         public UniversalJsonBuilder()
         {
-            this.ExcludeAttributes = new[] { "generate-json" };
+            this.ExcludeAttributes = new[] { "generate-json"};
         }
         public override void Execute(IBSharpContext context)
         {
@@ -27,18 +28,18 @@ namespace Qorpent.BSharp.Builder.Tasks.json
                 {
                     IDictionary<string, object> _opts = j["options"].jsonifymap();
                     j.Remove("options");
-                    foreach(var o in _opts) {
+                    foreach(var o in _opts.OrderBy(_=>_.Key)) {
                         j[o.Key] = o.Value;
                     }
                 }
                 
 
-                WriteElements(xml, j);
+                WriteElements(xml, j, opts);
                 
 
 
 
-                WriteJson(cls, j);
+                WriteJson(cls, j, opts);
             }
         }
 

@@ -63,6 +63,11 @@ namespace Qorpent.Bridge.Tests.Utils
         }
 
         [Test]
+        public void Bug_Guess() {
+            Assert.AreEqual("20374, 7066, 424688", "20374, 7066, 424688".Guess());    
+        }
+
+        [Test]
         public void DecimalsNotRounded() {
             Assert.AreEqual(52.45m,TypeConverter.ToDecimal("52.45"));
         }

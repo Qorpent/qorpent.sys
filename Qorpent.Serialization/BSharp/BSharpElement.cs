@@ -20,6 +20,8 @@ namespace Qorpent.BSharp{
 	    public bool Copy { get; set; }
         public string Xpath { get; set; }
 	    public XElement Definition { get; set; }
+        public bool AutoInclude { get; set; }
+        public bool Template { get; set; }
 
 	    /// <summary>
 		///     Имя цели мержинга (рут)

@@ -57,6 +57,114 @@ class B
             Console.WriteLine(result.Compiled);
             Assert.AreEqual("2",result.Compiled.Element("test").Attr("a"));
             Assert.AreEqual("level2", result.Compiled.Element("test").Attr("code"));
+            Assert.AreEqual("2", result.Compiled.Element("test").Attr("x"));
+        }
+
+        [Test]
+        public void InternalOverrideElements()
+        {
+            var code = @"
+class A embed b=4
+	test  level%{x} a='%{x}' 
+class B
+	include A  x=2
+        include-append
+            z '%{b}'
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.NotNull(result.Compiled.Element("A").Element("z"));
+            Assert.AreEqual("4",result.Compiled.Element("A").Element("z").Attr("code"));
+        }
+
+	    [Test]
+	    public void IncludeNameOverride() {
+            var code = @"
+class A oldname
+class B
+	include A newname
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual("newname", result.Compiled.Element("A").Attr("name"));
+        }
+
+        [Test]
+        public void IncludeAttrOverride()
+        {
+            var code = @"
+class A x=1 
+class B
+	include A x=2 z=3
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual("3", result.Compiled.Element("A").Attr("z"));
+            Assert.AreEqual("2", result.Compiled.Element("A").Attr("x"));
+        }
+
+        [Test]
+        public void AutoIncludeSupport()
+        {
+            var code = @"
+class A 'oldname'
+	x=2
+class B
+    element outer auto-include=true ai-keepcode=true ai-element=outer
+	outer A 'newname' y=3
+        where x
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            var e = result.Compiled.Element("outer");
+            Assert.AreEqual(true,result.SelfElements.First(_=>_.Name=="outer").AutoInclude);
+            Assert.AreEqual("2", e.Attr("x"));
+            Assert.AreEqual("3", e.Attr("y"));
+            Assert.AreEqual("newname", e.Attr("name"));
+            Assert.NotNull(e.Element("where"));
+
+        }
+
+        [Test]
+        public void Bug_AutoIncludeKillsAllPseudoEmbeds()
+        {
+            var code = @"
+class A 
+	x='%{a}'
+class W z='%{d}'
+    x a='%{x}'
+class B
+    import W
+    element outer auto-include=true
+	outer A 
+    
+";
+            var cpl = Compile(code);
+            var result = cpl.Get("B");
+            Console.WriteLine(result.Compiled);
+            Console.WriteLine(cpl.Get("W").Compiled);
+            var e = result.Compiled.Element("x");
+            Assert.AreEqual("%{x}", e.Attr("a"));
+            Assert.AreEqual("%{d}", result.Compiled.Attr("z"));
+        }
+
+
+        [Test]
+	    public void DefaultIncludeSupport() {
+            var code = @"
+class A 
+	x=2
+class B
+    element outer auto-include=true ai-keepcode=true ai-element=outer ai-default-include=A
+	outer C y=3
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            var e = result.Compiled.Element("outer");
+            Assert.AreEqual(true, result.SelfElements.First(_ => _.Name == "outer").AutoInclude);
+            Assert.AreEqual("C", e.Attr("code"));
+            Assert.AreEqual("2", e.Attr("x"));
+            Assert.AreEqual("3", e.Attr("y"));
         }
 
 

@@ -451,22 +451,26 @@ namespace Qorpent.Utils
 			}
 			return result;
 		}
+        static char[] _safemarks = { ',', ' ', ';',':','\r','\n' };
+        public static object Guess(this object obj, bool useDates = false, bool safe = true) {
+	        
 
-	    public static object Guess(this object obj, bool useDates = true)
-	    {
-       
-	        if (obj == null) return null;
+            if (obj == null) return null;
 	        if (obj is string)
 	        {
 	            var s = (string) obj;
+                
                 if (s.ToLower() == "true" || s.ToLower() == "false")
                 {
                     return obj.ToBool();
                 }
+                if (safe && s.IndexOfAny(_safemarks) != -1) return s;
+                if (safe && s.StartsWith("0") && "0"!=s) return s;
                 if (s.Contains(".") && obj.ToDecimal(true) != 0)
                 {
                     return obj.ToDecimal();
                 }
+	            
                 if (s == "0" || obj.ToLong() != 0)
 	            {
 	                var lng = obj.ToLong();

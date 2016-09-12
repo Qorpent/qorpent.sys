@@ -4,12 +4,31 @@ using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
+
+    internal class SetDefaultAttributesOperation : PreprocessOperation {
+        private XElement e;
+
+        public SetDefaultAttributesOperation(XElement e)
+        {
+            this.e = e;
+        }
+
+        public override void Execute(XElement el) {
+            foreach (var attribute in e.Attributes()) {
+                if (!el.HasAttribute(attribute.Name.LocalName)) {
+                    el.SetAttributeValue(attribute.Name, attribute.Value);
+                }
+            }
+        }
+    }
 	/// <summary>
 	/// </summary>
 	internal class SetAttributeOperation : PreprocessOperation{
 		/// <summary>
 		/// </summary>
 		public string Name;
+
+	    public bool DefaultOnly;
 
 		public string SubstRx;
 		public string SubstSrc;
@@ -41,7 +60,9 @@ namespace Qorpent.BSharp.Preprocessor{
 				el.Value = val;
 			}
 			else{
-				el.SetAttributeValue(Name, val);
+			    if (!DefaultOnly || (el.Attr(Name) == "")) {
+			        el.SetAttributeValue(Name, val);
+			    }
 			}
 		}
 	}

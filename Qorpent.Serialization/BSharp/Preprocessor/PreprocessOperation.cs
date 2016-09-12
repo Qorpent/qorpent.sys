@@ -38,7 +38,9 @@ namespace Qorpent.BSharp.Preprocessor{
 					return e.Apply(new CleanupElementOperation());
 				case "setattribute":
 					return e.Apply(new SetAttributeOperation());
-				case "removeattribute":
+                case "setdefaults":
+			        return new SetDefaultAttributesOperation(e);
+                case "removeattribute":
 					return e.Apply(new RemoveAttributeOperation());
 				case "elementtoattribute":
 					return e.Apply(new ElementToAttributeOperation());

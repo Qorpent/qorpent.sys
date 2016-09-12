@@ -1035,6 +1035,8 @@ namespace Qorpent.BSharp{
 			    merge.TargetAttr = i.Attr("targetattr");
 			    merge.TargetValue = i.Attr("targetvalue");
 				merge.Type = BSharpElementType.Define;
+			    merge.AutoInclude = i.Attr("auto-include").ToBool();
+			    merge.Template = i.Attr("template").ToBool();
                 
 				if (i.Attribute("override") != null){
 					merge.Type = BSharpElementType.Override;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.Win32;
 using Qorpent.Experiments;
 using Qorpent.Integration.BSharp.Builder.Tasks;
 using Qorpent.Utils;
@@ -17,19 +18,21 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             Index = TaskConstants.WriteWorkingOutputTaskIndex + 100 + 10;
         }
 
-        public void WriteJson(IBSharpClass cls, object json = null) {
+        public void WriteJson(IBSharpClass cls, object json = null, IList<string> opts =null) {
             json = json ?? new {};
             var path = Path.Combine(Project.RootDirectory, Project.Definition.Attr("JsonDir"), cls.Prototype,
                 cls.Name + "." + cls.Prototype + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             var j = json is IDictionary<string,object>? json as IDictionary<string,object>: json.jsonifymap();
-            Refine(j, cls.Compiled);
+            Refine(j, cls.Compiled,_opts:opts);
             File.WriteAllText(path,j.stringify(pretty:true));
         }
         public string[] ExcludeAttributes { get; set; }
         
-        protected IDictionary<string, object> GetOptions(XElement xml, params string[] excludeAttrs) {
+        protected IDictionary<string, object> GetOptions(XElement xml, IList<string> _opts, params string[] excludeAttrs) {
             var result = new Dictionary<string,object>();
+            var guess = !_opts.Contains("noguess");
+            
             foreach (var attribute in xml.Attributes()) {
                 if(attribute.Name.LocalName=="id")continue;
                 if(attribute.Name.LocalName=="code")continue;
@@ -39,7 +42,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
                 
                 if (-1!=Array.IndexOf(excludeAttrs,attribute.Name.LocalName))continue;
                 if (null!=ExcludeAttributes && -1!=Array.IndexOf(ExcludeAttributes, attribute.Name.LocalName))continue;
-                result[attribute.Name.LocalName] = attribute.Value.Guess(useDates:false);
+                result[attribute.Name.LocalName] = guess ? attribute.Value.Guess() : attribute.Value;
             }
             return result;
         }
@@ -50,9 +53,11 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             bool removezeroes = true, 
             string[] remove = null,
             string[] noopt = null ,
-            bool allnooptions = false
-            )
-        {
+            bool allnooptions = false,
+            IList<string> _opts = null 
+            ) {
+            _opts = _opts ?? _emptyopts;
+            var guess = !_opts.Contains("noguess");
             if (null == src) {
                 return target.jsonifymap();
             }
@@ -60,7 +65,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             noopt = noopt ?? new string[] {};
             var opts =
                 new[] {"id", "code", "name", "fullcode", "prototype"}.Union(noopt).Union(remove).ToArray();
-            var options = GetOptions(src,opts);
+            var options = GetOptions(src, _opts,opts);
             var j = target is IDictionary<string, object> ? target as IDictionary<string, object> : target.jsonifymap();
             if (string.IsNullOrWhiteSpace(j.str("id"))) {
                 j["id"] = src.GetCode();
@@ -80,8 +85,13 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             }
             foreach (var rootattribute in noopt)
             {
-                object val = src.Attr(rootattribute);
-                j[rootattribute] = val.Guess(useDates:false);
+                var val = src.Attr(rootattribute);
+                object _val = val;
+                if (_opts.Contains("parse-arrays") && val.StartsWith("["))
+                {
+                    _val = val.Substring(1, val.Length - 1).SmartSplit(false, true, ';').Select(_ =>guess? _.Guess():_).ToArray();
+                }
+                j[rootattribute] = guess? _val.Guess():_val;
             }
            
             if (removezeroes) {
@@ -122,7 +132,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
             }
         }
 
-        protected void WriteElements(XElement xml, IDictionary<string, object> j)
+        protected void WriteElements(XElement xml, IDictionary<string, object> j, IList<string> opts  )
         {
             var names = xml.Elements().Select(_ => _.Name.LocalName).Distinct();
             foreach(var n in names)
@@ -132,7 +142,7 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
                 var set = new List<object>();
                 foreach(var e in els)
                 {
-                    set.Add(ConvertElement(e));
+                    set.Add(ConvertElement(e,opts));
                 }
 
 
@@ -144,18 +154,24 @@ namespace Qorpent.BSharp.Builder.Tasks.json {
                 j[normalname] = set.ToArray();
             }
         }
-
-        protected IDictionary<string,object> ConvertElement(XElement e)
-        {
+        static List<string> _emptyopts =new List<string>(); 
+        protected IDictionary<string, object> ConvertElement(XElement e, IList<string> opts) {
+            opts = opts ?? _emptyopts;
+            var guess = !opts.Contains("noguess");
             var result = new Dictionary<string, object>();
-            foreach(var a in e.Attributes()) {
+            foreach(var a in e.Attributes().OrderBy(_=>_.Name.LocalName)) {
                 var name = a.Name.LocalName;
                 if (name == "code" && null == e.Attribute("id")) {
                     name = "id";
                 }
-                result[name] = a.Value;
+                var val = a.Value;
+                object _val = val;
+                if (opts.Contains("parse-arrays") && val.StartsWith("[")) {
+                    _val = val.Substring(1, val.Length - 1).SmartSplit(false, true, ';').Select(_=>guess?_.Guess():_).ToArray();
+                }
+                result[name] =guess?_val.Guess():_val;
             }
-            WriteElements(e, result);
+            WriteElements(e, result,opts);
             return result;
         }
     }

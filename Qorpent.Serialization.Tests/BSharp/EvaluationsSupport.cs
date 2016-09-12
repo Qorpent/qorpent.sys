@@ -82,7 +82,7 @@ base c
 		{
 			var result = Compile(@"
 class a embed
-	eval width for=.//x
+    eval width for=.//x
 	x width=(concat(%{w}+3,'px'))
 class base  abstract
 base c
@@ -94,7 +94,22 @@ base c
 			Assert.AreEqual("9px", cls.Compiled.Elements("a").Last().Element("x").Attr("width"));
 		}
 
-	    [Test]
+
+        [Test]
+        public void Bug_Hang_On_Include()
+        {
+            var result = Compile(@"
+class a embed
+	x width=%{w}
+class base  abstract
+base c
+	include a w=5
+	include a w=6
+");
+            var cls = result.Working[0];
+        }
+
+        [Test]
 	    public void SampleCountGapForIndex() {
             var result = Compile(@"
 class x size=48

@@ -98,25 +98,34 @@ namespace Qorpent.Utils {
         ///     рекурсивно по всей подветке
         /// </summary>
         /// <returns></returns>
-        public XElement Interpolate(XElement source, IScope baseconfig = null) {
+        public XElement Interpolate(XElement source, IScope baseconfig = null, XElement[] elements =null) {
             var level = Level;
             if (level <= 0) {
                 level = int.MaxValue;
             }
-            var result = InternalInterpolate(source, baseconfig, level);
+            var result = InternalInterpolate(source, baseconfig, level, elements);
             Postprocess(result,Level);
             return result;
         }
 
-        private XElement InternalInterpolate(XElement source, IScope parentconfig, int level) {
+        private XElement InternalInterpolate(XElement source, IScope parentconfig, int level, XElement[] elements=null) {
             var datasource = PrepareDataSource(source, parentconfig);
-            XElement changed;
-            var processchild = InterpolateDataToElement(source, datasource, out changed);
-            source = changed;
+            XElement changed = null;
+            
+            var processchild = (null!=elements) || InterpolateDataToElement(source, datasource, out changed);
+            source = changed ?? source;
             if (processchild && level >= 1) {
                 level--;
-                foreach (var e in source.Elements().ToArray()) {
-                    InternalInterpolate(e, datasource, level);
+                if (null != elements) {
+                    foreach (var e in elements)
+                    {
+                        InternalInterpolate(e, datasource, level, null);
+                    }
+                }
+                else {
+                    foreach (var e in source.Elements().ToArray()) {
+                        InternalInterpolate(e, datasource, level, null);
+                    }
                 }
             }
             if (UseExtensions && source.Attr("xi-delete").ToBool()) {
@@ -173,6 +182,10 @@ namespace Qorpent.Utils {
                 cfg = new Scope(cfg);
                 foreach (var attribute in element.Attributes()) {
                     cfg.Set(attribute.Name.LocalName, attribute.Value);
+                }
+                var selftext = string.Join(Environment.NewLine, element.Nodes().OfType<XText>().Select(_ => _.Value));
+                if (!string.IsNullOrWhiteSpace(selftext) && !cfg.ContainsOwnKey("__value")) {
+                    cfg.Set("__value", selftext);
                 }
             }
             return Interpolate(source, cfg);

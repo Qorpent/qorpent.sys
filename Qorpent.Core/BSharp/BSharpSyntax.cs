@@ -277,6 +277,10 @@ namespace Qorpent.BSharp {
         /// Модификатор include, изменяющий имя целевого элемента
         /// </summary>
         public const string IncludeKeepCodeModifier = "keepcode";
+        /// <summary>
+        /// Позволяет указать класс для импорта по умолчанию
+        /// </summary>
+        public const string IncludeDefaultIncludeModifier = "default-include";
 
 		/// <summary>
 		/// Описание условия для включения элементов в режиме body для Include

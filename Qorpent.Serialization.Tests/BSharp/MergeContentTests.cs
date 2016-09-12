@@ -34,7 +34,43 @@ class A
             Assert.AreEqual("2",result.Compiled.Elements("item").ElementAt(2).Attr("y"));
         }
 
-		[Test]
+
+	    [Test]
+	    public void TemplatedElementSupport() {
+	        var code = @"
+class A  _u=33
+    element x template=true template-nested=true
+		y c_%{.code}  basic = %{.code} _i=2 _i2=true l=%{_u}
+			z %{_i} _if=_i
+            z2 %{_i} _if=_i2
+    x 23 a=%{basic} _i=1 _i2=false 
+        w %{basic}%{basic}
+        x 24
+";
+            var result = Compile(code).Get("A");
+            Console.WriteLine(result.Compiled.ToString());
+	        var e = result.Compiled.Element("y");
+            Assert.NotNull(e);
+            
+            var z = e.Element("z");
+            Assert.NotNull(z);
+
+            Assert.AreEqual("c_23",e.GetCode());
+            Assert.AreEqual("23",e.Attr("basic"));
+            var w = e.Element("w");
+            Assert.NotNull(w);
+            Assert.AreEqual("2323", w.GetCode());
+            Assert.AreEqual("23", e.Attr("a"));
+           Assert.AreEqual("1",z.Attr("code"));
+
+            Assert.Null(e.Element("z2"));
+            Assert.Null(e.Element("x"));
+            Assert.NotNull(e.Element("y"));
+
+            Assert.AreEqual("33",e.Attr("l"));
+        }
+
+        [Test]
 		public void CanMergeWithLocalAttributes(){
 			var code = @"
 class A

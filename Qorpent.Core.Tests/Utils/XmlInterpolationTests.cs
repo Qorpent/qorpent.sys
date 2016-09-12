@@ -348,6 +348,15 @@ e
 
 		}
 
+	    [Test]
+	    public void CanInterpolateValue() {
+	        var x = new XElement("x","test");
+            var target = new XElement("y",new XAttribute("z","${.__value}"));
+	        var res = _xi.Interpolate(target, x);
+            Console.WriteLine(res);
+            Assert.AreEqual("test",res.Attr("z"));
+	    }
+
         [Test]
         public void BUG_InterpolateParentedWithNoOverhead2()
         {

@@ -19,6 +19,23 @@ class A
 			Assert.AreEqual(3,result.Compiled.Elements().Count());
 		}
 
+	    [Test]
+	    public void ConditionalInclude() {
+            var code = @"
+class B
+class C
+class A
+    _x = false
+    _y = tfdfdsfds
+    
+	include B if='_y'
+	include C if='_x'
+";
+            var result = Compile(code).Get("A");
+            Console.WriteLine(result.Compiled.ToString());
+            Assert.AreEqual(1, result.Compiled.Elements().Count());
+        }
+
 		[Test]
 		[Category("NOTC")]
 		public void Q229_Build534_OverridenConditional_Stability(){
