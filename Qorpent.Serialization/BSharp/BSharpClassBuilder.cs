@@ -612,11 +612,59 @@ namespace Qorpent.BSharp{
 	                foreach (var a in element.Definition.Attributes().Where(_=>_.Name.LocalName.StartsWith("ai-"))) {
 	                    include.SetAttributeValue(a.Name.LocalName.Substring(3), a.Value);
 	                }
+                     foreach (var a in element.Definition.Attributes().Where(_=>!_.Name.LocalName.StartsWith("ai-"))) {
+                         var ln = a.Name.LocalName;
+                        if (ln == "code") continue;
+                        if (ln == "id") continue;
+                        if (ln == "_file") continue;
+                        if (ln == "_line") continue;
+                        if (!include.HasAttribute(ln))
+                        {
+                            include.SetAttributeValue(ln, a.Value);
+                        }
+                    }
 	                foreach (var attribute in autoinclude.Attributes()) {
 	                    include.SetAttributeValue(attribute.Name,attribute.Value);
 	                }
-                    include.Add(new XElement("include-append",autoinclude.Elements()));
-                    autoinclude.ReplaceWith(include);
+	                if (null != autoinclude.Element("include-append")) {
+	                    var e = autoinclude.Element("include-append");
+                        include.Add(new XElement("include-append", e.Elements()));
+	                    foreach (var attribute in e.Attributes()) {
+	                        var ln = attribute.Name.LocalName;
+                            if(ln=="code")continue;
+                            if(ln=="id")continue;
+                            if(ln=="_file")continue;
+                            if(ln=="_line")continue;
+	                        if (!include.HasAttribute(ln)) {
+	                            include.SetAttributeValue(ln,attribute.Value);
+	                        }
+	                    }
+                    }
+	                else {
+	                    include.Add(new XElement("include-append", autoinclude.Elements()));
+	                }
+	                var trg = include.Element("include-append");
+
+	                if (null != element.Definition.Element("include-append")) {
+                        var e = element.Definition.Element("include-append");
+                        trg.Add( e.Elements());
+                        foreach (var attribute in e.Attributes())
+                        {
+                            var ln = attribute.Name.LocalName;
+                            if (ln == "code") continue;
+                            if (ln == "id") continue;
+                            if (ln == "_file") continue;
+                            if (ln == "_line") continue;
+                            if (!include.HasAttribute(ln))
+                            {
+                                include.SetAttributeValue(ln, attribute.Value);
+                            }
+                        }
+                    }
+	                else {
+                        trg.Add(element.Definition.Elements());
+                    }
+	                autoinclude.ReplaceWith(include);
 	            }
 	        }
 	    }
@@ -994,9 +1042,11 @@ namespace Qorpent.BSharp{
                     if(ln=="code")continue;
                     if(ln=="_file")continue;
                     if(ln=="_line")continue;
-			        if (includeelement.HasAttribute(ln)) {
+      
+        
+			        //if (includeelement.HasAttribute(ln)) {
                         includeelement.SetAttributeValue(ln, attribute.Value);
-                    }
+                    //}
 			    }
 
 				bool usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) ||
@@ -1078,6 +1128,10 @@ namespace Qorpent.BSharp{
 
 			includeelement.Attribute("id")?.Remove();
 			includeelement.Attribute("default-include")?.Remove();
+			includeelement.Attribute("auto-include")?.Remove();
+			includeelement.Attribute("element")?.Remove();
+			includeelement.Attribute("keepcode")?.Remove();
+			includeelement.Attribute("leveledcodes")?.Remove();
 
 
 		    XAttribute sc = includeelement.Attribute("set-code");

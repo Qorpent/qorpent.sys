@@ -110,7 +110,9 @@ class B
 class A 'oldname'
 	x=2
 class B
-    element outer auto-include=true ai-keepcode=true ai-element=outer
+    element outer auto-include=true ai-keepcode=true ai-element=outer  z=4
+        include-append
+            in A  
 	outer A 'newname' y=3
         where x
 ";
@@ -122,6 +124,33 @@ class B
             Assert.AreEqual("3", e.Attr("y"));
             Assert.AreEqual("newname", e.Attr("name"));
             Assert.NotNull(e.Element("where"));
+            Assert.AreEqual("4", e.Attr("z"));
+            Assert.AreEqual("A", e.Element("in").GetCode());
+
+        }
+
+        [Test]
+        public void EmbedElementSupport()
+        {
+            var code = @"
+class A 'oldname'
+	x=2
+class B
+    embed outer z=4
+        in A    
+	outer A 'newname' y=3
+        where x
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            var e = result.Compiled.Element("outer");
+            Assert.AreEqual(true, result.SelfElements.First(_ => _.Name == "outer").AutoInclude);
+            Assert.AreEqual("2", e.Attr("x"));
+            Assert.AreEqual("3", e.Attr("y"));
+            Assert.AreEqual("newname", e.Attr("name"));
+            Assert.NotNull(e.Element("where"));
+            Assert.AreEqual("4", e.Attr("z"));
+            Assert.AreEqual("A", e.Element("in").GetCode());
 
         }
 

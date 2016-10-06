@@ -819,6 +819,12 @@ namespace Qorpent.Utils.Extensions {
 			return IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
 
+	    public static string DefAttr(this XElement sourceElement, XName name, object value) {
+	        if (sourceElement.HasAttribute(name.LocalName)) return sourceElement.Attr(name);
+            sourceElement.SetAttributeValue(name,value);
+	        return value.ToStr();
+	    }
+
 	    public static bool ResolveFlag(this XElement e, string flag) {
 	        var attr = e.Attribute(flag);
 	        if (null != attr) return attr.Value.ToBool();

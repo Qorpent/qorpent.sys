@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
@@ -1023,6 +1024,16 @@ namespace Qorpent.BSharp{
 		}
 
 		private static void ParseCompoundElements(XElement e, IBSharpClass def){
+		    foreach (XElement i in e.Elements(BSharpSyntax.EmbedAttribute)) {
+		        i.Name = BSharpSyntax.ClassElementDefinition;
+                i.DefAttr("auto-include",true);
+                i.DefAttr("ai-keepcode", true);
+                i.DefAttr("ai-element", i.Attribute("as")?.Value ?? i.Attribute("of")?.Value ?? i.Attribute("name")?.Value ?? i.GetCode());
+		        i.DefAttr("ai-default-include", i.Attribute("of")?.Value ?? i.Attribute("name")?.Value ?? i.GetCode());
+                i.Attribute("as")?.Remove();
+                i.Attribute("of")?.Remove();
+		    }
+
 			foreach (XElement i in e.Elements(BSharpSyntax.ClassElementDefinition)){
 				var merge = new BSharpElement();
 			    merge.Definition =new XElement( i);
@@ -1102,6 +1113,31 @@ namespace Qorpent.BSharp{
 				_.Error = ex;
 			}
 		}
+
+	    public static IBSharpContext CompileAssembly(string resourceName = null) {
+	        return CompileAssembly(Assembly.GetCallingAssembly(), resourceName);
+	    }
+
+	    public static IBSharpContext CompileAssembly(Assembly a = null, string resourceName = null) {
+	        if (null == a) {
+	            a = Assembly.GetCallingAssembly();
+	        }
+	        IEnumerable<string> code = null;
+	        if (!string.IsNullOrWhiteSpace(resourceName)) {
+	            if (!resourceName.EndsWith(".bxls")) {
+	                resourceName += ".bxls";
+	            }
+	            code = new[] {a.ReadManifestResource(resourceName)};
+	        }
+	        else {
+	            code =
+	                a.GetManifestResourceNames()
+	                    .Where(_ => _.EndsWith(".bxls"))
+	                    .Select(_ => a.ReadManifestResource(_))
+	                    .ToArray();
+	        }
+	        return Compile(code);
+	    }
 
 		/// <summary>
 		///     Перекрыть для создания линковщика

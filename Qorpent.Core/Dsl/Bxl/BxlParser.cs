@@ -25,6 +25,9 @@ namespace Qorpent.Bxl {
 	public class BxlParser : IBxlParser, ISpecialXmlParser
 
     {
+        public static XElement ParseCode(string data) {
+            return new BxlParser().Parse(data);
+        }
 		private const string NAMESPACE = "namespace::";
 		private const string CODE = "code";
 		private const string ID = "id";

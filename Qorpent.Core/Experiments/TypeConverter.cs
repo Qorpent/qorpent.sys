@@ -192,7 +192,7 @@ namespace Qorpent.Utils
 				if (string.IsNullOrWhiteSpace(s)) {
 					return defaultValue;
 				}
-			    if (s.All(char.IsDigit)) {
+			    if (s.All(char.IsDigit) && s.Length<=18) {
 			        return long.Parse(s);
 			    }
 				dbl = ParseToDouble(s, s.Length, defaultValue, safe);
